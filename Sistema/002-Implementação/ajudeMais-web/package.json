@@ -1,0 +1,30 @@
+{
+  "name": "nodejs-serve-generate-dist",
+  "version": "0.5.1",
+  "description": "project in nodejs to help development web",
+  "main": "app.js",
+  "scripts": {
+    "start": "gulp start",
+    "postinstall": "node node_modules/bower/bin/bower install"
+  },
+  "author": "Franck Aragão",
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "browser-sync": "^2.18.8",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-angular-templatecache": "^2.0.0",
+    "gulp-clean-css": "^3.0.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-htmlmin": "^3.0.0",
+    "gulp-if": "^2.0.2",
+    "gulp-inject": "^4.2.0",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-uglify": "^2.1.2",
+    "gulp-wrap": "^0.13.0",
+    "proxy-middleware": "^0.15.0",
+    "run-sequence": "^1.2.2",
+    "url": "^0.11.0"
+  }
+}

@@ -1,0 +1,34 @@
+<div id="sidebar-wrapper">
+
+     <ul class="sidebar">
+        <li class="sidebar-main">
+          <a ng-click="toggle()">
+			  <span>AJUDE <b>MAIS</b></span>
+           	<span class="menu-icon fa fa-bars"></span>
+          </a>
+        </li>
+		<li class="sidebar-list" ui-sref-active="active"><a ui-sref="home">
+		<i class="menu-icon fa fa-home fa-fw"></i> Home</a>
+		</li>
+	
+		<li class="sidebar-list"><a ui-sref="home.doador">
+			<i class="menu-icon fa fa-heart fa-fw"></i>Doadores</a>
+		</li>
+		<li class="sidebar-list" access-view="ROLE_ADMINISTRATORS"><a ui-sref="home.admins">
+			<i class="menu-icon fa fa-file-text fa-fw"></i>Admins</a>
+		</li>
+	</ul>
+
+	<div class="sidebar-footer" ng-class="{'hide': !active}">
+		<div class="col-xs-6">
+			<a href="#"> <i class="fa fa-info-circle"></i>
+				Sobre
+			</a>
+		</div>
+		<div class="col-xs-6">
+			<a href="#"> <i class="fa fa-question-circle"></i> 
+				Ajuda
+			</a>
+		</div>
+	</div>
+</div>

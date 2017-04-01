@@ -1,0 +1,18 @@
+<div ng-controller="SidebarCtrl">
+  <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+    <menu toggle="toggleSidebar()" active="{{toggle}}"></menu>
+        
+    <div id="content-wrapper">
+      <div class="page-content">
+
+        <header></header>
+        <page-header></page-header>
+
+        <div ui-view></div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

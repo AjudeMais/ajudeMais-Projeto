@@ -1,0 +1,30 @@
+<div class="modal-header">
+	<button type="button" ng-click="vm.cancelar()" class="close" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title">{{vm.titulo}}</h4>
+</div>
+
+<form name="pacienteForm" ng-submit="pacienteForm.$valid && vm.salvar()" role="form" novalidate>
+	<div class="modal-body" id="modal-body">
+
+		<div class="form-group sigap-required" ng-class="{'has-error': pacienteForm.$submitted && pacienteForm.nome.$invalid}">
+			<label class="control-label">Nome</label>
+			<input name="nome" ng-model="vm.paciente.nome" type="text" class="form-control" required />
+			
+			<div ng-show="pacienteForm.$submitted && pacienteForm.nome.$invalid"
+				class="help-block">Nome do paciente deve ser informado.
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="modal-footer">
+		<input class="btn btn-primary" type="submit" value="Salvar" />
+		<button class="btn btn-warning" type="button" ng-click="vm.cancelar()">Cancelar</button>
+	</div>
+</form>
+
+<div class="overlay" ng-show="vm.loading">
+	<i class="fa fa-refresh fa-spin"></i>
+</div>
