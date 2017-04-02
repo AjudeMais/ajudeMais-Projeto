@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-5 col-md-offset-3">
+          <div class="login-logo">
+              <img alt="AjudeMais" max-widget="90%" src="content/img/am-icon (4).png" />
+  			</div>
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Efetuar Login</h3>
+                </div>
+                <div class="panel-body">
+                    <div ng-if="vm.error" class="alert alert-danger">{{vm.error}}</div>
+                    <form name="loginForm" role="form" ng-submit="loginForm.$valid && vm.doLogin()" novalidate>
+                        <fieldset>
+
+                            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.login.$invalid }">
+                                <input id="tLogin" class="form-control input-lg" ng-model="vm.usuario.login" placeholder="Usuário" name="login" type="text" autofocus required>
+                                <span class="glyphicon  glyphicon-user  form-control-feedback" aria-hidden="true"></span>
+                                <div ng-show="loginForm.$submitted && loginForm.login.$invalid" class="help-block">
+                                  Nome do Usuário deve ser informado
+                                </div>
+                            </div>
+
+                            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.senha.$invalid }">
+                                <input id="tSenha" class="form-control input-lg" ng-model="vm.usuario.senha" placeholder="Senha" name="senha" type="password" required>
+                                <span class="glyphicon  glyphicon-lock  form-control-feedback" aria-hidden="true"></span>
+                                <div ng-show="loginForm.$submitted && loginForm.senha.$invalid" class="help-block">
+                                  Senha deve ser informanda
+                                </div>
+                            </div>
+                            <div class="checkbox icheck">
+                                <label>
+                                    <input icheck id="rememberme" name="remember-me" type="checkbox" ng-value="remember-me" ng-model="vm.remember"> Lembre-me
+                                </label>
+                            </div>
+                            <input id="btnLogin" type="submit" class="btn btn-lg btn-primary btn-block" value="Login"/>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

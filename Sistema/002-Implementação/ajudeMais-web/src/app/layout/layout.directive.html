@@ -1,0 +1,25 @@
+<div ng-controller="SidebarCtrl">
+    <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+        <menu toggle="toggleSidebar()"></menu>
+
+        <div id="content-wrapper">
+            <div class="page-content">
+                <div class="row header">
+                    <div class="col-xs-12">
+                        <span ng-click="toggleSidebar()" ng-class="{'hide': toggle}"
+                              class="menu-icon fa fa-bars"></span>
+
+                        <header-notification></header-notification>
+
+                    </div>
+                </div>
+                <page-header></page-header>
+
+                <div ui-view></div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -149,3 +149,6 @@ Servers
 .recommenders
 /.recommenders
 /recommenders
+
+.springBeans
+.tern-project
