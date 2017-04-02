@@ -1,8 +1,8 @@
 'use strict';
 
 exports.base = {
-    port: 9000,
-    apiUri: 'http://localhost:8080/sigap',
+    port: 8000,
+    apiUri: 'http://localhost:8080',
 };
 exports.paths = {
     dist: 'dist',

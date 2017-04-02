@@ -20,7 +20,7 @@
 
 		resultado.usuarioLogado = function(callback) {
 			/*TODO: implementar...*/			
-			callback(true);
+			callback(false);
 		}
 
 		/**

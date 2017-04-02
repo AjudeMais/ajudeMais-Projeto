@@ -5,9 +5,9 @@
  * @description controller para o sidebar
  * 
  */
-angular.module('layout').controller('SidebarCtrl', ['$scope', '$cookieStore', SidebarCtrl]);
+angular.module('layout').controller('SidebarCtrl', ['$scope','$rootScope', '$cookieStore', SidebarCtrl]);
 
-function SidebarCtrl($scope, $cookieStore) {
+function SidebarCtrl($scope, $rootScope, $cookieStore) {
 
     var mobileView = 992;
 
@@ -31,7 +31,6 @@ function SidebarCtrl($scope, $cookieStore) {
         } else {
             $scope.toggle = false;
         }
-
     });
 
     /**

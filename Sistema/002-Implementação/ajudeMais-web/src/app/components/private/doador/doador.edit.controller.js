@@ -8,7 +8,7 @@
  */
 
 (function() {
-	angular.module("amApp").controller("PacienteModalController", function(pacienteService, $uibModalInstance, growl, doador) {
+	angular.module("amApp").controller("PacienteModalController", function(doadorService, $uibModalInstance, growl, doador) {
 		
 		var vm = this;
 		vm.doador = {};
@@ -26,14 +26,14 @@
 			vm.loading = true;
 
 			if (!vm.editar) {
-				pacienteService.salvar(vm.doador, function(response) {
+				doadorService.salvar(vm.doador, function(response) {
 					growl.success("<b>Doador</b> criado com sucesso");
 					angular.copy(response, doador);
 					vm.loading = false;
 					$uibModalInstance.close(doador);
 				});
 			} else {
-				pacienteService.alterar(vm.doador, function(response) {
+				doadorService.alterar(vm.doador, function(response) {
 					growl.success("<b>Doador</b> alterado com sucesso");
 					
 					angular.copy(response, doador);

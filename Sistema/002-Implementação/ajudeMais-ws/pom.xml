@@ -7,10 +7,6 @@
 	<version>0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<organization>
-		<name>Ajude Mais</name>
-	</organization>
-
 	<developers>
 		<developer>
 			<name>Franck Aragão</name>
@@ -22,17 +18,15 @@
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
-
+	
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.4.1.RELEASE</version>
+	</parent>
+	
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
-				<version>1.4.1.RELEASE</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
 			<dependency>
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>

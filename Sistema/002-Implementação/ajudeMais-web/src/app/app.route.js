@@ -34,12 +34,12 @@
 		
 		.state('home.doador', {
 			url : "/doador",
-			data : {
-				pageTitle : 'Pacientes'
-			},
 			templateUrl : "app/components/private/doador/daodores.html",
-			controller : "DoadorController",
-			controllerAs : 'vm'
-		});
+            controller : "DoadorController",
+            controllerAs : 'vm',
+            data : {
+                pageTitle : 'Doadores'
+            }
+        });
 	});
 })();

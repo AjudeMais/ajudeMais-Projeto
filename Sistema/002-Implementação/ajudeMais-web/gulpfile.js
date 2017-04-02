@@ -1,7 +1,5 @@
 var gulp = require('gulp');
 
-var url = require('url');
-var proxy = require('proxy-middleware');
 var browserSync = require('browser-sync');
 var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
@@ -72,15 +70,13 @@ gulp.task('scripts', ['plugins'], function() {
 
 
 gulp.task('browser-sync', function() {
-    var proxyOptions = url.parse('http://localhost:8080/sigap');
-    proxyOptions.route = '/sigap';
 
     browserSync({
         open: true,
         port: config.base.port,
+        files: [config.paths.src + '/**'],
         server: {
-            baseDir: './src'/*,
-            middleware: [proxy(proxyOptions)]*/
+            baseDir: config.paths.src
         }
     });
 });

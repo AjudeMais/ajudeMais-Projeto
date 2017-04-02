@@ -13,8 +13,7 @@
 		ddo.restrict = 'E';
 		ddo.replace = true;
 		ddo.scope = {
-			toggle : '&',
-			active : '@'
+			toggle : '&'
 		}
 		ddo.templateUrl = 'app/layout/sidebar/sidebar.directive.html';
 	

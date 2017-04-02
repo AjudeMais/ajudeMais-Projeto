@@ -9,13 +9,13 @@
  */
 
 (function(){
-  angular.module("amApp").factory("doadorService", function($http){
+  angular.module("amApp").factory("doadorService", function($http, amValue){
 
     /**
 	 * 
 	 */
 	var _getDoadores = function(callback) {
-		$http.get("paciente").then(function(response) {
+		$http.get(amValue.apiUri+"/doador").then(function(response) {
 			callback(response.data);
 		});
 	};
@@ -24,7 +24,7 @@
 	 * 
 	 */
     var _salvar = function(doador, callback) {
-		$http.post("doador", doador).then(function(response) {
+		$http.post(amValue.apiUri+"/doador", doador).then(function(response) {
 			callback(response.data);
 		});
 	};
@@ -33,7 +33,7 @@
 	 * Altera um doador na API
 	 */
     var _alterar = function(doador, callback) {
-      $http.put("doador", doador).then(function(response){
+      $http.put(amValue.apiUri+"/doador", doador).then(function(response){
         callback(response.data);
       });
     };

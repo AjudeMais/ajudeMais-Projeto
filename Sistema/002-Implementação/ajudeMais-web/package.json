@@ -1,14 +1,14 @@
 {
-  "name": "nodejs-serve-generate-dist",
+  "name": "Ajude Mais - Web",
   "version": "0.5.1",
-  "description": "project in nodejs to help development web",
+  "description": "módulo web do Ajude Mais",
   "main": "app.js",
   "scripts": {
-    "start": "gulp start",
+    "start": "node app.js",
     "postinstall": "node node_modules/bower/bin/bower install"
   },
   "author": "Franck Aragão",
-  "license": "MIT",
+  "license": "AJUDE MAIS",
   "devDependencies": {
     "bower": "^1.8.0",
     "browser-sync": "^2.18.8",
@@ -23,8 +23,12 @@
     "gulp-ng-annotate": "^2.0.0",
     "gulp-uglify": "^2.1.2",
     "gulp-wrap": "^0.13.0",
+    "http-proxy-middleware": "^0.17.4",
     "proxy-middleware": "^0.15.0",
     "run-sequence": "^1.2.2",
     "url": "^0.11.0"
+  },
+  "engines": {
+    "node": "6.9.2"
   }
 }
