@@ -8,7 +8,7 @@
 <form name="doadorForm" ng-submit="doadorForm.$valid && vm.salvar()" role="form" novalidate>
 	<div class="modal-body" id="modal-body">
 
-		<div class="form-group sigap-required" ng-class="{'has-error': doadorForm.$submitted && doadorForm.nome.$invalid}">
+		<div class="form-group am-required" ng-class="{'has-error': doadorForm.$submitted && doadorForm.nome.$invalid}">
 			<label class="control-label">Nome</label>
 			<input name="nome" ng-model="vm.doador.nome" type="text" class="form-control" required />
 			

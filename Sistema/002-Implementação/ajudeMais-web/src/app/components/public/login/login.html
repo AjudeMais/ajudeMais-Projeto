@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-5 col-md-offset-3">
           <div class="login-logo">
-              <img alt="AjudeMais" src="content/img/am-icon (4).png" />
+              <img alt="AjudeMais" max-widget="90%" src="content/img/am-icon (4).png" />
   			</div>
             <div class="login-panel panel panel-default">
                 <div class="panel-heading">
@@ -17,7 +17,7 @@
                                 <input id="tLogin" class="form-control input-lg" ng-model="vm.usuario.login" placeholder="Usuário" name="login" type="text" autofocus required>
                                 <span class="glyphicon  glyphicon-user  form-control-feedback" aria-hidden="true"></span>
                                 <div ng-show="loginForm.$submitted && loginForm.login.$invalid" class="help-block">
-                                  Nome do Usuário é Requerido
+                                  Nome do Usuário deve ser informado
                                 </div>
                             </div>
 
@@ -25,10 +25,9 @@
                                 <input id="tSenha" class="form-control input-lg" ng-model="vm.usuario.senha" placeholder="Senha" name="senha" type="password" required>
                                 <span class="glyphicon  glyphicon-lock  form-control-feedback" aria-hidden="true"></span>
                                 <div ng-show="loginForm.$submitted && loginForm.senha.$invalid" class="help-block">
-                                  Senha é Requerida
+                                  Senha deve ser informanda
                                 </div>
                             </div>
-
                             <div class="checkbox icheck">
                                 <label>
                                     <input icheck id="rememberme" name="remember-me" type="checkbox" ng-value="remember-me" ng-model="vm.remember"> Lembre-me
