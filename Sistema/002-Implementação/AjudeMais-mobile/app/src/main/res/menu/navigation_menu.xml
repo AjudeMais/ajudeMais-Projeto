@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/nav_config_conta"
+        android:title="Configuraçẽs da conta"
+        android:icon="@mipmap/ic_configuracao">
+    </item>
+
+    <item android:id="@+id/nav_notificacoes"
+        android:title="Notificações"
+        android:icon="@mipmap/ic_notificacao">
+    </item>
+
+    <item android:id="@+id/nav_sair"
+        android:title="Sair"
+        android:icon="@mipmap/ic_sair">
+    </item>
+
+</menu>
