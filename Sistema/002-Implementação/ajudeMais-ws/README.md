@@ -1,5 +1,9 @@
 Ajude Mais - WS
 ===============
+
+[![Build Status](https://travis-ci.org/AjudeMais/AjudeMais.svg?branch=master)](https://travis-ci.org/AjudeMais/AjudeMais)
+
+
 API RESTful Ajude Mais.
 
  
