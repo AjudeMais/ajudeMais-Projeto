@@ -152,3 +152,6 @@ bower_components
 ./idea
 npm-debug.log
 .npm-debug.log
+
+.install_nvm.sh.save
+./install_nvm.sh.save
