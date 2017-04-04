@@ -2,6 +2,11 @@ language: java
 before_install: cd Sistema/002-Implementação/ajudeMais-ws
 script: 
   - mvn test
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+  - mvn clean install
 jdk:
   - oraclejdk8
+
+notifications:
+  email:
+    - fjunior.aragao@gmail.com
+    - jose.rafael.feitosa@gmail.com
