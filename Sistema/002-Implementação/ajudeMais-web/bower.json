@@ -1,5 +1,5 @@
 {
-  "name": "ajudeMais-web",
+  "name": "ajudemais",
   "homepage": "https://github.com/AjudeMais/AjudeMais",
   "authors": [
     "Franck Aragão <fjunior.aragao@gmail.com>"
@@ -19,7 +19,7 @@
     "angular": "^1.6.3",
     "jquery": "^3.2.1",
     "iCheck": "^1.0.2",
-    "bootstrap": "^3.3.7",
+    "bootstrap": "3.3.7",
     "font-awesome": "^4.7.0",
     "datatables.net": "1.4.2",
     "angular-animate": "^1.6.3",
