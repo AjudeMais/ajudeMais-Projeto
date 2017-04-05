@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class Main_tab02 extends Fragment {
+public class MainTab02 extends Fragment {
 
 
     @Nullable

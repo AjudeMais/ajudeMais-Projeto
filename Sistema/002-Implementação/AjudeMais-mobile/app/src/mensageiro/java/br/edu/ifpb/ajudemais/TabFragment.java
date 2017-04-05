@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +17,6 @@ public class TabFragment extends Fragment {
     public static ViewPager viewPager;
     public static int int_items = 2 ;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /**
@@ -64,8 +62,8 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new Main_tab01();
-                case 1 : return new Main_tab02();
+                case 0 : return new MainTab01();
+                case 1 : return new MainTab02();
             }
             return null;
         }
@@ -86,9 +84,9 @@ public class TabFragment extends Fragment {
 
             switch (position){
                 case 0 :
-                    return "TAB 01";
+                    return "Próximas coletas";
                 case 1 :
-                    return "TAB 02";
+                    return "Minhas Coletas";
             }
             return null;
         }

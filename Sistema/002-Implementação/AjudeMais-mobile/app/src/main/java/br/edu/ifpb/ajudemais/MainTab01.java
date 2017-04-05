@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
-public class Main_tab01 extends Fragment {
+public class MainTab01 extends Fragment {
 
     @Nullable
     @Override

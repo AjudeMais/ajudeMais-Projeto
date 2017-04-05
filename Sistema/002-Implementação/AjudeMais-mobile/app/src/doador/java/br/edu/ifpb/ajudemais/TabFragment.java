@@ -1,5 +1,7 @@
+package br.edu.ifpb.ajudemais;
+
+
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,16 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import br.edu.ifpb.ajudemais.*;
-import br.edu.ifpb.ajudemais.Main_tab01;
-
 public class TabFragment extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
     public static int int_items = 2 ;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /**
@@ -64,8 +62,8 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new Main_tab01();
-                case 1 : return new Main_tab02();
+                case 0 : return new MainTab01();
+                case 1 : return new MainTab02();
             }
             return null;
         }
@@ -77,6 +75,9 @@ public class TabFragment extends Fragment {
 
         }
 
+        /**
+         * This method returns the title of the tab according to the position.
+         */
 
         @Override
         public CharSequence getPageTitle(int position) {

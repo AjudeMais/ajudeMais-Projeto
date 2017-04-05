@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /**
          * Lets inflate the very first fragment
-         * Here , we are inflating the TabFragment as the first Fragment
+         * Here , we are inflating the br.edu.ifpb.ajudemais.doador.TabFragment as the first Fragment
          */
 
         mFragmentManager = getSupportFragmentManager();
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //                if (menuItem.getItemId() == R.id.nav_item_inbox) {
 //                    FragmentTransaction xfragmentTransaction = mFragmentManager.beginTransaction();
-//                    xfragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
+//                    xfragmentTransaction.replace(R.id.containerView, new br.edu.ifpb.ajudemais.doador.TabFragment()).commit();
 //                }
 
                 return false;

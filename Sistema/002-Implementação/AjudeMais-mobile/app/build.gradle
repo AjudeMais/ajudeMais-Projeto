@@ -21,19 +21,24 @@ android {
     /**
      * Criando estrutura build de dois apks distintos para perspectiva de doador e outro para perspectiva de mensageiro
      */
+
     productFlavors {
         doador {
             applicationId "br.edu.ifpb.ajudemais.doador"
             applicationIdSuffix ".doador"
             versionNameSuffix "-doador"
+            testApplicationId 'br.edu.ifpb.ajudemais.doador.teste'
+            versionCode 1
+            versionName '0.1'
         }
-
         mensageiro {
             applicationId "br.edu.ifpb.ajudemais.mensageiro"
             applicationIdSuffix ".mensageiro"
             versionNameSuffix "-mensageiro"
-
+            versionCode 1
+            versionName '0.1'
         }
+
     }
     sourceSets {
         doador { java.srcDirs = ['src/doador/java', 'src/doador/java/'] }
@@ -44,7 +49,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
