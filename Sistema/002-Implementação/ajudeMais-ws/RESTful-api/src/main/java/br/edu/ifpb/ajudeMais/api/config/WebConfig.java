@@ -16,8 +16,9 @@ import org.springframework.web.filter.CorsFilter;
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 @Configuration
-public class WebConfig {
-
+public class WebConfig{
+	
+	
 	@Bean
 	public FilterRegistrationBean corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -31,4 +32,5 @@ public class WebConfig {
 		bean.setOrder(0);
 		return bean;
 	}
+
 }
