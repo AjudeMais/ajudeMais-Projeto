@@ -145,3 +145,6 @@ RemoteSystemsTempFiles
 
 Servers
 /Servers
+
+.application.properties
+./application.properties
