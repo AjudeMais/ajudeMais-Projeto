@@ -1,3 +1,13 @@
 <resources>
+    <!--Tela login-->
+    <string name="hitNomeUsuario">Nome do usuário</string>
+    <string name="btnCriarCobta">CRIAR CONTA</string>
+    <string name="novaConta">Nova Conta</string>
+
+    <!--Tela Criar Conta Doador sem rede social-->
+    <string name="hitTelefone">Telefone</string>
+    <string name="hitSenha">Senha</string>
+    <string name="hitConfirmacaoSenha">Confirmação da senha</string>
+    <string name="hitEmail">E-mail</string>
 
 </resources>

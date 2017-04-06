@@ -11,4 +11,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--Tela login-->
+    <string name="hitNumeroCpf">CPF Mensageiro</string>
+    <string name="hitSenhaUsuario">**********</string>
+    <string name="nomeBtnEntrar">ENTRAR</string>
+    <string name="opEsqueceuSenha">Esqueceu a senha?</string>
+
+
+
 </resources>

@@ -21,7 +21,7 @@ public class ApresentacaoActivity extends AppCompatActivity {
         timer.schedule(new TimerTask() {
             public void run() {
                 Intent i = new Intent();
-                i.setClass(ApresentacaoActivity.this, MainActivity.class);
+                i.setClass(ApresentacaoActivity.this, LoginActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(i);
 
