@@ -1,11 +1,16 @@
 <resources>
     <string name="app_name">Ajude Mais</string>
+    <string name="telaRecuperarSenha">Esqueceu a senha</string>
+
     <string name="abrir">Abrir</string>
     <string name="fechar">Fechar</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_teste">Teste</string>
     <string name="usuario">Nome do Usuário</string>
+    <string name="emailUsuario">example@gmail.com</string>
+    <string name="descPerfilImg">Foto do Perfil</string>
+
 
     <string name="section_format">Hello World from section: %1$d</string>
 
@@ -17,7 +22,8 @@
     <string name="hitSenhaUsuario">**********</string>
     <string name="nomeBtnEntrar">ENTRAR</string>
     <string name="opEsqueceuSenha">Esqueceu a senha?</string>
-
+    <string name="facebook">FACEBOOK</string>
+    <string name="logo_do_ajude_mais">Logo do Ajude Mais</string>
 
 
 </resources>

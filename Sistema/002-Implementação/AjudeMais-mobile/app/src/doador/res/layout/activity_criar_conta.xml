@@ -99,7 +99,7 @@
     <RelativeLayout
         android:id="@+id/componenteBtnCriarConta"
         android:layout_width="match_parent"
-        android:layout_height="50sp"
+        android:layout_height="55sp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorFont"
         android:orientation="vertical">
@@ -114,6 +114,7 @@
             android:text="@string/btnCriarCobta"
             android:textColor="@color/colorFont"
             android:textSize="@dimen/fontLogin" />
+
 
     </RelativeLayout>
 

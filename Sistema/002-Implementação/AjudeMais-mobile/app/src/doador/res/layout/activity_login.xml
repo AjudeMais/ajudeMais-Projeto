@@ -56,7 +56,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
-                android:src="@drawable/img_login" />
+                android:src="@drawable/img_login"
+                android:contentDescription="@string/logo_do_ajude_mais" />
 
             <Button
                 android:id="@+id/btnEntrar"
@@ -81,7 +82,7 @@
                 android:layout_marginTop="2dp"
                 android:height="@dimen/LagHeigth"
                 android:backgroundTint="@color/btnFaceTemp"
-                android:text="FACEBOOK"
+                android:text="@string/facebook"
                 android:textColor="@color/colorFont"
                 android:textSize="@dimen/fontLogin" />
 
@@ -92,11 +93,12 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/btnEntrar"
                 android:layout_marginTop="2dp"
-                android:text="Ou"
+                android:text="@string/SeparadorBtnsLogin"
+                android:clickable="true"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/esqueceuSenha"
+                android:id="@+id/tvEsqueceuSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -111,7 +113,7 @@
     <RelativeLayout
         android:id="@+id/componenteBtnCriarConta"
         android:layout_width="match_parent"
-        android:layout_height="50sp"
+        android:layout_height="55sp"
         android:layout_alignParentBottom="true"
         android:background="@color/colorFont"
         android:orientation="vertical">

@@ -31,11 +31,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(mToolbar);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.abrir, R.string.fechar);
+        mToggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                R.string.abrir,
+                R.string.fechar);
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mNavigationView = (NavigationView) findViewById(R.id.shitstuff);
