@@ -1,6 +1,8 @@
 package br.edu.ifpb.ajudemais;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,10 +22,24 @@ public class ApresentacaoActivity extends AppCompatActivity {
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                Intent i = new Intent();
-                i.setClass(ApresentacaoActivity.this, LoginActivity.class);
-                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(i);
+
+                SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
+                String nomeUsuario = sharedPref.getString("nomeUsuario", null);
+                String senhaUsuario = sharedPref.getString("senhaUsuario", null);
+
+                if (nomeUsuario != null && senhaUsuario != null) {
+                    Intent i = new Intent();
+                    i.setClass(ApresentacaoActivity.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+
+                } else {
+
+                    Intent i = new Intent();
+                    i.setClass(ApresentacaoActivity.this, LoginActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(i);
+                }
 
             }//end TimerTask
 
@@ -43,7 +59,7 @@ public class ApresentacaoActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
     }
 }

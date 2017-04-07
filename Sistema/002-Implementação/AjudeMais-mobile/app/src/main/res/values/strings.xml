@@ -25,5 +25,10 @@
     <string name="facebook">FACEBOOK</string>
     <string name="logo_do_ajude_mais">Logo do Ajude Mais</string>
 
+    <string name="msgNomeUsuarioNaoInformado">O nome do usuário deve ser informado.</string>
+    <string name="msgSenhaUsuarioNaoInformada">A senha do usuário deve ser informada.</string>
+
+    <string name="msgSenhaUsuarioMenorQueSeis">Senha inválida.</string>
+    <string name="msgNomeUsuarioMenorQueTres">Nome do usuário inválido.</string>
 
 </resources>
