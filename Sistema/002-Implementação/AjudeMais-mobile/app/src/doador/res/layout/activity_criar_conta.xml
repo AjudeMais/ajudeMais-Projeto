@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -45,19 +46,23 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="@string/hitNomeUsuario"
                 android:inputType="textPersonName"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+                />
 
-            <EditText
+
+
+            <com.github.pinball83.maskededittext.MaskedEditText
                 android:id="@+id/edtTelefone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtNomeUsuario"
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="@string/hitTelefone"
-                android:inputType="phone"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+                android:inputType="number"
+                app:mask="(**) *****-****"
+                app:notMaskedSymbol="*"
+                app:maskIconColor="@color/colorPrimary"
+
+                />
 
             <EditText
                 android:id="@+id/edtEmail"
@@ -65,10 +70,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtTelefone"
                 android:backgroundTint="@color/colorPrimary"
+                android:fontFamily="sans-serif"
                 android:hint="@string/hitEmail"
+
                 android:inputType="textEmailAddress"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+                android:singleLine="true"
+                android:typeface="normal" />
 
 
             <EditText
@@ -79,8 +86,8 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="@string/hitSenha"
                 android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+
+              />
 
             <EditText
                 android:id="@+id/edtConfirmarSenha"
@@ -90,8 +97,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:hint="@string/hitConfirmacaoSenha"
                 android:inputType="textPassword"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="@color/colorPrimary" />
+                />
 
         </RelativeLayout>
     </ScrollView>

@@ -130,6 +130,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(intent);
 
                 salvarNomeUsuarioESenha(edtNomeUsuario.getText().toString().trim(), edtSenhaUsuario.getText().toString().trim());
+                finish();
+
             }
         }
     }

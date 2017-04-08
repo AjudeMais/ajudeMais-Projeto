@@ -25,7 +25,7 @@ public class ApresentacaoActivity extends AppCompatActivity {
 
                 SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
                 String nomeUsuario = sharedPref.getString("nomeUsuario", null);
-                String senhaUsuario = sharedPref.getString("senhaUsuario", null);
+                String senhaUsuario = sharedPref.getString("emailUsuario", null);
 
                 if (nomeUsuario != null && senhaUsuario != null) {
                     Intent i = new Intent();
