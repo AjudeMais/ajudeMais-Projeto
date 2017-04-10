@@ -59,7 +59,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:+'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.pinball83:masked-edittext:1.0.3'
-
+    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
     testCompile 'junit:junit:4.12'
 
 }
