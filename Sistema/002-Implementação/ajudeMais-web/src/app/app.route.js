@@ -16,7 +16,7 @@
 
 		$stateProvider.state('login', {
 			url : '/login',
-			templateUrl : 'app/components/public/login/login.html',
+			templateUrl : 'app/components/login/login.html',
 			controller : 'LoginController',
 			controllerAs : 'vm',
 			data : {
@@ -34,7 +34,7 @@
 		
 		.state('home.doador', {
 			url : "/doador",
-			templateUrl : "app/components/private/doador/daodores.html",
+			templateUrl : "app/components/doador/daodores.html",
             controller : "DoadorController",
             controllerAs : 'vm',
             data : {

@@ -8,6 +8,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.dao.DoadorRepository;
@@ -27,14 +28,18 @@ public class DoadorServiceImpl implements DoadorService {
 
 	@Autowired
 	private DoadorRepository doadorRepository;
-
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	/**
 	 * 
 	 */
 	@Override
 	@Transactional
-	public Doador criar(Doador paciente) {
-		return doadorRepository.save(paciente);
+	public Doador criar(Doador doador) {
+		String senha = passwordEncoder.encode(doador.getConta().getSenha());
+		doador.getConta().setSenha(senha);
+		return doadorRepository.save(doador);
 	}
 
 	/**
@@ -42,8 +47,8 @@ public class DoadorServiceImpl implements DoadorService {
 	 */
 	@Override
 	@Transactional
-	public Doador alterar(Doador paciente) {
-		return doadorRepository.save(paciente);
+	public Doador alterar(Doador doador) {
+		return doadorRepository.save(doador);
 	}
 
 	/**

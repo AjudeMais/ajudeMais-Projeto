@@ -1,42 +1,73 @@
+/**
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.security;
 
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  *
  */
-public class UsuarioSistema extends User {
+public class UsuarioSistema implements UserDetails {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4127773916346149593L;
 	
-	private Usuario usuario;
+	private Conta conta;
+	private final Collection<? extends GrantedAuthority> authorities;
+	
 
-	/**
-	 * 
-	 * @param usuario
-	 * @param authorities
-	 */
-	public UsuarioSistema(Usuario usuario, Collection<? extends GrantedAuthority> authorities) {
-		super(usuario.getUsername(), usuario.getSenha(), authorities);
-		this.usuario = usuario;
+    public UsuarioSistema(Conta conta, Collection<? extends GrantedAuthority> authorities) {
+		this.conta = conta;
+		this.authorities = authorities;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public Usuario getUsuario() {
-		return usuario;
-	}
+	@Override
+    public String getUsername() {
+        return conta.getUsername();
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @JsonIgnore
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+
+    @JsonIgnore
+    @Override
+    public String getPassword() {
+        return conta.getSenha();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

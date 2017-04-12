@@ -41,7 +41,7 @@ public class Doador implements Serializable {
 	
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private Usuario conta;
+	private Conta conta;
 
 	/**
 	 * @return the id
@@ -73,11 +73,11 @@ public class Doador implements Serializable {
 		this.nome = nome;
 	}
 
-	public Usuario getConta() {
+	public Conta getConta() {
 		return conta;
 	}
 
-	public void setConta(Usuario conta) {
+	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
 

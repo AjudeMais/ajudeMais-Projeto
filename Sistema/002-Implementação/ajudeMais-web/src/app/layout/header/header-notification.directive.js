@@ -7,12 +7,14 @@ angular.module('layout').directive('headerNotification',
 			replace : true,
 			controller: function($rootScope, $state, authenticationService) {
 				var vm = this;
-	
+                vm.usuario = $rootScope.sessionUser;
 				/**
 				 * 
 				 */
 				vm.logout = function() {
-					/*TODO:implementar...*/
+                    authenticationService.doLogout(function() {
+                        $state.go("login");
+                    });
 				}							
 				
 			},

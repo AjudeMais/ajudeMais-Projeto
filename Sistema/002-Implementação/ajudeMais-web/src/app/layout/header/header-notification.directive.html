@@ -8,7 +8,7 @@
 			<li class="dropdown-header">
 				<center>
 					Usuário<br>
-					<b>Thanos o Titan louco</b>
+					<b>{{headerNotificationCtrl.usuario.username}}</b></li>
 				</center>
 			</li>
 			<div>
@@ -16,7 +16,7 @@
 				  <a class="list-group-item">
 				  	Conta
 				  </a>
-				  <a class="list-group-item">
+				  <a class="list-group-item" ng-click="headerNotificationCtrl.logout()">
 				  	Sair
 				  </a>
 				</ul>

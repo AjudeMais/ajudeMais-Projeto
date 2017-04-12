@@ -44,7 +44,8 @@
 
 	        return responseData;
 	      });
-		
+
+        $httpProvider.interceptors.push('authInterceptor');
 		$httpProvider.interceptors.push('errorResolverInterceptor');
 		$httpProvider.interceptors.push('accessDeniedInterceptor');
 	}

@@ -4,19 +4,19 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Usuario;
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  *
  */
-public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
+public interface UsuarioRepository extends JpaRepository<Conta, Long>{
 	
 	/**
 	 * 
 	 * @param username
 	 */
-	Optional<Usuario> findByUsername(String username);
+	Optional<Conta> findByUsername(String username);
 
 }

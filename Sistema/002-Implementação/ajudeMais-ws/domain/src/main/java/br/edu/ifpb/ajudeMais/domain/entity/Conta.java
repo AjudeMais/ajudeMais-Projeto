@@ -2,11 +2,18 @@ package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 
@@ -14,7 +21,7 @@ import javax.persistence.Id;
  *
  */
 @Entity
-public class Usuario {
+public class Conta {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,17 +29,26 @@ public class Usuario {
 	/**
 	 * 	
 	 */
+	@NotBlank 
+	@NotNull
+	@Size(min=4, max=100)
+	@Column(length=100, nullable=false)
 	private String username;
 
 	/**
 	 * 
 	 */
+	@NotBlank 
+	@NotNull 
+	@Size(min=4, max=100)
+	@Basic(fetch = FetchType.LAZY)
+    @Column(length=100, nullable=false)
 	private String senha;
 
 	/**
 	 * 
 	 */
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> grupos;
 
 	/**
@@ -82,7 +98,7 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Conta [id=" + id + ", username=" + username + ", senha=" + senha + ", grupos=" + grupos + ", ativo="
+		return "Conta [id=" + id + ", username=" + username + ", senha=" +senha + ", grupos=" + grupos + ", ativo="
 				+ ativo + "]";
 	}
 

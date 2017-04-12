@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.edu.ifpb.ajudeMais.api.config;
+package br.edu.ifpb.ajudeMais.api.handler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
+
 /**
  * 
  * <p>
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-@ControllerAdvice("br.edu.ifpb.ajudeMais.api.rest")
+@ControllerAdvice(basePackageClasses = {DoadorRestService.class})
 public class RestExceptionHandler {
 
 	/**
