@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudeMais.api.security.jwt;
+package br.edu.ifpb.ajudeMais.api.security;
 
 import java.io.IOException;
 
@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import br.edu.ifpb.ajudeMais.service.security.jwt.JwtTokenUtil;
 
 /**
  * 
@@ -36,8 +38,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         String authToken = request.getHeader(this.tokenHeader);
-        // authToken.startsWith("Bearer ")
-        // String authToken = header.substring(7);
         String username = jwtTokenUtil.getUsernameFromToken(authToken);
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

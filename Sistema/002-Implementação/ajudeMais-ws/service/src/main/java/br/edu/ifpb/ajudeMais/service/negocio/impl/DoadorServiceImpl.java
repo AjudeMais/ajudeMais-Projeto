@@ -59,4 +59,10 @@ public class DoadorServiceImpl implements DoadorService {
 		return doadorRepository.findAll();
 	}
 
+	@Override
+	@Transactional
+	public void remover(Doador doador) {
+		doadorRepository.delete(doador);
+	}
+
 }

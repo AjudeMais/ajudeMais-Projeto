@@ -4,22 +4,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mobile.device.Device;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifpb.ajudeMais.api.security.jwt.JwtTokenUtil;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
+import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
 
 /**
  * 
@@ -29,18 +25,12 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 @RestController
 @RequestMapping("/auth")
 public class AuthRestService {
-
+	
+	@Autowired
+	private AuthService authService;
+	
 	@Value("${jwt.header}")
 	private String tokenHeader;
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
-
-	@Autowired
-	private UserDetailsService userDetailsService;
 
 	/**
 	 * 
@@ -53,12 +43,7 @@ public class AuthRestService {
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody Conta conta, Device device)
 			throws AuthenticationException {
 
-		final Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(conta.getUsername(), conta.getSenha()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		final UserDetails userDetails = userDetailsService.loadUserByUsername(conta.getUsername());
-		final String token = jwtTokenUtil.generateToken(userDetails, device);
+		JwtToken token = authService.criaAutenticao(conta, device);
 
 		return ResponseEntity.ok(token);
 	}
@@ -68,12 +53,43 @@ public class AuthRestService {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/refresh", method = RequestMethod.GET)
+	@RequestMapping(value = "/atualizar", method = RequestMethod.GET)
 	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {
 		String token = request.getHeader(tokenHeader);
+		JwtToken tokenAtualizado = authService.atualizaAutenticacao(new JwtToken(token));
+		
+		if(tokenAtualizado != null){
+			return ResponseEntity.ok(tokenAtualizado);
+		}else{
+			return new ResponseEntity<Object>("token inválido", HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 
-		String refreshedToken = jwtTokenUtil.refreshToken(token);
-		return ResponseEntity.ok(refreshedToken);
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public ResponseEntity<?> getUsuario(HttpServletRequest request) {
+		String token = request.getHeader(tokenHeader);
+		Conta conta = authService.getContaPorToken(new JwtToken(token));
+
+		return ResponseEntity.ok(conta);
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/valida", method = RequestMethod.GET)
+	public ResponseEntity<Boolean> autenticacaoValida(HttpServletRequest request) {
+		String token = request.getHeader(tokenHeader);
+		Boolean valido = authService.autenticacaoValida(new JwtToken(token));
+
+		return ResponseEntity.ok(valido);
 	}
 
 }

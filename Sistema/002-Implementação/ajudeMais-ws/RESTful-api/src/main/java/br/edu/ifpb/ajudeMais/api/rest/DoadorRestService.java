@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,5 +72,19 @@ public class DoadorRestService {
 		List<Doador> doador = doadorService.buscarTodos();
 		
 		return new ResponseEntity<List<Doador>>(doador,HttpStatus.OK);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method=RequestMethod.DELETE, value = "/{id}")
+	public ResponseEntity<?> remover(@PathVariable Long id) {
+		
+		Doador doador = new Doador();
+		doador.setId(id);
+		doadorService.remover(doador);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

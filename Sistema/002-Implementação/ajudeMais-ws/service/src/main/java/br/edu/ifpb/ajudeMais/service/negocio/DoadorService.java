@@ -40,4 +40,10 @@ public interface DoadorService {
 	 * @return
 	 */
 	List<Doador> buscarTodos();
+	
+	/**
+	 * 
+	 * @param doador
+	 */
+	void remover(Doador doador);
 }

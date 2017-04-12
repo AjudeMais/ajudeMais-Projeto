@@ -14,8 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.edu.ifpb.ajudeMais.api.security.jwt.JwtAuthenticationEntryPoint;
-import br.edu.ifpb.ajudeMais.api.security.jwt.JwtAuthenticationTokenFilter;
+import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationEntryPoint;
+import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationTokenFilter;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 
 /**
  * 
@@ -84,9 +85,13 @@ public class SecurityConfig {
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 				.authorizeRequests()
-					.antMatchers("/auth/*", "/user")
+					.antMatchers("/auth/login", "/auth/valida")
 					.permitAll()
-					.antMatchers("/doador").hasRole("DOADOR")
+					.antMatchers("/doador")
+						.hasAnyRole(
+								Grupo.DOADOR.name(), 
+								Grupo.INSTITUICAO.name(),
+								Grupo.SUPER.name())
 					.anyRequest().authenticated()
 					.and();
 			

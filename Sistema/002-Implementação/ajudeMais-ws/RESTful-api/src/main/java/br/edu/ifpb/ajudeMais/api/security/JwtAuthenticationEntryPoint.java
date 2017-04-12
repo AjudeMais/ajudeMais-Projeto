@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudeMais.api.security.jwt;
+package br.edu.ifpb.ajudeMais.api.security;
 
 import java.io.IOException;
 import java.io.Serializable;
