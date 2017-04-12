@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@color/colorPrimary"
-    android:gravity="bottom"
-    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -13,27 +11,37 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
 
-    <TextView
-        android:id="@+id/nameApp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_x="73dp"
-        android:layout_y="100dp"
-        android:text="@string/usuario"
-        android:textSize="38px"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/imageView"
-        android:textAlignment="center" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="95dp"
-        android:layout_x="13dp"
-        android:layout_y="27dp"
-        android:src="@drawable/ic_conta"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/photoProfile"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:contentDescription="@string/profileDescription"
+        android:src="@drawable/ic_account"
+        app:civ_border_color="@color/colorPrimaryDark"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
+
+
+    <TextView
+        android:id="@+id/tvEmailProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUserNameProfile"
+        android:layout_toEndOf="@+id/photoProfile"
+        android:text="@string/userMailTemp"
+        android:textAlignment="viewStart" />
+
+    <TextView
+        android:id="@+id/tvUserNameProfile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/photoProfile"
+        android:paddingTop="19dp"
+        android:text="@string/userNameTemp"
+        android:textAlignment="viewStart"
+        android:textSize="18sp" />
 
 
 </RelativeLayout>

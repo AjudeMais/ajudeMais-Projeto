@@ -1,3 +1,20 @@
 <resources>
+    <!--Tela login-->
+    <string name="hitUserName">Nome do usuário</string>
+    <string name="hitName">Nome</string>
+
+    <string name="btnCreateNewAccount">CRIAR CONTA</string>
+    <string name="newAccountActivity">Nova Conta</string>
+
+    <string name="separatorBtnsLogin">Ou</string>
+
+    <!--Tela Criar Conta Doador sem rede social-->
+    <string name="hitPhone">Telefone</string>
+    <string name="hitPassword">Senha</string>
+    <string name="hitConfirmationPassword">Confirmação da senha</string>
+    <string name="hitEmail">E-mail</string>
+
+    <!--Tela Esqueceu a senha sem rede social-->
+    <string name="btnRecoveryPasswordName">REDEFINIR</string>
 
 </resources>
