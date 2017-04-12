@@ -9,7 +9,7 @@
         android:layout_marginTop="40dp"
         android:textSize="30sp"
         android:gravity="center"
-        android:id="@+id/textoExamplo"
+        android:id="@+id/exampleText"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/background_dark"
         android:text="TAB01"/>

@@ -14,101 +14,112 @@ import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button btnCriarConta;
-    private Button btnEntrar;
-    private TextView tvRecuperarSenha;
-    private EditText edtNomeUsuario;
-    private EditText edtSenhaUsuario;
+    private Button btnCreateAccount;
+    private Button btnOpenApp;
+    private TextView tvRecoveryPassword;
+    private EditText edtUserName;
+    private EditText edtPassword;
     private Resources resources;
     private SharedPreferences sharedPref;
 
-
+    /**
+     * Método Que é executado no momento inicial da inicialização da activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        btnCriarConta = (Button) findViewById(R.id.btnCriarConta);
-        btnEntrar = (Button) findViewById(R.id.btnEntrar);
-        tvRecuperarSenha = (TextView) findViewById(R.id.tvEsqueceuSenha);
-        edtNomeUsuario = (EditText) findViewById(R.id.edtnomeusuario);
-        edtSenhaUsuario = (EditText) findViewById(R.id.edtsenha);
+        init();
+
+        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, CreateAccountActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
+
+        btnOpenApp.setOnClickListener(this);
+
+        tvRecoveryPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+
+            }
+        });
+
+
+    }
+
+    /**
+     * Inicializa todos os atributos e propriedades utilizadas na activity.
+     */
+    public void init() {
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
+        btnOpenApp = (Button) findViewById(R.id.btnOpen);
+        tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
+        edtUserName = (EditText) findViewById(R.id.edtUserName);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
         resources = getResources();
-
-        btnCriarConta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, CriarContaActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
-        btnEntrar.setOnClickListener(this);
-
-        tvRecuperarSenha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, RecuperarSenhaActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-            }
-        });
-
-
     }
 
     /**
      * Valida o se nome e senha do usuário estão corretos,
-     * @return
+     *
+     * @return boolean
      */
-    private boolean ValidaCamposLogin() {
-        String nomeUsuario = edtNomeUsuario.getText().toString().trim();
-        String senha = edtSenhaUsuario.getText().toString().trim();
-        return (!validaCampoVazio(nomeUsuario, senha) && validaTamanhoCamposLogin(nomeUsuario, senha));
+    private boolean validateLoginFields() {
+        String userName = edtUserName.getText().toString().trim();
+        String password = edtPassword.getText().toString().trim();
+        return (!validateEmptyFields(userName, password) && ValidateFieldsLength(userName, password));
     }
 
     /**
-     * Recebe o nome do usuário e senha verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
+     * Recebe o nome do usuário e password verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
      *
-     * @param nomeUsuario
-     * @param senha
+     * @param userName
+     * @param password
      * @return boolean
      */
-    private boolean validaCampoVazio(String nomeUsuario, String senha) {
+    private boolean validateEmptyFields(String userName, String password) {
 
-        if (TextUtils.isEmpty(nomeUsuario)) {
-            edtNomeUsuario.requestFocus();
-            edtNomeUsuario.setError(resources.getString(R.string.msgNomeUsuarioNaoInformado));
+        if (TextUtils.isEmpty(userName)) {
+            edtUserName.requestFocus();
+            edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
             return true;
 
-        } else if (TextUtils.isEmpty(senha)) {
-            edtSenhaUsuario.requestFocus();
-            edtSenhaUsuario.setError(resources.getString(R.string.msgSenhaUsuarioNaoInformada));
+        } else if (TextUtils.isEmpty(password)) {
+            edtPassword.requestFocus();
+            edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
             return true;
         }
         return false;
     }
 
     /**
-     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a senha informada possui mais de 6 caracteres exigidos.
+     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a password informada possui mais de 6 caracteres exigidos.
      *
-     * @param nomeUsuario
-     * @param senha
+     * @param userName
+     * @param password
      * @return boolean
      */
-    private boolean validaTamanhoCamposLogin(String nomeUsuario, String senha) {
+    private boolean ValidateFieldsLength(String userName, String password) {
 
-        if (!(nomeUsuario.length() > 3)) {
-            edtNomeUsuario.requestFocus();
-            edtNomeUsuario.setError(resources.getString(R.string.msgNomeUsuarioMenorQueTres));
+        if (!(userName.length() > 3)) {
+            edtUserName.requestFocus();
+            edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
             return false;
-        } else if (!(senha.length() > 5)) {
-            edtSenhaUsuario.requestFocus();
-            edtSenhaUsuario.setError(resources.getString(R.string.msgSenhaUsuarioMenorQueSeis));
+        } else if (!(password.length() > 5)) {
+            edtPassword.requestFocus();
+            edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
             return false;
         }
         return true;
@@ -122,25 +133,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
 
-        if (v.getId() == R.id.btnEntrar) {
-            if (ValidaCamposLogin()) {
+        if (v.getId() == R.id.btnOpen) {
+            if (validateLoginFields()) {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 
-                salvarNomeUsuarioESenha(edtNomeUsuario.getText().toString().trim(), edtSenhaUsuario.getText().toString().trim());
+                saveInformationsLogin(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim());
                 finish();
 
             }
         }
     }
 
-    private void salvarNomeUsuarioESenha(String nomeUsuario, String senhaUsuario){
-        SharedPreferences sharedPref = getSharedPreferences("login",Context.MODE_PRIVATE);
+    /**
+     * Armazena informações de login para usuário ficar logado.
+     * @param userName
+     * @param password
+     */
+    private void saveInformationsLogin(String userName, String password) {
+        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("nomeUsuario",nomeUsuario);
-        editor.putString("senhaUsuario", senhaUsuario);
+        editor.putString("userName", userName);
+        editor.putString("password", password);
         editor.apply();
     }
 }

@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">Ajude Mais</string>
-    <string name="telaRecuperarSenha">Esqueceu a senha</string>
+    <string name="screenRecoveryPassword">Esqueceu a senha</string>
 
-    <string name="abrir">Abrir</string>
-    <string name="fechar">Fechar</string>
+    <string name="open">Abrir</string>
+    <string name="close">Fechar</string>
     <string name="action_settings">Settings</string>
 
     <string name="title_activity_teste">Teste</string>
-    <string name="usuario">Nome do Usuário</string>
-    <string name="emailUsuario">example@gmail.com</string>
-    <string name="descPerfilImg">Foto do Perfil</string>
+    <string name="userNameTemp">Nome do Usuário</string>
+    <string name="userMailTemp">example@gmail.com</string>
+    <string name="profileDescription">Foto do Perfil</string>
 
 
     <string name="section_format">Hello World from section: %1$d</string>
@@ -18,23 +18,25 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--Tela login-->
-    <string name="hitNumeroCpf">CPF Mensageiro</string>
-    <string name="hitSenhaUsuario">**********</string>
-    <string name="nomeBtnEntrar">ENTRAR</string>
-    <string name="opEsqueceuSenha">Esqueceu a senha?</string>
+    <string name="hitCpfNumber">CPF Mensageiro</string>
+    <string name="hitPassword">**********</string>
+    <string name="BtnOpenApp">ENTRAR</string>
+    <string name="lbForgotPassword">Esqueceu a senha?</string>
+    <string name="recoveryPasswordActivity">Esqueceu a senha</string>
+
     <string name="facebook">FACEBOOK</string>
-    <string name="logo_do_ajude_mais">Logo do Ajude Mais</string>
+    <string name="brandLogoApp">Logo do Ajude Mais</string>
 
-    <string name="msgNomeUsuarioNaoInformado">O nome do usuário deve ser informado.</string>
-    <string name="msgSenhaUsuarioNaoInformada">A senha do usuário deve ser informada.</string>
-    <string name="msgTelfoneoNaoInformada">O telefone deve ser informado.</string>
-    <string name="msgEmailNaoInformada">O e-mail deve ser informado.</string>
-    <string name="msgConfirmacaoSenhaNaoInformada">A confirmação da senha deve ser informada.</string>
+    <string name="msgUserNameNotInformed">O nome do usuário deve ser informado.</string>
+    <string name="msgPasswordNotInformed">A senha do usuário deve ser informada.</string>
+    <string name="msgPhoneNotInformed">O telefone deve ser informado.</string>
+    <string name="msgEmailNotInformed">O e-mail deve ser informado.</string>
+    <string name="msgConfirmPasswordNotInformed">A confirmação da senha deve ser informada.</string>
 
-    <string name="msgSenhaUsuarioMenorQueSeis">Senha inválida.</string>
-    <string name="msgNomeUsuarioMenorQueTres">Nome do usuário inválido.</string>
-    <string name="msgSenhaNaoConferem">As senhas não conferem.</string>
+    <string name="msgInvalidePassword">Senha inválida.</string>
+    <string name="msgInvalideUserName">Nome do usuário inválido.</string>
+    <string name="msgPasswordAndConfirmPasswordNotCombined">As senhas não conferem.</string>
 
-    <string name="selecionarImage">Selecione uma opção para carregar a foto.</string>
+    <string name="imageSelect">Selecione uma opção para carregar a foto.</string>
 
 </resources>

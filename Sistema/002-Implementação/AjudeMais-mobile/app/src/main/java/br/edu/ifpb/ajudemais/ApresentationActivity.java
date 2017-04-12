@@ -11,32 +11,32 @@ import android.view.MenuItem;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class ApresentacaoActivity extends AppCompatActivity {
+public class ApresentationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apresentacao);
+        setContentView(R.layout.activity_apresentation);
 
-        //Time to next Activity
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
 
                 SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-                String nomeUsuario = sharedPref.getString("nomeUsuario", null);
-                String senhaUsuario = sharedPref.getString("emailUsuario", null);
+                String userName = sharedPref.getString("userName", null);
+                String password = sharedPref.getString("password", null);
+                String email = sharedPref.getString("email", null);
 
-                if (nomeUsuario != null && senhaUsuario != null) {
+                if (userName != null && password != null) {
                     Intent i = new Intent();
-                    i.setClass(ApresentacaoActivity.this, MainActivity.class);
+                    i.setClass(ApresentationActivity.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
 
                 } else {
 
                     Intent i = new Intent();
-                    i.setClass(ApresentacaoActivity.this, LoginActivity.class);
+                    i.setClass(ApresentationActivity.this, LoginActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);
                 }
@@ -48,7 +48,7 @@ public class ApresentacaoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.apresentacao_menu, menu);
+        getMenuInflater().inflate(R.menu.apresentation_menu, menu);
         return true;
     }
 

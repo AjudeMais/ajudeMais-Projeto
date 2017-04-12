@@ -24,29 +24,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private ImageView fotoPerfilUsuario;
-
+    private ImageView profilePhoto;
     private Toolbar mToolbar;
 
     private NavigationView mNavigationView;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
-    private TextView tvNomeUsuario;
+    private TextView tvUserName;
     private TextView tvEmail;
+    private static final int PICK_IMAGE_ID = 234;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        init();
+
         setSupportActionBar(mToolbar);
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
-        mToggle = new ActionBarDrawerToggle(this,
-                mDrawerLayout,
-                R.string.abrir,
-                R.string.fechar);
+
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
 
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
@@ -54,34 +53,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mNavigationView = (NavigationView) findViewById(R.id.shitstuff);
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
 
-        View hView =  mNavigationView.getHeaderView(0);
-        fotoPerfilUsuario = (ImageView) hView.findViewById(R.id.fotoPerfilUsuario);
-        tvNomeUsuario = (TextView) hView.findViewById(R.id.tvNomeUsuarioPerfil);
-        tvEmail = (TextView) hView.findViewById(R.id.tvEmailUsuarioPerfil);
+        View hView = mNavigationView.getHeaderView(0);
+        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
+        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
+        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
-        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-        String nomeUsuario = sharedPref.getString("nomeUsuario", null);
-        String emailUsuario = sharedPref.getString("emailUsuario", null);
+        setDataUserLoggedIn();
 
-        if (nomeUsuario != null && emailUsuario != null) {
-            tvNomeUsuario.setText(nomeUsuario);
-            tvEmail.setText(emailUsuario);
-
-        }
-
-        fotoPerfilUsuario.setOnClickListener(new View.OnClickListener() {
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
                 startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
             }
         });
+
+
+    }
+
+
+    private void setDataUserLoggedIn() {
+
+        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
+        String userName = sharedPref.getString("userName", null);
+        String email = sharedPref.getString("email", null);
+
+        if (userName != null && email != null) {
+            tvUserName.setText(userName);
+            tvEmail.setText(email);
+
+        }
+    }
+
+
+    /**
+     * Inicializa componentes como editText,botões, imageView e etc.
+     */
+    private void init() {
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
+        mNavigationView = (NavigationView) findViewById(R.id.shitstuff);
 
     }
 
@@ -103,22 +119,68 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-    private static final int PICK_IMAGE_ID = 234; // the number doesn't matter
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if(resultCode != RESULT_CANCELED){
+        if (resultCode != RESULT_CANCELED) {
             if (requestCode == PICK_IMAGE_ID) {
-                if (data.getExtras() == null){
+                if (data.getExtras() == null) {
                     Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                    fotoPerfilUsuario.setImageBitmap(bitmap);
-                }else{
+                    profilePhoto.setImageBitmap(bitmap);
+                } else {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    fotoPerfilUsuario.setImageBitmap(photo);
+                    profilePhoto.setImageBitmap(photo);
                 }
             }
         }
     }
+
+
+//    private class HttpPostRequestTask extends AsyncTask<Void, Void, Donor> {
+//
+//        private Context context;
+//
+//        public HttpPostRequestTask(Context context) {
+//            this.context = context;
+//        }
+//
+//        @Override
+//        protected Donor doInBackground(Void... params) {
+//
+//            try {
+//                Donor doador = new Donor();
+//                // doador.setNome("Zefão salvei agora");
+//                doadorRemoteService = new DonorRemoteService();
+//                doador = doadorRemoteService.salvarDoador(doador);
+//                return doador;
+//
+//            } catch (HttpStatusCodeException e) {
+//                final String message = e.getResponseBodyAsString().replace("[", "").replace("]","");
+//                runOnUiThread(new Runnable() {
+//
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//
+//
+//            } catch (RestClientException e) {
+//                Toast.makeText(getApplication(), "Ocorreu um erro enesperado no sistema aguarde e tente novamente.", Toast.LENGTH_LONG).show();
+//            } catch (Exception e) {
+//            }
+//
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Donor doador) {
+//            Log.e("DOADOR", String.valueOf(doador));
+//
+//            super.onPostExecute(doador);
+//        }
+//
+//
+//    }
 }

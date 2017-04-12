@@ -45,6 +45,13 @@ android {
         mensageiro { java.srcDirs = ['src/mensageiro/java', 'src/mensageiro/java/'] }
     }
 
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/notice.txt'
+    }
 
 }
 
@@ -59,7 +66,11 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:+'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.github.pinball83:masked-edittext:1.0.3'
-    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+    compile group: 'org.springframework.android', name: 'spring-android-rest-template', version: '2.0.0.M3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.0.pr2'
+
+
+//    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
     testCompile 'junit:junit:4.12'
 
 }

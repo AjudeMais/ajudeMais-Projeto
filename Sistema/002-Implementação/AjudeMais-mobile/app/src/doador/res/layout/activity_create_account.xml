@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFont"
-    tools:context="br.edu.ifpb.ajudemais.CriarContaActivity">
+    tools:context="br.edu.ifpb.ajudemais.CreateAccountActivity">
 
     <LinearLayout
         android:id="@+id/componenteActionBar"
@@ -40,23 +40,34 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <EditText
-                android:id="@+id/edtNomeUsuario"
+                android:id="@+id/edtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitNomeUsuario"
+                android:hint="@string/hitName"
+                android:inputType="textPersonName"
+                />
+
+
+            <EditText
+                android:layout_below="@+id/edtNome"
+                android:id="@+id/edtUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorPrimary"
+                android:hint="@string/hitUserName"
                 android:inputType="textPersonName"
                 />
 
 
 
             <com.github.pinball83.maskededittext.MaskedEditText
-                android:id="@+id/edtTelefone"
+                android:id="@+id/edtPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtNomeUsuario"
+                android:layout_below="@+id/edtUserName"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitTelefone"
+                android:hint="@string/hitPhone"
                 android:inputType="number"
                 app:mask="(**) *****-****"
                 app:notMaskedSymbol="*"
@@ -68,34 +79,31 @@
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtTelefone"
+                android:layout_below="@+id/edtPhone"
                 android:backgroundTint="@color/colorPrimary"
-                android:fontFamily="sans-serif"
                 android:hint="@string/hitEmail"
-
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
                 android:typeface="normal" />
 
 
             <EditText
-                android:id="@+id/edtSenha"
+                android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitSenha"
+                android:hint="@string/hitPassword"
                 android:inputType="textPassword"
 
               />
 
             <EditText
-                android:id="@+id/edtConfirmarSenha"
+                android:id="@+id/edtConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtSenha"
+                android:layout_below="@+id/edtPassword"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitConfirmacaoSenha"
+                android:hint="@string/hitConfirmationPassword"
                 android:inputType="textPassword"
                 />
 
@@ -103,7 +111,7 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/componenteBtnCriarConta"
+        android:id="@+id/componentCreateBtnNewAccount"
         android:layout_width="match_parent"
         android:layout_height="55sp"
         android:layout_alignParentBottom="true"
@@ -111,13 +119,13 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnCriarConta"
+            android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:height="@dimen/LagHeigth"
             android:backgroundTint="@color/colorPrimary"
-            android:text="@string/btnCriarCobta"
+            android:text="@string/btnCreateNewAccount"
             android:textColor="@color/colorFont"
             android:textSize="@dimen/fontLogin" />
 

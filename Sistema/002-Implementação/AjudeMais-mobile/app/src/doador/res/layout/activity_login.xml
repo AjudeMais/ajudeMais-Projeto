@@ -16,7 +16,7 @@
 
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/componentesLogin"
+            android:id="@+id/componentLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorFont"
@@ -26,25 +26,25 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <EditText
-                android:id="@+id/edtsenha"
+                android:id="@+id/edtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtnomeusuario"
+                android:layout_below="@+id/edtUserName"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitSenhaUsuario"
+                android:hint="@string/hitPassword"
                 android:inputType="textPassword"
                 android:textColor="@color/colorPrimary"
                 android:textColorHint="@color/colorPrimary" />
 
             <EditText
-                android:id="@+id/edtnomeusuario"
+                android:id="@+id/edtUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/imglogin"
                 android:layout_marginTop="45dp"
                 android:backgroundTint="@color/colorPrimary"
-                android:hint="@string/hitNomeUsuario"
+                android:hint="@string/hitName"
                 android:inputType="textPersonName"
                 android:textColor="@color/colorPrimary"
                 android:textColorHint="@color/colorPrimary" />
@@ -57,18 +57,18 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="25dp"
                 android:src="@drawable/img_login"
-                android:contentDescription="@string/logo_do_ajude_mais" />
+                android:contentDescription="@string/brandLogoApp" />
 
             <Button
-                android:id="@+id/btnEntrar"
+                android:id="@+id/btnOpen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtsenha"
+                android:layout_below="@+id/edtPassword"
                 android:layout_marginTop="12dp"
                 android:height="@dimen/LagHeigth"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="@string/nomeBtnEntrar"
+                android:text="@string/BtnOpenApp"
                 android:textColor="@color/colorFont"
                 android:textSize="@dimen/fontLogin" />
 
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/separadorEntraEFacebook"
+                android:layout_below="@+id/separatorBetweenLoginAndLoginFacebook"
                 android:layout_marginTop="2dp"
                 android:height="@dimen/LagHeigth"
                 android:backgroundTint="@color/btnFaceTemp"
@@ -87,31 +87,31 @@
                 android:textSize="@dimen/fontLogin" />
 
             <TextView
-                android:id="@+id/separadorEntraEFacebook"
+                android:id="@+id/separatorBetweenLoginAndLoginFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/btnEntrar"
+                android:layout_below="@+id/btnOpen"
                 android:layout_marginTop="2dp"
-                android:text="@string/SeparadorBtnsLogin"
+                android:text="@string/separatorBtnsLogin"
                 android:clickable="true"
                 android:textAlignment="center" />
 
             <TextView
-                android:id="@+id/tvEsqueceuSenha"
+                android:id="@+id/tvForgotPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/btnFacebook"
                 android:layout_marginTop="15dp"
-                android:text="@string/opEsqueceuSenha"
+                android:text="@string/lbForgotPassword"
                 android:textAlignment="center" />
 
         </RelativeLayout>
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/componenteBtnCriarConta"
+        android:id="@+id/componentBtnCreateAccount"
         android:layout_width="match_parent"
         android:layout_height="55sp"
         android:layout_alignParentBottom="true"
@@ -119,13 +119,13 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnCriarConta"
+            android:id="@+id/btnCreateAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:height="@dimen/LagHeigth"
             android:backgroundTint="@color/colorPrimary"
-            android:text="@string/btnCriarCobta"
+            android:text="@string/btnCreateNewAccount"
             android:textColor="@color/colorFont"
             android:textSize="@dimen/fontLogin" />
 

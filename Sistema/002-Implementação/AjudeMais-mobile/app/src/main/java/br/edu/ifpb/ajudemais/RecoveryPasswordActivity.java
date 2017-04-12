@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-import br.edu.ifpb.ajudemais.R;
-
-public class RecuperarSenhaActivity extends AppCompatActivity {
+public class RecoveryPasswordActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mToggle;
 
@@ -19,7 +17,7 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recuperar_senha);
+        setContentView(R.layout.activity_recovery_password);
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
@@ -33,7 +31,7 @@ public class RecuperarSenhaActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(RecuperarSenhaActivity.this, LoginActivity.class);
+                Intent intent = new Intent(RecoveryPasswordActivity.this, LoginActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

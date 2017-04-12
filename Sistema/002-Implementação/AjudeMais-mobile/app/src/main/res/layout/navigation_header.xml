@@ -13,33 +13,33 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fotoPerfilUsuario"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:contentDescription="@string/descPerfilImg"
-        android:src="@drawable/ic_conta"
+        android:id="@+id/photoProfile"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
+        android:contentDescription="@string/profileDescription"
+        android:src="@drawable/ic_account"
         app:civ_border_color="@color/colorPrimaryDark"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
 
     <TextView
-        android:id="@+id/tvEmailUsuarioPerfil"
+        android:id="@+id/tvEmailProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvNomeUsuarioPerfil"
-        android:layout_toEndOf="@+id/fotoPerfilUsuario"
-        android:text="@string/emailUsuario"
+        android:layout_below="@+id/tvUserNameProfile"
+        android:layout_toEndOf="@+id/photoProfile"
+        android:text="@string/userMailTemp"
         android:textAlignment="viewStart" />
 
     <TextView
-        android:id="@+id/tvNomeUsuarioPerfil"
+        android:id="@+id/tvUserNameProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/fotoPerfilUsuario"
+        android:layout_toEndOf="@+id/photoProfile"
         android:paddingTop="19dp"
-        android:text="@string/usuario"
+        android:text="@string/userNameTemp"
         android:textAlignment="viewStart"
         android:textSize="18sp" />
 
