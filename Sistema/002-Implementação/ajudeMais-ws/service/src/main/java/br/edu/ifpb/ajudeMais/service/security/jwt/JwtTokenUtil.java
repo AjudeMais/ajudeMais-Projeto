@@ -19,8 +19,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * 
  * Classe utilitária para manipulação de JWT
  * 
- * Baseada nos projetos:
  * <pre>
+ * Baseada nos projetos:
  * @see <a href="https://github.com/brahalla/Cerberus</a>
  * @see <a href="https://www.toptal.com/java/rest-security-with-jwt-spring-security-and-java</a>
  * </pre>

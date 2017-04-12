@@ -29,7 +29,7 @@ import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
 	@Autowired
