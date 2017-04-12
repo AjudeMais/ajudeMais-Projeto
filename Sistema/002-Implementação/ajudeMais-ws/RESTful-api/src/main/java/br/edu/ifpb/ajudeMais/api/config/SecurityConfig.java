@@ -3,6 +3,7 @@ package br.edu.ifpb.ajudeMais.api.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationEntryPoint;
 import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationTokenFilter;
-import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 
 /**
  * 
@@ -86,12 +86,9 @@ public class SecurityConfig {
 					.and()
 				.authorizeRequests()
 					.antMatchers("/auth/login", "/auth/valida")
-					.permitAll()
-					.antMatchers("/doador")
-						.hasAnyRole(
-								Grupo.DOADOR.name(), 
-								Grupo.INSTITUICAO.name(),
-								Grupo.SUPER.name())
+						.permitAll()
+					.antMatchers(HttpMethod.POST, "/doador")
+						.permitAll()
 					.anyRequest().authenticated()
 					.and();
 			

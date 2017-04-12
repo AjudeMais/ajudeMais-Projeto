@@ -98,7 +98,7 @@ public class Conta {
 
 	@Override
 	public String toString() {
-		return "Conta [id=" + id + ", username=" + username + ", senha=" +senha + ", grupos=" + grupos + ", ativo="
+		return "Conta [id=" + id + ", username=" + username + ", senha=[PROTEGIDO]"+ ", grupos=" + grupos + ", ativo="
 				+ ativo + "]";
 	}
 

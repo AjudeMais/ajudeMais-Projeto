@@ -67,9 +67,7 @@ public class AuthServiceImpl implements AuthService{
 	@Override
 	public Conta getContaPorToken(JwtToken token) {
 		if(autenticacaoValida(token)){
-			String username = jwtTokenUtil.getUsernameFromToken(token.getToken());
-			UsuarioSistema userDetails = (UsuarioSistema) userDetailsService.loadUserByUsername(username);
-			return userDetails.getConta();
+			return this.getConta(token);
 		}
 		return null;
 	}
@@ -88,5 +86,18 @@ public class AuthServiceImpl implements AuthService{
 		return false;
 		
 	}
-
+	
+	/**
+	 * 
+	 * @param token
+	 * @return
+	 */
+	private Conta getConta(JwtToken token) {
+		String username = jwtTokenUtil.getUsernameFromToken(token.getToken());
+		UsuarioSistema userDetails = (UsuarioSistema) userDetailsService.loadUserByUsername(username);
+		Conta conta = userDetails.getConta();
+		conta.setSenha("[PROTEGIDA]");
+		
+		return conta;
+	}
 }

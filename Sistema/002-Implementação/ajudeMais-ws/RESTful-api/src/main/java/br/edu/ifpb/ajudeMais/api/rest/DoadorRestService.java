@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +55,7 @@ public class DoadorRestService {
 	 * @param doador
 	 * @return
 	 */
+	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Doador> alterar(@Valid @RequestBody Doador doador) {
 
@@ -66,6 +68,7 @@ public class DoadorRestService {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Doador>> buscarTodos() {
 		
@@ -78,6 +81,7 @@ public class DoadorRestService {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method=RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<?> remover(@PathVariable Long id) {
 		
