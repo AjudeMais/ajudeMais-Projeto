@@ -12,15 +12,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnCreateAccount;
     private Button btnOpenApp;
+    private LoginButton btnFacebook;
     private TextView tvRecoveryPassword;
     private EditText edtUserName;
     private EditText edtPassword;
     private Resources resources;
     private SharedPreferences sharedPref;
+    private CallbackManager callbackManager;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -56,7 +64,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        callbackManager = CallbackManager.Factory.create();
+        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // TODO: 13/04/17  
+            }
 
+            @Override
+            public void onCancel() {
+                // TODO: 13/04/17  
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                // TODO: 13/04/17
+            }
+        });
     }
 
     /**
@@ -65,6 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void init() {
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
+        btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
         tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);

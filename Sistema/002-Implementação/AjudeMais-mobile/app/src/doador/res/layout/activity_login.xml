@@ -73,7 +73,7 @@
                 android:textSize="@dimen/fontLogin" />
 
 
-            <Button
+            <com.facebook.login.widget.LoginButton
                 android:id="@+id/btnFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,9 +82,10 @@
                 android:layout_marginTop="2dp"
                 android:height="@dimen/LagHeigth"
                 android:backgroundTint="@color/btnFaceTemp"
-                android:text="@string/facebook"
+                android:text="@string/com_facebook_loginview_log_in_button"
                 android:textColor="@color/colorFont"
                 android:textSize="@dimen/fontLogin" />
+
 
             <TextView
                 android:id="@+id/separatorBetweenLoginAndLoginFacebook"
