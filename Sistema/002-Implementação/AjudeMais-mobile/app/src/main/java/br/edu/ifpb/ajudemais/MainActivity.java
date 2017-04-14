@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -11,13 +13,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.ImagePicker;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -26,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle mToggle;
     private ImageView profilePhoto;
     private Toolbar mToolbar;
+    private Conta conta;
 
     private NavigationView mNavigationView;
     private FragmentManager mFragmentManager;
@@ -39,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        conta = (Conta) getIntent().getSerializableExtra("Conta");
+
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+        findViewById(R.id.containerView).setVisibility(View.GONE);
 
         init();
 
@@ -63,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
+        tvUserName.setText(conta.getUsername());
+
         setDataUserLoggedIn();
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
+        new LoadingCampanhasDoacoesTask().execute();
     }
 
 
@@ -118,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -137,50 +147,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-//    private class HttpPostRequestTask extends AsyncTask<Void, Void, Donor> {
-//
-//        private Context context;
-//
-//        public HttpPostRequestTask(Context context) {
-//            this.context = context;
-//        }
-//
-//        @Override
-//        protected Donor doInBackground(Void... params) {
-//
-//            try {
-//                Donor doador = new Donor();
-//                // doador.setNome("Zefão salvei agora");
-//                doadorRemoteService = new DonorRemoteService();
-//                doador = doadorRemoteService.salvarDoador(doador);
-//                return doador;
-//
-//            } catch (HttpStatusCodeException e) {
-//                final String message = e.getResponseBodyAsString().replace("[", "").replace("]","");
-//                runOnUiThread(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//
-//
-//            } catch (RestClientException e) {
-//                Toast.makeText(getApplication(), "Ocorreu um erro enesperado no sistema aguarde e tente novamente.", Toast.LENGTH_LONG).show();
-//            } catch (Exception e) {
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Donor doador) {
-//            Log.e("DOADOR", String.valueOf(doador));
-//
-//            super.onPostExecute(doador);
-//        }
-//
-//
-//    }
+    private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String>{
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String message) {
+            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+            findViewById(R.id.containerView).setVisibility(View.VISIBLE);
+            Toast.makeText(getApplication(), "CARREGADO", Toast.LENGTH_LONG).show();
+        }
+
+    }
 }

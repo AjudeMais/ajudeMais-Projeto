@@ -4,19 +4,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
 public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +44,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
+     *
      * @param savedInstanceState
      */
     @Override
@@ -51,7 +61,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
-    private void init(){
+    private void init() {
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -66,10 +76,12 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         edtConfirmPassword = (EditText) findViewById(R.id.edtConfirmPassword);
 
+
     }
 
     /**
      * Implementação para controlar operações na action bar
+     *
      * @param item
      * @return
      */
@@ -185,6 +197,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     /**
      * Implementa as operação de clique.
+     *
      * @param v
      */
     @Override
@@ -192,19 +205,26 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         if (v.getId() == R.id.btnCreateAccount) {
             if (validateDoadorCreate()) {
 
+                List<String> grupos = new ArrayList<>();
+                grupos.add("ROLE_DOADOR");
+
                 Doador doador = new Doador(edtName.getText().toString().trim(),
-                        edtPassword.getText().toString().trim(), true,
                         new Conta(edtUserName.getText().toString().trim(),
-                                edtPhone.getText().toString().trim(),
-                                edtEmail.getText().toString().trim()));
+                                edtPassword.getText().toString().trim(), grupos));
 
                 System.out.println(doador);
+                new HttpPostRequestTask(this, doador).execute();
+
                 Intent intent = new Intent();
                 intent.setClass(CreateAccountActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                saveDataUserCreated(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim(), edtEmail.getText().toString().trim());
+
+                saveDataUserCreated(doador.getConta().getUsername(), doador.getConta().getSenha(), "example@gmail.com");
+
                 finish();
+
+
 
             }
 
@@ -213,6 +233,7 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
     /**
      * Responsável por guardar os dados do usuário criado para não precisar logar novamente.
+     *
      * @param userName
      * @param password
      * @param email
@@ -224,5 +245,70 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         editor.putString("password", password);
         editor.putString("email", email);
         editor.apply();
+    }
+
+
+
+
+    private class HttpPostRequestTask extends AsyncTask<Void, Void, Doador> {
+
+        private Context context;
+        private Doador doador;
+        private DoadorRemoteService doadorRemoteService;
+
+        public HttpPostRequestTask(Context context, Doador doador) {
+            this.context = context;
+            this.doador = doador;
+        }
+
+        @Override
+        protected Doador doInBackground(Void... params) {
+
+            try {
+                doadorRemoteService = new DoadorRemoteService();
+                doador = doadorRemoteService.saveDoador(doador);
+
+                return doador;
+
+            } catch (HttpStatusCodeException e) {
+                final String message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
+            } catch (RestClientException e) {
+
+
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(context, "Ocorreu um erro enesperado no sistema aguarde e tente novamente.", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Doador doador) {
+            if (doador != null) {
+                Log.e("DOADOR", doador.toString());
+            }
+            super.onPostExecute(doador);
+        }
+
+
+
+
     }
 }

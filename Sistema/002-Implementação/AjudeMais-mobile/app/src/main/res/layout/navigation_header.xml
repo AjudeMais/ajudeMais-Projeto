@@ -14,8 +14,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/photoProfile"
-        android:layout_width="86dp"
-        android:layout_height="86dp"
+        android:layout_width="66dp"
+        android:layout_height="match_parent"
         android:contentDescription="@string/profileDescription"
         android:src="@drawable/ic_account"
         app:civ_border_color="@color/colorPrimaryDark"
@@ -27,21 +27,22 @@
         android:id="@+id/tvEmailProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUserNameProfile"
-        android:layout_toEndOf="@+id/photoProfile"
         android:text="@string/userMailTemp"
-        android:textAlignment="viewStart" />
+        android:textAlignment="viewStart"
+        android:layout_below="@+id/tvUserNameProfile"
+        android:layout_alignStart="@+id/tvUserNameProfile" />
 
     <TextView
         android:id="@+id/tvUserNameProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/photoProfile"
-        android:paddingTop="19dp"
+        android:paddingTop="17dp"
         android:text="@string/userNameTemp"
         android:textAlignment="viewStart"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/photoProfile"
+        android:layout_marginStart="8dp" />
 
 
 </RelativeLayout>

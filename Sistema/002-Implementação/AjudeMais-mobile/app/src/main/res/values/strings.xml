@@ -38,5 +38,6 @@
     <string name="msgPasswordAndConfirmPasswordNotCombined">As senhas não conferem.</string>
 
     <string name="imageSelect">Selecione uma opção para carregar a foto.</string>
+    <string name="msgDialogLoading">Por favor aguarde...</string>
 
 </resources>
