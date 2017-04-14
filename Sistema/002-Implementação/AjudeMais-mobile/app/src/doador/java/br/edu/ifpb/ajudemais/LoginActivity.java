@@ -4,31 +4,50 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+import com.facebook.CallbackManager;
+import com.facebook.login.widget.LoginButton;
+
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClientException;
+
+import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.JwtToken;
+import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+
+public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Button btnCreateAccount;
     private Button btnOpenApp;
+    private LoginButton btnFacebook;
     private TextView tvRecoveryPassword;
     private EditText edtUserName;
     private EditText edtPassword;
     private Resources resources;
     private SharedPreferences sharedPref;
+    private AuthRemoteService authRemoteService;
+    private CallbackManager callbackManager;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
+     *
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         init();
@@ -56,19 +75,39 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        callbackManager = CallbackManager.Factory.create();
+        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // TODO: 13/04/17
+            }
 
+            @Override
+            public void onCancel() {
+
+                // TODO: 13/04/17  
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                // TODO: 13/04/17
+            }
+        });
     }
 
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
+        authRemoteService = new AuthRemoteService();
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
+        btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
         tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         resources = getResources();
+
     }
 
     /**
@@ -135,28 +174,102 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (v.getId() == R.id.btnOpen) {
             if (validateLoginFields()) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-                saveInformationsLogin(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim());
-                finish();
-
+                new LoginTask(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
             }
         }
     }
 
     /**
+     * @param result
+     */
+    private void showResult(String result) {
+        if (result != null) {
+            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "I got null, something happened!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    /**
      * Armazena informações de login para usuário ficar logado.
+     *
      * @param userName
      * @param password
      */
-    private void saveInformationsLogin(String userName, String password) {
+    private void saveInformationsLoginAndToken(String userName, String password, String accessToken) {
         SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("userName", userName);
         editor.putString("password", password);
+        editor.putString("accessToken", accessToken);
         editor.apply();
+    }
+
+
+    private class LoginTask extends AsyncTask<Void, Void, JwtToken> {
+
+        private String message = null;
+        private Conta conta;
+        private JwtToken jwtToken;
+        private AuthRemoteService authRemoteService;
+        private String username;
+        private String senha;
+
+        public LoginTask(String username, String senha) {
+            this.authRemoteService = new AuthRemoteService();
+            this.username = username;
+            this.senha = senha;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+            showLoadingProgressDialog();
+
+        }
+
+        @Override
+        protected JwtToken doInBackground(Void... params) {
+
+            try {
+                conta = new Conta(username, senha);
+                jwtToken = authRemoteService.createAuthenticationToken(conta);
+                conta = authRemoteService.getUsuario(jwtToken.getToken());
+
+                return jwtToken;
+
+            } catch (HttpStatusCodeException e) {
+                message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
+                e.printStackTrace();
+            } catch (RestClientException e) {
+                message = "Ocorreu um problema, tente novamente mais tarde";
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(JwtToken jwtToken) {
+            dismissProgressDialog();
+
+            if (jwtToken != null) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Conta", conta);
+                startActivity(intent);
+                saveInformationsLoginAndToken(username, senha, jwtToken.getToken());
+
+                finish();
+
+            }else{
+                showResult(message);
+            }
+        }
+
     }
 }

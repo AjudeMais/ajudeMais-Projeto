@@ -23,6 +23,14 @@
             android:id="@+id/containerView">
         </FrameLayout>
 
+        <RelativeLayout style="@style/GenericProgressBackground"
+            android:id="@+id/loadingPanel"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <ProgressBar style="@style/GenericProgressIndicator"/>
+        </RelativeLayout>
+
+
 
     </LinearLayout>
 
@@ -36,6 +44,7 @@
         android:layout_gravity="start">
 
     </android.support.design.widget.NavigationView>
+
 
 
 </android.support.v4.widget.DrawerLayout>

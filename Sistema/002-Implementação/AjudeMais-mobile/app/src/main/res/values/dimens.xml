@@ -12,6 +12,8 @@
     <dimen name="fontLogin">18sp</dimen>
     <dimen name="LagHeigth">60dp</dimen>
     <dimen name="LagHeigth2">40dp</dimen>
+    <dimen name="LagBtnFacebook">13dp</dimen>
+    <dimen name="LagBtnFbRigthAndLeft">3dp</dimen>
 
 
 </resources>

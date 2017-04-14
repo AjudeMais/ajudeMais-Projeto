@@ -27,6 +27,7 @@
         <activity android:name=".CreateAccountActivity"
             android:label="@string/newAccountActivity">
         </activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
     </application>
 
 </manifest>

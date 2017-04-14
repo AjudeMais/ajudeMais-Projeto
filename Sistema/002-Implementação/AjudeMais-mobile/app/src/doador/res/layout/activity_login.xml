@@ -73,18 +73,20 @@
                 android:textSize="@dimen/fontLogin" />
 
 
-            <Button
+            <com.facebook.login.widget.LoginButton
                 android:id="@+id/btnFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/separatorBetweenLoginAndLoginFacebook"
-                android:layout_marginTop="2dp"
-                android:height="@dimen/LagHeigth"
-                android:backgroundTint="@color/btnFaceTemp"
-                android:text="@string/facebook"
-                android:textColor="@color/colorFont"
-                android:textSize="@dimen/fontLogin" />
+                android:layout_marginTop="4dp"
+                android:textSize="@dimen/fontLogin"
+                android:paddingTop="@dimen/LagBtnFacebook"
+                android:paddingBottom="@dimen/LagBtnFacebook"
+                android:layout_marginRight="@dimen/LagBtnFbRigthAndLeft"
+                android:layout_marginLeft="@dimen/LagBtnFbRigthAndLeft"
+                />
+
 
             <TextView
                 android:id="@+id/separatorBetweenLoginAndLoginFacebook"

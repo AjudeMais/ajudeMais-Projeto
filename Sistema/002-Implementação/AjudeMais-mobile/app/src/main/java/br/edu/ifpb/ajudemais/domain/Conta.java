@@ -1,31 +1,39 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by rafaelfeitosa on 10/04/17.
  * Classe que representa um Doador no sistema.
  */
 
-public class Conta {
+public class Conta implements Serializable{
 
     private Long id;
-    private String name;
-    private String phone;
-    private String email;
-    private String facebookId;
-    private String tokenFCM;
+    private String username;
+    private String senha;
+    private boolean ativo;
 
-    public Conta(String name, String phone, String email, String facebookId, String tokenFCM) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.facebookId = facebookId;
-        this.tokenFCM = tokenFCM;
+    //    private String telefone;
+//    private String email;
+//    private String facebookId;
+//    private String tokenFCM;
+    private List<String> grupos;
+
+    public Conta(String username, String senha, List<String> grupos) {
+        this.username = username;
+        this.senha = senha;
+        this.grupos = grupos;
     }
 
-    public Conta(String name, String phone, String email) {
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
+    public Conta(String username, String senha) {
+        this.username = username;
+        this.senha = senha;
+    }
+
+    public Conta(){
+
     }
 
     /**
@@ -48,91 +56,75 @@ public class Conta {
      *
      * @return String
      */
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     /**
      *
-     * @param name
+     * @param username
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     *
-     * @return String
-     */
-    public String getPhone() {
-        return phone;
-    }
-
-    /**
-     *
-     * @param phone
-     */
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    /***
-     *
-     * @return String
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     *
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     /**
      *
      * @return String
      */
-    public String getFacebookId() {
-        return facebookId;
+    public String getSenha() {
+        return senha;
     }
 
     /**
      *
-     * @param facebookId
+     * @param senha
      */
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+
+    /**
+     *
+     * @return List
+     */
+    public List<String> getGrupos() {
+        return grupos;
     }
 
     /**
      *
-     * @return String
+     * @param grupos
      */
-    public String getTokenFCM() {
-        return tokenFCM;
+    public void setGrupos(List<String> grupos) {
+        this.grupos = grupos;
     }
 
     /**
      *
-     * @param tokenFCM
+     * @return boolean
      */
-    public void setTokenFCM(String tokenFCM) {
-        this.tokenFCM = tokenFCM;
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    /**
+     *
+     * @param ativo
+     */
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
 
     @Override
     public String toString() {
         return "Conta{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", email='" + email + '\'' +
-                ", facebookId='" + facebookId + '\'' +
-                ", tokenFCM='" + tokenFCM + '\'' +
+                ", username='" + username + '\'' +
+                ", senha='" + senha + '\'' +
+                ", ativo=" + ativo +
+                ", grupos=" + grupos +
                 '}';
     }
 }
