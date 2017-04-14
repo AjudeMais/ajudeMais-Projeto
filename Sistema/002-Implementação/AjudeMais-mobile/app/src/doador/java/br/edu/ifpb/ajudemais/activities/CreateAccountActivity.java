@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +23,7 @@ import org.springframework.web.client.RestClientException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;

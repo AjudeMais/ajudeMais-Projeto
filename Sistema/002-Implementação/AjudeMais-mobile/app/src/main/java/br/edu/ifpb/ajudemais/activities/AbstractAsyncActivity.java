@@ -1,7 +1,9 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.AppCompatActivity;
+
+import br.edu.ifpb.ajudemais.R;
 
 /**
  * Created by rafaelfeitosa on 12/04/17.

@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,9 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
-import br.edu.ifpb.ajudemais.util.ImagePicker;
+import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -85,9 +86,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        mNavigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        menuItem.setChecked(true);
+                        mDrawerLayout.closeDrawers();
+                        onNavDrawerItemSelected(menuItem);
+                        return true;
+                    }
+                });
+
         new LoadingCampanhasDoacoesTask().execute();
     }
 
+    /**
+     * @param menuItem
+     */
+    private void onNavDrawerItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_minhas_doacoes:
+                break;
+            case R.id.nav_campanhas:
+                break;
+            case R.id.nav_instituicoes_caridade:
+                break;
+            case R.id.nav_notificacoes:
+
+                break;
+            case R.id.nav_config_conta:
+                break;
+            case R.id.nav_sair:
+                SharedPreferences.Editor prefsEditor = getSharedPreferences("login", Context.MODE_PRIVATE).edit();
+                prefsEditor.clear();
+                prefsEditor.apply();
+
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+
+                break;
+        }
+    }
 
     private void setDataUserLoggedIn() {
 
@@ -147,7 +189,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String>{
+    private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... params) {

@@ -10,9 +10,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity
-            android:name=".ApresentationActivity"
+            android:name=".activities.ApresentationActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,8 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".RecoveryPasswordActivity"
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RecoveryPasswordActivity"
             android:label="@string/recoveryPasswordActivity">
 
         </activity>

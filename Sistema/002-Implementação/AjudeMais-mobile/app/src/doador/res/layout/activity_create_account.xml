@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFont"
-    tools:context="br.edu.ifpb.ajudemais.CreateAccountActivity">
+    tools:context="br.edu.ifpb.ajudemais.activities.CreateAccountActivity">
 
     <LinearLayout
         android:id="@+id/componenteActionBar"
