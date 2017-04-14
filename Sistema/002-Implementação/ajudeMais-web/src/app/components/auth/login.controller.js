@@ -8,7 +8,7 @@
  */
 (function () {
 
-    angular.module('amApp').controller('LoginController', function (authenticationService, $state) {
+    angular.module('amApp').controller('LoginController', function (authenticationService, $state, $rootScope) {
         var vm = this;
         vm.conta = {};
 
@@ -16,12 +16,11 @@
          *
          */
         vm.doLogin = function () {
-            authenticationService.doLogin(vm.conta.username, vm.conta.senha,
+            authenticationService.doLogin(vm.conta,
                 function (response) {
-                    console.log(response);
+                    authenticationService.storageToken(response.token);
                     $state.go("home");
                 }, function (response) {
-                    console.log(response);
                     vm.error = "Nome de Usuário ou Senha Inválida";
                 });
         };

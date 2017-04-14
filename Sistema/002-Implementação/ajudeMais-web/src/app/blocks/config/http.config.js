@@ -1,8 +1,9 @@
+
 /**
  * @ngdoc Config
- * 
+ *
  * @description Configurações para requisições Http
- * 
+ *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 (function() {
@@ -46,7 +47,9 @@
 	      });
 
         $httpProvider.interceptors.push('authInterceptor');
-		$httpProvider.interceptors.push('errorResolverInterceptor');
-		$httpProvider.interceptors.push('accessDeniedInterceptor');
+        $httpProvider.interceptors.push('authDeniedInterceptor');
+       // $httpProvider.interceptors.push('authExpiredInterceptor');
+        $httpProvider.interceptors.push('errorResolverInterceptor');
 	}
 })();
+

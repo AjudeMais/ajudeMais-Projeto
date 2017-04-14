@@ -1,24 +1,24 @@
-/**
- * @ngdoc Service
- * @name errorResolverInterceptor
- * 
- * @description Service para interceptação de erros do servidor
- * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
- */
+(function() {
+    'use strict';
 
-(function(){
-  angular.module('amApp').factory("accessDeniedInterceptor", function($q, $location) {
-	  
-	    var accessDeniedInterceptor = {
-	            responseError: function(response) {
-	                if (response.status === 403) {
-	                	$location.path("/login");
-	                }
-	                return $q.reject(response);
-	            }
-	        };
-	        return accessDeniedInterceptor;
-  });
+    angular
+        .module('amApp')
+        .factory('authDeniedInterceptor', authExpiredInterceptor);
 
+    authExpiredInterceptor.$inject = ['$q', '$injector', '$location'];
+
+    function authExpiredInterceptor($q, $injector, $location) {
+        var service = {
+            responseError: responseError
+        };
+
+        return service;
+
+        function responseError(rejection) {
+            if (rejection.status === 403) {
+                $location.path('/403');
+            }
+            return $q.reject(rejection);
+        }
+    }
 })();

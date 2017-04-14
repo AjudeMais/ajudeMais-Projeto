@@ -15,8 +15,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationEntryPoint;
-import br.edu.ifpb.ajudeMais.api.security.JwtAuthenticationTokenFilter;
+import br.edu.ifpb.ajudeMais.api.security.JwtEntryPoint;
+import br.edu.ifpb.ajudeMais.api.security.JwtTokenFilter;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 
 /**
  * 
@@ -36,7 +37,7 @@ public class SecurityConfig {
 	private UserDetailsService userDetailService;
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    private JwtEntryPoint unauthorizedHandler;
 
 	/**
 	 * 
@@ -63,8 +64,8 @@ public class SecurityConfig {
 	 * @throws Exception
 	 */
     @Bean
-    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtAuthenticationTokenFilter();
+    public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtTokenFilter();
     }
 
 
@@ -89,6 +90,10 @@ public class SecurityConfig {
 						.permitAll()
 					.antMatchers(HttpMethod.POST, "/doador")
 						.permitAll()
+					.antMatchers(HttpMethod.OPTIONS)
+						.permitAll()
+					.antMatchers("/doador","/instituicao", "/admin")
+						.hasAnyRole(Grupo.SUPER.name())
 					.anyRequest().authenticated()
 					.and();
 			

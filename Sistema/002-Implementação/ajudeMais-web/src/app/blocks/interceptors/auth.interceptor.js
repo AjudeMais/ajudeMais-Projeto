@@ -8,26 +8,31 @@
  */
 
 (function () {
-    angular.module('amApp').factory("authInterceptor", function ($q, $location, $rootScope) {
+    angular.module('amApp').factory("authInterceptor", authInterceptor);
 
-        return {
+    authInterceptor.$inject = ['$rootScope', '$q', '$sessionStorage'];
 
-            'request': function (config) {
-                if($rootScope.basicAuth) {
-                    config.headers.Authorization = 'Basic ' + $rootScope.basicAuth;
-                }
-
-                return config;
-            },
-
-            'responseError': function (rejection) {
-                if (rejection.status == 401) {
-                    $rootScope.sessionUser = {};
-                    $rootScope.basicAuth = {};
-                    $location.path("/login");
-                }
-                return rejection;
-            }
+    function authInterceptor($rootScope, $q, $sessionStorage) {
+        var service = {
+            request: request
         };
-    });
+
+        return service;
+
+        function request(config) {
+            config.headers = config.headers || {};
+            var token = $sessionStorage.authToken;
+            if (token) {
+                config.headers.Authorization = token;
+            }
+            return config;
+        }
+    }
 })();
+
+
+
+
+
+
+

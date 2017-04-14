@@ -13,10 +13,10 @@
                     <form name="loginForm" role="form" ng-submit="loginForm.$valid && vm.doLogin()" novalidate>
                         <fieldset>
 
-                            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.login.$invalid }">
+                            <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.username.$invalid }">
                                 <input id="tLogin" class="form-control input-lg" ng-model="vm.conta.username" placeholder="Usuário" name="username" type="text" autofocus required>
                                 <span class="glyphicon  glyphicon-user  form-control-feedback" aria-hidden="true"></span>
-                                <div ng-show="loginForm.$submitted && loginForm.login.$invalid" class="help-block">
+                                <div ng-show="loginForm.$submitted && loginForm.username.$invalid" class="help-block">
                                   Nome do Usuário deve ser informado
                                 </div>
                             </div>

@@ -8,7 +8,7 @@
  */
 (function () {
     angular.module('amApp', ['amRoute', 'layout', 'ui.bootstrap',
-        'ngAnimate', 'datatables', 'datatables.bootstrap', 'hyperactive.angular.utils', 'ngCookies'
+        'ngAnimate', 'datatables', 'datatables.bootstrap', 'hyperactive.angular.utils', 'ngCookies', 'ngStorage'
     ]);
 
     angular.module('amApp').run([
@@ -19,7 +19,8 @@
         function ($rootScope, $location, $http, authenticationService) {
 
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
-                authenticationService.usuarioLogado(function (logado) {
+
+                authenticationService.logado(function (logado) {
                     if (logado) {
                         if ($location.path() === '/login') {
                             $location.path('/home');
@@ -31,6 +32,7 @@
                         }
                     }
                 });
+
             });
         }
     ]);

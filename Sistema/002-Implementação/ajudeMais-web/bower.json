@@ -28,6 +28,7 @@
     "angular-bootstrap": "^2.5.0",
     "angular-cookies": "^1.6.3",
     "angular-loading-bar": "^0.9.0",
-    "angular-growl-v2": "^0.7.9"
+    "angular-growl-v2": "^0.7.9",
+    "ngstorage": "^0.3.11"
   }
 }

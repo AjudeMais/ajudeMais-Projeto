@@ -16,14 +16,22 @@
 
 		$stateProvider.state('login', {
 			url : '/login',
-			templateUrl : 'app/components/login/login.html',
+			templateUrl : 'app/components/auth/login.html',
 			controller : 'LoginController',
 			controllerAs : 'vm',
 			data : {
 				pageTitle : 'Login'
 			}
 		})
-		
+
+        $stateProvider.state('403', {
+            url : '/403',
+            templateUrl : 'app/components/auth/403/403.html',
+            data : {
+                pageTitle : 'Acesso Negado'
+            }
+        })
+
 		.state('home', {
 			url : '/home',
 			template : '<layout></layout>',
