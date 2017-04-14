@@ -55,6 +55,10 @@ android {
 
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -68,9 +72,6 @@ dependencies {
     compile 'com.github.pinball83:masked-edittext:1.0.3'
     compile group: 'org.springframework.android', name: 'spring-android-rest-template', version: '2.0.0.M3'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.0.pr2'
-
-
-//    compile 'com.facebook.android:facebook-android-sdk:4.11.0'
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     testCompile 'junit:junit:4.12'
-
 }
