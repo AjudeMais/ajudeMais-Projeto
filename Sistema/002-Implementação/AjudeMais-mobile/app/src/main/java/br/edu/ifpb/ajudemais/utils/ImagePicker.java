@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.util;
+package br.edu.ifpb.ajudemais.utils;
 
 import android.app.Activity;
 import android.content.Context;

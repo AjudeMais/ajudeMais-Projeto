@@ -1,16 +1,13 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -23,16 +20,17 @@ import org.springframework.web.client.RestClientException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.JwtToken;
+import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
-public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener {
+public class CreateAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
-    private ActionBarDrawerToggle mToggle;
 
     private Toolbar mToolbar;
-
     private Button btnCreateAccount;
     private EditText edtName;
     private EditText edtUserName;
@@ -207,23 +205,11 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
 
                 List<String> grupos = new ArrayList<>();
                 grupos.add("ROLE_DOADOR");
-
                 Doador doador = new Doador(edtName.getText().toString().trim(),
                         new Conta(edtUserName.getText().toString().trim(),
                                 edtPassword.getText().toString().trim(), grupos));
 
-                System.out.println(doador);
-                new HttpPostRequestTask(this, doador).execute();
-
-                Intent intent = new Intent();
-                intent.setClass(CreateAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-                saveDataUserCreated(doador.getConta().getUsername(), doador.getConta().getSenha(), "example@gmail.com");
-
-                finish();
-
+                new CreateAccounTask(doador).execute();
 
 
             }
@@ -232,65 +218,64 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
     }
 
     /**
-     * Responsável por guardar os dados do usuário criado para não precisar logar novamente.
+     * Armazena informações de login para usuário ficar logado.
      *
      * @param userName
      * @param password
-     * @param email
      */
-    private void saveDataUserCreated(String userName, String password, String email) {
+    private void saveInformationsLoginAndToken(String userName, String password, String accessToken) {
         SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("userName", userName);
         editor.putString("password", password);
-        editor.putString("email", email);
+        editor.putString("accessToken", accessToken);
         editor.apply();
     }
 
 
+    private class CreateAccounTask extends AsyncTask<Void, Void, JwtToken> {
 
 
-    private class HttpPostRequestTask extends AsyncTask<Void, Void, Doador> {
-
-        private Context context;
+        private String message;
+        private String password;
         private Doador doador;
+        private JwtToken jwtToken;
         private DoadorRemoteService doadorRemoteService;
+        private AuthRemoteService authRemoteService;
 
-        public HttpPostRequestTask(Context context, Doador doador) {
-            this.context = context;
+
+        public CreateAccounTask(Doador doador) {
             this.doador = doador;
+            this.password = doador.getConta().getSenha();
+            this.authRemoteService = new AuthRemoteService();
+            this.doadorRemoteService = new DoadorRemoteService();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            showLoadingProgressDialog();
+
         }
 
         @Override
-        protected Doador doInBackground(Void... params) {
+        protected JwtToken doInBackground(Void... params) {
 
             try {
                 doadorRemoteService = new DoadorRemoteService();
                 doador = doadorRemoteService.saveDoador(doador);
+                doador.getConta().setSenha(password);
+                jwtToken = authRemoteService.createAuthenticationToken(doador.getConta());
 
-                return doador;
+                return jwtToken;
 
             } catch (HttpStatusCodeException e) {
-                final String message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-                    }
-                });
-
+                message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
+                e.printStackTrace();
 
             } catch (RestClientException e) {
-
-
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Ocorreu um erro enesperado no sistema aguarde e tente novamente.", Toast.LENGTH_LONG).show();
-                    }
-                });
+                message = "Ocorreu um erro enesperado no sistema aguarde e tente novamente.";
+                e.printStackTrace();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -300,14 +285,24 @@ public class CreateAccountActivity extends AppCompatActivity implements View.OnC
         }
 
         @Override
-        protected void onPostExecute(Doador doador) {
-            if (doador != null) {
-                Log.e("DOADOR", doador.toString());
+        protected void onPostExecute(JwtToken jwtToken) {
+            dismissProgressDialog();
+
+            if (jwtToken != null) {
+                Intent intent = new Intent();
+                intent.setClass(CreateAccountActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Conta", doador.getConta());
+                startActivity(intent);
+                saveInformationsLoginAndToken(doador.getConta().getUsername(), doador.getConta().getSenha(), jwtToken.getToken());
+
+                finish();
+
+            } else {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
-            super.onPostExecute(doador);
+
         }
-
-
 
 
     }

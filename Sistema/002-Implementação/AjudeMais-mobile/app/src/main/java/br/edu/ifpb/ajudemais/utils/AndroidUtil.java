@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.util;
+package br.edu.ifpb.ajudemais.utils;
 
 /**
  * Created by rafaelfeitosa on 07/04/17.
