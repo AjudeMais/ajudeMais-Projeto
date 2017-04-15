@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.ajudeMais.data.dao.DoadorRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 

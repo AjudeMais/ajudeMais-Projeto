@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.ajudeMais.data.dao.ContaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.ContaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**

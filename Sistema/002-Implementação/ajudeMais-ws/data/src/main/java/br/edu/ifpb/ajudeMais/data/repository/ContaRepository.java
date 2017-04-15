@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudeMais.data.dao;
+package br.edu.ifpb.ajudeMais.data.repository;
 
 import java.util.Optional;
 

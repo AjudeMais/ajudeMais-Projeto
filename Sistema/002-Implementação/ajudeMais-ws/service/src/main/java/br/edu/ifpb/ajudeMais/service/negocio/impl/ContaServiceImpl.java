@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.ajudeMais.data.dao.ContaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.ContaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
