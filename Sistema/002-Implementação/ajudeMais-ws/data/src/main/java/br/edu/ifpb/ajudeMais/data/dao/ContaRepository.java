@@ -11,7 +11,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  *
  */
-public interface UsuarioRepository extends JpaRepository<Conta, Long>{
+public interface ContaRepository extends JpaRepository<Conta, Long>{
 	
 	/**
 	 * 

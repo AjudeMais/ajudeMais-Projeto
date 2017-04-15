@@ -7,6 +7,6 @@ package br.edu.ifpb.ajudeMais.domain.enumerations;
  */
 public enum Grupo {
 	
-	DOADOR, INSTITUICAO, SUPER, MENSAGEIRO
+	DOADOR, INSTITUICAO, ADMIN, MENSAGEIRO
 
 }

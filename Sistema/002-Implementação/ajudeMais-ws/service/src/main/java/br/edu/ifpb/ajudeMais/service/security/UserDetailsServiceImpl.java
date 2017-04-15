@@ -15,7 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.ajudeMais.data.dao.UsuarioRepository;
+import br.edu.ifpb.ajudeMais.data.dao.ContaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
@@ -27,7 +27,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private UsuarioRepository usuarioRepository;
+	private ContaRepository usuarioRepository;
 	
 	/**
 	 * 

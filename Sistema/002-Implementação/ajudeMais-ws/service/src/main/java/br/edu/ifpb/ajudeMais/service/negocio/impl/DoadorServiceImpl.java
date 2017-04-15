@@ -36,7 +36,7 @@ public class DoadorServiceImpl implements DoadorService {
 	 */
 	@Override
 	@Transactional
-	public Doador criar(Doador doador) {
+	public Doador save(Doador doador) {
 		String senha = passwordEncoder.encode(doador.getConta().getSenha());
 		doador.getConta().setSenha(senha);
 		return doadorRepository.save(doador);
@@ -47,7 +47,7 @@ public class DoadorServiceImpl implements DoadorService {
 	 */
 	@Override
 	@Transactional
-	public Doador alterar(Doador doador) {
+	public Doador update(Doador doador) {
 		return doadorRepository.save(doador);
 	}
 
@@ -55,14 +55,20 @@ public class DoadorServiceImpl implements DoadorService {
 	 * 
 	 */
 	@Override
-	public List<Doador> buscarTodos() {
+	public List<Doador> findAll() {
 		return doadorRepository.findAll();
 	}
 
+	@Override
+	public Doador findById(Long id) {
+		return doadorRepository.findOne(id);
+	}
+	
 	@Override
 	@Transactional
 	public void remover(Doador doador) {
 		doadorRepository.delete(doador);
 	}
+
 
 }

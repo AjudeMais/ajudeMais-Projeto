@@ -8,16 +8,16 @@
  */
 (function () {
     angular.module('amApp').factory('authenticationService', function ($http, $rootScope, amValue, $sessionStorage, $localStorage) {
-        var resultado = {};
+        var service = {};
 
         /**
          *
-         * @param conta
+         * @param account
          * @param callback
          * @param callbackError
          */
-        resultado.doLogin = function (conta, callback, callbackError) {
-            $http.post(amValue.apiUri + "/auth/login", conta).then(function (response) {
+        service.doLogin = function (account, callback, callbackError) {
+            $http.post(amValue.apiUri + "/auth/login", account).then(function (response) {
                 callback(response.data);
             }, function (response) {
                 callbackError(response.data);
@@ -28,9 +28,10 @@
          *
          * @param callback
          */
-        resultado.doLogout = function (callback) {
+        service.doLogout = function (callback) {
             delete $localStorage.authToken;
             delete $sessionStorage.authToken;
+            $rootScope.sessionUser = undefined;
             callback();
         }
 
@@ -38,7 +39,18 @@
          *
          * @param callback
          */
-        resultado.logado = function (callback) {
+        service.getUserLogged = function (callback) {
+            $http.get(amValue.apiUri + "/auth/user").then(function (response) {
+                $rootScope.sessionUser = response.data;
+                callback();
+            });
+        };
+
+        /**
+         *
+         * @param callback
+         */
+        service.logged = function (callback) {
             if ($sessionStorage.authToken === undefined) {
                 callback(false);
             } else if ($rootScope.sessionUser === undefined) {
@@ -57,7 +69,7 @@
          * @param authorizedRoles
          * @returns {boolean}
          */
-        resultado.autorizado = function (authorizedRoles) {
+        service.isAuthorized = function (authorizedRoles) {
             if (!angular.isArray(authorizedRoles)) {
                 if (authorizedRoles == '*') {
                     return true;
@@ -78,10 +90,10 @@
          *
          * @param jwt
          */
-        resultado.storageToken = function (jwt) {
+        service.storageToken = function (jwt) {
             $sessionStorage.authToken = jwt;
         }
 
-        return resultado;
+        return service;
     });
 })();

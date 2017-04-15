@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -46,7 +45,7 @@ public class DoadorRestService {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Doador> criar(@Valid @RequestBody Doador doador) {
 
-		Doador doadorCriado = doadorService.criar(doador);
+		Doador doadorCriado = doadorService.save(doador);
 
 		return new ResponseEntity<Doador>(doadorCriado, HttpStatus.CREATED);
 	}
@@ -59,7 +58,7 @@ public class DoadorRestService {
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Doador> alterar(@Valid @RequestBody Doador doador) {
 
-		Doador pacienteAtualizado = doadorService.alterar(doador);
+		Doador pacienteAtualizado = doadorService.update(doador);
 
 		return new ResponseEntity<Doador>(pacienteAtualizado, HttpStatus.CREATED);
 	}
@@ -72,23 +71,8 @@ public class DoadorRestService {
 	@RequestMapping(method=RequestMethod.GET)
 	public ResponseEntity<List<Doador>> buscarTodos() {
 		
-		List<Doador> doador = doadorService.buscarTodos();
+		List<Doador> doador = doadorService.findAll();
 		
 		return new ResponseEntity<List<Doador>>(doador,HttpStatus.OK);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	@PreAuthorize("hasRole('DOADOR')")
-	@RequestMapping(method=RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<?> remover(@PathVariable Long id) {
-		
-		Doador doador = new Doador();
-		doador.setId(id);
-		doadorService.remover(doador);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

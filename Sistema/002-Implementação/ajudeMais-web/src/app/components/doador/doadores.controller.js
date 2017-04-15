@@ -20,13 +20,13 @@
             /**
              *
              */
-            vm.buscarDoadores = function () {
-                doadorService.getDoadores(function (resultado) {
-                    vm.doadores = resultado;
+            vm.getDoadores = function () {
+                doadorService.getDoadores(function (response) {
+                    vm.doadores = response;
                 });
             }
 
-            vm.buscarDoadores();
+            vm.getDoadores();
 
         });
 })();

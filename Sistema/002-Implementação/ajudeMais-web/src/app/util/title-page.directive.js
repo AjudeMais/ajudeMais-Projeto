@@ -7,7 +7,7 @@
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 (function() {
-	angular.module("hyperactive.angular.utils").directive('updateTitle',function($rootScope, $timeout) {
+	angular.module("ajudeMais.utils").directive('updateTitle',function($rootScope, $timeout) {
 		return {
 		      link: function(scope, element) {
 

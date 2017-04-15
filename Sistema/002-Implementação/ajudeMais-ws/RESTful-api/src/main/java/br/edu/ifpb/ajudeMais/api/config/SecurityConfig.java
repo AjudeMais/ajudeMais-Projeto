@@ -87,12 +87,11 @@ public class SecurityConfig {
 				.authorizeRequests()
 					.antMatchers("/auth/login", "/auth/valida")
 						.permitAll()
-					.antMatchers(HttpMethod.POST, "/doador")
+					.antMatchers(HttpMethod.POST, "/doador", "/conta")
 						.permitAll()
 					.antMatchers(HttpMethod.OPTIONS)
 						.permitAll()
-					.anyRequest().authenticated()
-					.and();
+					.anyRequest().authenticated();
 			
 	        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		}

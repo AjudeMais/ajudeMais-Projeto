@@ -3,8 +3,6 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio;
 
-import java.util.List;
-
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 
 /**
@@ -19,31 +17,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public interface DoadorService {
+public interface DoadorService extends Service<Doador, Long>{
 
-	/**
-	 * 
-	 * @param doador
-	 * @return
-	 */
-	Doador criar(Doador doador);
 
-	/**
-	 * 
-	 * @param doador
-	 * @return
-	 */
-	Doador alterar(Doador doador);
-	
-	/**
-	 * 
-	 * @return
-	 */
-	List<Doador> buscarTodos();
-	
-	/**
-	 * 
-	 * @param doador
-	 */
-	void remover(Doador doador);
 }

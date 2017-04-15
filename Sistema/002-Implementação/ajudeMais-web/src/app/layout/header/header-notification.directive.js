@@ -1,24 +1,23 @@
-(function() {
-angular.module('layout').directive('headerNotification',
-	function() {
-		return {
-			templateUrl : 'app/layout/header/header-notification.directive.html',
-			restrict : 'E',
-			replace : true,
-			controller: function($rootScope, $state, authenticationService) {
-				var vm = this;
+(function () {
+    angular.module('layout').directive('headerNotification', function () {
+        return {
+            templateUrl: 'app/layout/header/header-notification.directive.html',
+            restrict: 'E',
+            replace: true,
+            controller: function ($rootScope, $state, authenticationService) {
+                var vm = this;
                 vm.usuario = $rootScope.sessionUser;
-				/**
-				 * 
-				 */
-				vm.logout = function() {
-                    authenticationService.doLogout(function() {
+                /**
+                 *
+                 */
+                vm.logout = function () {
+                    authenticationService.doLogout(function () {
                         $state.go("login");
                     });
-				}							
-				
-			},
-			controllerAs: 'headerNotificationCtrl'
-		}
-	});
+                }
+
+            },
+            controllerAs: 'headerNotificationCtrl'
+        }
+    });
 })();

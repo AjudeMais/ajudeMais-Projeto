@@ -1,5 +1,5 @@
 (function(){
-	angular.module('hyperactive.angular.utils').directive('numbersOnly', function () {
+	angular.module('ajudeMais.utils').directive('numbersOnly', function () {
 	    return {
 	        require: 'ngModel',
 	        link: function (scope, element, attr, ngModelCtrl) {

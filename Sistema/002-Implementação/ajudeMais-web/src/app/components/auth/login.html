@@ -14,7 +14,7 @@
                         <fieldset>
 
                             <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.username.$invalid }">
-                                <input id="tLogin" class="form-control input-lg" ng-model="vm.conta.username" placeholder="Usuário" name="username" type="text" autofocus required>
+                                <input id="tLogin" class="form-control input-lg" ng-model="vm.account.username" placeholder="Usuário" name="username" type="text" autofocus required>
                                 <span class="glyphicon  glyphicon-user  form-control-feedback" aria-hidden="true"></span>
                                 <div ng-show="loginForm.$submitted && loginForm.username.$invalid" class="help-block">
                                   Nome do Usuário deve ser informado
@@ -22,7 +22,7 @@
                             </div>
 
                             <div class="form-group has-feedback" ng-class="{ 'has-error': loginForm.$submitted && loginForm.senha.$invalid }">
-                                <input id="tSenha" class="form-control input-lg" ng-model="vm.conta.senha" placeholder="Senha" name="senha" type="password" required>
+                                <input id="tSenha" class="form-control input-lg" ng-model="vm.account.senha" placeholder="Senha" name="senha" type="password" required>
                                 <span class="glyphicon  glyphicon-lock  form-control-feedback" aria-hidden="true"></span>
                                 <div ng-show="loginForm.$submitted && loginForm.senha.$invalid" class="help-block">
                                   Senha deve ser informanda

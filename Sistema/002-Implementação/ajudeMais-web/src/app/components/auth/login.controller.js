@@ -10,19 +10,20 @@
 
     angular.module('amApp').controller('LoginController', function (authenticationService, $state, $rootScope) {
         var vm = this;
-        vm.conta = {};
+        vm.account = {};
 
         /**
          *
          */
         vm.doLogin = function () {
-            authenticationService.doLogin(vm.conta,
-                function (response) {
-                    authenticationService.storageToken(response.token);
+            authenticationService.doLogin(vm.account, function (response) {
+                authenticationService.storageToken(response.token);
+                authenticationService.getUserLogged(function () {
                     $state.go("home");
-                }, function (response) {
-                    vm.error = "Nome de Usuário ou Senha Inválida";
                 });
+            }, function (response) {
+                vm.error = "Nome de Usuário ou Senha Inválido";
+            });
         };
     });
 

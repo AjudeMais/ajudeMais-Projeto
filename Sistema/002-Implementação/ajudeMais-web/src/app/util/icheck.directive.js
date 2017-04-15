@@ -2,7 +2,7 @@
  * 
  */
 (function(){
-	angular.module("hyperactive.angular.utils")
+	angular.module("ajudeMais.utils")
 	.directive('icheck', function ($timeout, $parse) {
 	    return {
 	        require: 'ngModel',

@@ -1,5 +1,5 @@
 (function() {
-	angular.module("hyperactive.angular.utils", ['ui.bootstrap']).directive("dateBefore", function(uibDateParser) {
+	angular.module("ajudeMais.utils", ['ui.bootstrap']).directive("dateBefore", function(uibDateParser) {
 		return {
 			require : 'ngModel',
 			link : function(scope, el, attrs, ctrl) {
@@ -42,7 +42,7 @@
 		};
 	});
 
-	angular.module("hyperactive.angular.utils").directive("dateAfter", function(uibDateParser) {
+	angular.module("ajudeMais.utils").directive("dateAfter", function(uibDateParser) {
 		return {
 			require : 'ngModel',
 			link : function(scope, el, attrs, ctrl) {
