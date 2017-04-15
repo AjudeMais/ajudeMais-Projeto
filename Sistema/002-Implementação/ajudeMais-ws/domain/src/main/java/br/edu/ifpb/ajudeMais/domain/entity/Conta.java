@@ -16,8 +16,16 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
+ * <p>
+ * <b> Doador </b>
+ * </p>
+ *
+ * <p>
+ * Entidade que representa a conta de usuário no sistema.
+ * </p>
  * 
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * And <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  *
  */
 @Entity
@@ -55,51 +63,107 @@ public class Conta {
 	 * 
 	 */
 	private boolean ativo;
+	
+	/**
+	 * 
+	 */
+	@NotNull(message = "O e-mail deve ser informado")
+	private String email;
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public List<String> getGrupos() {
-		return grupos;
-	}
-
-	public void setGrupos(List<String> grupos) {
-		this.grupos = grupos;
-	}
-
-	public boolean isAtivo() {
-		return ativo;
-	}
-
-	public void setAtivo(boolean ativo) {
-		this.ativo = ativo;
-	}
-
+	/**
+	 * @return the id
+	 */
 	public Long getId() {
 		return id;
 	}
 
+	/**
+	 * @param id the id to set
+	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-	@Override
-	public String toString() {
-		return "Conta [id=" + id + ", username=" + username + ", senha=[PROTEGIDO]"+ ", grupos=" + grupos + ", ativo="
-				+ ativo + "]";
+	/**
+	 * @return the username
+	 */
+	public String getUsername() {
+		return username;
 	}
 
+	/**
+	 * @param username the username to set
+	 */
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	/**
+	 * @return the senha
+	 */
+	public String getSenha() {
+		return senha;
+	}
+
+	/**
+	 * @param senha the senha to set
+	 */
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
+
+	/**
+	 * @return the grupos
+	 */
+	public List<String> getGrupos() {
+		return grupos;
+	}
+
+	/**
+	 * @param grupos the grupos to set
+	 */
+	public void setGrupos(List<String> grupos) {
+		this.grupos = grupos;
+	}
+
+	/**
+	 * @return the ativo
+	 */
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	/**
+	 * @param ativo the ativo to set
+	 */
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
+
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Conta [id=" + id + ", username=" + username + ", senha=" + senha + ", grupos=" + grupos + ", ativo="
+				+ ativo + ", email=" + email + "]";
+	}
+	
+	
+	
 }

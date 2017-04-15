@@ -11,12 +11,31 @@ public class Doador implements Serializable{
 
     private Long id;
     private String nome;
+    private String telefone;
+    private String facebookId;
+    private String tokenFCM;
     private Conta conta;
 
     public Doador(){}
 
-    public Doador(String nome,Conta conta) {
+    public Doador(String nome, String telefone, String facebookId, String tokenFCM, Conta conta) {
         this.nome = nome;
+        this.telefone = telefone;
+        this.facebookId = facebookId;
+        this.tokenFCM = tokenFCM;
+        this.conta = conta;
+    }
+
+    public Doador(String nome, String telefone, String facebookId, Conta conta) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.facebookId = facebookId;
+        this.conta = conta;
+    }
+
+    public Doador(String nome, String telefone, Conta conta) {
+        this.nome = nome;
+        this.telefone = telefone;
         this.conta = conta;
     }
 
@@ -62,12 +81,70 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getTelefone() {
+        return telefone;
+    }
+
+    /**
+     *
+     * @param telefone
+     */
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    /**
+     *
+     * @param facebookId
+     */
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getTokenFCM() {
+        return tokenFCM;
+    }
+
+    /**
+     *
+     * @param tokenFCM
+     */
+    public void setTokenFCM(String tokenFCM) {
+        this.tokenFCM = tokenFCM;
+    }
 
     @Override
     public String toString() {
         return "Doador{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", facebookId='" + facebookId + '\'' +
+                ", tokenFCM='" + tokenFCM + '\'' +
                 ", conta=" + conta +
                 '}';
     }

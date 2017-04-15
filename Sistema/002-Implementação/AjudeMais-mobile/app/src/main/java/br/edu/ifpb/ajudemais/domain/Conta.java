@@ -14,11 +14,7 @@ public class Conta implements Serializable{
     private String username;
     private String senha;
     private boolean ativo;
-
-    //    private String telefone;
-//    private String email;
-//    private String facebookId;
-//    private String tokenFCM;
+    private String email;
     private List<String> grupos;
 
     public Conta(String username, String senha, List<String> grupos) {
