@@ -24,11 +24,19 @@
 			}
 		})
 
-        $stateProvider.state('403', {
+        $stateProvider.state('home.403', {
             url : '/403',
             templateUrl : 'app/components/auth/403/403.html',
             data : {
                 pageTitle : 'Acesso Negado'
+            }
+        })
+
+        $stateProvider.state('home.500', {
+            url : '/500',
+            templateUrl : 'app/components/auth/500/500.html',
+            data : {
+                pageTitle : ''
             }
         })
 

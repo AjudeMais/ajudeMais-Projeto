@@ -16,7 +16,7 @@
 
         function responseError(rejection) {
             if (rejection.status === 403) {
-                $location.path('/403');
+                $location.path('home/403');
             }
             return $q.reject(rejection);
         }

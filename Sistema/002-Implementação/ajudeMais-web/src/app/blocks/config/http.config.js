@@ -48,7 +48,7 @@
 
         $httpProvider.interceptors.push('authInterceptor');
         $httpProvider.interceptors.push('authDeniedInterceptor');
-       // $httpProvider.interceptors.push('authExpiredInterceptor');
+       //$httpProvider.interceptors.push('authExpiredInterceptor');
         $httpProvider.interceptors.push('errorResolverInterceptor');
 	}
 })();

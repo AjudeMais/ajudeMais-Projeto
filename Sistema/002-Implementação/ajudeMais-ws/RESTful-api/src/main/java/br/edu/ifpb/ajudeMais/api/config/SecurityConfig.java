@@ -17,7 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import br.edu.ifpb.ajudeMais.api.security.JwtEntryPoint;
 import br.edu.ifpb.ajudeMais.api.security.JwtTokenFilter;
-import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 
 /**
  * 
@@ -92,8 +91,6 @@ public class SecurityConfig {
 						.permitAll()
 					.antMatchers(HttpMethod.OPTIONS)
 						.permitAll()
-					.antMatchers("/doador","/instituicao", "/admin")
-						.hasAnyRole(Grupo.SUPER.name())
 					.anyRequest().authenticated()
 					.and();
 			

@@ -8,12 +8,12 @@
  */
 
 (function(){
-  angular.module('amApp').factory("errorResolverInterceptor", function($q, growl) {
+  angular.module('amApp').factory("errorResolverInterceptor", function($q, $location) {
 	  
     var errorResolverInterceptor = {
         responseError: function(response) {
             if (response.status >= 500) {
-              growl.error("Erro na comunicação com servidor. Tente novamente mais tarde");
+              $location.path('home/500');
             }
             return $q.reject(response);
         }
