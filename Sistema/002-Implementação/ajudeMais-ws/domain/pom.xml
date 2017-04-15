@@ -20,6 +20,11 @@
 			<email>fjunior.aragao@gmail.com</email>
 			<url>franckaj.github.io</url>
 		</developer>
+		<developer>
+			<name>Rafael Feitosa</name>
+			<email>jose.rafael.feitosa@gmail.com</email>
+			<url>joserafael97.github.io</url>
+		</developer>
 	</developers>
 
 	<dependencies>

@@ -64,7 +64,6 @@ public class DoadorServiceImpl implements DoadorService {
 		return doadorRepository.findOne(id);
 	}
 	
-
 	
 	@Override
 	@Transactional

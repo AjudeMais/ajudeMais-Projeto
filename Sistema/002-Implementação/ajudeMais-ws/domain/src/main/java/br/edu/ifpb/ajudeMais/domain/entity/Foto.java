@@ -1,18 +1,33 @@
 package br.edu.ifpb.ajudeMais.domain.entity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * <p>
- * <b> Foto.java </b>
+ * <b> Foto</b>
  * </p>
  *
  * <p> Entidade que representa um foto. </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
+@Entity
 public class Foto {
 
+	@Id
+	@Column(name = "id", unique = true)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
+	
+	/**
+	 * 
+	 */
 	private String nome;
+	
 	private String pathFoto;
 	
 	

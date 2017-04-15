@@ -17,19 +17,16 @@ public class Conta implements Serializable{
     private String email;
     private List<String> grupos;
 
-    public Conta(String username, String senha, List<String> grupos) {
-        this.username = username;
-        this.senha = senha;
-        this.grupos = grupos;
-    }
-
-    public Conta(String username, String senha) {
-        this.username = username;
-        this.senha = senha;
-    }
-
     public Conta(){
 
+    }
+
+    public Conta(String username, String senha, boolean ativo, String email, List<String> grupos) {
+        this.username = username;
+        this.senha = senha;
+        this.ativo = ativo;
+        this.email = email;
+        this.grupos = grupos;
     }
 
     /**
@@ -113,6 +110,22 @@ public class Conta implements Serializable{
         this.ativo = ativo;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     *
+     * @param email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Conta{" +
@@ -120,6 +133,7 @@ public class Conta implements Serializable{
                 ", username='" + username + '\'' +
                 ", senha='" + senha + '\'' +
                 ", ativo=" + ativo +
+                ", email='" + email + '\'' +
                 ", grupos=" + grupos +
                 '}';
     }

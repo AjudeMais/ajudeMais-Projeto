@@ -60,6 +60,7 @@ public class Doador implements Serializable {
 	/**
 	 * 
 	 */
+	@OneToOne(cascade = CascadeType.ALL)
 	private Foto foto;
 	
 

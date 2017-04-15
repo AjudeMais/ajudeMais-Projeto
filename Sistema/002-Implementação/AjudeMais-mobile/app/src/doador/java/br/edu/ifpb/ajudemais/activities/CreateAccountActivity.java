@@ -205,7 +205,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
                 List<String> grupos = new ArrayList<>();
                 grupos.add("ROLE_DOADOR");
-                Doador doador = new Doador(edtName.getText().toString().trim(),
+                Doador doador = new Doador(edtName.getText().toString().trim(),e
                         new Conta(edtUserName.getText().toString().trim(),
                                 edtPassword.getText().toString().trim(), grupos));
 
