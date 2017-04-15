@@ -36,7 +36,7 @@
             url : '/500',
             templateUrl : 'app/components/auth/500/500.html',
             data : {
-                pageTitle : ''
+                pageTitle : 'Erro no Servidor'
             }
         })
 

@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-
 var browserSync = require('browser-sync');
 var runSequence = require('run-sequence');
 var concat = require('gulp-concat');
@@ -13,22 +12,37 @@ var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var path = require('path');
 
+
 var config = require('./config');
 
-gulp.task('clean', function() {
+gulp.task('clean', function () {
     return del(config.paths.dist + '/**/*', {
         dot: true
     });
 });
 
-gulp.task('copy', ['clean'], function() {
+gulp.task('copy', ['clean'], function () {
     return gulp.src(config.paths.static, {
-            base: config.paths.src
-        })
+        base: config.paths.src
+    })
         .pipe(gulp.dest(config.paths.dist));
 });
 
-gulp.task('templates', function() {
+gulp.task('layouts', function () {
+    return gulp.src(config.paths.src + '/app/layout/**/*.html')
+        .pipe(htmlmin({
+            collapseWhitespace: true
+        }))
+        .pipe(templateCache({
+            module: 'layouts',
+            root: 'app',
+            standalone: true,
+            moduleSystem: 'IIFE'
+        }))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('templates', ['layouts'], function () {
     return gulp.src(config.paths.src + '/app/components/**/*.html')
         .pipe(htmlmin({
             collapseWhitespace: true
@@ -42,25 +56,25 @@ gulp.task('templates', function() {
         .pipe(gulp.dest('./'));
 });
 
-gulp.task('plugins', ['templates'], function() {
+gulp.task('plugins', ['templates'], function () {
     return gulp.src(config.paths.vendors)
         .pipe(concat('vendors.js'))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest(config.paths.dist + '/app/js/'));
 });
 
-gulp.task('styles', function() {
+gulp.task('styles', function () {
     return gulp.src(config.paths.css)
         .pipe(cleanCSS())
         .pipe(concat('main.min.css'))
         .pipe(gulp.dest(config.paths.dist + '/content/css/'));
 });
 
-gulp.task('scripts', ['plugins'], function() {
+gulp.task('scripts', ['plugins'], function () {
     return gulp.src([
-            config.paths.src + '/app/**/*.js',
-            './templates.js'
-        ])
+        config.paths.src + '/app/**/*.js',
+        './layouts.js', './templates.js'
+    ])
         .pipe(wrap('(function(angular){\n\'use strict\';\n<%= contents %>})(window.angular);'))
         .pipe(concat('scripts.js'))
         .pipe(ngAnnotate())
@@ -69,7 +83,7 @@ gulp.task('scripts', ['plugins'], function() {
 });
 
 
-gulp.task('browser-sync', function() {
+gulp.task('browser-sync', function () {
 
     browserSync({
         open: true,
@@ -81,14 +95,14 @@ gulp.task('browser-sync', function() {
     });
 });
 
-gulp.task('reload-css', function() {
+gulp.task('reload-css', function () {
     gulp.src(config.paths.css)
         .pipe(browserSync.reload({
             stream: true
         }));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch(config.paths.css, ['reload-css']);
     gulp.watch(config.paths.src + '/app');
 });
@@ -97,6 +111,6 @@ gulp.task('default', ['browser-sync', 'watch']);
 
 gulp.task('start', ['browser-sync', 'watch']);
 
-gulp.task('build', function(cb) {
+gulp.task('build', function (cb) {
     return runSequence('clean', ['copy', 'styles', 'scripts'], cb)
 });
