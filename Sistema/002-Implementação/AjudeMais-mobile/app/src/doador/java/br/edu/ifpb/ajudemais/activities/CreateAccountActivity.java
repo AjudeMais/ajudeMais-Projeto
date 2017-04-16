@@ -293,7 +293,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                 e.printStackTrace();
 
             } catch (RestClientException e) {
-                message = "Ocorreu um erro enesperado no sistema aguarde e tente novamente.";
+                message = "Ocorreu um erro inesperado no sistema aguarde e tente novamente.";
                 e.printStackTrace();
 
             } catch (Exception e) {

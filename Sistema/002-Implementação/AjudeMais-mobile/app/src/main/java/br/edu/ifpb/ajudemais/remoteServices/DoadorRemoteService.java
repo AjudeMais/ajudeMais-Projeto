@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 /**
  * Created by rafaelfeitosa on 10/04/17.
@@ -32,6 +33,8 @@ public class DoadorRemoteService {
     public DoadorRemoteService() {
         restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+        restTemplate.setErrorHandler(new MyResponseErrorHandler());
+
     }
 
 

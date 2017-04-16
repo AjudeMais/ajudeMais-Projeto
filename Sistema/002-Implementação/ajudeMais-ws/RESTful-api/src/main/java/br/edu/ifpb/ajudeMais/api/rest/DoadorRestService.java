@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 
 /**
@@ -41,9 +42,10 @@ public class DoadorRestService {
 	/**
 	 * @param doador
 	 * @return response 
+	 * @throws AjudeMaisException 
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Doador> criar(@Valid @RequestBody Doador doador) {
+	public ResponseEntity<Doador> criar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
 
 		Doador doadorCriado = doadorService.save(doador);
 

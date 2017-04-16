@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
 /**
@@ -28,9 +29,10 @@ public class ContaRestService {
 	/**
 	 * @param conta
 	 * @return response
+	 * @throws AjudeMaisException 
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Conta> create(@Valid @RequestBody Conta conta) {
+	public ResponseEntity<Conta> create(@Valid @RequestBody Conta conta) throws AjudeMaisException {
 
 		Conta contaCriada = contaService.save(conta);
 
