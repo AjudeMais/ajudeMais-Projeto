@@ -38,5 +38,4 @@ public class ContaRestService {
 
 		return new ResponseEntity<Conta>(contaCriada, HttpStatus.CREATED);
 	}
-
 }

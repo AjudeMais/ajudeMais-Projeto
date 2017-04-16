@@ -16,7 +16,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
@@ -39,7 +38,6 @@ public class RestExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	@ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
 	@ResponseBody
 	public ResponseEntity<List<String>> handlerErrorValidation(HttpServletRequest req, MethodArgumentNotValidException manvex) {
 
@@ -63,7 +61,6 @@ public class RestExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(UniqueConstraintAlreadyException.class)
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	public ResponseEntity<String> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
 		return ResponseEntity.badRequest().body(e.getMessage());
