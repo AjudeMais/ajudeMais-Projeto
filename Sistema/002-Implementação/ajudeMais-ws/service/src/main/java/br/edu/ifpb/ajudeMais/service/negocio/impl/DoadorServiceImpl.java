@@ -4,6 +4,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -31,28 +32,26 @@ public class DoadorServiceImpl implements DoadorService {
 
 	@Autowired
 	private DoadorRepository doadorRepository;
-	
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Autowired
 	private ContaRepository contaRepository;
-	
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	/**
-	 * @throws UniqueConstraintAlreadyException 
-	 * 
-	 */
+
 	@Override
 	@Transactional
 	public Doador save(Doador doador) throws UniqueConstraintAlreadyException {
-		
-		Conta conta = contaRepository.findByUsername(doador.getConta().getUsername()).orElse(null);
-		
-		if (conta != null) {
-			throw new UniqueConstraintAlreadyException("O nome de usuário informado já está em uso.");
+
+		Optional<Conta> contaEmail = contaRepository.findOneByEmail(doador.getConta().getEmail());
+		Optional<Conta> contaUsername = contaRepository.findOneByUsername(doador.getConta().getUsername());
+
+		if (contaEmail.isPresent()) {
+			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
 		}
-		
+		if (contaUsername.isPresent()) {
+			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
+		}
 		String senha = passwordEncoder.encode(doador.getConta().getSenha());
 		doador.getConta().setSenha(senha);
 		return doadorRepository.save(doador);
@@ -79,13 +78,11 @@ public class DoadorServiceImpl implements DoadorService {
 	public Doador findById(Long id) {
 		return doadorRepository.findOne(id);
 	}
-	
-	
+
 	@Override
 	@Transactional
 	public void remover(Doador doador) {
 		doadorRepository.delete(doador);
 	}
-
 
 }

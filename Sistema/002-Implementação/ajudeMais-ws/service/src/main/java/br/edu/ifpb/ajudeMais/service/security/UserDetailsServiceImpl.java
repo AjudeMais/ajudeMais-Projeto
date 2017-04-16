@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 */
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		
-		Optional<Conta> usuarioOptional = usuarioRepository.findByUsername(login);
+		Optional<Conta> usuarioOptional = usuarioRepository.findOneByUsername(login);
 		Conta usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha inválidos"));
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		List<String> permissoes = usuario.getGrupos();

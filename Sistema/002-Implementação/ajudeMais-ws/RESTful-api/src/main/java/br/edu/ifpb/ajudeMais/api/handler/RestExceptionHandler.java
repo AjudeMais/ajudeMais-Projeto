@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
+import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
 /**
  * 
@@ -54,6 +55,18 @@ public class RestExceptionHandler {
 		ResponseEntity<List<String>> responseEntity = new ResponseEntity<>(messages, HttpStatus.UNPROCESSABLE_ENTITY);
 
 		return responseEntity;
+	}
+	
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	@ExceptionHandler(UniqueConstraintAlreadyException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public ResponseEntity<String> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
+		return ResponseEntity.badRequest().body(e.getMessage());
 	}
 
 }

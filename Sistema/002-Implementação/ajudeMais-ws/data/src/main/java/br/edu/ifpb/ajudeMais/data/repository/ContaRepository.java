@@ -17,6 +17,13 @@ public interface ContaRepository extends JpaRepository<Conta, Long>{
 	 * 
 	 * @param username
 	 */
-	Optional<Conta> findByUsername(String username);
+	Optional<Conta> findOneByUsername(String username);
+	
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
+	Optional<Conta> findOneByEmail(String email);
 
 }

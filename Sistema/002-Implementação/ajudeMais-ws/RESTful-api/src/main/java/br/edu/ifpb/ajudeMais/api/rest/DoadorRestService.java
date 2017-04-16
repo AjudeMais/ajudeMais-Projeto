@@ -33,23 +33,19 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 @RequestMapping(value = "/doador")
 public class DoadorRestService {
 
-	/**
-	 * 
-	 */
 	@Autowired
 	private DoadorService doadorService;
 
 	/**
 	 * @param doador
-	 * @return response 
-	 * @throws AjudeMaisException 
+	 * @return response
+	 * @throws AjudeMaisException
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Doador> criar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
+	public ResponseEntity<?> criar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
 
 		Doador doadorCriado = doadorService.save(doador);
-
-		return new ResponseEntity<Doador>(doadorCriado, HttpStatus.CREATED);
+		return new ResponseEntity<>(doadorCriado, HttpStatus.CREATED);
 	}
 
 	/**
@@ -64,17 +60,17 @@ public class DoadorRestService {
 
 		return new ResponseEntity<Doador>(pacienteAtualizado, HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Doador>> buscarTodos() {
-		
+
 		List<Doador> doador = doadorService.findAll();
-		
-		return new ResponseEntity<List<Doador>>(doador,HttpStatus.OK);
+
+		return new ResponseEntity<List<Doador>>(doador, HttpStatus.OK);
 	}
 }

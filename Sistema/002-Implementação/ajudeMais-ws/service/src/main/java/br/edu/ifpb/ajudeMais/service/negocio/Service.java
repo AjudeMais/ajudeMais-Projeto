@@ -17,7 +17,6 @@ public interface Service<T, K> {
 	 * 
 	 * @param entity
 	 * @return
-	 * @throws UniqueConstraintAlreadyException 
 	 */
 	T save(T entity) throws AjudeMaisException;
 
