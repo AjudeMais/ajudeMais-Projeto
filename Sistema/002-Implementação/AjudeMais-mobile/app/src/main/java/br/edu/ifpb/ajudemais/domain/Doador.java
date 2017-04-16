@@ -11,12 +11,32 @@ public class Doador implements Serializable{
 
     private Long id;
     private String nome;
+    private String telefone;
+    private String facebookID;
+    private String tokenFCM;
     private Conta conta;
+    private Foto foto;
 
     public Doador(){}
 
-    public Doador(String nome,Conta conta) {
+    public Doador(String nome, String telefone, String facebookID, String tokenFCM, Conta conta) {
         this.nome = nome;
+        this.telefone = telefone;
+        this.facebookID = facebookID;
+        this.tokenFCM = tokenFCM;
+        this.conta = conta;
+    }
+
+    public Doador(String nome, String telefone, String facebookID, Conta conta) {
+        this.nome = nome;
+        this.telefone = telefone;
+        this.facebookID = facebookID;
+        this.conta = conta;
+    }
+
+    public Doador(String nome, String telefone, Conta conta) {
+        this.nome = nome;
+        this.telefone = telefone;
         this.conta = conta;
     }
 
@@ -62,13 +82,88 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getTelefone() {
+        return telefone;
+    }
+
+    /**
+     *
+     * @param telefone
+     */
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getFacebookID() {
+        return facebookID;
+    }
+
+    /**
+     *
+     * @param facebookID
+     */
+    public void setFacebookID(String facebookID) {
+        this.facebookID = facebookID;
+    }
+
+    /**
+     *
+     * @return String
+     */
+    public String getTokenFCM() {
+        return tokenFCM;
+    }
+
+    /**
+     *
+     * @param tokenFCM
+     */
+    public void setTokenFCM(String tokenFCM) {
+        this.tokenFCM = tokenFCM;
+    }
+
+    /**
+     *
+     * @return Foto
+     */
+    public Foto getFoto() {
+        return foto;
+    }
+
+    /**
+     *
+     * @param foto
+     */
+    public void setFoto(Foto foto) {
+        this.foto = foto;
+    }
 
     @Override
     public String toString() {
         return "Doador{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", facebookID='" + facebookID + '\'' +
+                ", tokenFCM='" + tokenFCM + '\'' +
                 ", conta=" + conta +
+                ", foto=" + foto +
                 '}';
     }
 }

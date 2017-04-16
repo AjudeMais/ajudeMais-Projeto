@@ -110,7 +110,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         String email = edtEmail.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
-        return ((!validateFieldsEmpty(userName, phone, email, confirmPassword, password) && validateLengthFields(userName, password, confirmPassword)) && validatePasswords(password, confirmPassword));
+        return ((!validateFieldsEmpty(userName, phone, email, confirmPassword, password) && validateLengthFields(userName, password, confirmPassword)) && (validatePasswords(password, confirmPassword) && validateEmail(edtEmail)));
     }
 
     /**
@@ -205,9 +205,9 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
                 List<String> grupos = new ArrayList<>();
                 grupos.add("ROLE_DOADOR");
-                Doador doador = new Doador(edtName.getText().toString().trim(),
+                Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(),
                         new Conta(edtUserName.getText().toString().trim(),
-                                edtPassword.getText().toString().trim(), grupos));
+                                edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));
 
                 new CreateAccounTask(doador).execute();
 
@@ -230,6 +230,25 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         editor.putString("password", password);
         editor.putString("accessToken", accessToken);
         editor.apply();
+    }
+
+
+    /**
+     *
+     * @param edtEmail
+     */
+    private boolean validateEmail(EditText edtEmail) {
+        String email = edtEmail.getText().toString().trim();
+
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+        if (!email.matches(emailPattern)) {
+            edtEmail.requestFocus();
+            edtEmail.setError(resources.getString(R.string.msgEmailNotValid));
+            return false;
+        }else {
+            return true;
+        }
     }
 
 
@@ -283,6 +302,8 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
             return null;
         }
+
+
 
         @Override
         protected void onPostExecute(JwtToken jwtToken) {

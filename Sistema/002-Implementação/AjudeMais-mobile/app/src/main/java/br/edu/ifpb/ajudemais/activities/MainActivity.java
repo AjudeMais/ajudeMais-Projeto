@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -20,9 +21,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FragmentTransaction mFragmentTransaction;
     private TextView tvUserName;
     private TextView tvEmail;
+    private CapturePhotoUtils capturePhotoUtils;
     private static final int PICK_IMAGE_ID = 234;
 
 
@@ -75,8 +82,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         tvUserName.setText(conta.getUsername());
+        tvEmail.setText(conta.getEmail());
 
-        setDataUserLoggedIn();
+        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+
+        if(bitmap != null) {
+            profilePhoto.setImageBitmap(bitmap);
+        }
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SharedPreferences.Editor prefsEditor = getSharedPreferences("login", Context.MODE_PRIVATE).edit();
                 prefsEditor.clear();
                 prefsEditor.apply();
+                System.out.println(capturePhotoUtils.deleteImageProfile());
 
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, LoginActivity.class);
@@ -131,24 +144,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private void setDataUserLoggedIn() {
-
-        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-        String userName = sharedPref.getString("userName", null);
-        String email = sharedPref.getString("email", null);
-
-        if (userName != null && email != null) {
-            tvUserName.setText(userName);
-            tvEmail.setText(email);
-
-        }
-    }
-
 
     /**
      * Inicializa componentes como editText,botões, imageView e etc.
      */
     private void init() {
+        capturePhotoUtils = new CapturePhotoUtils();
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.shitstuff);
@@ -180,9 +181,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (data.getExtras() == null) {
                     Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
                     profilePhoto.setImageBitmap(bitmap);
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
                 } else {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     profilePhoto.setImageBitmap(photo);
+                    capturePhotoUtils.saveToInternalStorage(photo);
+
                 }
             }
         }
