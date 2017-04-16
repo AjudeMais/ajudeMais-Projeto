@@ -34,13 +34,13 @@ gulp.task('copy', ['clean', 'copy-fonts'], function () {
 });
 
 gulp.task('templates', function () {
-    return gulp.src(config.paths.src + '/app/components/**/*.html')
+    return gulp.src(config.paths.templates)
         .pipe(htmlmin({
             collapseWhitespace: true
         }))
         .pipe(templateCache({
             module: 'templates',
-            root: 'app/components',
+            root: 'app',
             standalone: true,
             moduleSystem: 'IIFE'
         }))
@@ -55,10 +55,7 @@ gulp.task('vendors', ['templates'], function () {
 });
 
 gulp.task('scripts', ['vendors'], function () {
-    return gulp.src([
-        config.paths.src + '/app/**/*.js',
-        config.paths.tmp + '/templates.js'
-    ])
+    return gulp.src(config.paths.scripts)
         .pipe(wrap('(function(angular){\n\'use strict\';\n<%= contents %>})(window.angular);'))
         .pipe(concat('scripts.min.js'))
         .pipe(ngAnnotate())

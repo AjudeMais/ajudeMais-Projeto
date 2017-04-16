@@ -42,7 +42,7 @@
 
 		.state('home', {
 			url : '/home',
-			template : '<layout></layout>',
+			templateUrl : 'app/layouts/layout.html',
 			data : {
 				pageTitle : 'Home'
 			}

@@ -155,3 +155,6 @@ npm-debug.log
 
 .install_nvm.sh.save
 ./install_nvm.sh.save
+
+/tmp
+tmp

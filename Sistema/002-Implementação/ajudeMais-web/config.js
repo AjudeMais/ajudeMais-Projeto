@@ -13,6 +13,9 @@ exports.paths = {
         'src/content/img/**/*',
         'src/content/fonts/**/*'
     ],
+    templates: [
+        'src/app/**/**/*.html'
+    ],
     vendors: [
         'src/vendors/jquery/dist/jquery.min.js',
         'src/vendors/iCheck/icheck.js',
@@ -28,6 +31,20 @@ exports.paths = {
         'src/vendors/angular-cookies/angular-cookies.js',
         'src/vendors/angular-growl-v2/build/angular-growl.js',
         'src/vendors/angular-loading-bar/build/loading-bar.js'
+    ], scripts: [
+        'src/app/*.js',
+        'src/app/util/*.js',
+        'src/app/services/**/*.js',
+        'src/app/util/directives/*.js',
+        'src/app/blocks/**/*.js',
+        'src/app/layouts/*.js',
+        'src/app/layouts/header/*.js',
+        'src/app/layouts/notification/*.js',
+        'src/app/layouts/sidebar/directive/*.js',
+        'src/app/layouts/sidebar/*.js',
+        'src/app/layouts/widget/*.js',
+        'src/app/components/**/*.js',
+        'tmp/*.js'
     ],
     css: [
         'src/vendors/bootstrap/dist/css/bootstrap.min.css',

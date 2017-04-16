@@ -1,12 +1,12 @@
 (function () {
     angular.module('layout').directive('headerNotification', function () {
         return {
-            templateUrl: 'app/components/layout/header/header-notification.directive.html',
+            templateUrl: 'app/layouts/notification/header-notification.directive.html',
             restrict: 'E',
             replace: true,
-            controller: function ($rootScope, $state, authenticationService) {
+            controller: function ($sessionStorage, $state, authenticationService) {
                 var vm = this;
-                vm.usuario = $rootScope.sessionUser;
+                vm.usuario = $sessionStorage.sessionUser;
                 /**
                  *
                  */

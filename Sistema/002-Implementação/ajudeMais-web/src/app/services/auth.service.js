@@ -7,7 +7,7 @@
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
-    angular.module('amApp').factory('authenticationService', function ($http, $rootScope, amValue, $sessionStorage, $localStorage) {
+    angular.module('amApp').factory('authenticationService', function ($http, amValue, $sessionStorage, $localStorage) {
         var service = {};
 
         /**
@@ -31,7 +31,7 @@
         service.doLogout = function (callback) {
             delete $localStorage.authToken;
             delete $sessionStorage.authToken;
-            $rootScope.sessionUser = undefined;
+            $sessionStorage.sessionUser = undefined;
             callback();
         }
 
@@ -41,7 +41,7 @@
          */
         service.getUserLogged = function (callback) {
             $http.get(amValue.apiUri + "/auth/user").then(function (response) {
-                $rootScope.sessionUser = response.data;
+                $sessionStorage.sessionUser = response.data;
                 callback();
             });
         };
@@ -53,9 +53,9 @@
         service.logged = function (callback) {
             if ($sessionStorage.authToken === undefined) {
                 callback(false);
-            } else if ($rootScope.sessionUser === undefined) {
+            } else if ($sessionStorage.sessionUser === undefined) {
                 $http.get(amValue.apiUri + "/auth/user").then(function (response) {
-                    $rootScope.sessionUser = response.data;
+                    $sessionStorage.sessionUser = response.data;
                     callback(true);
                 }, function (response) {
                     callback(false);
@@ -78,7 +78,7 @@
             }
             var isAuthorized = false;
             angular.forEach(authorizedRoles, function (authorizedRole) {
-                var authorized = (!!$rootScope.sessionUser && $rootScope.sessionUser.grupos.indexOf(authorizedRole) !== -1);
+                var authorized = (!!$sessionStorage.sessionUser && $sessionStorage.sessionUser.grupos.indexOf(authorizedRole) !== -1);
                 if (authorized || authorizedRole == '*') {
                     isAuthorized = true;
                 }
