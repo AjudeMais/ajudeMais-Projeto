@@ -12,24 +12,25 @@ public class Doador implements Serializable{
     private Long id;
     private String nome;
     private String telefone;
-    private String facebookId;
+    private String facebookID;
     private String tokenFCM;
     private Conta conta;
+    private Foto foto;
 
     public Doador(){}
 
-    public Doador(String nome, String telefone, String facebookId, String tokenFCM, Conta conta) {
+    public Doador(String nome, String telefone, String facebookID, String tokenFCM, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
-        this.facebookId = facebookId;
+        this.facebookID = facebookID;
         this.tokenFCM = tokenFCM;
         this.conta = conta;
     }
 
-    public Doador(String nome, String telefone, String facebookId, Conta conta) {
+    public Doador(String nome, String telefone, String facebookID, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
-        this.facebookId = facebookId;
+        this.facebookID = facebookID;
         this.conta = conta;
     }
 
@@ -109,16 +110,16 @@ public class Doador implements Serializable{
      *
      * @return String
      */
-    public String getFacebookId() {
-        return facebookId;
+    public String getFacebookID() {
+        return facebookID;
     }
 
     /**
      *
-     * @param facebookId
+     * @param facebookID
      */
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setFacebookID(String facebookID) {
+        this.facebookID = facebookID;
     }
 
     /**
@@ -137,15 +138,32 @@ public class Doador implements Serializable{
         this.tokenFCM = tokenFCM;
     }
 
+    /**
+     *
+     * @return Foto
+     */
+    public Foto getFoto() {
+        return foto;
+    }
+
+    /**
+     *
+     * @param foto
+     */
+    public void setFoto(Foto foto) {
+        this.foto = foto;
+    }
+
     @Override
     public String toString() {
         return "Doador{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", telefone='" + telefone + '\'' +
-                ", facebookId='" + facebookId + '\'' +
+                ", facebookID='" + facebookID + '\'' +
                 ", tokenFCM='" + tokenFCM + '\'' +
                 ", conta=" + conta +
+                ", foto=" + foto +
                 '}';
     }
 }

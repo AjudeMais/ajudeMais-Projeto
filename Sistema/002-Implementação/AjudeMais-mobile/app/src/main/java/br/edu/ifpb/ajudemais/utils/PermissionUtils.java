@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -38,4 +39,5 @@ public class PermissionUtils {
 
         return false;
     }
+
 }

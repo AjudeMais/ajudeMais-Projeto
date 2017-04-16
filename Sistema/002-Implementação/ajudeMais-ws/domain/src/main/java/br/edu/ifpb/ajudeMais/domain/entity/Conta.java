@@ -40,7 +40,7 @@ public class Conta {
 	@NotBlank 
 	@NotNull
 	@Size(min=4, max=100)
-	@Column(length=100, nullable=false)
+	@Column(length=100, nullable=false, unique = true)
 	private String username;
 
 	/**
