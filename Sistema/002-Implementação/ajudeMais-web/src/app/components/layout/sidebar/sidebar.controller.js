@@ -1,30 +1,23 @@
-/**
- * @ngdoc Controller
- * @name layout
- * 
- * @description controller para o sidebar
- * 
- */
-angular.module('layout').controller('SidebarCtrl', ['$scope','$rootScope', '$cookieStore', SidebarCtrl]);
+angular.module('layout').controller('SidebarCtrl', ['$scope', '$rootScope', '$cookieStore', SidebarCtrl]);
 
 function SidebarCtrl($scope, $rootScope, $cookieStore) {
 
     var mobileView = 992;
 
     /**
-     * 
+     *
      */
-    $scope.getWidth = function() {
+    $scope.getWidth = function () {
         return window.innerWidth;
     };
 
     /**
-     * 
+     *
      */
-    $scope.$watch($scope.getWidth, function(newValue, oldValue) {
+    $scope.$watch($scope.getWidth, function (newValue, oldValue) {
         if (newValue >= mobileView) {
             if (angular.isDefined($cookieStore.get('toggle'))) {
-                $scope.toggle = ! $cookieStore.get('toggle') ? false : true;
+                $scope.toggle = !$cookieStore.get('toggle') ? false : true;
             } else {
                 $scope.toggle = true;
             }
@@ -34,14 +27,14 @@ function SidebarCtrl($scope, $rootScope, $cookieStore) {
     });
 
     /**
-     * 
+     *
      */
-    $scope.toggleSidebar = function() {
+    $scope.toggleSidebar = function () {
         $scope.toggle = !$scope.toggle;
         $cookieStore.put('toggle', $scope.toggle);
     };
 
-    window.onresize = function() {
+    window.onresize = function () {
         $scope.$apply();
     };
 }

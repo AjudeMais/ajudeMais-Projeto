@@ -4,7 +4,7 @@
   "description": "módulo web do Ajude Mais",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "gulp build && node app.js",
     "postinstall": "node node_modules/bower/bin/bower install"
   },
   "author": "Franck Aragão",
@@ -13,7 +13,9 @@
     "bower": "^1.8.0",
     "browser-sync": "^2.18.8",
     "del": "^2.2.2",
+    "express": "^4.15.2",
     "gulp": "^3.9.1",
+    "gulp-angular-filesort": "^1.1.1",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-clean-css": "^3.0.4",
     "gulp-concat": "^2.6.1",
@@ -22,11 +24,10 @@
     "gulp-inject": "^4.2.0",
     "gulp-minify": "0.0.15",
     "gulp-ng-annotate": "^2.0.0",
+    "gulp-sourcemaps": "^2.6.0",
     "gulp-uglify": "2.0.0",
     "gulp-util": "^3.0.8",
     "gulp-wrap": "^0.13.0",
-    "http-proxy-middleware": "^0.17.4",
-    "proxy-middleware": "^0.15.0",
     "run-sequence": "^1.2.2",
     "url": "^0.11.0"
   },

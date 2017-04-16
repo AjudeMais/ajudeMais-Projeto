@@ -15,7 +15,7 @@
 		ddo.scope = {
 			toggle : '&'
 		}
-		ddo.templateUrl = 'app/layout/sidebar/sidebar.directive.html';
+		ddo.templateUrl = 'app/components/layout/sidebar/directive/sidebar.directive.html';
 	
 		return ddo;
 	});

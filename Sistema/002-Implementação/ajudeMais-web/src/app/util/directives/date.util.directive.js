@@ -1,5 +1,5 @@
 (function() {
-	angular.module("ajudeMais.utils", ['ui.bootstrap']).directive("dateBefore", function(uibDateParser) {
+	angular.module("ajudeMais.utils").directive("dateBefore", function(uibDateParser) {
 		return {
 			require : 'ngModel',
 			link : function(scope, el, attrs, ctrl) {

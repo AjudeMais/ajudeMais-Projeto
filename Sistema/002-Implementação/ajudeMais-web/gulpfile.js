@@ -11,7 +11,7 @@ var ngAnnotate = require('gulp-ng-annotate');
 var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var path = require('path');
-
+var inject = require('gulp-inject');
 
 var config = require('./config');
 
@@ -21,45 +21,48 @@ gulp.task('clean', function () {
     });
 });
 
-gulp.task('copy', ['clean'], function () {
+gulp.task('copy-fonts', function () {
+    return gulp.src(config.paths.fonts)
+        .pipe(gulp.dest(config.paths.dist + '/content/fonts'));
+});
+
+gulp.task('copy', ['clean', 'copy-fonts'], function () {
     return gulp.src(config.paths.static, {
         base: config.paths.src
     })
         .pipe(gulp.dest(config.paths.dist));
 });
 
-gulp.task('layouts', function () {
-    return gulp.src(config.paths.src + '/app/layout/**/*.html')
-        .pipe(htmlmin({
-            collapseWhitespace: true
-        }))
-        .pipe(templateCache({
-            module: 'layouts',
-            root: 'app',
-            standalone: true,
-            moduleSystem: 'IIFE'
-        }))
-        .pipe(gulp.dest('./'));
-});
-
-gulp.task('templates', ['layouts'], function () {
+gulp.task('templates', function () {
     return gulp.src(config.paths.src + '/app/components/**/*.html')
         .pipe(htmlmin({
             collapseWhitespace: true
         }))
         .pipe(templateCache({
             module: 'templates',
-            root: 'app',
+            root: 'app/components',
             standalone: true,
             moduleSystem: 'IIFE'
         }))
-        .pipe(gulp.dest('./'));
+        .pipe(gulp.dest(config.paths.tmp));
 });
 
-gulp.task('plugins', ['templates'], function () {
+gulp.task('vendors', ['templates'], function () {
     return gulp.src(config.paths.vendors)
-        .pipe(concat('vendors.js'))
-        //.pipe(uglify())
+        .pipe(concat('plugins.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(config.paths.dist + '/app/js/'));
+});
+
+gulp.task('scripts', ['vendors'], function () {
+    return gulp.src([
+        config.paths.src + '/app/**/*.js',
+        config.paths.tmp + '/templates.js'
+    ])
+        .pipe(wrap('(function(angular){\n\'use strict\';\n<%= contents %>})(window.angular);'))
+        .pipe(concat('scripts.min.js'))
+        .pipe(ngAnnotate())
+       // .pipe(uglify())
         .pipe(gulp.dest(config.paths.dist + '/app/js/'));
 });
 
@@ -70,18 +73,15 @@ gulp.task('styles', function () {
         .pipe(gulp.dest(config.paths.dist + '/content/css/'));
 });
 
-gulp.task('scripts', ['plugins'], function () {
-    return gulp.src([
-        config.paths.src + '/app/**/*.js',
-        './layouts.js', './templates.js'
-    ])
-        .pipe(wrap('(function(angular){\n\'use strict\';\n<%= contents %>})(window.angular);'))
-        .pipe(concat('scripts.js'))
-        .pipe(ngAnnotate())
-        .pipe(uglify())
-        .pipe(gulp.dest(config.paths.dist + '/app/js/'));
-});
+gulp.task('inject', function () {
+    var sources = gulp.src([
+        config.paths.dist + '/app/**/*.js',
+        config.paths.dist + '/content/**/*.css'], {read: false});
 
+    return gulp.src('./src/index.html')
+        .pipe(inject(sources, {ignorePath: 'dist'}))
+        .pipe(gulp.dest('./dist'));
+});
 
 gulp.task('browser-sync', function () {
 
@@ -112,5 +112,5 @@ gulp.task('default', ['browser-sync', 'watch']);
 gulp.task('start', ['browser-sync', 'watch']);
 
 gulp.task('build', function (cb) {
-    return runSequence('clean', ['copy', 'styles', 'scripts'], cb)
+    return runSequence('clean', 'copy', 'styles', 'scripts', ['inject'], cb)
 });
