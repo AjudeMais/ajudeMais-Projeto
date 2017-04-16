@@ -5,7 +5,6 @@ var concat = require('gulp-concat');
 var wrap = require('gulp-wrap');
 var uglify = require('gulp-uglify');
 var htmlmin = require('gulp-htmlmin');
-var gulpif = require('gulp-if');
 var cleanCSS = require('gulp-clean-css');
 var ngAnnotate = require('gulp-ng-annotate');
 var templateCache = require('gulp-angular-templatecache');
@@ -59,7 +58,7 @@ gulp.task('scripts', ['vendors'], function () {
         .pipe(wrap('(function(angular){\n\'use strict\';\n<%= contents %>})(window.angular);'))
         .pipe(concat('scripts.min.js'))
         .pipe(ngAnnotate())
-       // .pipe(uglify())
+        .pipe(uglify())
         .pipe(gulp.dest(config.paths.dist + '/app/js/'));
 });
 
