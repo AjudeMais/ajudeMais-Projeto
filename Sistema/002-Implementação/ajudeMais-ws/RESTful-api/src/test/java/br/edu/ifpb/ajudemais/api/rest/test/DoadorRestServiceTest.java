@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.api.rest;
+package br.edu.ifpb.ajudemais.api.rest.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,14 +31,15 @@ public class DoadorRestServiceTest {
 	@Autowired
 	private TestRestTemplate testRestTemplate;
 
+	/**
+	 * 
+	 */
 	@Test
-	public void getDoadoresTest() {
+	public void getUserFalhoTest() {
 		HttpHeaders headers = new HttpHeaders();
 
 		ResponseEntity<String> entity = this.testRestTemplate.exchange("/auth/user", HttpMethod.GET,
 				new HttpEntity<Void>(headers), String.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
-
 	}
-
 }
