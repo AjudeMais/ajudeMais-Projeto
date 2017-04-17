@@ -11,6 +11,8 @@ var templateCache = require('gulp-angular-templatecache');
 var del = require('del');
 var path = require('path');
 var inject = require('gulp-inject');
+var rename = require('gulp-rename');
+var ngConstant = require('gulp-ng-constant');
 
 var config = require('./config');
 
@@ -79,8 +81,33 @@ gulp.task('inject', function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('browser-sync', function () {
+gulp.task('ngconstant:dev', function () {
+    return ngConstant({
+        name: 'amApp',
+        constants: {
+            Api: config.base.apiDev
+        },
+        template: config.base.constantTemplate,
+        stream: true
+    })
+        .pipe(rename('app.constants.js'))
+        .pipe(gulp.dest(config.paths.src + '/app/constants'));
+});
 
+gulp.task('ngconstant:prod', function () {
+    return ngConstant({
+        name: 'amApp',
+        constants: {
+            Api: config.base.apiProd
+        },
+        template: config.base.constantTemplate,
+        stream: true
+    })
+        .pipe(rename('app.constants.js'))
+        .pipe(gulp.dest(config.paths.src + '/app/constants'));
+});
+
+gulp.task('browser-sync', function () {
     browserSync({
         open: true,
         port: config.base.port,
@@ -103,10 +130,14 @@ gulp.task('watch', function () {
     gulp.watch(config.paths.src + '/app');
 });
 
-gulp.task('default', ['browser-sync', 'watch']);
+gulp.task('install', function (cb) {
+    return runSequence('browser-sync', 'watch', ['ngconstant:dev'], cb)
+});
 
-gulp.task('start', ['browser-sync', 'watch']);
+gulp.task('default', ['install']);
+
+gulp.task('start', ['install']);
 
 gulp.task('build', function (cb) {
-    return runSequence('clean', 'copy', 'styles', 'scripts', ['inject'], cb)
+    return runSequence('clean', 'copy', 'styles', 'ngconstant:prod', 'scripts', ['inject'], cb)
 });

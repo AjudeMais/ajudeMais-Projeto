@@ -7,7 +7,7 @@
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
-    angular.module('amApp').factory('authenticationService', function ($http, amValue, $sessionStorage, $localStorage) {
+    angular.module('amApp').factory('authenticationService', function ($http, Api, $sessionStorage, $localStorage) {
 
         /**
          *
@@ -17,7 +17,7 @@
          * @private
          */
         var _doLogin = function (account, callback, callbackError) {
-            $http.post(amValue.apiUri + "/auth/login", account).then(function (response) {
+            $http.post(Api + "/auth/login", account).then(function (response) {
                 callback(response.data);
             }, function (response) {
                 callbackError(response.data);
@@ -42,7 +42,7 @@
          * @private
          */
         var _getUserLogged = function (callback) {
-            $http.get(amValue.apiUri + "/auth/user").then(function (response) {
+            $http.get(Api + "/auth/user").then(function (response) {
                 $sessionStorage.sessionUser = response.data;
                 callback();
             });
@@ -57,7 +57,7 @@
             if ($sessionStorage.authToken === undefined) {
                 callback(false);
             } else if ($sessionStorage.sessionUser === undefined) {
-                $http.get(amValue.apiUri + "/auth/user").then(function (response) {
+                $http.get(Api + "/auth/user").then(function (response) {
                     $sessionStorage.sessionUser = response.data;
                     callback(true);
                 }, function (response) {

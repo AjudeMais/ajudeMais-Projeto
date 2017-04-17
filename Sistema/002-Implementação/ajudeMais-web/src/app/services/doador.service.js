@@ -8,7 +8,7 @@
  */
 
 (function () {
-    angular.module("amApp").factory("doadorService", function ($http, amValue) {
+    angular.module("amApp").factory("doadorService", function ($http, Api) {
 
         /**
          *
@@ -16,7 +16,7 @@
          * @private
          */
         var _getDoadores = function (callback) {
-            $http.get(amValue.apiUri + "/doador").then(function (response) {
+            $http.get(Api + "/doador").then(function (response) {
                 callback(response.data);
             });
         };

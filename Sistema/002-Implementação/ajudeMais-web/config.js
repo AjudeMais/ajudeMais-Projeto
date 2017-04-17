@@ -2,7 +2,12 @@
 
 exports.base = {
     port: 8000,
-    apiUri: 'http://localhost:8080',
+    apiDev: 'http://localhost:8080',
+    apiProd: 'http://TODO',
+    constantTemplate: '(function () {\n' +
+    '    angular.module(\'<%- moduleName %>\')\n' +
+    '<% constants.forEach(function(constant) { %>        .constant(\'<%- constant.name %>\', <%= constant.value %>)\n<% }) %>;\n' +
+    '})();\n'
 };
 
 exports.paths = {
@@ -33,6 +38,7 @@ exports.paths = {
         'src/vendors/angular-loading-bar/build/loading-bar.js'
     ], scripts: [
         'src/app/*.js',
+        'src/app/constants/*.js',
         'src/app/util/*.js',
         'src/app/services/**/*.js',
         'src/app/util/directives/*.js',
