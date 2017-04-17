@@ -12,6 +12,7 @@ import java.util.Arrays;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
+import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 /**
@@ -38,11 +39,11 @@ public class AuthRemoteService {
      * @param conta
      * @return
      */
-    public JwtToken createAuthenticationToken(Conta conta) {
+    public JwtToken createAuthenticationToken(Conta conta){
         return restTemplate.postForObject(URL, conta, JwtToken.class);
     }
 
-    public Conta getUsuario(String token) {
+    public Conta getUsuario(String token){
 
         final HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", token);

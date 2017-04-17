@@ -1,9 +1,12 @@
 package br.edu.ifpb.ajudemais.handler;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
 
@@ -30,7 +33,12 @@ public class MyResponseErrorHandler implements ResponseErrorHandler {
     }
 
     public void handleError(ClientHttpResponse response) throws IOException {
-        String body = IOUtils.toString(response.getBody());
-        throw new RemoteAccessErrorException(response.getStatusCode(), body, body);
+        String body = IOUtils.toString(response.getBody()).replace("[", "").replace("]", "");
+
+        if (response.getStatusCode() == HttpStatus.UNAUTHORIZED){
+            body = "Nome de usuário ou senha inválido";
+        }
+        throw new RestClientException(body);
     }
+
 }

@@ -96,14 +96,10 @@ public class ApresentationActivity extends AppCompatActivity {
                     jwtToken = authRemoteService.createAuthenticationToken(conta);
 
                     conta = authRemoteService.getUsuario(jwtToken.getToken());
-
                     return jwtToken;
 
-                } catch (HttpStatusCodeException e) {
-                    message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
-                    e.printStackTrace();
                 } catch (RestClientException e) {
-                    message = "Ocorreu um problema, tente novamente mais tarde";
+                    message = e.getMessage();
                     e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();

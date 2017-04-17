@@ -14,18 +14,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
+import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -240,11 +240,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
                 return jwtToken;
 
-            } catch (HttpStatusCodeException e) {
-                message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
-                e.printStackTrace();
             } catch (RestClientException e) {
-                message = "Ocorreu um problema, tente novamente mais tarde";
+                message = e.getMessage();
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -267,7 +264,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
                 finish();
 
-            }else{
+            } else {
                 showResult(message);
             }
         }

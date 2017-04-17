@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 
 
-public class RemoteAccessErrorException extends RuntimeException {
+public class RemoteAccessErrorException extends IOException {
 
     private HttpStatus statusCode;
 
