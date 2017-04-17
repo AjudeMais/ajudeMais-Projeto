@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Component
@@ -20,6 +20,9 @@ public class JwtEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = -8970718410437077606L;
 
+    /**
+     * 
+     */
     @Override
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,

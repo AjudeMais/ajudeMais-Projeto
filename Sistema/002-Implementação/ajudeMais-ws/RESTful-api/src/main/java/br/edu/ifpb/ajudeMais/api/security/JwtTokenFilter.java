@@ -20,6 +20,8 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtTokenUtil;
 
 /**
  * 
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
