@@ -64,7 +64,7 @@ public class Doador implements Serializable {
 	private Foto foto;
 	
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
 
 
