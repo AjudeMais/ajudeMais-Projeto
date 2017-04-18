@@ -24,6 +24,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
+import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
@@ -288,12 +289,9 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
                 return jwtToken;
 
-            } catch (HttpStatusCodeException e) {
-                message = e.getResponseBodyAsString().replace("[", "").replace("]", "");
-                e.printStackTrace();
 
             } catch (RestClientException e) {
-                message = "Ocorreu um erro inesperado no sistema aguarde e tente novamente.";
+                message = e.getMessage();
                 e.printStackTrace();
 
             } catch (Exception e) {

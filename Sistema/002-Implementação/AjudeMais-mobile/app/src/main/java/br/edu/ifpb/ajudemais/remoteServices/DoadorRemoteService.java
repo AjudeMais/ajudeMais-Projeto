@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 /**
@@ -44,7 +45,7 @@ public class DoadorRemoteService {
      * @param doador
      * @return
      */
-    public Doador saveDoador(Doador doador) {
+    public Doador saveDoador(Doador doador){
         doador = restTemplate.postForObject(URL, doador, Doador.class);
         return doador;
     }
