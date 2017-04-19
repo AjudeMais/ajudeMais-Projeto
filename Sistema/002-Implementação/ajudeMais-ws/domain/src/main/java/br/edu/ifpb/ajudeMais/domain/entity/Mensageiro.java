@@ -66,8 +66,8 @@ public class Mensageiro {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Conta conta;
 
-	@OneToMany(cascade = CascadeType.ALL, targetEntity = Endereco.class, mappedBy = "mensageiro")
-	private List<Endereco> endereco;
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Endereco.class, mappedBy = "mensageiro", fetch = FetchType.LAZY)
+	private List<Endereco> enderecos;
 
 	/**
 	 * 
@@ -198,15 +198,15 @@ public class Mensageiro {
 	/**
 	 * @return the endereco
 	 */
-	public List<Endereco> getEndereco() {
-		return endereco;
+	public List<Endereco> getEnderecos() {
+		return enderecos;
 	}
 
 	/**
 	 * @param endereco the endereco to set
 	 */
-	public void setEndereco(List<Endereco> endereco) {
-		this.endereco = endereco;
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
 	}
 
 	
