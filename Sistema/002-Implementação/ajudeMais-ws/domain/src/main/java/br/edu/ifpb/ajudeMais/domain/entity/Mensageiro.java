@@ -1,12 +1,15 @@
 
 package br.edu.ifpb.ajudeMais.domain.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -27,48 +30,50 @@ import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 public class Mensageiro {
-	
+
 	@Id
 	@Column(name = "id", unique = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull(message = "O nome deve ser informado")
 	private String nome;
-	
+
 	/**
 	 * 
 	 */
 	@CPF
 	@NotNull(message = "O CPF deve ser informado")
 	private String cpf;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull(message = "O e-mail deve ser informado")
 	private String email;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull(message = "O telefone deve ser informado")
 	private String telefone;
-	
+
 	private String tokenFCM;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	private Conta conta;
-	
+
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "mensageiro")
+	private List<Endereco> endereco;
+
 	/**
 	 * 
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	private Foto foto;
-	
 
 	/**
 	 * @return the id
@@ -78,7 +83,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -92,7 +98,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -106,7 +113,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param cpf the cpf to set
+	 * @param cpf
+	 *            the cpf to set
 	 */
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
@@ -120,7 +128,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param email
+	 *            the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
@@ -134,7 +143,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param telefone the telefone to set
+	 * @param telefone
+	 *            the telefone to set
 	 */
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
@@ -148,7 +158,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param tokenFCM the tokenFCM to set
+	 * @param tokenFCM
+	 *            the tokenFCM to set
 	 */
 	public void setTokenFCM(String tokenFCM) {
 		this.tokenFCM = tokenFCM;
@@ -162,7 +173,8 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param conta the conta to set
+	 * @param conta
+	 *            the conta to set
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
@@ -176,13 +188,26 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param foto the foto to set
+	 * @param foto
+	 *            the foto to set
 	 */
 	public void setFoto(Foto foto) {
 		this.foto = foto;
 	}
-	
-	
-	
 
+	/**
+	 * @return the endereco
+	 */
+	public List<Endereco> getEndereco() {
+		return endereco;
+	}
+
+	/**
+	 * @param endereco the endereco to set
+	 */
+	public void setEndereco(List<Endereco> endereco) {
+		this.endereco = endereco;
+	}
+
+	
 }

@@ -2,18 +2,15 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
-import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
-import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 
 /**
@@ -30,23 +27,18 @@ public class MesageiroServiceImpl implements MensageiroService{
 	private MensageiroRepository mensageiroRepository;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
+	private ContaService contaService;
+
+	/**
+	 * 
+	 */
 	@Override
 	@Transactional
-	public Mensageiro save(Mensageiro mensageiro) throws UniqueConstraintAlreadyException {
+	public Mensageiro save(Mensageiro mensageiro) throws AjudeMaisException {
 
-		Optional<Conta> contaEmail = mensageiroRepository.findOneByEmail(mensageiro.getConta().getEmail());
-		Optional<Conta> contaUsername = mensageiroRepository.findOneByUsername(mensageiro.getConta().getUsername());
-
-		if (contaEmail.isPresent()) {
-			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
-		}
-		if (contaUsername.isPresent()) {
-			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
-		}
-		String senha = passwordEncoder.encode(mensageiro.getConta().getSenha());
-		mensageiro.getConta().setSenha(senha);
+		Conta conta = contaService.save(mensageiro.getConta());
+		mensageiro.setConta(conta);
+		
 		return mensageiroRepository.save(mensageiro);
 	}
 
@@ -67,11 +59,17 @@ public class MesageiroServiceImpl implements MensageiroService{
 		return mensageiroRepository.findAll();
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public Mensageiro findById(Long id) {
 		return mensageiroRepository.findOne(id);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	@Transactional
 	public void remover(Mensageiro mensageiro) {
