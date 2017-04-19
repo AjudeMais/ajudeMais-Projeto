@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.ContaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
 /**
@@ -25,10 +27,22 @@ public class ContaServiceImpl implements ContaService{
 	private PasswordEncoder passwordEncoder;
 
 	/**
+	 * @throws UniqueConstraintAlreadyException 
 	 * 
 	 */
 	@Override
-	public Conta save(Conta entity) {
+	public Conta save(Conta entity) throws UniqueConstraintAlreadyException {
+		
+		Optional<Conta> contaEmail = contaRepository.findOneByEmail(entity.getEmail());
+		Optional<Conta> contaUsername = contaRepository.findOneByUsername(entity.getUsername());
+
+		if (contaEmail.isPresent()) {
+			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
+		}
+		if (contaUsername.isPresent()) {
+			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
+		}
+		
 		String senha = passwordEncoder.encode(entity.getSenha());
 		entity.setSenha(senha);
 		return contaRepository.save(entity);

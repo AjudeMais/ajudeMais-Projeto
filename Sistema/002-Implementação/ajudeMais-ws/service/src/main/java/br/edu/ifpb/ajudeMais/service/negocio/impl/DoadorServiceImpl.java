@@ -4,19 +4,17 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.edu.ifpb.ajudeMais.data.repository.ContaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
-import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 
 /**
@@ -34,26 +32,20 @@ public class DoadorServiceImpl implements DoadorService {
 	private DoadorRepository doadorRepository;
 
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private ContaService contaService;
 
-	@Autowired
-	private ContaRepository contaRepository;
-
+	/**
+	 * 
+	 * @param doador
+	 * @return
+	 * @throws AjudeMaisException
+	 */
 	@Override
 	@Transactional
-	public Doador save(Doador doador) throws UniqueConstraintAlreadyException {
-
-		Optional<Conta> contaEmail = contaRepository.findOneByEmail(doador.getConta().getEmail());
-		Optional<Conta> contaUsername = contaRepository.findOneByUsername(doador.getConta().getUsername());
-
-		if (contaEmail.isPresent()) {
-			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
-		}
-		if (contaUsername.isPresent()) {
-			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
-		}
-		String senha = passwordEncoder.encode(doador.getConta().getSenha());
-		doador.getConta().setSenha(senha);
+	public Doador save(Doador doador) throws AjudeMaisException {
+		Conta conta = contaService.save(doador.getConta());
+		doador.setConta(conta);
+		
 		return doadorRepository.save(doador);
 	}
 
