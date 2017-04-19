@@ -73,7 +73,7 @@ public class InstituicaoCaridadeRestService {
 	 * @param id
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ADMIN, INSTITUICAO')")
+	@PreAuthorize("hasAnyRole('ADMIN, INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<InstituicaoCaridade> findById(@PathVariable Long id) {
 		InstituicaoCaridade instituicao = instituicaoService.findById(id);

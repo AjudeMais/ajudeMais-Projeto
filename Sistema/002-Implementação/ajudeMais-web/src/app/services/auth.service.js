@@ -9,6 +9,16 @@
 (function () {
     angular.module('amApp').factory('authenticationService', function ($http, Api, $sessionStorage, $localStorage) {
 
+        var service = {
+            doLogin: _doLogin,
+            doLogout: _doLogout,
+            getUserLogged: _getUserLogged,
+            logged: _logged,
+            isAuthorized: _isAuthorized,
+            storageToken: _storageToken
+        };
+        return service;
+
         /**
          *
          * @param account
@@ -16,7 +26,7 @@
          * @param callbackError
          * @private
          */
-        var _doLogin = function (account, callback, callbackError) {
+        function _doLogin(account, callback, callbackError) {
             $http.post(Api + "/auth/login", account).then(function (response) {
                 callback(response.data);
             }, function (response) {
@@ -29,7 +39,7 @@
          * @param callback
          * @private
          */
-        var _doLogout = function (callback) {
+        function _doLogout(callback) {
             delete $localStorage.authToken;
             delete $sessionStorage.authToken;
             $sessionStorage.sessionUser = undefined;
@@ -41,7 +51,7 @@
          * @param callback
          * @private
          */
-        var _getUserLogged = function (callback) {
+        function _getUserLogged(callback) {
             $http.get(Api + "/auth/user").then(function (response) {
                 $sessionStorage.sessionUser = response.data;
                 callback();
@@ -53,7 +63,7 @@
          * @param callback
          * @private
          */
-        var _logged = function (callback) {
+        function _logged(callback) {
             if ($sessionStorage.authToken === undefined) {
                 callback(false);
             } else if ($sessionStorage.sessionUser === undefined) {
@@ -73,7 +83,7 @@
          * @returns {boolean}
          * @private
          */
-        var _isAuthorized = function (authorizedRoles) {
+        function _isAuthorized(authorizedRoles) {
             if (!angular.isArray(authorizedRoles)) {
                 if (authorizedRoles == '*') {
                     return true;
@@ -95,17 +105,9 @@
          * @param jwt
          * @private
          */
-        var _storageToken = function (jwt) {
+        function _storageToken(jwt) {
             $sessionStorage.authToken = jwt;
         }
 
-        return {
-            doLogin: _doLogin,
-            doLogout: _doLogout,
-            getUserLogged: _getUserLogged,
-            logged: _logged,
-            isAuthorized: _isAuthorized,
-            storageToken: _storageToken
-        };
     });
 })();

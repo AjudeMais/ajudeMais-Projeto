@@ -10,7 +10,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -34,10 +33,6 @@ public class InstituicaoCaridade {
 	private String telefone;
 
 	@NotNull
-	@Email
-	private String email;
-
-	@NotNull
 	@NotBlank(message = "CPF/CNPJ deve ser informando")
 	private String documento;
 
@@ -45,6 +40,7 @@ public class InstituicaoCaridade {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 
+	@NotNull
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
 
@@ -91,21 +87,6 @@ public class InstituicaoCaridade {
 	 */
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
-	}
-
-	/**
-	 * @return the email
-	 */
-	public String getEmail() {
-		return email;
-	}
-
-	/**
-	 * @param email
-	 *            the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	/**
@@ -160,8 +141,8 @@ public class InstituicaoCaridade {
 	 */
 	@Override
 	public String toString() {
-		return "InstituicaoCaridade [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", email=" + email
-				+ ", documento=" + documento + ", endereco=" + endereco + ", conta=" + conta + "]";
+		return "InstituicaoCaridade [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", documento="
+				+ documento + ", endereco=" + endereco + ", conta=" + conta + "]";
 	}
 
 }

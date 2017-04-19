@@ -20,6 +20,11 @@
     content: "*";
 }
 
+.am-btn-new {
+    margin-top: -90px;
+    padding: px;
+}
+
 /*
  * Componentes: Layout
  * Css do layouts: AdminLTE com modificações
@@ -67,7 +72,7 @@ a.custom-link {
 }
 
 /*
- * Pagina: 400 and 500
+ * Pagina: 400 e 500
  * ------------------------------
  */
 .error-page {
@@ -863,9 +868,9 @@ div.dataTables_info {
     background: #ffffff;
     border-top: 3px solid #d2d6de;
     margin-bottom: 20px;
+    padding-bottom: 15px;
     width: 100%;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    padding-bottom: 15px;
 }
 
 .box-topic {
@@ -873,11 +878,11 @@ div.dataTables_info {
 }
 
 .box.box-primary {
-    border-top-color: #3c8dbc;
+    border-top-color: #12A7B5;
 }
 
 .box.box-info {
-    border-top-color: #00c0ef;
+    border-top-color: #12A7B5;
 }
 
 .box.box-danger {
@@ -924,8 +929,8 @@ div.dataTables_info {
 
 .box.box-solid.box-primary > .box-header {
     color: #ffffff;
-    background: #3c8dbc;
-    background-color: #3c8dbc;
+    background: #12A7B5;
+    background-color: #12A7B5;
 }
 
 .box.box-solid.box-primary > .box-header a, .box.box-solid.box-primary > .box-header .btn {
@@ -1579,7 +1584,7 @@ table.dataTable thead .sorting:after {
 }
 
 .modal-primary .modal-header, .modal-primary .modal-footer {
-    border-color: #307095;
+    border-color: #12A7B5;
 }
 
 .modal-warning .modal-header, .modal-warning .modal-footer {
@@ -1801,7 +1806,7 @@ table.text-center, table.text-center td, table.text-center th {
 }
 
 .callout.callout-info {
-    border-color: #0097bc;
+    border-color: #12A7B5;
 }
 
 .callout.callout-success {
@@ -1854,7 +1859,7 @@ table.text-center, table.text-center td, table.text-center th {
 }
 
 .alert-info {
-    border-color: #00acd6;
+    border-color: #12A7B5;
 }
 
 /*
