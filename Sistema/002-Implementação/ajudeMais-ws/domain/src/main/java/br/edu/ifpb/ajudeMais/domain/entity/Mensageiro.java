@@ -66,7 +66,7 @@ public class Mensageiro {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Conta conta;
 
-	@OneToMany(cascade = CascadeType.ALL,mappedBy = "mensageiro")
+	@OneToMany(cascade = CascadeType.ALL, targetEntity = Endereco.class, mappedBy = "mensageiro")
 	private List<Endereco> endereco;
 
 	/**
