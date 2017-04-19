@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Inicializa componentes como editText,botões, imageView e etc.
      */
     private void init() {
-        capturePhotoUtils = new CapturePhotoUtils();
+        capturePhotoUtils = new CapturePhotoUtils(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.shitstuff);

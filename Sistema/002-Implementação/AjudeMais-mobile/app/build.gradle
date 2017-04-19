@@ -30,6 +30,8 @@ android {
             testApplicationId 'br.edu.ifpb.ajudemais.doador.teste'
             versionCode 1
             versionName '0.1'
+
+
         }
         mensageiro {
             applicationId "br.edu.ifpb.ajudemais.mensageiro"
@@ -76,6 +78,6 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
 
 
-    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    doadorCompile 'com.facebook.android:facebook-android-sdk:[4,5)'
     testCompile 'junit:junit:4.12'
 }

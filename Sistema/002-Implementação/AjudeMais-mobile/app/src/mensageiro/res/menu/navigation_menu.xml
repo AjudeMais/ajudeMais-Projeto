@@ -17,7 +17,7 @@
 
         <item
             android:id="@+id/nav_config_conta"
-            android:icon="@mipmap/ic_configuracao"
+            android:icon="@mipmap/ic_settings"
             android:title="Configuraçẽs da conta" />
 
         <item

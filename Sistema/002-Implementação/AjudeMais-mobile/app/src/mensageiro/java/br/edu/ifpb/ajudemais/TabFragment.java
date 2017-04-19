@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.edu.ifpb.ajudemais.activities.MainTab01;
+import br.edu.ifpb.ajudemais.activities.MainTab02;
+
 public class TabFragment extends Fragment {
 
     public static TabLayout tabLayout;

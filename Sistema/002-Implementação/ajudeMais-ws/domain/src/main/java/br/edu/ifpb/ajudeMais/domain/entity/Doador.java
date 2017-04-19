@@ -55,7 +55,7 @@ public class Doador implements Serializable {
 	/**
 	 * 
 	 */
-	private String TokenFCM;
+	private String tokenFCM;
 	
 	/**
 	 * 
@@ -136,7 +136,7 @@ public class Doador implements Serializable {
 	 * @return the tokenFCM
 	 */
 	public String getTokenFCM() {
-		return TokenFCM;
+		return tokenFCM;
 	}
 
 
@@ -144,7 +144,7 @@ public class Doador implements Serializable {
 	 * @param tokenFCM the tokenFCM to set
 	 */
 	public void setTokenFCM(String tokenFCM) {
-		TokenFCM = tokenFCM;
+		this.tokenFCM = tokenFCM;
 	}
 
 
@@ -186,7 +186,7 @@ public class Doador implements Serializable {
 	@Override
 	public String toString() {
 		return "Doador [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", facebookID=" + facebookID
-				+ ", TokenFCM=" + TokenFCM + ", foto=" + foto + ", conta=" + conta + "]";
+				+ ", TokenFCM=" + tokenFCM + ", foto=" + foto + ", conta=" + conta + "]";
 	}
 
 	
