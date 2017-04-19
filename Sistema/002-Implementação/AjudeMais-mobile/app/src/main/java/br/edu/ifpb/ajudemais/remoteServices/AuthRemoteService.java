@@ -22,8 +22,8 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 public class AuthRemoteService {
 
-    private static final String URL = "http://192.168.0.105:8080/auth/login";
-    private static final String URL2 = "http://192.168.0.105:8080/auth/user";
+    private static final String URL = "http://192.168.0.106:8080/auth/login";
+    private static final String URL2 = "http://192.168.0.106:8080/auth/user";
     private RestTemplate restTemplate;
 
     public AuthRemoteService() {

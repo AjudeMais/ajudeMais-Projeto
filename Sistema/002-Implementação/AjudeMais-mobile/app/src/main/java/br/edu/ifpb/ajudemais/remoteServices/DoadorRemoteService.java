@@ -28,7 +28,7 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 public class DoadorRemoteService {
 
 
-    private static final String URL = "http://192.168.0.105:8080/doador";
+    private static final String URL = "http://192.168.0.106:8080/doador";
     private RestTemplate restTemplate;
 
     public DoadorRemoteService() {

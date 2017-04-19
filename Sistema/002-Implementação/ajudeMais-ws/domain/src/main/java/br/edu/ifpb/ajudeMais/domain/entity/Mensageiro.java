@@ -1,9 +1,5 @@
-/**
- * 
- */
-package br.edu.ifpb.ajudeMais.domain.entity;
 
-import java.io.Serializable;
+package br.edu.ifpb.ajudeMais.domain.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,31 +10,47 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 /**
  * 
  * <p>
- * <b> Doador </b>
+ * <b> {@link Mensageiro} </b>
  * </p>
  *
  * <p>
- * Entiddade de negócio Doador.
+ * Entidade que representa Mensageiro no sistema
  * </p>
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
- * And <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
+
 @Entity
-public class Doador implements Serializable {
-
-	private static final long serialVersionUID = 7784316565471954266L;
-
+public class Mensageiro {
+	
 	@Id
 	@Column(name = "id", unique = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-
-	@NotNull(message = "Nome deve ser informado")
+	
+	/**
+	 * 
+	 */
+	@NotNull(message = "O nome deve ser informado")
 	private String nome;
+	
+	/**
+	 * 
+	 */
+	@CPF
+	@NotNull(message = "O CPF deve ser informado")
+	private String cpf;
+	
+	/**
+	 * 
+	 */
+	@NotNull(message = "O e-mail deve ser informado")
+	private String email;
 	
 	/**
 	 * 
@@ -46,16 +58,10 @@ public class Doador implements Serializable {
 	@NotNull(message = "O telefone deve ser informado")
 	private String telefone;
 	
-	
-	/**
-	 * 
-	 */
-	private String facebookID;
-	
-	/**
-	 * 
-	 */
 	private String tokenFCM;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	private Conta conta;
 	
 	/**
 	 * 
@@ -64,17 +70,12 @@ public class Doador implements Serializable {
 	private Foto foto;
 	
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private Conta conta;
-
-
 	/**
 	 * @return the id
 	 */
 	public Long getId() {
 		return id;
 	}
-
 
 	/**
 	 * @param id the id to set
@@ -83,14 +84,12 @@ public class Doador implements Serializable {
 		this.id = id;
 	}
 
-
 	/**
 	 * @return the nome
 	 */
 	public String getNome() {
 		return nome;
 	}
-
 
 	/**
 	 * @param nome the nome to set
@@ -99,6 +98,33 @@ public class Doador implements Serializable {
 		this.nome = nome;
 	}
 
+	/**
+	 * @return the cpf
+	 */
+	public String getCpf() {
+		return cpf;
+	}
+
+	/**
+	 * @param cpf the cpf to set
+	 */
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	/**
 	 * @return the telefone
@@ -107,30 +133,12 @@ public class Doador implements Serializable {
 		return telefone;
 	}
 
-
 	/**
 	 * @param telefone the telefone to set
 	 */
 	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
-
-
-	/**
-	 * @return the facebookID
-	 */
-	public String getFacebookID() {
-		return facebookID;
-	}
-
-
-	/**
-	 * @param facebookID the facebookID to set
-	 */
-	public void setFacebookID(String facebookID) {
-		this.facebookID = facebookID;
-	}
-
 
 	/**
 	 * @return the tokenFCM
@@ -139,14 +147,12 @@ public class Doador implements Serializable {
 		return tokenFCM;
 	}
 
-
 	/**
 	 * @param tokenFCM the tokenFCM to set
 	 */
 	public void setTokenFCM(String tokenFCM) {
 		this.tokenFCM = tokenFCM;
 	}
-
 
 	/**
 	 * @return the conta
@@ -155,14 +161,12 @@ public class Doador implements Serializable {
 		return conta;
 	}
 
-
 	/**
 	 * @param conta the conta to set
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
 	}
-
 
 	/**
 	 * @return the foto
@@ -171,23 +175,14 @@ public class Doador implements Serializable {
 		return foto;
 	}
 
-
 	/**
 	 * @param foto the foto to set
 	 */
 	public void setFoto(Foto foto) {
 		this.foto = foto;
 	}
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return "Doador [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", facebookID=" + facebookID
-				+ ", TokenFCM=" + tokenFCM + ", foto=" + foto + ", conta=" + conta + "]";
-	}
-
 	
+	
+	
+
 }
