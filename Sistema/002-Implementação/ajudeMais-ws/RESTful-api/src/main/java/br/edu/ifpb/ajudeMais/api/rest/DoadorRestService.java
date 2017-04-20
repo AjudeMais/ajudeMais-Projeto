@@ -51,10 +51,11 @@ public class DoadorRestService {
 	/**
 	 * @param doador
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<Doador> alterar(@Valid @RequestBody Doador doador) {
+	public ResponseEntity<Doador> alterar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
 
 		Doador pacienteAtualizado = doadorService.update(doador);
 

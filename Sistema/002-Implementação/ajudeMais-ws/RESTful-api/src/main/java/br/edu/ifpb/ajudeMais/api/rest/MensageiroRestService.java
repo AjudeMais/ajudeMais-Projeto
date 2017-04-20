@@ -51,10 +51,11 @@ public class MensageiroRestService {
 	 * End point para atualizar informações do mensageiro.
 	 * @param mensageiro
 	 * @return Mensageiro
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<Mensageiro> update(@Valid @RequestBody Mensageiro mensageiro) {
+	public ResponseEntity<Mensageiro> update(@Valid @RequestBody Mensageiro mensageiro) throws AjudeMaisException {
 		mensageiro = mensageiroService.update(mensageiro);
 		return new ResponseEntity<Mensageiro>(mensageiro, HttpStatus.OK);
 

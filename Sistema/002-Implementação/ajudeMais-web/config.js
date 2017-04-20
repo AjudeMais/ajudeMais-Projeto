@@ -38,7 +38,9 @@ exports.paths = {
         'src/vendors/angular-loading-bar/build/loading-bar.js',
         'src/vendors/angular-input-masks/angular-input-masks-dependencies.js',
         'src/vendors/angular-input-masks/angular-input-masks.br.js',
-        'src/vendors/angular-br-filters/release/angular-br-filters.js'
+        'src/vendors/angular-br-filters/release/angular-br-filters.js',
+        'src/vendors/angular-viacep/dist/angular-viacep.js'
+
     ], scripts: [
         'src/app/*.js',
         'src/app/constants/*.js',

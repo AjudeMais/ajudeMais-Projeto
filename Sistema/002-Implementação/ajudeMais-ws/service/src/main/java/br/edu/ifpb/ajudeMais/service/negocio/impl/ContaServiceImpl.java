@@ -18,21 +18,21 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
  *
  */
 @Service
-public class ContaServiceImpl implements ContaService{
+public class ContaServiceImpl implements ContaService {
 
 	@Autowired
 	private ContaRepository contaRepository;
-	
+
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	/**
-	 * @throws UniqueConstraintAlreadyException 
+	 * @throws UniqueConstraintAlreadyException
 	 * 
 	 */
 	@Override
 	public Conta save(Conta entity) throws UniqueConstraintAlreadyException {
-		
+
 		Optional<Conta> contaEmail = contaRepository.findOneByEmail(entity.getEmail());
 		Optional<Conta> contaUsername = contaRepository.findOneByUsername(entity.getUsername());
 
@@ -42,17 +42,29 @@ public class ContaServiceImpl implements ContaService{
 		if (contaUsername.isPresent()) {
 			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
 		}
-		
+
 		String senha = passwordEncoder.encode(entity.getSenha());
 		entity.setSenha(senha);
 		return contaRepository.save(entity);
 	}
 
 	/**
+	 * @throws UniqueConstraintAlreadyException
 	 * 
 	 */
 	@Override
-	public Conta update(Conta entity) {
+	public Conta update(Conta entity) throws UniqueConstraintAlreadyException {
+		
+		Optional<Conta> contaEmail = contaRepository.findOneByEmail(entity.getEmail());
+		Optional<Conta> contaUsername = contaRepository.findOneByUsername(entity.getUsername());
+
+		if (contaEmail.isPresent() && !(entity.getId().equals(contaEmail.get().getId()))) {
+			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
+		}
+		if (contaUsername.isPresent() && !(entity.getId().equals(contaEmail.get().getId()))) {
+			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
+		}
+
 		return contaRepository.save(entity);
 	}
 
@@ -71,7 +83,6 @@ public class ContaServiceImpl implements ContaService{
 	public Conta findById(Long id) {
 		return contaRepository.findOne(id);
 	}
-
 
 	/**
 	 * 

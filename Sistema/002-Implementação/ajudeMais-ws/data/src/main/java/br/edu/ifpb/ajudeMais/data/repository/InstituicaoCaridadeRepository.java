@@ -1,5 +1,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,13 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
  */
 @Repository
 public interface InstituicaoCaridadeRepository extends JpaRepository<InstituicaoCaridade, Long>{
+	
+	/**
+	 * 
+	 * @param documento
+	 * @return
+	 */
+	Optional<InstituicaoCaridade> findOneByDocumento(String documento);
 	
 	
 

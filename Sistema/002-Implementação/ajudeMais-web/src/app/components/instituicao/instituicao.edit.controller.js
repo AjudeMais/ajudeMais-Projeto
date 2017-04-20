@@ -10,14 +10,16 @@
     angular.module("amApp")
         .controller("InstituicaoEditController", InstituicaoEditController);
 
-    InstituicaoEditController.$inject = ['instituicaoService', 'growl', '$stateParams', '$state'];
+    InstituicaoEditController.$inject = ['instituicaoService', 'growl', '$stateParams', '$state', 'viaCEP'];
 
-    function InstituicaoEditController(instituicaoService, growl, $stateParams, $state) {
+    function InstituicaoEditController(instituicaoService, growl, $stateParams, $state, viaCEP) {
+        
         var vm = this;
         vm.instituicao = {};
 
         if ($stateParams.instituicaoEdit) {
             vm.instituicao = $stateParams.instituicaoEdit;
+            console.log(vm.instituicao);
         }
 
         /**
@@ -29,19 +31,18 @@
                 instituicaoService.save(vm.instituicao, function (response) {
                     growl.success("<b>Instituição</b> criada com sucesso");
                     $state.go('home.instituicao');
-                }, function (validationErrors) {
-                    var msgErrors = "";
-                    console.log(validationErrors);
-                    validationErrors.forEach(function (error) {
-                        msgErrors += error + "<br>";
-                    })
-                    growl.warning(msgErrors);
+                }, function (response) {
+                    var msgError = response.data.msg;
+                    growl.warning(msgError);
                 });
 
             } else {
                 instituicaoService.update(vm.instituicao, function (response) {
                     growl.success("<b>Instituição</b> alterada com sucesso");
                     $state.go('home.instituicao');
+                }, function (response) {
+                    var msgError = response.data.msg;
+                    growl.warning(msgError);
                 });
             }
         };
@@ -61,7 +62,19 @@
         };
 
         /**
+         * obtém localidade pelo CEP
          *
+         * @param cep
+         */
+        vm.getLocation = function (cep) {
+            viaCEP.get(cep).then(function (response) {
+                vm.instituicao.endereco = response;
+
+            });
+        }
+
+        /**
+         * Cria um conta default para uma instituição.
          * @param instituicao
          */
         function _setDefaultAccount(instituicao) {

@@ -19,10 +19,10 @@ public class Endereco {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	@NotNull
 	@NotBlank
-	private String rua;
+	private String logradouro;
 
 	@NotNull
 	@NotBlank
@@ -38,25 +38,46 @@ public class Endereco {
 
 	@NotNull
 	@NotBlank
-	private String cidade;
+	private String localidade;
 
 	@NotNull
 	@NotBlank
-	private String estado;
+	private String uf;
+
+	private String unidade;
+
+	private String complemento;
+
+	private String ibge;
 
 	/**
-	 * @return the rua
+	 * @return the id
 	 */
-	public String getRua() {
-		return rua;
+	public Long getId() {
+		return id;
 	}
 
 	/**
-	 * @param rua
-	 *            the rua to set
+	 * @param id
+	 *            the id to set
 	 */
-	public void setRua(String rua) {
-		this.rua = rua;
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the logradouro
+	 */
+	public String getLogradouro() {
+		return logradouro;
+	}
+
+	/**
+	 * @param logradouro
+	 *            the logradouro to set
+	 */
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
 	}
 
 	/**
@@ -105,33 +126,78 @@ public class Endereco {
 	}
 
 	/**
-	 * @return the cidade
+	 * @return the localidade
 	 */
-	public String getCidade() {
-		return cidade;
+	public String getLocalidade() {
+		return localidade;
 	}
 
 	/**
-	 * @param cidade
-	 *            the cidade to set
+	 * @param localidade
+	 *            the localidade to set
 	 */
-	public void setCidade(String cidade) {
-		this.cidade = cidade;
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
 	}
 
 	/**
-	 * @return the estado
+	 * @return the uf
 	 */
-	public String getEstado() {
-		return estado;
+	public String getUf() {
+		return uf;
 	}
 
 	/**
-	 * @param estado
-	 *            the estado to set
+	 * @param uf
+	 *            the uf to set
 	 */
-	public void setEstado(String estado) {
-		this.estado = estado;
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
+	/**
+	 * @return the unidade
+	 */
+	public String getUnidade() {
+		return unidade;
+	}
+
+	/**
+	 * @param unidade
+	 *            the unidade to set
+	 */
+	public void setUnidade(String unidade) {
+		this.unidade = unidade;
+	}
+
+	/**
+	 * @return the complemento
+	 */
+	public String getComplemento() {
+		return complemento;
+	}
+
+	/**
+	 * @param complemeto
+	 *            the complemeto to set
+	 */
+	public void setComplemento(String complemeto) {
+		this.complemento = complemeto;
+	}
+
+	/**
+	 * @return the ibge
+	 */
+	public String getIbge() {
+		return ibge;
+	}
+
+	/**
+	 * @param ibge
+	 *            the ibge to set
+	 */
+	public void setIbge(String ibge) {
+		this.ibge = ibge;
 	}
 
 	/*
@@ -141,8 +207,9 @@ public class Endereco {
 	 */
 	@Override
 	public String toString() {
-		return "Endereco [rua=" + rua + ", numero=" + numero + ", bairro=" + bairro + ", cep=" + cep + ", cidade="
-				+ cidade + ", estado=" + estado + "]";
+		return "Endereco [id=" + id + ", logradouro=" + logradouro + ", numero=" + numero + ", bairro=" + bairro
+				+ ", cep=" + cep + ", localidade=" + localidade + ", uf=" + uf + ", unidade=" + unidade
+				+ ", complemento=" + complemento + ", ibge=" + ibge + "]";
 	}
 
 }

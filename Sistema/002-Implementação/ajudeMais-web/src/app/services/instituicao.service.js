@@ -32,7 +32,7 @@
             $http.post(Api + "/instituicao", instituicao).then(function (response) {
                 callback(response.data);
             }, function (response) {
-                callbackError(response.data);
+                callbackError(response);
 
             });
         }
@@ -43,9 +43,12 @@
          * @param callback
          * @private
          */
-        function _update(instituicao, callback) {
+        function _update(instituicao, callback, callbackError) {
             $http.put(Api + "/instituicao", instituicao).then(function (response) {
                 callback(response.data);
+            }, function (response) {
+                callbackError(response);
+
             });
         }
 

@@ -9,7 +9,7 @@
 (function () {
     angular.module('amApp', ['amRoute', 'layout', 'ui.bootstrap', /*'templates',*/
         'ngAnimate', 'datatables', 'datatables.bootstrap', 'ajudeMais.utils', 'ngCookies',
-        'ngStorage', 'idf.br-filters', 'ui.utils.masks'
+        'ngStorage', 'idf.br-filters', 'ui.utils.masks', 'angular.viacep'
     ]);
 
     angular.module('amApp').run([

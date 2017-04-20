@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +12,7 @@ import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
@@ -20,11 +22,11 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
  *
  */
 @Service
-public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeService{
-	
+public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeService {
+
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRespository;
-	
+
 	@Autowired
 	private ContaService contaService;
 
@@ -34,21 +36,32 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	@Transactional
 	@Override
 	public InstituicaoCaridade save(InstituicaoCaridade entity) throws AjudeMaisException {
+
+		Optional<InstituicaoCaridade> instituicaoOptional = instituicaoRespository
+				.findOneByDocumento(entity.getDocumento());
+
+		if (instituicaoOptional.isPresent()) {
+			throw new UniqueConstraintAlreadyException("CPF/CNPJ já esta sendo usado");
+		}
+
 		Conta conta = contaService.save(entity.getConta());
 		entity.setConta(conta);
-		
+
 		return instituicaoRespository.save(entity);
 	}
 
 	/**
+	 * @throws AjudeMaisException 
 	 * 
 	 */
 	@Transactional
 	@Override
-	public InstituicaoCaridade update(InstituicaoCaridade entity) {
+	public InstituicaoCaridade update(InstituicaoCaridade entity) throws AjudeMaisException {
+		Conta conta = contaService.update(entity.getConta());
+		entity.setConta(conta);
 		return instituicaoRespository.save(entity);
 	}
-	
+
 	/**
 	 * 
 	 */

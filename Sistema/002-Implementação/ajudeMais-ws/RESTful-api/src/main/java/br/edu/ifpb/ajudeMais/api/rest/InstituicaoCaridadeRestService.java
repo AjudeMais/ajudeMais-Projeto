@@ -47,10 +47,11 @@ public class InstituicaoCaridadeRestService {
 	 * 
 	 * @param instituicaoCaridade
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade) {
+	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade) throws AjudeMaisException {
 		InstituicaoCaridade instituicao = instituicaoService.update(instituicaoCaridade);
 		
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);

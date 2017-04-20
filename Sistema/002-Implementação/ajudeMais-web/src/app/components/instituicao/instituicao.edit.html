@@ -64,15 +64,35 @@
                     <h3 class="box-title">Endereço</h3>
                 </div>
                 <div class="row box-topic">
+                    <div class="col-lg-2">
+                        <div class="form-group am-required"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.cep.$invalid }">
+                            <label class="control-label" for="email">CEP</label>
+                            <div class="input-group">
+                                <input name="cep" id="cep" ng-model="vm.instituicao.endereco.cep" type="text"
+                                       class="form-control" required ui-br-cep-mask/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default"
+                                            ng-click="vm.getLocation(vm.instituicao.endereco.cep)" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.cep.$invalid"
+                                 class="help-block">CEP deve ser informado
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-5">
                         <div class="form-group am-required"
-                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.rua.$invalid }">
-                            <label class="control-label" for="rua">Rua</label>
-                            <input name="rua" id="rua" ng-model="vm.instituicao.endereco.rua" type="text"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.logradouro.$invalid }">
+                            <label class="control-label" for="logradouro">Logradouro</label>
+                            <input name="logradouro" id="logradouro" ng-model="vm.instituicao.endereco.logradouro"
+                                   type="text"
                                    class="form-control" required/>
 
-                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.rua.$invalid"
-                                 class="help-block">Rua deve ser informado
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.logradouro.$invalid"
+                                 class="help-block">Logradouro deve ser informado
                             </div>
                         </div>
                     </div>
@@ -100,41 +120,39 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-2">
-                        <div class="form-group am-required"
-                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.cep.$invalid }">
-                            <label class="control-label" for="email">CEP</label>
-                            <input name="cep" id="cep" ng-model="vm.instituicao.endereco.cep" type="text"
-                                   class="form-control" required ui-br-cep-mask/>
-
-                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.cep.$invalid"
-                                 class="help-block">CEP deve ser informado
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-5">
+                        <div class="form-group"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.complemento.$invalid }">
+                            <label class="control-label" for="complemento">Complemento</label>
+                            <input name="complemento" id="complemento" ng-model="vm.instituicao.endereco.complemento"
+                                   type="text"
+                                   class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
                         <div class="form-group am-required"
-                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.cidade.$invalid }">
-                            <label class="control-label" for="rua">Cidade</label>
-                            <input name="cidade" id="cidade" ng-model="vm.instituicao.endereco.cidade" type="text"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.localidade.$invalid }">
+                            <label class="control-label" for="localidade">Cidade</label>
+                            <input name="localidade" id="localidade" ng-model="vm.instituicao.endereco.localidade"
+                                   type="text"
                                    class="form-control" required/>
 
-                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.cidade.$invalid"
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.localidade.$invalid"
                                  class="help-block">Cidade deve ser informado
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-3">
                         <div class="form-group am-required"
-                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.estado.$invalid }">
-                            <label class="control-label" for="email">Estado</label>
-                            <input name="estado" id="estado" ng-model="vm.instituicao.endereco.estado" type="text"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.uf.$invalid }">
+                            <label class="control-label" for="email">UF</label>
+                            <input name="uf" id="uf" ng-model="vm.instituicao.endereco.uf" type="text"
                                    class="form-control" required/>
 
-                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.estado.$invalid"
-                                 class="help-block">Estado deve ser informado
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.uf.$invalid"
+                                 class="help-block">UF deve ser informado
                             </div>
                         </div>
                     </div>

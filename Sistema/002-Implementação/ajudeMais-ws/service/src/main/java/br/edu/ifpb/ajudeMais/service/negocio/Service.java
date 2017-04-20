@@ -12,7 +12,7 @@ import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
  * @param <K>
  */
 public interface Service<T, K> {
-	
+
 	/**
 	 * 
 	 * @param entity
@@ -24,23 +24,23 @@ public interface Service<T, K> {
 	 * 
 	 * @param entity
 	 * @return
+	 * @throws AjudeMaisException
 	 */
-	T update(T entity);
-	
+	T update(T entity) throws AjudeMaisException;
+
 	/**
 	 * 
 	 * @return
 	 */
 	List<T> findAll();
-	
+
 	/**
 	 * 
 	 * @param id
 	 * @return
 	 */
 	T findById(K id);
-	
-	
+
 	/**
 	 * 
 	 * @param entity

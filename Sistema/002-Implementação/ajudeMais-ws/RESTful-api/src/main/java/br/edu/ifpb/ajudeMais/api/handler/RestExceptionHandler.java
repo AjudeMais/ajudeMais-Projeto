@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import br.edu.ifpb.ajudeMais.api.dto.MessageErrorDTO;
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
@@ -28,7 +29,7 @@ import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-@ControllerAdvice(basePackageClasses = {DoadorRestService.class})
+@ControllerAdvice(basePackageClasses = { DoadorRestService.class })
 public class RestExceptionHandler {
 
 	/**
@@ -39,10 +40,11 @@ public class RestExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseBody
-	public ResponseEntity<List<String>> handlerErrorValidation(HttpServletRequest req, MethodArgumentNotValidException manvex) {
+	public ResponseEntity<List<String>> handlerErrorValidation(HttpServletRequest req,
+			MethodArgumentNotValidException manvex) {
 
 		List<ObjectError> errors = manvex.getBindingResult().getAllErrors();
-		Iterator<ObjectError> iterator = errors.iterator();		
+		Iterator<ObjectError> iterator = errors.iterator();
 
 		List<String> messages = new ArrayList<>();
 
@@ -54,7 +56,7 @@ public class RestExceptionHandler {
 
 		return responseEntity;
 	}
-	
+
 	/**
 	 * 
 	 * @param e
@@ -62,8 +64,8 @@ public class RestExceptionHandler {
 	 */
 	@ExceptionHandler(UniqueConstraintAlreadyException.class)
 	@ResponseBody
-	public ResponseEntity<String> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
-		return ResponseEntity.badRequest().body(e.getMessage());
+	public ResponseEntity<MessageErrorDTO> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
+		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
 	}
 
 }
