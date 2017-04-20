@@ -8,12 +8,46 @@
  */
 
 (function () {
-    angular.module("amApp").factory("instituicaoService", function ($http, Api) {
+    angular.module("amApp")
+        .factory("instituicaoService", instituicaoService);
+
+    instituicaoService.$inject = ['$http', 'Api'];
+
+    function instituicaoService($http, Api) {
 
         var service = {
+            save: _save,
+            update: _update,
             getInstituicoes: _getInstituicoes
         };
         return service;
+
+        /**
+         *
+         * @param instituicao
+         * @param callback
+         * @private
+         */
+        function _save(instituicao, callback, callbackError) {
+            $http.post(Api + "/instituicao", instituicao).then(function (response) {
+                callback(response.data);
+            }, function (response) {
+                callbackError(response.data);
+
+            });
+        }
+
+        /**
+         *
+         * @param instituicao
+         * @param callback
+         * @private
+         */
+        function _update(instituicao, callback) {
+            $http.put(Api + "/instituicao", instituicao).then(function (response) {
+                callback(response.data);
+            });
+        }
 
         /**
          *
@@ -25,5 +59,5 @@
                 callback(response.data);
             });
         };
-    });
+    };
 })();

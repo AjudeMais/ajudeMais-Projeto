@@ -2,44 +2,46 @@
  * @ngdoc controller
  * @name DoadorController
  *
- * @description Controller para consulta de instituições.
+ * @description Controller para consulta de instituição.
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 (function () {
-
     angular.module('amApp')
-        .controller('InstituicaoController', function (instituicaoService, DTOptionsBuilder, $state) {
+        .controller('InstituicaoController', InstituicaoController);
 
-            var vm = this;
-            vm.instituicoes = [];
+    InstituicaoController.$inject = ['instituicaoService', 'DTOptionsBuilder', '$state'];
 
-            vm.dtOptions = DTOptionsBuilder.newOptions()
-                .withPaginationType('simple_numbers').withDisplayLength(10).withBootstrap();
+    function InstituicaoController(instituicaoService, DTOptionsBuilder, $state) {
 
-            /**
-             *
-             */
-            vm.getInstituicoes = function () {
-                instituicaoService.getInstituicoes(function (response) {
-                    vm.instituicoes = response;
-                });
-            }
-            vm.getInstituicoes();
+        var vm = this;
+        vm.instituicoes = [];
 
-            /**
-             *
-             */
-            vm.adicionarInstituicao = function () {
-                $state.go("home.instituicaoEdit", {instituicaoEdit: null});
-            };
+        vm.dtOptions = DTOptionsBuilder.newOptions()
+            .withPaginationType('simple_numbers').withDisplayLength(10).withBootstrap();
 
-            /**
-             *
-             */
-            vm.editarInstituicao = function (instituicao) {
-                $state.go("home.instituicaoEdit", {instituicaoEdit: instituicao});
-            };
+        /**
+         *
+         */
+        vm.getInstituicoes = function () {
+            instituicaoService.getInstituicoes(function (response) {
+                vm.instituicoes = response;
+            });
+        }
+        vm.getInstituicoes();
 
-        });
+        /**
+         *
+         */
+        vm.adicionarInstituicao = function () {
+            $state.go("home.instituicaoEdit", {instituicaoEdit: null});
+        };
+
+        /**
+         *
+         */
+        vm.editInstituicao = function (instituicao) {
+            $state.go("home.instituicaoEdit", {instituicaoEdit: instituicao});
+        };
+    };
 })();

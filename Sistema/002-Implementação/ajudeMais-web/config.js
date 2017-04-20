@@ -35,7 +35,10 @@ exports.paths = {
         'src/vendors/angular-bootstrap/ui-bootstrap-tpls.js',
         'src/vendors/angular-cookies/angular-cookies.js',
         'src/vendors/angular-growl-v2/build/angular-growl.js',
-        'src/vendors/angular-loading-bar/build/loading-bar.js'
+        'src/vendors/angular-loading-bar/build/loading-bar.js',
+        'src/vendors/angular-input-masks/angular-input-masks-dependencies.js',
+        'src/vendors/angular-input-masks/angular-input-masks.br.js',
+        'src/vendors/angular-br-filters/release/angular-br-filters.js'
     ], scripts: [
         'src/app/*.js',
         'src/app/constants/*.js',

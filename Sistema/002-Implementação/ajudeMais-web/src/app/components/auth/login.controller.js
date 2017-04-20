@@ -7,8 +7,11 @@
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
+    angular.module('amApp').controller('LoginController', LoginController);
 
-    angular.module('amApp').controller('LoginController', function (authenticationService, $state, $rootScope) {
+    LoginController.$inject = ['authenticationService', '$state'];
+
+    function LoginController(authenticationService, $state) {
         var vm = this;
         vm.account = {};
 
@@ -22,9 +25,10 @@
                     $state.go("home");
                 });
             }, function (response) {
-                vm.error = "Nome de Usuário ou Senha Inválido";
+                if (response.status == 401) {
+                    vm.error = "Nome de usuário ou senha inválido";
+                }
             });
         };
-    });
-
+    };
 })();

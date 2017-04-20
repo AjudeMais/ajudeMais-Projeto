@@ -61,6 +61,9 @@
                 templateUrl: "app/components/instituicao/instituicao.edit.html",
                 controller: "InstituicaoEditController",
                 controllerAs: 'vm',
+                params:{
+                    instituicaoEdit:null
+                },
                 data: {
                     pageTitle: 'Edição de Instituição'
                 }

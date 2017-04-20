@@ -7,7 +7,12 @@
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
-    angular.module('amApp').factory('authenticationService', function ($http, Api, $sessionStorage, $localStorage) {
+    angular.module('amApp')
+        .factory('authenticationService', authenticationService);
+
+    authenticationService.$inject = ['$http', 'Api', '$sessionStorage', '$localStorage'];
+
+    function authenticationService($http, Api, $sessionStorage, $localStorage) {
 
         var service = {
             doLogin: _doLogin,
@@ -108,6 +113,5 @@
         function _storageToken(jwt) {
             $sessionStorage.authToken = jwt;
         }
-
-    });
+    };
 })();

@@ -7,8 +7,9 @@
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
-    angular.module('amApp', ['amRoute', 'layout', 'ui.bootstrap',/*'templates',*/
-        'ngAnimate', 'datatables', 'datatables.bootstrap', 'ajudeMais.utils', 'ngCookies', 'ngStorage'
+    angular.module('amApp', ['amRoute', 'layout', 'ui.bootstrap', /*'templates',*/
+        'ngAnimate', 'datatables', 'datatables.bootstrap', 'ajudeMais.utils', 'ngCookies',
+        'ngStorage', 'idf.br-filters', 'ui.utils.masks'
     ]);
 
     angular.module('amApp').run([
