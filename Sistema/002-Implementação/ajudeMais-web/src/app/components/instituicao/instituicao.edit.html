@@ -29,7 +29,7 @@
                                    class="form-control" ui-br-cpfcnpj-mask required/>
 
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.documento.$invalid"
-                                 class="help-block">Documento deve ser informado
+                                 class="help-block">CPF ou CNPJ deve ser informado corretamente
                             </div>
                         </div>
                     </div>
@@ -43,7 +43,7 @@
                                    class="form-control" required ui-br-phone-number/>
 
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.telefone.$invalid"
-                                 class="help-block">Telefone deve ser informado
+                                 class="help-block">Telefone deve ser informado corretamente
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                                    class="form-control" required/>
 
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.email.$invalid"
-                                 class="help-block">E-mail deve ser informado
+                                 class="help-block">E-mail deve ser informado corretamente
                             </div>
                         </div>
                     </div>
@@ -66,10 +66,10 @@
                 <div class="row box-topic">
                     <div class="col-lg-2">
                         <div class="form-group am-required"
-                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.cep.$invalid }">
-                            <label class="control-label" for="email">CEP</label>
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.zipCode.$invalid }">
+                            <label class="control-label" for="zipCode">CEP</label>
                             <div class="input-group">
-                                <input name="cep" id="cep" ng-model="vm.instituicao.endereco.cep" type="text"
+                                <input name="zipCode" id="zipCode" ng-model="vm.instituicao.endereco.cep" type="text"
                                        class="form-control" required ui-br-cep-mask/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-default"
@@ -78,8 +78,8 @@
                                     </button>
                                 </span>
                             </div>
-                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.cep.$invalid"
-                                 class="help-block">CEP deve ser informado
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.zipCode.$invalid"
+                                 class="help-block">CEP deve ser informado corretamente
                             </div>
                         </div>
                     </div>

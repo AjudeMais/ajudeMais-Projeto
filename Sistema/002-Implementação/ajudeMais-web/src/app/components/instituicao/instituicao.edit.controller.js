@@ -13,13 +13,12 @@
     InstituicaoEditController.$inject = ['instituicaoService', 'growl', '$stateParams', '$state', 'viaCEP'];
 
     function InstituicaoEditController(instituicaoService, growl, $stateParams, $state, viaCEP) {
-        
+
         var vm = this;
         vm.instituicao = {};
 
         if ($stateParams.instituicaoEdit) {
             vm.instituicao = $stateParams.instituicaoEdit;
-            console.log(vm.instituicao);
         }
 
         /**
