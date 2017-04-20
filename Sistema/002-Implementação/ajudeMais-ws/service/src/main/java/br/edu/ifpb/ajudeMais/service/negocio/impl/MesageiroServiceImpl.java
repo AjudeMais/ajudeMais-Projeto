@@ -6,6 +6,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
@@ -21,6 +23,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
+@Service
 public class MesageiroServiceImpl implements MensageiroService{
 	
 	@Autowired
