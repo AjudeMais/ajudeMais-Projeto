@@ -11,6 +11,7 @@
 
         if (instituicaoDetailparam) {
             vm.instituicao = instituicaoDetailparam;
+
         }
     }
 })();
