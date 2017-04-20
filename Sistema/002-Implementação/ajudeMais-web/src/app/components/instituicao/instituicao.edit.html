@@ -6,6 +6,7 @@
                 <div class="box-header with-border box-topic">
                     <h3 class="box-title">Informações gerais</h3>
                 </div>
+
                 <div class="row box-topic">
                     <div class="col-lg-8">
                         <div class="form-group am-required"
@@ -24,7 +25,7 @@
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.documento.$invalid }">
 
-                            <label>CPF/CNPJ</label>
+                            <label class="control-label">CPF/CNPJ</label>
                             <input name="documento" id="documento" ng-model="vm.instituicao.documento" type="text"
                                    class="form-control" ui-br-cpfcnpj-mask required/>
 
@@ -33,7 +34,9 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="form-group am-required"
@@ -47,6 +50,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-lg-8">
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.email.$invalid }">
@@ -60,9 +64,11 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="box-header with-border box-topic">
                     <h3 class="box-title">Endereço</h3>
                 </div>
+
                 <div class="row box-topic">
                     <div class="col-lg-2">
                         <div class="form-group am-required"
@@ -121,6 +127,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-lg-5">
                         <div class="form-group"

@@ -41,7 +41,6 @@
     "commit": "253b718a0b35b044fba25c78b1b2020d672c4017"
   },
   "_source": "https://github.com/gsklee/ngStorage.git",
-  "_target": "^0.3.11",
-  "_originalSource": "ngstorage",
-  "_direct": true
+  "_target": "0.3.11",
+  "_originalSource": "ngstorage"
 }

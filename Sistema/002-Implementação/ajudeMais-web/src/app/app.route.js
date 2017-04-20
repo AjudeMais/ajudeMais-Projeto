@@ -61,11 +61,20 @@
                 templateUrl: "app/components/instituicao/instituicao.edit.html",
                 controller: "InstituicaoEditController",
                 controllerAs: 'vm',
-                params:{
-                    instituicaoEdit:null
+                params: {
+                    instituicaoEdit: null
                 },
                 data: {
                     pageTitle: 'Edição de Instituição'
+                }
+            })
+            .state('home.instituicaoDetail', {
+                url: "/instituicaoDetail/:instituicaoDetail",
+                templateUrl: "app/components/instituicao/instituicao.detail.html",
+                controller: "InstituicaoDetailController",
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Detalhes de Instituição'
                 }
             });
     });

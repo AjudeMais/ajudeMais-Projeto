@@ -30,7 +30,6 @@
     "commit": "d099221effc54c7924627908e9cf071f43a766cf"
   },
   "_source": "https://github.com/assisrafael/bower-angular-input-masks.git",
-  "_target": "^2.5.0",
-  "_originalSource": "angular-input-masks",
-  "_direct": true
+  "_target": "2.5.0",
+  "_originalSource": "angular-input-masks"
 }

@@ -34,7 +34,6 @@
     "commit": "94cfa59b55a01ff2560a6200930b3c7d35b6c991"
   },
   "_source": "https://github.com/the-darc/angular-br-filters.git",
-  "_target": "^0.7.0",
-  "_originalSource": "angular-br-filters",
-  "_direct": true
+  "_target": "0.7.0",
+  "_originalSource": "angular-br-filters"
 }

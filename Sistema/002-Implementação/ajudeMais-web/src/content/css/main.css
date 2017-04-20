@@ -22,7 +22,7 @@
 
 .am-btn-new {
     margin-top: -90px;
-    padding: px;
+    margin-right: -12px;
 }
 
 /*
@@ -119,6 +119,14 @@ a.custom-link {
     .error-page > .error-content > h3 {
         text-align: center;
     }
+}
+
+/*
+ * Sobrescrita de classes de erros do boostrap
+ * ----------------------------------------
+ */
+.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+    color: #a94442 !important;
 }
 
 /*
@@ -1080,9 +1088,10 @@ div.dataTables_info {
 
 .box-header > .fa, .box-header > .glyphicon, .box-header > .ion, .box-header .box-title {
     display: inline-block;
-    font-size: 18px;
+    font-size: 22px;
     margin: 0;
     line-height: 1;
+    font-weight: 500;
 }
 
 .box-header > .fa, .box-header > .glyphicon, .box-header > .ion {

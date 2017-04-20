@@ -33,7 +33,7 @@
         /**
          *
          */
-        vm.adicionarInstituicao = function () {
+        vm.addInstituicao = function () {
             $state.go("home.instituicaoEdit", {instituicaoEdit: null});
         };
 
@@ -43,5 +43,13 @@
         vm.editInstituicao = function (instituicao) {
             $state.go("home.instituicaoEdit", {instituicaoEdit: instituicao});
         };
-    };
+
+        /**
+         *
+         * @param instituicao
+         */
+        vm.openDetails = function(instituicao) {
+            $state.go("home.instituicaoDetail", {instituicaoDetail: JSON.stringify(instituicao)});
+        }
+    }
 })();
