@@ -54,15 +54,19 @@ public class ContaServiceImpl implements ContaService {
 	 */
 	@Override
 	public Conta update(Conta entity) throws UniqueConstraintAlreadyException {
-		
+
 		Optional<Conta> contaEmail = contaRepository.findOneByEmail(entity.getEmail());
 		Optional<Conta> contaUsername = contaRepository.findOneByUsername(entity.getUsername());
 
-		if (contaEmail.isPresent() && !(entity.getId().equals(contaEmail.get().getId()))) {
-			throw new UniqueConstraintAlreadyException("E-mail já está em uso");
+		if (contaEmail.isPresent()) {
+			if (!entity.getId().equals(contaEmail.get().getId())) {
+				throw new UniqueConstraintAlreadyException("E-mail já está em uso");
+			}
 		}
-		if (contaUsername.isPresent() && !(entity.getId().equals(contaEmail.get().getId()))) {
-			throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
+		if (contaUsername.isPresent()) {
+			if (!entity.getId().equals(contaUsername.get().getId())) {
+				throw new UniqueConstraintAlreadyException("Nome de usuário já está em uso");
+			}
 		}
 
 		return contaRepository.save(entity);

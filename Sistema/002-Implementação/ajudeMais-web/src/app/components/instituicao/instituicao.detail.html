@@ -10,7 +10,7 @@
                     <div class="table-responsive">
                         <table class="table">
                             <tr>
-                                <th>Nome da Intituição</th>
+                                <th width="30%">Nome da Intituição</th>
                                 <td>{{vm.instituicao.nome}}</td>
                             </tr>
                             <tr>
@@ -34,7 +34,7 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <th>Logradouro</th>
+                                    <th width="30%">Logradouro</th>
                                     <td>{{vm.instituicao.endereco.logradouro}}</td>
                                 </tr>
                                 <tr>
@@ -51,8 +51,8 @@
                     <div class="col-lg-6">
                         <div class="table-responsive">
                             <table class="table">
-                                <tr>
-                                    <th>Completamento</th>
+                                <tr ng-show="!!vm.instituicao.endereco.complemento">
+                                    <th width="30%">Completamento</th>
                                     <td>{{vm.instituicao.endereco.complemento}}</td>
                                 </tr>
                                 <tr>
@@ -75,7 +75,7 @@
                         <div class="table-responsive">
                             <table class="table">
                                 <tr>
-                                    <th>E-mail</th>
+                                    <th width="30%">E-mail</th>
                                     <td>{{vm.instituicao.conta.email}}</td>
                                 </tr>
                                 <tr>

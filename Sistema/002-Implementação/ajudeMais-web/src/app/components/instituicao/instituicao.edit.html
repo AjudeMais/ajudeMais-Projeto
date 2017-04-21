@@ -70,7 +70,7 @@
                 </div>
 
                 <div class="row box-topic">
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.zipCode.$invalid }">
                             <label class="control-label" for="zipCode">CEP</label>
@@ -78,7 +78,7 @@
                                 <input name="zipCode" id="zipCode" ng-model="vm.instituicao.endereco.cep" type="text"
                                        class="form-control" required ui-br-cep-mask/>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default"
+                                    <button class="btn btn-default" title="Buscar endereço pelo CEP" data-toggle="tooltip"
                                             ng-click="vm.getLocation(vm.instituicao.endereco.cep)" type="button">
                                         <i class="fa fa-search"></i>
                                     </button>
@@ -89,7 +89,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5">
+                    <div class="col-lg-4">
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.logradouro.$invalid }">
                             <label class="control-label" for="logradouro">Logradouro</label>
@@ -110,7 +110,7 @@
                                    class="form-control" required/>
 
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.numero.$invalid"
-                                 class="help-block">Número da rua deve ser informado
+                                 class="help-block">Número deve ser informado
                             </div>
                         </div>
                     </div>

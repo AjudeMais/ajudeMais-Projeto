@@ -810,8 +810,8 @@ div.dataTables_info {
 .dataTables_wrapper .row {
     margin-top: 20px;
     margin-bottom: -10px !important;
-    margin-left: -13px !important;
-    margin-right: -13px !important;
+    margin-left: -20px !important;
+    margin-right: -20px !important;
 }
 
 /*
