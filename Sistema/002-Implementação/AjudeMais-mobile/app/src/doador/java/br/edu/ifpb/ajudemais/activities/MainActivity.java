@@ -28,6 +28,7 @@ import java.util.Date;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
@@ -129,9 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_config_conta:
                 break;
             case R.id.nav_sair:
-                SharedPreferences.Editor prefsEditor = getSharedPreferences("login", Context.MODE_PRIVATE).edit();
-                prefsEditor.clear();
-                prefsEditor.apply();
+                SharedPrefManager.getInstance(this).clearSharedPrefs();
                 System.out.println(capturePhotoUtils.deleteImageProfile());
 
                 Intent intent = new Intent();

@@ -14,20 +14,22 @@ import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
+/**
+ *
+ */
 public class ApresentationActivity extends AppCompatActivity {
-
-    private SharedPreferences sharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apresentation);
-        sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
 
-        new LoginTask().execute();
+        new LoginTask(this).execute();
 
     }
 
@@ -48,13 +50,6 @@ public class ApresentationActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void updateTokenAccess(String token) {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("accessToken", token);
-        editor.apply();
-    }
-
-
     /**
      * @param result
      */
@@ -66,53 +61,48 @@ public class ApresentationActivity extends AppCompatActivity {
         }
     }
 
-    private class LoginTask extends AsyncTask<Void, Void, JwtToken> {
+    private class LoginTask extends AsyncTask<Void, Void, Conta> {
 
         private String message = null;
         private Conta conta;
-        private JwtToken jwtToken;
         private AuthRemoteService authRemoteService;
-        private String userName;
-        private String password;
+        private Context context;
 
-        public LoginTask() {
+        public LoginTask(Context context) {
+            this.context = context;
         }
 
         @Override
         protected void onPreExecute() {
-            authRemoteService = new AuthRemoteService();
-            userName = sharedPref.getString("userName", null);
-            password = sharedPref.getString("password", null);
+            authRemoteService = new AuthRemoteService(context);
         }
 
         @Override
-        protected JwtToken doInBackground(Void... params) {
+        protected Conta doInBackground(Void... params) {
+            try {
 
-            if (userName != null && password != null) {
-                try {
+                 if (authRemoteService.logged()) {
 
-                    conta = new Conta(userName, password);
-                    jwtToken = authRemoteService.createAuthenticationToken(conta);
+                     conta = SharedPrefManager.getInstance(context).getUser();
 
-                    conta = authRemoteService.getUsuario(jwtToken.getToken());
-                    return jwtToken;
+                     return conta;
+                 }
 
-                } catch (RestClientException e) {
-                    message = e.getMessage();
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+            } catch (RestClientException e) {
+                message = e.getMessage();
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return null;
         }
 
-        @Override
-        protected void onPostExecute(JwtToken jwtToken) {
 
-            if (jwtToken != null) {
-                updateTokenAccess(jwtToken.getToken());
+
+        @Override
+        protected void onPostExecute(Conta conta) {
+
+            if (conta != null) {
                 Intent intent = new Intent();
                 intent.setClass(ApresentationActivity.this, MainActivity.class);
                 intent.putExtra("Conta", conta);
@@ -131,7 +121,6 @@ public class ApresentationActivity extends AppCompatActivity {
                     showResult(message);
                 }
             }
-
         }
     }
 }

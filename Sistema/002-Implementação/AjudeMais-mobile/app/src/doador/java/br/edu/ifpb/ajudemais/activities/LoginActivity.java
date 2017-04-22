@@ -36,8 +36,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private EditText edtUserName;
     private EditText edtPassword;
     private Resources resources;
-    private SharedPreferences sharedPref;
-    private AuthRemoteService authRemoteService;
     private CallbackManager callbackManager;
 
     /**
@@ -100,7 +98,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
-        authRemoteService = new AuthRemoteService();
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
@@ -175,7 +172,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         if (v.getId() == R.id.btnOpen) {
             if (validateLoginFields()) {
-                new LoginTask(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
+                new LoginTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
             }
         }
     }
@@ -191,36 +188,21 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
     }
 
-
-    /**
-     * Armazena informações de login para usuário ficar logado.
-     *
-     * @param userName
-     * @param password
-     */
-    private void saveInformationsLoginAndToken(String userName, String password, String accessToken) {
-        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("userName", userName);
-        editor.putString("password", password);
-        editor.putString("accessToken", accessToken);
-        editor.apply();
-    }
-
-
-    private class LoginTask extends AsyncTask<Void, Void, JwtToken> {
+    private class LoginTask extends AsyncTask<Void, Void, Conta> {
 
         private String message = null;
         private Conta conta;
-        private JwtToken jwtToken;
         private AuthRemoteService authRemoteService;
         private String username;
         private String senha;
+        private Context context;
 
-        public LoginTask(String username, String senha) {
-            this.authRemoteService = new AuthRemoteService();
+        public LoginTask(Context context, String username, String senha) {
+            this.context = context;
+            this.authRemoteService = new AuthRemoteService(context);
             this.username = username;
             this.senha = senha;
+
 
         }
 
@@ -231,14 +213,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
         @Override
-        protected JwtToken doInBackground(Void... params) {
+        protected Conta doInBackground(Void... params) {
 
             try {
                 conta = new Conta(username, senha);
-                jwtToken = authRemoteService.createAuthenticationToken(conta);
-                conta = authRemoteService.getUsuario(jwtToken.getToken());
+                conta = authRemoteService.createAuthenticationToken(conta);
 
-                return jwtToken;
+                return conta;
 
             } catch (RestClientException e) {
                 message = e.getMessage();
@@ -251,16 +232,15 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
         @Override
-        protected void onPostExecute(JwtToken jwtToken) {
+        protected void onPostExecute(Conta conta) {
             dismissProgressDialog();
 
-            if (jwtToken != null) {
+            if (conta != null) {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
                 startActivity(intent);
-                saveInformationsLoginAndToken(username, senha, jwtToken.getToken());
 
                 finish();
 

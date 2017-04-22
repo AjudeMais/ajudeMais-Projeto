@@ -1,57 +1,95 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import android.content.Context;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
-import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
+import br.edu.ifpb.ajudemais.filter.JwtInterceptor;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
- * Created by rafaelfeitosa on 12/04/17.
  * Classe que fornece serviços relacionados a autenticação do usuário no app.
+ *
+ * @author Rafael / Franck
  */
 
-public class AuthRemoteService {
-
-    private static final String URL = "http://192.168.0.106:8080/auth/login";
-    private static final String URL2 = "http://192.168.0.106:8080/auth/user";
-    private RestTemplate restTemplate;
-
-    public AuthRemoteService() {
-        restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restTemplate.setErrorHandler(new MyResponseErrorHandler());
-    }
+public class AuthRemoteService extends AbstractRemoteService{
 
 
     /**
-     * Autentica usuário no sistema.
+     * @param context
+     */
+    public AuthRemoteService(Context context) {
+        super(context);
+    }
+
+    /**
      *
      * @param conta
      * @return
      */
-    public JwtToken createAuthenticationToken(Conta conta){
-        return restTemplate.postForObject(URL, conta, JwtToken.class);
+    public Conta createAuthenticationToken(Conta conta){
+        JwtToken token = restTemplate.postForObject(API+"/auth/login", conta, JwtToken.class);
+        if(token != null) {
+            storageToken(token.getToken());
+        }
+        return getUser();
     }
 
-    public Conta getUsuario(String token){
+    /**
+     *
+     * @return
+     */
+    public Conta getUser(){
+        final ResponseEntity<Conta> responseEntity = restTemplate.getForEntity(API+"/auth/user", Conta.class);
+        Conta conta = responseEntity.getBody();
+        if (conta != null) {
+            SharedPrefManager.getInstance(context).storeUser(conta);
+        }
+        return conta;
 
-        final HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", token);
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        final HttpEntity<String> httpEntity = new HttpEntity<String>(headers);
-        final ResponseEntity<Conta> responseEntity = restTemplate.exchange(URL2, HttpMethod.GET, httpEntity, Conta.class);
-
-       return responseEntity.getBody();
     }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean isAuth() {
+        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API+"/auth/valida", Boolean.class);
+        Boolean isValid = responseEntity.getBody();
+        if(isValid != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public boolean logged() {
+        if(SharedPrefManager.getInstance(context).getToken() == null) {
+            return false;
+        } else if(SharedPrefManager.getInstance(context).getUser() == null) {
+            return false;
+
+        }else if(!isAuth()) {
+            return false;
+        }
+        return true;
+    }
+
+    private void storageToken(String token) {
+        SharedPrefManager.getInstance(context).storeToken(token);
+    }
+
 }

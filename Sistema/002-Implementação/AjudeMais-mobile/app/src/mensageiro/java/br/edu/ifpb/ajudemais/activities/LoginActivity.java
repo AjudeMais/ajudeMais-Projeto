@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,21 +14,7 @@ import android.widget.Toast;
 import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-
-/**
- * <p>
- * <b>br.edu.ifpb.ajudemais</b>
- * </p>
- * <p>
- * <p>
- * Entidade que representa um foto.
- * </p>
- *
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
- */
-
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -38,8 +23,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private EditText edtUserName;
     private EditText edtPassword;
     private Resources resources;
-    private SharedPreferences sharedPref;
-    private AuthRemoteService authRemoteService;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -72,7 +55,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
-        authRemoteService = new AuthRemoteService();
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
         tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
@@ -123,11 +105,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
      */
     private boolean ValidateFieldsLength(String userName, String password) {
 
-        if (!(userName.length() > 12)) {
+        if (!(userName.length() > 3)) {
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
             return false;
-        } else if (!(password.length() > 5)) {
+        } else if (!(password.length() > 3)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
             return false;
@@ -145,7 +127,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         if (v.getId() == R.id.btnOpen) {
             if (validateLoginFields()) {
-                new LoginTask(edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
+                new LoginTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
 
             }
         }
@@ -160,33 +142,16 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     }
 
 
-    /**
-     * Armazena informações de login para usuário ficar logado.
-     *
-     * @param userName
-     * @param password
-     */
-    private void saveInformationsLoginAndToken(String userName, String password, String accessToken) {
-        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("userName", userName);
-        editor.putString("password", password);
-        editor.putString("accessToken", accessToken);
-        editor.apply();
-    }
-
-
-    private class LoginTask extends AsyncTask<Void, Void, JwtToken> {
+    private class LoginTask extends AsyncTask<Void, Void, Conta> {
 
         private String message = null;
         private Conta conta;
-        private JwtToken jwtToken;
         private AuthRemoteService authRemoteService;
         private String username;
         private String senha;
 
-        public LoginTask(String username, String senha) {
-            this.authRemoteService = new AuthRemoteService();
+        public LoginTask(Context context, String username, String senha) {
+            this.authRemoteService = new AuthRemoteService(context);
             this.username = username;
             this.senha = senha;
 
@@ -194,47 +159,45 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         @Override
         protected void onPreExecute() {
-           // showLoadingProgressDialog();
+           showLoadingProgressDialog();
 
         }
 
         @Override
-        protected JwtToken doInBackground(Void... params) {
+        protected Conta doInBackground(Void... params) {
 
-//            try {
-//                conta = new Conta(username, senha);
-//                jwtToken = authRemoteService.createAuthenticationToken(conta);
-//                conta = authRemoteService.getUsuario(jwtToken.getToken());
-//
-//                return jwtToken;
-//
-//            } catch (RestClientException e) {
-//                message = e.getMessage();
-//                e.printStackTrace();
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
+            try {
+                conta = new Conta(username, senha);
+                conta = authRemoteService.createAuthenticationToken(conta);
+
+               return conta;
+
+            } catch (RestClientException e) {
+                message = e.getMessage();
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             return null;
         }
 
         @Override
-        protected void onPostExecute(JwtToken jwtToken) {
-           // dismissProgressDialog();
+        protected void onPostExecute(Conta conta) {
+           dismissProgressDialog();
 
-//            if (jwtToken != null) {
+            if (conta != null) {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-               //intent.putExtra("Conta", conta);
+                intent.putExtra("Conta", conta);
                 startActivity(intent);
-              //  saveInformationsLoginAndToken(username, senha, jwtToken.getToken());
 
                 finish();
 
-//            } else {
-//                showResult(message);
-//            }
+            } else {
+               showResult(message);
+           }
         }
 
     }

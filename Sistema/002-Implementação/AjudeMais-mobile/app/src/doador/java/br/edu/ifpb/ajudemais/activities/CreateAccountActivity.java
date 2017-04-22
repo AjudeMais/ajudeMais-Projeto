@@ -28,6 +28,9 @@ import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
+/**
+ * Created by Rafael / Franck
+ */
 public class CreateAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
 
@@ -210,29 +213,13 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                         new Conta(edtUserName.getText().toString().trim(),
                                 edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));
 
-                new CreateAccounTask(doador).execute();
+                new CreateAccounTask(doador, this).execute();
 
 
             }
 
         }
     }
-
-    /**
-     * Armazena informações de login para usuário ficar logado.
-     *
-     * @param userName
-     * @param password
-     */
-    private void saveInformationsLoginAndToken(String userName, String password, String accessToken) {
-        SharedPreferences sharedPref = getSharedPreferences("login", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("userName", userName);
-        editor.putString("password", password);
-        editor.putString("accessToken", accessToken);
-        editor.apply();
-    }
-
 
     /**
      *
@@ -253,42 +240,44 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     }
 
 
-    private class CreateAccounTask extends AsyncTask<Void, Void, JwtToken> {
-
+    private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
 
         private String message;
-        private String password;
         private Doador doador;
-        private JwtToken jwtToken;
+        private String password;
         private DoadorRemoteService doadorRemoteService;
         private AuthRemoteService authRemoteService;
 
-
-        public CreateAccounTask(Doador doador) {
+        public CreateAccounTask(Doador doador, Context context) {
             this.doador = doador;
-            this.password = doador.getConta().getSenha();
-            this.authRemoteService = new AuthRemoteService();
-            this.doadorRemoteService = new DoadorRemoteService();
+            doadorRemoteService = new DoadorRemoteService(context);
+            authRemoteService = new AuthRemoteService(context);
         }
 
-
+        /**
+         *
+         */
         @Override
         protected void onPreExecute() {
             showLoadingProgressDialog();
 
         }
 
+        /**
+         *
+         * @param params
+         * @return
+         */
         @Override
-        protected JwtToken doInBackground(Void... params) {
+        protected Conta doInBackground(Void... params) {
 
             try {
-                doadorRemoteService = new DoadorRemoteService();
+                password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
-                doador.getConta().setSenha(password);
-                jwtToken = authRemoteService.createAuthenticationToken(doador.getConta());
+                Conta conta = authRemoteService.createAuthenticationToken(
+                        new Conta(doador.getConta().getUsername(), password));
 
-                return jwtToken;
-
+                return conta;
 
             } catch (RestClientException e) {
                 message = e.getMessage();
@@ -302,18 +291,19 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         }
 
 
-
+        /**
+         *
+         * @param conta
+         */
         @Override
-        protected void onPostExecute(JwtToken jwtToken) {
+        protected void onPostExecute(Conta conta) {
             dismissProgressDialog();
-
-            if (jwtToken != null) {
+            if (conta != null) {
                 Intent intent = new Intent();
                 intent.setClass(CreateAccountActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", doador.getConta());
+                intent.putExtra("Conta", conta);
                 startActivity(intent);
-                saveInformationsLoginAndToken(doador.getConta().getUsername(), doador.getConta().getSenha(), jwtToken.getToken());
 
                 finish();
 
@@ -322,7 +312,6 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
             }
 
         }
-
 
     }
 }

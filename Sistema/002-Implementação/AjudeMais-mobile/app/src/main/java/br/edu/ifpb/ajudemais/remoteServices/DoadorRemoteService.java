@@ -1,5 +1,7 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
+import android.content.Context;
+
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
@@ -25,19 +27,15 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  * Faz comunicação com API RestFul para os serviços relacionandos a doador.
  */
 
-public class DoadorRemoteService {
+public class DoadorRemoteService extends AbstractRemoteService{
 
 
-    private static final String URL = "http://192.168.0.106:8080/doador";
-    private RestTemplate restTemplate;
-
-    public DoadorRemoteService() {
-        restTemplate = new RestTemplate();
-        restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-        restTemplate.setErrorHandler(new MyResponseErrorHandler());
-
+    /**
+     * @param context
+     */
+    public DoadorRemoteService(Context context) {
+        super(context);
     }
-
 
     /**
      * Salva via requisão post Http um novo doador no banco.
@@ -46,7 +44,7 @@ public class DoadorRemoteService {
      * @return
      */
     public Doador saveDoador(Doador doador){
-        doador = restTemplate.postForObject(URL, doador, Doador.class);
+        doador = restTemplate.postForObject(API+"/doador", doador, Doador.class);
         return doador;
     }
 
