@@ -8,6 +8,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,11 +19,11 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  * Created by Franck on 4/22/17.
  */
 
-public class JwtInterceptor implements ClientHttpRequestInterceptor {
+public class RequestResponseInterceptor implements ClientHttpRequestInterceptor {
 
     private Context context;
 
-    public JwtInterceptor(Context context) {
+    public RequestResponseInterceptor(Context context) {
         this.context = context;
     }
 
@@ -38,6 +39,34 @@ public class JwtInterceptor implements ClientHttpRequestInterceptor {
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
                                         ClientHttpRequestExecution execution) throws IOException {
 
+        interceptRequest(request, body);
+
+        ClientHttpResponse clientHttpResponse = execution.execute(request, body);
+
+        interceptResponse(clientHttpResponse);
+
+        return clientHttpResponse;
+    }
+
+    /**
+     *
+     * @param response
+     */
+    private void interceptResponse(ClientHttpResponse response) {
+        String currentToken = response.getHeaders().getAuthorization();
+
+        if(currentToken != null || !(StringUtils.isEmpty(currentToken))) {
+            SharedPrefManager.getInstance(context).storeToken(currentToken);
+        }
+    }
+
+    /**
+     *
+     * @param request
+     * @param body
+     */
+    private void interceptRequest(HttpRequest request, byte[] body) {
+
         String token = SharedPrefManager.getInstance(this.context).getToken();
         HttpRequest wrapper = new HttpRequestWrapper(request);
 
@@ -47,7 +76,5 @@ public class JwtInterceptor implements ClientHttpRequestInterceptor {
 
         wrapper.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         wrapper.getHeaders().setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-
-        return execution.execute(wrapper, body);
     }
 }

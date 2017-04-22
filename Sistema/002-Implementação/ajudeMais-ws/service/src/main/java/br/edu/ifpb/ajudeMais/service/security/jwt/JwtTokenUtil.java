@@ -21,8 +21,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
  * 
  * <pre>
  * Baseada nos projetos:
- * @see <a href="https://github.com/brahalla/Cerberus</a>
- * @see <a href="https://www.toptal.com/java/rest-security-with-jwt-spring-security-and-java</a>
+ * &#64;see <a href="https://github.com/brahalla/Cerberus</a>
+ * &#64;see <a href="https://www.toptal.com/java/rest-security-with-jwt-spring-security-and-java</a>
  * </pre>
  *
  */
@@ -33,18 +33,21 @@ public class JwtTokenUtil implements Serializable {
 
 	static final String CLAIM_KEY_USERNAME = "sub";
 	static final String CLAIM_KEY_AUDIENCE = "audience";
-	static final String CLAIM_KEY_CREATED  = "created";
+	static final String CLAIM_KEY_CREATED = "created";
 
-	private static final String AUDIENCE_UNKNOWN  = "unknown";
-	private static final String AUDIENCE_WEB      = "web";
-	private static final String AUDIENCE_MOBILE   = "mobile";
-	private static final String AUDIENCE_TABLET   = "tablet";
+	private static final String AUDIENCE_UNKNOWN = "unknown";
+	private static final String AUDIENCE_WEB = "web";
+	private static final String AUDIENCE_MOBILE = "mobile";
+	private static final String AUDIENCE_TABLET = "tablet";
 
 	@Value("${jwt.secret}")
 	private String secret;
 
-	@Value("${jwt.expiration}")
-	private Long expiration;
+	@Value("${jwt.expirationWeb}")
+	private Long expirationWeb;
+	
+	@Value("${jwt.expirationMobile}")
+	private Long expirationMobile;
 
 	public String getUsernameFromToken(String token) {
 		String username;
@@ -126,8 +129,11 @@ public class JwtTokenUtil implements Serializable {
 		return claims;
 	}
 
-	private Date generateExpirationDate() {
-		return new Date(System.currentTimeMillis() + expiration * 60 * 1000);
+	private Date generateExpirationDate(Map<String, Object> claims) {
+		if (claims.get(CLAIM_KEY_AUDIENCE).equals(AUDIENCE_WEB)) {
+			return new Date(System.currentTimeMillis() + expirationWeb * 60 * 1000);
+		}
+		return new Date(System.currentTimeMillis() + expirationMobile * 60 * 60 * 1000);
 	}
 
 	private Boolean isTokenExpired(String token) {
@@ -148,7 +154,8 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
+		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate(claims))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();
+
 	}
 }

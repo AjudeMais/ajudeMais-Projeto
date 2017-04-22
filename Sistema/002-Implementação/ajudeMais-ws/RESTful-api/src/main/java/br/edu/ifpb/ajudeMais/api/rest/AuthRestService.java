@@ -43,10 +43,6 @@ public class AuthRestService {
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody Conta conta, Device device)
 			throws AuthenticationException {
 
-		System.out.println(device.isMobile() + " MOBILE");
-		System.out.println(device.isTablet() + " TABLET");
-		System.out.println(device.isNormal() + " WEB");
-		
 		JwtToken token = authService.criaAutenticao(conta, device);
 
 		return ResponseEntity.ok(token);

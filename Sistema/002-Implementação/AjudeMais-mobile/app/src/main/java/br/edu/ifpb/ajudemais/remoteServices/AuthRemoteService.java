@@ -3,17 +3,9 @@ package br.edu.ifpb.ajudemais.remoteServices;
 import android.content.Context;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
-import br.edu.ifpb.ajudemais.filter.JwtInterceptor;
-import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**

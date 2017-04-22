@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.ifpb.ajudemais.filter.JwtInterceptor;
+import br.edu.ifpb.ajudemais.filter.RequestResponseInterceptor;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 /**
@@ -32,7 +32,7 @@ public abstract class AbstractRemoteService {
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         restTemplate.setErrorHandler(new MyResponseErrorHandler());
         List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-        interceptors.add(new JwtInterceptor(context));
+        interceptors.add(new RequestResponseInterceptor(context));
         restTemplate.setInterceptors(interceptors);
     }
 }
