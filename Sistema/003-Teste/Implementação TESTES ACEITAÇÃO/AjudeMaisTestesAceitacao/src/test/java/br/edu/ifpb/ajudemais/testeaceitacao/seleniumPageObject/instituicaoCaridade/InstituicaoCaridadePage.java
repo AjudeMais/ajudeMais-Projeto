@@ -1,16 +1,4 @@
 
-/**
- * 
- * <p>
- * <b> InstitucaoCaridadePage.java </b>
- * </p>
- *
- * <p>
- * Entidade ...
- * </p>
- * 
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
- */
 package br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade;
 
 import static com.codeborne.selenide.Condition.appears;
@@ -19,9 +7,7 @@ import static com.codeborne.selenide.Selenide.open;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.By.ByXPath;
 
-import com.codeborne.selenide.commands.Click;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
 
@@ -56,8 +42,6 @@ public class InstituicaoCaridadePage extends AbstractPage{
 	 * 
 	 */
 	public void visita() {
-		
-		System.out.println(getUrlBase()+"/home/instituicao");
 		open(getUrlBase()+"/home/instituicao");
 		fazlogin();
 		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[3]/a")).click();
@@ -85,3 +69,4 @@ public class InstituicaoCaridadePage extends AbstractPage{
 	}
 
 }
+

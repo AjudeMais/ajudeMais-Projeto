@@ -16,6 +16,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.codeborne.selenide.WebDriverRunner;
 
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CreateInstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.InstituicaoCaridadePage;
 
 /**
@@ -83,6 +84,23 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage.novo().addInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ", "32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("32521763000174");
 		assertTrue("A instituição de caridade deveria ter sido cadastrada com sucesso", instituicaoCadastradaComSucesso);
+
+	}
+	
+	
+	/**
+	 * Tenta adicionar uma instituição sem preecher o campo nome.
+	 */
+	@Test
+	public void adicionarInstituicaoCaridadeSemCampoObgNome() {
+		instituicaoCaridadePage.visita();
+		
+		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		createInstituicaoCaridadePage.addInstituicaoCaridade("", "", "", "", "", "", "", "", "");
+		
+		boolean houveErroCamposObgsNaoInformados = createInstituicaoCaridadePage.houveUmErroTodosCamposObgs();
+		
+		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.", houveErroCamposObgsNaoInformados);
 
 	}
 }
