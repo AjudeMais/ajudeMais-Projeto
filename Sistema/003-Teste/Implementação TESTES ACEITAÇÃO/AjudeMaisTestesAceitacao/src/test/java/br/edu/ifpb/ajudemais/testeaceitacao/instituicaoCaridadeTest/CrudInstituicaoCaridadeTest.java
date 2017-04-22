@@ -1,7 +1,8 @@
 
 package br.edu.ifpb.ajudemais.testeaceitacao.instituicaoCaridadeTest;
 
-import static com.codeborne.selenide.Selenide.open;
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -51,6 +52,7 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage = new InstituicaoCaridadePage(driver);
 
 		WebDriverRunner.setWebDriver(driver);
+		
 
 	}
 
@@ -60,10 +62,27 @@ public class CrudInstituicaoCaridadeTest {
 	}
 	
 	/**
-	 * Adiciona uma instituição com todos os campos obrigatórios preenchidos
+	 * Adiciona uma instituição com todos os campos obrigatórios preenchidos com cpf.
 	 */
 	@Test
-	public void adicionarCliente() {
-		open("http://google.com.br");
+	public void adicionarInstituicaoCaridadeComCpf() {
+		instituicaoCaridadePage.visita();
+		instituicaoCaridadePage.novo().addInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES", "823.862.380-40", "(83) 99812-2196", "zefao2000@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("82386238040");
+		assertTrue("A instituição de caridade deveria ter sido cadastrada com sucesso", instituicaoCadastradaComSucesso);
+
+	}
+	
+	
+	/**
+	 * Adiciona uma instituição com todos os campos obrigatórios preenchidos com cnpj.
+	 */
+	@Test
+	public void adicionarInstituicaoCaridadeComCnpj() {
+		instituicaoCaridadePage.visita();
+		instituicaoCaridadePage.novo().addInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ", "32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("32521763000174");
+		assertTrue("A instituição de caridade deveria ter sido cadastrada com sucesso", instituicaoCadastradaComSucesso);
+
 	}
 }
