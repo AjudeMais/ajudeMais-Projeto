@@ -58,10 +58,10 @@ public class AuthRemoteService extends AbstractRemoteService{
     public Boolean isAuth() {
         ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API+"/auth/valida", Boolean.class);
         Boolean isValid = responseEntity.getBody();
-        if(isValid != null) {
-            return true;
+        if(isValid == null) {
+            return false;
         }
-        return false;
+        return isValid;
     }
 
     /**
