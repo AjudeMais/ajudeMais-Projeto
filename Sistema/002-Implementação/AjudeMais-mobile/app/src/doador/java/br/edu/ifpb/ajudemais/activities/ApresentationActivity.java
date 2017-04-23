@@ -75,20 +75,19 @@ public class ApresentationActivity extends AppCompatActivity {
 
         @Override
         protected Conta doInBackground(Void... params) {
+            try {
+                if (authRemoteService.logged()) {
 
-            if (authRemoteService.logged()) {
-                try {
-                    conta = SharedPrefManager.getInstance(context).getUser();
-                    return conta;
-
-                } catch (RestClientException e) {
-                    message = e.getMessage();
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                        conta = SharedPrefManager.getInstance(context).getUser();
+                        return conta;
                 }
-
+            } catch (RestClientException e) {
+                message = e.getMessage();
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
             return null;
         }
 
