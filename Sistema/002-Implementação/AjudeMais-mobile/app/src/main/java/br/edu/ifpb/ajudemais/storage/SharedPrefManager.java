@@ -20,7 +20,7 @@ public class SharedPrefManager {
 
     private static final String KEY_ACCESS_TOKEN = "authToken";
     private static final  String USER_SESSION_USERNAME = "userSessionUsername";
-    private static final  String USER_SESSION_MAIL = "userSessionUsername";
+    private static final  String USER_SESSION_MAIL = "userSessionMail";
 
     private static Context context;
 
