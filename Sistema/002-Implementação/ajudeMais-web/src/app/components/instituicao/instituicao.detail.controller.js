@@ -2,9 +2,9 @@
     angular.module("amApp")
         .controller("InstituicaoDetailController", InstituicaoDetailController);
 
-    InstituicaoDetailController.$inject = ['instituicaoService', '$stateParams'];
+    InstituicaoDetailController.$inject = ['instituicaoService', '$stateParams', '$state'];
 
-    function InstituicaoDetailController(instituicaoService, $stateParams) {
+    function InstituicaoDetailController(instituicaoService, $stateParams,$state) {
         var vm = this;
         vm.instituicao = {};
         var instituicaoDetailparam = JSON.parse($stateParams.instituicaoDetail);
@@ -13,5 +13,16 @@
             vm.instituicao = instituicaoDetailparam;
 
         }
+
+
+        /**
+         *
+         */
+        vm.voltar = function () {
+            $state.go('home.instituicao');
+        };
     }
+
+
+
 })();

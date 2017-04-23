@@ -26,7 +26,7 @@
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.documento.$invalid }">
 
                             <label class="control-label">CPF/CNPJ</label>
-                            <input name="documento" id="documento" ng-model="vm.instituicao.documento" type="text"
+                            <input  name="documento" id="documento" ng-model="vm.instituicao.documento" ng-disabled="vm.isEdited()" type="text"
                                    class="form-control" ui-br-cpfcnpj-mask required/>
 
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.documento.$invalid"

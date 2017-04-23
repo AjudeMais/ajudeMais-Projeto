@@ -6,7 +6,6 @@ import static com.codeborne.selenide.Selenide.$;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
 
 /**
  * 
@@ -20,7 +19,7 @@ import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class CreateInstituicaoCaridadePage extends AbstractPage {
+public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
 
 	/**
 	 * @param driver
@@ -28,30 +27,14 @@ public class CreateInstituicaoCaridadePage extends AbstractPage {
 	public CreateInstituicaoCaridadePage(WebDriver driver) {
 		super(driver);
 	}
-
-	/**
-	 */
-	public void addInstituicaoCaridade(String nome, String documento, String telefone, String email, String cep,
-			String logradouro, String numeroEndereco, String bairro, String complemento) {
-
-		// teste Preechimento automático
-		$("#zipCode").setValue(cep);
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[5]/div[1]/div/div[1]/span/button"))
-				.click();
-
-		$("#nome").setValue(nome);
-		$("#documento").setValue(documento);
-		$("#telefone").setValue(telefone);
-		$("#email").setValue(email);
-
-		$("#bairro").setValue(bairro);
-		$("#complemento").setValue(complemento);
-		$("#logradouro").setValue(logradouro);
-		$("#numero").setValue(numeroEndereco);
-
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[2]/input")).click();
+	
+	
+	
+	public boolean houveUmErrorCampoInformadoJaExiste(String mensagem){
+		return $(By.xpath("/html/body/div[2]/div/div")).getText().equals(mensagem);
 	}
 
+	
 	/**
 	 * 
 	 * @param xpath
@@ -193,7 +176,7 @@ public class CreateInstituicaoCaridadePage extends AbstractPage {
 	
 	/**
 	 * 
-	 * @return
+	 * @return boolean
 	 */
 	public boolean houveUmErroTodosCamposObgs() {				
 		return (houveUmErroCampoObgNome() && houveUmErroCampoObgDocumento()) && (houveUmErroCampoObgEmail() && houveUmErroCampoObgTelefone()) 
@@ -201,4 +184,32 @@ public class CreateInstituicaoCaridadePage extends AbstractPage {
 				&& (houveUmErroCampoObgCidade() && houveUmErroCampoObgUf());
 	}
 	
+	
+	/**
+	 * 
+	 * @return boolean
+	 */
+	public boolean houveUmErroCampoEmailInvalido() {				
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[3]/div[2]/div/div", "E-mail deve ser informado corretamente");
+				
+	}
+	
+	
+	/**
+	 * 
+	 * @return {@link Boolean}
+	 */
+	public boolean houveUmErroCampoDocumentoInvalido() {				
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[2]/div[2]/div/div", "CPF ou CNPJ deve ser informado corretamente");
+				
+	}
+	
+	/**
+	 * 
+	 * @return {@link Boolean}
+	 */
+	public boolean houveUmErroCampoTelefoneInvalido() {				
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[3]/div[1]/div/div", "Telefone deve ser informado corretamente");
+				
+	}
 }

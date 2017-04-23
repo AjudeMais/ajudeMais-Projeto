@@ -2,7 +2,7 @@
  * @ngdoc Controller
  * @name InstituicaoEditController
  *
- * @description Controller para página de edição de instituição
+ * @description Controller para página de Edição de Instituição
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
