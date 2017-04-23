@@ -78,18 +78,26 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // TODO: 13/04/17
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
 
             @Override
             public void onCancel() {
-
-                // TODO: 13/04/17  
+                Toast toast = new Toast(getApplicationContext());
+                toast.setText(R.string.cancelOperation);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                // TODO: 13/04/17
+                Toast toast = new Toast(getApplicationContext());
+                toast.setText(error.getMessage());
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
