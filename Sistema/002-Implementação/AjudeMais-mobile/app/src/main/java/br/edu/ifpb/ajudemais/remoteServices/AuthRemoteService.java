@@ -83,5 +83,4 @@ public class AuthRemoteService extends AbstractRemoteService{
     private void storageToken(String token) {
         SharedPrefManager.getInstance(context).storeToken(token);
     }
-
 }
