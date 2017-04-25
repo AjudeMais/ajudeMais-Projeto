@@ -74,18 +74,18 @@
 
 
             <com.facebook.login.widget.LoginButton
+                xmlns:facebook="http://schemas.android.com/apk/res-auto"
+                facebook:com_facebook_login_text="YourText"
                 android:id="@+id/btnFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/separatorBetweenLoginAndLoginFacebook"
-                android:layout_marginTop="4dp"
-                android:textSize="@dimen/fontLogin"
-                android:paddingTop="@dimen/LagBtnFacebook"
-                android:paddingBottom="@dimen/LagBtnFacebook"
-                android:layout_marginRight="@dimen/LagBtnFbRigthAndLeft"
                 android:layout_marginLeft="@dimen/LagBtnFbRigthAndLeft"
-                />
+                android:layout_marginRight="@dimen/LagBtnFbRigthAndLeft"
+                android:paddingBottom="@dimen/LagBtnFacebook"
+                android:paddingTop="@dimen/LagBtnFacebook"
+                android:textSize="@dimen/fontLogin" />
 
 
             <TextView
