@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,11 +20,13 @@ import com.facebook.login.widget.LoginButton;
 
 import org.springframework.web.client.RestClientException;
 
+import java.util.Arrays;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.JwtToken;
-import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
+import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import br.edu.ifpb.ajudemais.utils.FacebookAccount;
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -75,9 +76,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         });
 
         callbackManager = CallbackManager.Factory.create();
+        btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email", "phone_number"));
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Doador doador = FacebookAccount.userFacebookData(loginResult);
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -258,4 +261,5 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
     }
+
 }
