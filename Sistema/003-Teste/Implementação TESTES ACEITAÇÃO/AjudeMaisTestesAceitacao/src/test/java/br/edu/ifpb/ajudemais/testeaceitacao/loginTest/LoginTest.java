@@ -82,7 +82,7 @@ public class LoginTest {
 	public void fazerLoginDadosInvalidos() throws InterruptedException{
 		loginPage.fazerLogin("teste123", "teserw");
 		
-		boolean houveCampoObgSenha = loginPage.houveErroSenha("Senha deve ser informada");
+		loginPage.houveErroSenha("Senha deve ser informada");
 
 		boolean houveLoginInvalido = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
 		
