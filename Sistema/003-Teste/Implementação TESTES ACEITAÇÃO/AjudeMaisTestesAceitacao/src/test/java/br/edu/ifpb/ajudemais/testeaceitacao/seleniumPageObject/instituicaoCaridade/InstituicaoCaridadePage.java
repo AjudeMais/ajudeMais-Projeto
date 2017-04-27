@@ -99,6 +99,13 @@ public class InstituicaoCaridadePage extends AbstractPage {
 		
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[5]/div[1]/div/div[1]/span/button")).click();
 
+		  try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  
 		$("#nome").setValue(nome);
 		
 		if (documento.trim().length() > 0) {
@@ -114,6 +121,9 @@ public class InstituicaoCaridadePage extends AbstractPage {
 		$("#numero").setValue(numeroEndereco);
 
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[2]/input")).click();
+		
+      
+
 	}
 
 }

@@ -83,6 +83,8 @@ public class LoginTest {
 		loginPage.fazerLogin("teste123", "teserw");
 		
 		loginPage.houveErroSenha("Senha deve ser informada");
+		
+        Thread.sleep(100);
 
 		boolean houveLoginInvalido = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
 		
