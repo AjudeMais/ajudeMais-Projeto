@@ -29,7 +29,7 @@ public class GoogleMapsResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	@Value("${google.api.maps.key}")
+//	@Value("${google.api.maps.key}")
 	private String key;
 
 	private GeoApiContext apiContext;
