@@ -7,6 +7,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,6 +33,8 @@ import org.hibernate.validator.constraints.br.CPF;
  */
 
 @Entity
+@NamedQueries({ @NamedQuery(name = "mensageiro.FiltrarMensageirosPorEndereco",
+query = "SELECT e,m FROM Mensageiro m JOIN m.enderecos listaEnderecos WHERE (SELECT COUNT(e.id) FROM listaEnderecos.endereco e where lower(e.bairro) like :bairro and lower(e.localidade) :localidade and lower(e.uf) like :uf ")})
 public class Mensageiro {
 
 	@Id
