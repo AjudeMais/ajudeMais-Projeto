@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.utils;
+package br.edu.ifpb.ajudemais.util;
 
 import android.net.Uri;
 import android.os.Bundle;

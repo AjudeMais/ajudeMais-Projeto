@@ -26,7 +26,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.utils.FacebookAccount;
+import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
