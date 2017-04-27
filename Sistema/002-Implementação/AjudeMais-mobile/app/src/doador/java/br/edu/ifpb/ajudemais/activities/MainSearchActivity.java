@@ -10,7 +10,7 @@ import br.edu.ifpb.ajudemais.R;
 public class MainSearchActivity extends AbstractActivity {
 
     @Override
-    protected void onCreate(Bundlegit  savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_search);
     }
