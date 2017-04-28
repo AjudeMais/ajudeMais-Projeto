@@ -83,8 +83,5 @@ public class MensageiroRestService {
 		Mensageiro mensageiro = mensageiroService.findById(id);
 		return new ResponseEntity<Mensageiro>(mensageiro, HttpStatus.OK);
 	}
-	
-	
-	
 
 }
