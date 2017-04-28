@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifpb.ajudeMais.api.dto.LatLng;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
 /**
@@ -77,9 +78,9 @@ public class InstituicaoCaridadeRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
-	@RequestMapping(method = RequestMethod.GET, value = "/{localidade}/{uf}")
-	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@PathVariable String localidade,@PathVariable String uf) {
-		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCaridadeClose(localidade, uf);
+	@RequestMapping(method = RequestMethod.GET, value = "/filterGeoAddress")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@Valid @RequestBody Endereco endereco) {
+		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicoesForAddress(endereco);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}
@@ -92,9 +93,9 @@ public class InstituicaoCaridadeRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
-	@RequestMapping(method = RequestMethod.POST, value = "/filterCoordinates")
-	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(LatLng latLng) {
-		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCaridadeClose(latLng.getLatitude(), latLng.getLongitude());
+	@RequestMapping(method = RequestMethod.GET, value = "/filterGeoCoordinates")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(@Valid @RequestBody LatLng latLng) {
+		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCloseForLatAndLng(latLng);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}

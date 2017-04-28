@@ -1,8 +1,13 @@
 package br.edu.ifpb.ajudeMais.service.negocio;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.google.maps.errors.ApiException;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 
 /**
  * 
@@ -19,7 +24,22 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 * @param uf
 	 * @return
 	 */
-    public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(String localidade, String uf);
+    public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco);
+
+    
+    /**
+	 * Busca todos as instituições e seu endereço que é proximo a localidade do endereço passado
+	 * @param logradouro
+	 * @param bairro
+	 * @param localidade
+	 * @param uf
+	 * @return
+     * @throws IOException 
+     * @throws InterruptedException 
+     * @throws ApiException 
+     * @throws NumberFormatException 
+	 */
+    public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
 
 
 }
