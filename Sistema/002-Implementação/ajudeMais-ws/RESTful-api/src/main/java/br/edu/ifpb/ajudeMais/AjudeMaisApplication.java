@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package br.edu.ifpb.ajudeMais;
 
 

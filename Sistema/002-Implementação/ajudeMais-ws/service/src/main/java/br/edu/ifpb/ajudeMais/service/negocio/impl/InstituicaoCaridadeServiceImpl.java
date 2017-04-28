@@ -87,4 +87,12 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		instituicaoRespository.delete(entity);
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(String localidade, String uf) {
+		return instituicaoRespository.filtersInstituicaoCaridadeClose(localidade, uf);
+	}
+
 }

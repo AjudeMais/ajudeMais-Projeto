@@ -23,6 +23,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 public interface MensageiroRepository extends JpaRepository<Mensageiro, Long>{
 
 	
-    public List<Object[]> filtrarMensageirosPorEndereco(@Param("logradouro") String logradouro, @Param("bairro") String bairro, @Param("localidade") String localidade, @Param("uf") String uf);
+    public List<Object[]> filtersMensageiroCloser(@Param("logradouro") String logradouro, @Param("bairro") String bairro, @Param("localidade") String localidade, @Param("uf") String uf);
 
+    
 }

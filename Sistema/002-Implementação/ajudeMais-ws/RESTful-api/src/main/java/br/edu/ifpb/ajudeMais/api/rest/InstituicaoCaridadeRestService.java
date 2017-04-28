@@ -71,6 +71,18 @@ public class InstituicaoCaridadeRestService {
 	
 	/**
 	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/{localidade}/{uf}")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@PathVariable String localidade,@PathVariable String uf) {
+		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCaridadeClose(localidade, uf);
+
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+	}
+	
+	/**
+	 * 
 	 * @param id
 	 * @return
 	 */
