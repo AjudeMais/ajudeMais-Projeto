@@ -1,19 +1,10 @@
 
-/**
- * 
- * <p>
- * <b> MensageiroRepository.java </b>
- * </p>
- *
- * <p>
- * Entidade ...
- * </p>
- * 
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
- */
 package br.edu.ifpb.ajudeMais.data.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
@@ -30,5 +21,8 @@ import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public interface MensageiroRepository extends JpaRepository<Mensageiro, Long>{
+
+	
+    public List<Object[]> filtrarMensageirosPorEndereco(@Param("logradouro") String logradouro, @Param("bairro") String bairro, @Param("localidade") String localidade, @Param("uf") String uf);
 
 }

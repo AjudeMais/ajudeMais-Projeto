@@ -29,6 +29,10 @@ public class InstituicaoCaridade {
 	@NotNull
 	@NotBlank(message = "nome deve ser informado")
 	private String nome;
+	
+	@NotNull
+	@NotBlank(message = "A descrição deve ser informado")
+	private String descricao;
 
 	private String telefone;
 
@@ -132,6 +136,22 @@ public class InstituicaoCaridade {
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+	
+	
+
+	/**
+	 * @return the descricao
+	 */
+	public String getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	/*

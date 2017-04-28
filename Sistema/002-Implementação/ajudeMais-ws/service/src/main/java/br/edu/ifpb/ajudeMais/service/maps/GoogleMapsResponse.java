@@ -4,6 +4,7 @@ package br.edu.ifpb.ajudeMais.service.maps;
 import java.io.Serializable;
 
 import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.google.maps.DistanceMatrixApi;
@@ -12,6 +13,8 @@ import com.google.maps.DirectionsApi.RouteRestriction;
 import com.google.maps.model.DistanceMatrix;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.Unit;
+
+import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 
 /**
  * 
@@ -29,7 +32,7 @@ public class GoogleMapsResponse implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-//	@Value("${google.api.maps.key}")
+	@Value("${google.api.maps.key}")
 	private String key;
 
 	private GeoApiContext apiContext;
@@ -60,4 +63,6 @@ public class GoogleMapsResponse implements Serializable {
 		return matrix;
 	
 	}
+	
+	
 }

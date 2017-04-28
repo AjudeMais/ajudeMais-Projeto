@@ -61,7 +61,7 @@ public class InstituicaoCaridadeRestService {
 	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<InstituicaoCaridade>> findAll() {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.findAll();

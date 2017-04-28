@@ -7,12 +7,15 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.br.CPF;
@@ -26,12 +29,13 @@ import org.hibernate.validator.constraints.br.CPF;
  * <p>
  * Entidade que representa Mensageiro no sistema
  * </p>
- * @NamedQueries({ @NamedQuery(name = "mensageiro.FiltrarMensageirosPorEndereco", query = "SELECT e,m FROM Mensageiro m JOIN m.enderecos listaEnderecos WHERE (SELECT COUNT(e.id) FROM listaEnderecos.endereco e where lower(e.bairro) like :bairro and lower(e.localidade) :localidade and lower(e.uf) like :uf ")})
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
 @Entity
+@NamedQueries({@NamedQuery(name = "Mensageiro.filtrarMensageirosPorEndereco", 
+query = "SELECT m,e FROM Mensageiro m JOIN FETCH m.enderecos e WHERE e.logradouro like :logradouro and e.bairro like :bairro and e.localidade like :localidade and e.uf like :uf")})
 public class Mensageiro {
 
 	@Id
@@ -195,5 +199,16 @@ public class Mensageiro {
 		this.enderecos = enderecos;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Mensageiro [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", tokenFCM="
+				+ tokenFCM + ", conta=" + conta + ", enderecos=" + enderecos + ", foto=" + foto + "]";
+	}
+
+	
+	
 	
 }
