@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.TabFragment;
+import br.edu.ifpb.ajudemais.TabFragmentMain;
 
 public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -30,7 +30,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
+        mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
 
         init();
         setUpAccount();
@@ -42,7 +42,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, LoginActivity.class);
+                intent.setClass(MainActivity.this, MainSearchActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
