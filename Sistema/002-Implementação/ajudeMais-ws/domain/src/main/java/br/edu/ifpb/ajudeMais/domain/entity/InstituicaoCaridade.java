@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,9 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 @Entity
 @Table(name = "intituicao_caridade")
+@NamedQueries({
+@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf")})
+
 public class InstituicaoCaridade {
 
 	@Id
@@ -29,6 +34,10 @@ public class InstituicaoCaridade {
 	@NotNull
 	@NotBlank(message = "nome deve ser informado")
 	private String nome;
+	
+	@NotNull
+	@NotBlank(message = "A descrição deve ser informado")
+	private String descricao;
 
 	private String telefone;
 
@@ -132,6 +141,22 @@ public class InstituicaoCaridade {
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
+	}
+	
+	
+
+	/**
+	 * @return the descricao
+	 */
+	public String getDescricao() {
+		return descricao;
+	}
+
+	/**
+	 * @param descricao the descricao to set
+	 */
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	/*

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.api.dto.LatLng;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
@@ -31,7 +32,7 @@ public class InstituicaoCaridadeRestService {
 	private InstituicaoCaridadeService instituicaoService;
 	
 	/**
-	 * 
+	 * End point para salvar uma nova instituição de caridade no sistema.
 	 * @param instituicaoCaridade
 	 * @return
 	 * @throws AjudeMaisException
@@ -44,10 +45,10 @@ public class InstituicaoCaridadeRestService {
 	}
 	
 	/**
-	 * 
+	 * End point para atualizar informações de uma instituição de caridade.
 	 * @param instituicaoCaridade
 	 * @return
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.PUT)
@@ -58,10 +59,10 @@ public class InstituicaoCaridadeRestService {
 	}
 	
 	/**
-	 * 
+	 * End point para buscar todas as instituições de caridade.
 	 * @return
 	 */
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<InstituicaoCaridade>> findAll() {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.findAll();
@@ -70,7 +71,36 @@ public class InstituicaoCaridadeRestService {
 	}
 	
 	/**
-	 * 
+	 * End point para filtrar instituições por uma localidade e estado.
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/{localidade}/{uf}")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@PathVariable String localidade,@PathVariable String uf) {
+		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCaridadeClose(localidade, uf);
+
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+	}
+	
+
+	/**
+	 * End point para filtrar instituições pela latitude e longitude passada.
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.POST, value = "/filterCoordinates")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(LatLng latLng) {
+		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCaridadeClose(latLng.getLatitude(), latLng.getLongitude());
+
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+	}
+	
+	/**
+	 * End point para buscar uma instituição de caridade pelo ID.
 	 * @param id
 	 * @return
 	 */
