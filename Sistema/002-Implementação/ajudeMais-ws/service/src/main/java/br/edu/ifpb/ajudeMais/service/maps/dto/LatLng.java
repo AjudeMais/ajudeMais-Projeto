@@ -1,5 +1,5 @@
 
-package br.edu.ifpb.ajudeMais.api.dto;
+package br.edu.ifpb.ajudeMais.service.maps.dto;
 
 
 /**

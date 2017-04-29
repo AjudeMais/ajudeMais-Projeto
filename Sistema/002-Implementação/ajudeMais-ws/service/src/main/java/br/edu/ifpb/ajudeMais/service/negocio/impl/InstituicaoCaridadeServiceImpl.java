@@ -14,10 +14,12 @@ import com.google.maps.model.GeocodingResult;
 
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsResponse;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
@@ -34,7 +36,6 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	@Autowired
 	private ContaService contaService;
-	
 
 	private GoogleMapsResponse googleMapsResponse = new GoogleMapsResponse();
 
@@ -59,7 +60,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 * 
 	 */
 	@Transactional
@@ -95,30 +96,46 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		instituicaoRespository.delete(entity);
 	}
 
-	/**
+	/*
+	 * (non-Javadoc)
 	 * 
+	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
+	 * filtersInstituicoesForAddress(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(String latOuLocalidade, String lgOuUf){ 
+	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco) {
 		
-		if(latOuLocalidade.matches("[0-9]*") && lgOuUf.matches("[0-9]*")){
-			GeocodingResult[] result;
-			try {
-				result = googleMapsResponse.converteLatitudeAndLongitudeInAddress(Double.parseDouble(latOuLocalidade), Double.parseDouble(lgOuUf));
-				System.out.println(result);
+		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
 
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (ApiException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
+	 * filtersInstituicaoCloseForLatAndLng(com.google.maps.model.LatLng)
+	 */
+	@Override
+	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) {
+		GeocodingResult[] result;
+
+		try {
+			result = googleMapsResponse.converteLatitudeAndLongitudeInAddress(Double.parseDouble(latLng.getLatitude()),
+					Double.parseDouble(latLng.getLongitude()));
+
+			System.out.println(result);
+
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ApiException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		return institui
-				vcaoRespository.filtersInstituicaoCaridadeClose(latOuLocalidade, lgOuUf);
+
+		return null;
 	}
 
 }
