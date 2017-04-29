@@ -17,8 +17,8 @@ import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
-import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsService;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
+import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
@@ -37,7 +37,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	private ContaService contaService;
 
 	@Autowired
-	private GoogleMapsService googleMapsResponse;
+	private GoogleMapsServiceImpl googleMapsResponse;
 
 	/**
 	 * 
