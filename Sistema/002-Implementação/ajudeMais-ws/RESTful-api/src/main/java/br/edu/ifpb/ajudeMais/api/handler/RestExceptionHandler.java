@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -66,6 +67,17 @@ public class RestExceptionHandler {
 	@ResponseBody
 	public ResponseEntity<MessageErrorDTO> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
 		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
+	}
+	
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleAccessDeniedException(AccessDeniedException e) {
+		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.FORBIDDEN);
 	}
 
 }

@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
 
-public class TabFragment extends Fragment {
+public class TabFragmentMain extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
