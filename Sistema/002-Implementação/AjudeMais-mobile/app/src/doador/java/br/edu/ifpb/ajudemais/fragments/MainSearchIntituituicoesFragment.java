@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class MainSearchIntituituicoesFragment extends Fragment {
 
     private MainSearchInstituicoesAdapter mainSearchInstituicoesAdapter;
     private static RecyclerView recyclerView;
+    private static View view;
     private List<InstituicaoCaridade> instituicoes;
 
 
@@ -45,22 +47,19 @@ public class MainSearchIntituituicoesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
+        view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_instituicoes);
 
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
 
-        new MainSearchInstituicoesFragmentTask(view).execute();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mainSearchInstituicoesAdapter = new MainSearchInstituicoesAdapter(instituicoes, getActivity());
-        recyclerView.setAdapter(mainSearchInstituicoesAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        new MainSearchInstituicoesFragmentTask().execute();
     }
 
     /**
@@ -68,26 +67,25 @@ public class MainSearchIntituituicoesFragment extends Fragment {
      */
     private class MainSearchInstituicoesFragmentTask extends AsyncTask<Void, Void, List<InstituicaoCaridade>> {
 
-        private View view;
         private InstituicaoRemoteService instituicaoRemoteService;
         private String message = null;
+        private List<InstituicaoCaridade> instituicoesResult;
 
-        public MainSearchInstituicoesFragmentTask(View view) {
-            this.view = view;
+        public MainSearchInstituicoesFragmentTask() {
             instituicaoRemoteService = new InstituicaoRemoteService(getContext());
         }
 
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
-                List<InstituicaoCaridade> instituicoes = instituicaoRemoteService.getInstituicoes();
+                instituicoesResult = instituicaoRemoteService.getInstituicoes();
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return instituicoes;
+            return instituicoesResult;
         }
 
         @Override
@@ -96,6 +94,10 @@ public class MainSearchIntituituicoesFragment extends Fragment {
                 instituicoes = result;
                 view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
                 view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
+
+                mainSearchInstituicoesAdapter = new MainSearchInstituicoesAdapter(instituicoes, getActivity());
+                recyclerView.setAdapter(mainSearchInstituicoesAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
             } else {
                 showResult(message);
             }

@@ -52,6 +52,8 @@ public class MainSearchInstituicoesAdapter extends RecyclerView.Adapter<MainSear
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.nomeInstituicao.setText(instituicoes.get(position).getNome());
+        holder.descricaoInstituicao.setText(instituicoes.get(position).getDescricao());
+
     }
 
     /**
@@ -71,10 +73,12 @@ public class MainSearchInstituicoesAdapter extends RecyclerView.Adapter<MainSear
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView nomeInstituicao;
+        TextView descricaoInstituicao;
 
         public ViewHolder(View itemView) {
             super(itemView);
             nomeInstituicao = (TextView) itemView.findViewById(R.id.tv_instituicao_nome);
+            descricaoInstituicao = (TextView) itemView.findViewById(R.id.tv_instituicao_description);
         }
     }
 }

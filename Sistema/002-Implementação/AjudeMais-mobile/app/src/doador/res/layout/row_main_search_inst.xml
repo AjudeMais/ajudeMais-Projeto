@@ -4,15 +4,14 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/card_view_main_"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="8dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     app:cardElevation="3dp"
     app:cardUseCompatPadding="false"
     app:cardPreventCornerOverlap="false"
     app:cardMaxElevation="3dp"
-    app:cardCornerRadius="3dp">
+    app:cardCornerRadius="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -23,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"
+            android:paddingTop="2dp"
             android:paddingLeft="10dp"
             android:textColor="@color/textPrimary"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_instituicao_nome"
-            android:paddingBottom="7dp"
+            android:paddingBottom="8dp"
             android:textColor="@color/textSecond"
             android:paddingLeft="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"

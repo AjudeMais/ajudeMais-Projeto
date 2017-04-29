@@ -10,6 +10,8 @@ public class InstituicaoCaridade {
 
     private String nome;
 
+    private String descricao;
+
     private String telefone;
 
     private String documento;
@@ -72,5 +74,13 @@ public class InstituicaoCaridade {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 }
