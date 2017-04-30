@@ -51,7 +51,6 @@ public abstract class AbstractPage {
 		$("#tLogin").setValue(USERNAME);
 		$("#tSenha").setValue(PASSWORD);
 		$("#btnLogin").click();
-
 	}
 
 	/**

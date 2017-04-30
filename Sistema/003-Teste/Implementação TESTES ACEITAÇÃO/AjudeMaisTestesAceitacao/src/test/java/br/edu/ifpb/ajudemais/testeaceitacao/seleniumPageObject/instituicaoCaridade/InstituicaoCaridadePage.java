@@ -92,25 +92,21 @@ public class InstituicaoCaridadePage extends AbstractPage {
 	/**
 	 * Adiciona ou edita uma instituição de caridade
 	 */
-	public void addOrEditInstituicaoCaridade(String nome, String documento, String telefone, String email, String cep,
+	public void addOrEditInstituicaoCaridade(String nome, String descricao,String documento, String telefone, String email, String cep,
 			String logradouro, String numeroEndereco, String bairro, String complemento) {
 
 		$("#zipCode").setValue(cep);
 		
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[5]/div[1]/div/div[1]/span/button")).click();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
 
-		  try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		  
 		$("#nome").setValue(nome);
+		
+		$("#descricao").setValue(descricao);
 		
 		if (documento.trim().length() > 0) {
 			$("#documento").setValue(documento);
 		}
+	
 		
 		$("#telefone").setValue(telefone);
 		$("#email").setValue(email);
@@ -122,7 +118,6 @@ public class InstituicaoCaridadePage extends AbstractPage {
 
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[2]/input")).click();
 		
-      
 
 	}
 

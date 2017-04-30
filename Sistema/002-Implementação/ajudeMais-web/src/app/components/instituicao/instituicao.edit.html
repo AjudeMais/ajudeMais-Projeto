@@ -21,6 +21,7 @@
                         </div>
                     </div>
 
+
                     <div class="col-lg-4">
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.documento.$invalid }">
@@ -35,6 +36,20 @@
                         </div>
                     </div>
 
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-12">
+                        <div class="form-group am-required"
+                             ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.descricao.$invalid }">
+                            <label class="control-label" for="nome">Descrição</label>
+                            <textarea id="descricao" placeholder="Descreva uma breve introdução sobre a instituição" name="descricao" ng-model="vm.instituicao.descricao" class="form-control" rows="3" id="comment" required></textarea>
+                            <div ng-show="instituicaoForm.$submitted && instituicaoForm.descricao.$invalid"
+                                 class="help-block">A descrição deve ser informada
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">

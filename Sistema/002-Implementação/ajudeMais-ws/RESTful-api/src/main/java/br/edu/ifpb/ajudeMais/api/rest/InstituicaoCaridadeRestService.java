@@ -78,8 +78,8 @@ public class InstituicaoCaridadeRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
-	@RequestMapping(method = RequestMethod.GET, value = "/filterGeoAddress")
-	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@Valid @RequestBody Endereco endereco) {
+	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoAddress")
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForAddress(@RequestBody Endereco endereco) {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicoesForAddress(endereco);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
@@ -93,7 +93,7 @@ public class InstituicaoCaridadeRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
-	@RequestMapping(method = RequestMethod.GET, value = "/filterGeoCoordinates")
+	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoCoordinates")
 	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(@Valid @RequestBody LatLng latLng) {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCloseForLatAndLng(latLng);
 
