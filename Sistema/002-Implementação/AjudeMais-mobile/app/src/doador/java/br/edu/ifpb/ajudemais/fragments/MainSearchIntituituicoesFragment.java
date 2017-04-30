@@ -1,36 +1,40 @@
 package br.edu.ifpb.ajudemais.fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.GoogleMap;
 
 import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.activities.InstituicaoActivity;
 import br.edu.ifpb.ajudemais.adapters.MainSearchInstituicoesAdapter;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
+import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
 
 /**
- * Created by Franck on 4/27/17.
+ * Created by Franck Aragão on 4/27/17.
  */
-public class MainSearchIntituituicoesFragment extends Fragment {
+public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
     private MainSearchInstituicoesAdapter mainSearchInstituicoesAdapter;
     private static RecyclerView recyclerView;
     private static View view;
+    private GoogleMap map;
     private List<InstituicaoCaridade> instituicoes;
-
 
     /**
      *
@@ -59,7 +63,22 @@ public class MainSearchIntituituicoesFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new MainSearchInstituicoesFragmentTask().execute();
+        new MainSearchInstituicoesFragmentTask(this).execute();
+    }
+
+    @Override
+    public void onItemClick(View childView, int position) {
+        InstituicaoCaridade instituicaoCaridade = instituicoes.get(position);
+
+        Intent intent = new Intent(getContext(), InstituicaoActivity.class);
+        intent.putExtra("instituicao", instituicaoCaridade);
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void onItemLongPress(View childView, int position) {
+
     }
 
     /**
@@ -70,9 +89,11 @@ public class MainSearchIntituituicoesFragment extends Fragment {
         private InstituicaoRemoteService instituicaoRemoteService;
         private String message = null;
         private List<InstituicaoCaridade> instituicoesResult;
+        private RecyclerItemClickListener.OnItemClickListener clickListener;
 
-        public MainSearchInstituicoesFragmentTask() {
+        public MainSearchInstituicoesFragmentTask(RecyclerItemClickListener.OnItemClickListener clickListener) {
             instituicaoRemoteService = new InstituicaoRemoteService(getContext());
+            this.clickListener = clickListener;
         }
 
         @Override
@@ -98,6 +119,8 @@ public class MainSearchIntituituicoesFragment extends Fragment {
                 mainSearchInstituicoesAdapter = new MainSearchInstituicoesAdapter(instituicoes, getActivity());
                 recyclerView.setAdapter(mainSearchInstituicoesAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+
             } else {
                 showResult(message);
             }

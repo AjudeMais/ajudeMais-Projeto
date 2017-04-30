@@ -15,6 +15,8 @@ public class MainSearchActivity extends AbstractAsyncActivity {
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,5 +25,7 @@ public class MainSearchActivity extends AbstractAsyncActivity {
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerViewMainSearch, new TabFragmentMainSearch()).commit();
+
     }
+
 }

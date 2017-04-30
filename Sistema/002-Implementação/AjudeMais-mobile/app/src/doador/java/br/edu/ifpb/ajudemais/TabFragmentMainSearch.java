@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais;
 
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,23 +23,13 @@ public class TabFragmentMainSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        /**
-         *Inflate tab_layout and setup Views.
-         */
+
+
         View x =  inflater.inflate(R.layout.tab_layout,null);
         tabLayout = (TabLayout) x.findViewById(R.id.tabs);
         viewPager = (ViewPager) x.findViewById(R.id.viewpager);
 
-        /**
-         *Set an Apater for the View Pager
-         */
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-
-        /**
-         * Now , this is a workaround ,
-         * The setupWithViewPager dose't works without the runnable .
-         * Maybe a Support Library Bug .
-         */
 
         tabLayout.post(new Runnable() {
             @Override
@@ -57,10 +48,6 @@ public class TabFragmentMainSearch extends Fragment {
             super(fm);
         }
 
-        /**
-         * Return fragment with respect to Position .
-         */
-
         @Override
         public Fragment getItem(int position)
         {
@@ -78,10 +65,6 @@ public class TabFragmentMainSearch extends Fragment {
 
         }
 
-        /**
-         * This method returns the title of the tab according to the position.
-         */
-
         @Override
         public CharSequence getPageTitle(int position) {
 
@@ -94,6 +77,4 @@ public class TabFragmentMainSearch extends Fragment {
             return null;
         }
     }
-
-
 }

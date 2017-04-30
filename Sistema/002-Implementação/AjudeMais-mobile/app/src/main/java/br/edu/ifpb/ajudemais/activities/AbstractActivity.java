@@ -54,6 +54,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         return false;
     }
 
+    protected void setUpToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.nav_action);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
+    }
+
     protected void setUpToggle() {
         setSupportActionBar(mToolbar);
 

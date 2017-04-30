@@ -46,4 +46,8 @@
     <string name="btnRecoveryPasswordName">REDEFINIR</string>
 
     <string name="facebook_app_id">775335345957213</string>
+
+
+    <!--Detalhe intituição-->
+    <string name="tv_inf_instituicao">Informações Gerais</string>
 </resources>

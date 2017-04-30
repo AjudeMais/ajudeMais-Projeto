@@ -1,10 +1,12 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
+
 /**
  * Created by Franck Aragão on 4/27/17.
  */
 
-public class Endereco {
+public class Endereco implements Serializable{
 
     private Long id;
 
