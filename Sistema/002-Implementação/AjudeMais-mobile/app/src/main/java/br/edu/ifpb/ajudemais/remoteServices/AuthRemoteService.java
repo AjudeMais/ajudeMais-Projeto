@@ -3,8 +3,10 @@ package br.edu.ifpb.ajudemais.remoteServices;
 import android.content.Context;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
@@ -14,7 +16,7 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  * @author Rafael / Franck
  */
 
-public class AuthRemoteService extends AbstractRemoteService{
+public class AuthRemoteService extends AbstractRemoteService {
 
 
     /**
@@ -25,26 +27,25 @@ public class AuthRemoteService extends AbstractRemoteService{
     }
 
     /**
-     *
      * @param conta
      * @return
      */
-    public Conta createAuthenticationToken(Conta conta){
-        JwtToken token = restTemplate.postForObject(API+"/auth/login", conta, JwtToken.class);
-        if(token != null) {
+    public Conta createAuthenticationToken(Conta conta, Grupo grupo) {
+        JwtToken token = restTemplate.postForObject(API + "/auth/login", conta, JwtToken.class);
+        if (token != null) {
             storageToken(token.getToken());
         }
-        return getUser();
+        return getUser(grupo);
     }
 
     /**
-     *
      * @return
      */
-    public Conta getUser(){
-        final ResponseEntity<Conta> responseEntity = restTemplate.getForEntity(API+"/auth/user", Conta.class);
+    public Conta getUser(Grupo grupo) {
+        final ResponseEntity<Conta> responseEntity = restTemplate.getForEntity(API + "/auth/user", Conta.class);
         Conta conta = responseEntity.getBody();
         if (conta != null) {
+            verifyUserModule(conta, grupo);
             SharedPrefManager.getInstance(context).storeUser(conta);
         }
         return conta;
@@ -52,35 +53,53 @@ public class AuthRemoteService extends AbstractRemoteService{
     }
 
     /**
-     *
      * @return
      */
     public Boolean isAuth() {
-        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API+"/auth/valida", Boolean.class);
+        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API + "/auth/valida", Boolean.class);
         Boolean isValid = responseEntity.getBody();
-        if(isValid == null) {
+        if (isValid == null) {
             return false;
         }
         return isValid;
     }
 
     /**
-     *
      * @return
      */
     public boolean logged() {
-        if(SharedPrefManager.getInstance(context).getToken() == null) {
+        if (SharedPrefManager.getInstance(context).getToken() == null) {
             return false;
-        } else if(SharedPrefManager.getInstance(context).getUser() == null) {
+        } else if (SharedPrefManager.getInstance(context).getUser() == null) {
             return false;
 
-        }else if(!isAuth()) {
+        } else if (!isAuth()) {
             return false;
         }
         return true;
     }
 
+    /**
+     *
+     * @param token
+     */
     private void storageToken(String token) {
         SharedPrefManager.getInstance(context).storeToken(token);
+    }
+
+    /**
+     *
+     * @param conta
+     * @param grupo
+     */
+    private void verifyUserModule(Conta conta, final Grupo grupo) {
+
+        for (String p : conta.getGrupos()) {
+            if(!p.contains(grupo.name())) {
+                SharedPrefManager.getInstance(context).clearSharedPrefs();
+                throw  new RestClientException("Usuário não autorizado");
+            }
+        }
+
     }
 }

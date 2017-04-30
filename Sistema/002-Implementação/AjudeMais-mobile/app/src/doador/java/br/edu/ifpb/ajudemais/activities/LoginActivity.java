@@ -25,6 +25,7 @@ import java.util.Arrays;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
@@ -228,7 +229,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
             try {
                 conta = new Conta(username, senha);
-                conta = authRemoteService.createAuthenticationToken(conta);
+                conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
 
                 return conta;
 

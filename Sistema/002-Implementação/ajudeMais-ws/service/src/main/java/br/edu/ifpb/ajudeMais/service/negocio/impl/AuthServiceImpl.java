@@ -1,7 +1,11 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Grupo;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.security.UsuarioSistema;
 import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
@@ -47,6 +52,7 @@ public class AuthServiceImpl implements AuthService{
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(conta.getUsername());
+		verifyUserByModule(userDetails, device);
 		final String token = jwtTokenUtil.generateToken(userDetails, device);
 		
 		return new JwtToken(token);
@@ -99,5 +105,27 @@ public class AuthServiceImpl implements AuthService{
 		conta.setSenha("[PROTEGIDA]");
 		
 		return conta;
+	}
+	
+	/**
+	 * 
+	 * @param userDetails
+	 * @param device
+	 */
+	private void verifyUserByModule(UserDetails userDetails, Device device) {
+		String msg = "Usuário não autorizado";
+		List<String> permitions = new ArrayList<>();
+		userDetails.getAuthorities().forEach(p -> permitions.add(p.getAuthority()));
+		for (String p : permitions) {
+			if(device.isNormal()){
+				if(p.contains(Grupo.DOADOR.name()) || p.contains(Grupo.MENSAGEIRO.name())) {
+					throw new AccessDeniedException(msg);
+				}
+			} else {
+				if(p.contains(Grupo.ADMIN.name()) || p.contains(Grupo.INSTITUICAO.name())) {
+					throw new AccessDeniedException(msg);
+				}
+			}
+		}
 	}
 }

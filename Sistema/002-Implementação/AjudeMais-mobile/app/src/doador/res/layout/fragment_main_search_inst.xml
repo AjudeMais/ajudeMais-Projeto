@@ -4,36 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+
+    <FrameLayout
+        android:id="@+id/containerViewSearchInst"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/containerViewSearchInst">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view_instituicoes"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:paddingTop="2dp"
+            android:scrollbars="vertical" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_instituicoes"
-                android:layout_width="fill_parent"
-                android:paddingTop="2dp"
-                android:layout_height="fill_parent"
-                android:scrollbars="vertical" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loadingPanelMainSearchInst"
+        style="@style/GenericProgressBackground">
 
-        <RelativeLayout style="@style/GenericProgressBackground"
-            android:id="@+id/loadingPanelMainSearchInst"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <ProgressBar style="@style/GenericProgressIndicator"/>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-
+        <ProgressBar style="@style/GenericProgressIndicator" />
+    </RelativeLayout>
 
 
 </LinearLayout>

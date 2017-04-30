@@ -21,6 +21,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
@@ -271,7 +272,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
                 Conta conta = authRemoteService.createAuthenticationToken(
-                        new Conta(doador.getConta().getUsername(), password));
+                        new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
 
                 return conta;
 

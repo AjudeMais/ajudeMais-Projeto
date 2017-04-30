@@ -20,7 +20,7 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.InstituicaoActivity;
-import br.edu.ifpb.ajudemais.adapters.MainSearchInstituicoesAdapter;
+import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
@@ -30,7 +30,7 @@ import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
  */
 public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
-    private MainSearchInstituicoesAdapter mainSearchInstituicoesAdapter;
+    private InstituicoesAdapter instituicoesAdapter;
     private static RecyclerView recyclerView;
     private static View view;
     private GoogleMap map;
@@ -116,8 +116,8 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                 view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
                 view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
 
-                mainSearchInstituicoesAdapter = new MainSearchInstituicoesAdapter(instituicoes, getActivity());
-                recyclerView.setAdapter(mainSearchInstituicoesAdapter);
+                instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
+                recyclerView.setAdapter(instituicoesAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
 
@@ -133,7 +133,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             if (result != null) {
                 Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getContext(), "Aconteceu algum erro no servidor", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Aconteceu algum erro no servidor!", Toast.LENGTH_LONG).show();
             }
         }
     }

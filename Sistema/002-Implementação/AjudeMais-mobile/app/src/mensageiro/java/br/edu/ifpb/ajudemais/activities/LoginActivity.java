@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
@@ -168,7 +169,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
             try {
                 conta = new Conta(username, senha);
-                conta = authRemoteService.createAuthenticationToken(conta);
+                conta = authRemoteService.createAuthenticationToken(conta, Grupo.MENSAGEIRO);
 
                return conta;
 

@@ -3,11 +3,13 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
@@ -25,6 +27,9 @@ public class ApresentationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apresentation);
 
+        ProgressBar mBar= (ProgressBar) findViewById(R.id.progress_presentation);
+        mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
         new LoginTask(this).execute();
 
     }
@@ -53,7 +58,7 @@ public class ApresentationActivity extends AppCompatActivity {
         if (result != null) {
             Toast.makeText(this, result, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "I got null, something happened!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Aconteceu algum erro no servidor!", Toast.LENGTH_LONG).show();
         }
     }
 

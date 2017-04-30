@@ -16,7 +16,7 @@ import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 /**
  * Created by Franck Aragão on 4/27/17.
  */
-public class MainSearchInstituicoesAdapter extends RecyclerView.Adapter<MainSearchInstituicoesAdapter.ViewHolder>{
+public class InstituicoesAdapter extends RecyclerView.Adapter<InstituicoesAdapter.ViewHolder>{
 
     private List<InstituicaoCaridade> instituicoes;
     private Context context;
@@ -26,7 +26,7 @@ public class MainSearchInstituicoesAdapter extends RecyclerView.Adapter<MainSear
      * @param instituicoes
      * @param context
      */
-    public MainSearchInstituicoesAdapter(List<InstituicaoCaridade> instituicoes, Context context) {
+    public InstituicoesAdapter(List<InstituicaoCaridade> instituicoes, Context context) {
         this.instituicoes = instituicoes;
         this.context = context;
 
