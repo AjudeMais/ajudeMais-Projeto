@@ -33,8 +33,8 @@ import org.hibernate.validator.constraints.br.CPF;
  */
 
 @Entity
-@NamedQueries({ @NamedQuery(name = "mensageiro.FiltrarMensageirosPorEndereco",
-query = "SELECT e,m FROM Mensageiro m JOIN m.enderecos listaEnderecos WHERE (SELECT COUNT(e.id) FROM listaEnderecos.endereco e where lower(e.bairro) like :bairro and lower(e.localidade) :localidade and lower(e.uf) like :uf ")})
+//@NamedQueries({ @NamedQuery(name = "mensageiro.FiltrarMensageirosPorEndereco",
+//query = "SELECT e,m FROM Mensageiro m JOIN m.enderecos listaEnderecos WHERE (SELECT COUNT(e.id) FROM listaEnderecos.endereco e where lower(e.bairro) like :bairro and lower(e.localidade) :localidade and lower(e.uf) like :uf ")})
 public class Mensageiro {
 
 	@Id
