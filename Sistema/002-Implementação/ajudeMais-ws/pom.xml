@@ -28,17 +28,12 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<dependency>
-				<groupId>org.hsqldb</groupId>
-				<artifactId>hsqldb</artifactId>
-				<version>2.3.2</version>
-			</dependency>
+
 
 			<dependency>
 				<groupId>org.postgresql</groupId>
 				<artifactId>postgresql</artifactId>
 				<version>9.4-1201-jdbc41</version>
-				<scope>provided</scope>
 			</dependency>
 
 			<dependency>
