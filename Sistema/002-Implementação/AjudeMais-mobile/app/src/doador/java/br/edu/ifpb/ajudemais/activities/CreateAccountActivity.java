@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClientException;
 
 import java.util.ArrayList;
@@ -23,8 +21,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.JwtToken;
-import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
+import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
@@ -275,7 +272,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
                 Conta conta = authRemoteService.createAuthenticationToken(
-                        new Conta(doador.getConta().getUsername(), password));
+                        new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
 
                 return conta;
 

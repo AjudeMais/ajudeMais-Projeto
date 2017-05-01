@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true" />
 
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@+id/progress_presentation"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"

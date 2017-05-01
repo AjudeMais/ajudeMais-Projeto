@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,11 +9,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.maps.errors.ApiException;
+
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
+import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
@@ -29,6 +35,9 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	@Autowired
 	private ContaService contaService;
+
+	@Autowired
+	private GoogleMapsServiceImpl googleMapsResponse;
 
 	/**
 	 * 
@@ -51,7 +60,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 * 
 	 */
 	@Transactional
@@ -85,6 +94,47 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	@Override
 	public void remover(InstituicaoCaridade entity) {
 		instituicaoRespository.delete(entity);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
+	 * filtersInstituicoesForAddress(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco) {
+		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
+	 * filtersInstituicaoCloseForLatAndLng(com.google.maps.model.LatLng)
+	 */
+	@Override
+	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) {
+
+		Endereco endereco = null;
+
+		try {
+			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(
+					Double.parseDouble(latLng.getLatitude()), Double.parseDouble(latLng.getLongitude()));
+
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ApiException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
+
 	}
 
 }

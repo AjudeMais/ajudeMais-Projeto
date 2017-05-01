@@ -72,7 +72,7 @@ public class AuthRestService {
 	 * @return
 	 */
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	public ResponseEntity<?> getUsuario(HttpServletRequest request) {
+	public ResponseEntity<?> getUser(HttpServletRequest request) {
 		String token = request.getHeader(tokenHeader);
 		Conta conta = authService.getContaPorToken(new JwtToken(token));
 
@@ -85,11 +85,11 @@ public class AuthRestService {
 	 * @return
 	 */
 	@RequestMapping(value = "/valida", method = RequestMethod.GET)
-	public ResponseEntity<Boolean> autenticacaoValida(HttpServletRequest request) {
+	public ResponseEntity<Boolean> authenticationValid(HttpServletRequest request) {
 		String token = request.getHeader(tokenHeader);
-		Boolean valido = authService.autenticacaoValida(new JwtToken(token));
+		Boolean valid = authService.autenticacaoValida(new JwtToken(token));
 
-		return ResponseEntity.ok(valido);
+		return ResponseEntity.ok(valid);
 	}
 
 }

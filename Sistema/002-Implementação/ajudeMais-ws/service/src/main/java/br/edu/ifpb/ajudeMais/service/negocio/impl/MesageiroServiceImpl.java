@@ -31,6 +31,8 @@ public class MesageiroServiceImpl implements MensageiroService{
 	
 	@Autowired
 	private ContaService contaService;
+	
+	
 
 	/**
 	 * 
@@ -69,6 +71,12 @@ public class MesageiroServiceImpl implements MensageiroService{
 	public Mensageiro findById(Long id) {
 		return mensageiroRepository.findOne(id);
 	}
+	
+    public List<Object[]> filtersMensageiroCloser(String logradouro, String bairro, String localidade, String uf){
+    	return mensageiroRepository.filtersMensageiroCloser(logradouro, bairro, localidade, uf);
+    	
+    }
+
 
 	/**
 	 * 

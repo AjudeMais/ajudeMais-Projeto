@@ -27,6 +27,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+
 			<dependency>
 				<groupId>org.hsqldb</groupId>
 				<artifactId>hsqldb</artifactId>
@@ -70,7 +71,11 @@
 				<version>0.1.20</version>
 			</dependency>
 
-
+			<dependency>
+				<groupId>com.squareup.okhttp</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>2.0.0</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
