@@ -28,17 +28,23 @@ import com.jayway.jsonpath.JsonPath;
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
+/**
+ * Classe com configuração para execução de testes com o MockMvc
+ * 
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
+ */
 @SpringBootTest(classes = AjudeMaisApplication.class)
-@ActiveProfiles(profiles={"test"})
+@ActiveProfiles(profiles = { "test" })
 @RunWith(SpringRunner.class)
 public class AbstractRestTest {
 
 	protected MockMvc mockMvc;
-	
+
 	private ObjectMapper mapper = new ObjectMapper();
-	
+
 	private Gson gson = new Gson();
-	
+
 	@SuppressWarnings("rawtypes")
 	private static Set<Class> inited = new HashSet<>();
 
@@ -65,6 +71,12 @@ public class AbstractRestTest {
 		}
 	}
 
+	/**
+	 * Deve ser sobrescrevido em classes que extendam desta. 
+	 * Irá funcionar um o @Before
+	 * 
+	 * @throws Exception
+	 */
 	protected void doInit() throws Exception {
 	}
 
@@ -77,7 +89,7 @@ public class AbstractRestTest {
 	protected String json(Object o) throws IOException {
 		return mapper.writeValueAsString(o);
 	}
-	
+
 	/**
 	 * 
 	 * @param o
@@ -100,7 +112,9 @@ public class AbstractRestTest {
 		final Conta auth = new Conta();
 		auth.setUsername(username);
 		auth.setSenha(password);
-		return mockMvc.perform(post("/auth/login").content(json(auth)).contentType(MediaType.APPLICATION_JSON));
+		return mockMvc.perform(post("/auth/login")
+				.content(json(auth))
+				.contentType(MediaType.APPLICATION_JSON));
 	}
 
 	/**
@@ -110,16 +124,18 @@ public class AbstractRestTest {
 	 * @throws UnsupportedEncodingException
 	 */
 	protected String extractToken(MvcResult result) throws UnsupportedEncodingException {
-		return JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+		return JsonPath.read(result.getResponse()
+				.getContentAsString(), "$.token");
 	}
-	
+
 	/**
 	 * 
 	 * @param result
 	 * @return header
 	 */
 	protected String extractTokenHeader(MvcResult result) {
-		return result.getResponse().getHeader("Authorization");
+		return result.getResponse()
+				.getHeader("Authorization");
 	}
 
 }

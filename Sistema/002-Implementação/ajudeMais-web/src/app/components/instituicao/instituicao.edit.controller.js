@@ -68,7 +68,9 @@
         vm.getLocation = function (cep) {
             viaCEP.get(cep).then(function (response) {
                 vm.instituicao.endereco = response;
-
+                if (response) {
+                    vm.instituicao.endereco.cep = formatCep(response.cep);
+                }
             });
         }
 
@@ -81,6 +83,19 @@
             vm.instituicao.conta.senha = instituicao.documento;
             vm.instituicao.conta.grupos = ['ROLE_INSTITUICAO'];
             vm.instituicao.conta.ativo = true;
+        }
+
+        /**
+         *
+         * @param cep
+         * @returns {string}
+         */
+        function formatCep(cep) {
+            if (cep) {
+                return cep.replace("-", "");
+            } else {
+                return "";
+            }
         }
     };
 })();

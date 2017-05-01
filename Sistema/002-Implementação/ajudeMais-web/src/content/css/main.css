@@ -25,6 +25,12 @@
     margin-right: -12px;
 }
 
+.am-growl {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: -10px;
+}
+
 /*
  * Componentes: Layout
  * Css do layouts: AdminLTE com modificações

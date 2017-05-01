@@ -9,9 +9,10 @@
    angular.module('amApp').config(function(growlProvider) {
        growlProvider.globalTimeToLive(3000);
        growlProvider.globalDisableCloseButton(true);
-       growlProvider.globalPosition('top-center');
+       //growlProvider.globalPosition('top-center');
        growlProvider.globalDisableCountDown(true);
-       
+       //growlProvider.globalInlineMessages(true);
+
    });
 
 })();
