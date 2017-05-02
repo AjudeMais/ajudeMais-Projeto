@@ -69,7 +69,16 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		return matrix;
 
 	}
-
+	
+	/**
+	 * Recebe a latitude e logintude de um localização e converte em um Objeto do tipo Endereço.
+	 * @param latitude
+	 * @param logitude
+	 * @return
+	 * @throws ApiException
+	 * @throws InterruptedException
+	 * @throws IOException
+	 */
 	public Endereco converteLatitudeAndLongitudeInAddress(double latitude, double logitude)
 			throws ApiException, InterruptedException, IOException {
 
@@ -82,6 +91,11 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 
 	}
 
+	/**
+	 * Recebe o resultado da consulta do google e converte em um objeto Endereço
+	 * @param results
+	 * @return
+	 */
 	private Endereco setResultEnderecoGoogleMaps(GeocodingResult[] results) {
 		endereco = new Endereco();
 
@@ -100,7 +114,7 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 			}
 
 			if (addressComponent.types[0].toString().trim().equals(MAP_ADMINISTRATIVE_AREA_LEVEL_1)) {
-				endereco.setUf(addressComponent.longName);
+				endereco.setUf(addressComponent.shortName);
 			}
 
 			if (addressComponent.types[0].toString().trim().equals(MAP_POSTAL_CODE)) {

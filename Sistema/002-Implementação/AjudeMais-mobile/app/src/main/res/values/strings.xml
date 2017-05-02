@@ -33,6 +33,11 @@
     <string name="msgEmailNotInformed">O e-mail deve ser informado.</string>
     <string name="msgEmailNotValid">E-mail inválido.</string>
     <string name="msgConfirmPasswordNotInformed">A confirmação da senha deve ser informada.</string>
+    <string name="msgPermitionUsingGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a permissão do uso de sua localização</string>
+    <string name="msgPermitionTurnOnGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
+    <string name="permission">Permissão</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 
     <string name="msgInvalidePassword">A senha deve conte no mínimo 6 caracteres.</string>
     <string name="msgInvalideUserName">Nome do usuário deve conte no mínimo 4 caracteres.</string>

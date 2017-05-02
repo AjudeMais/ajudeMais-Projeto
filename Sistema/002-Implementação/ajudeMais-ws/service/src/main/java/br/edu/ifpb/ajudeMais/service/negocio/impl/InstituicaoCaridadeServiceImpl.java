@@ -25,6 +25,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 /**
  * 
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ * Service de instituições de caridade.
  *
  */
 @Service
@@ -120,9 +121,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		Endereco endereco = null;
 
 		try {
-			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(
-					Double.parseDouble(latLng.getLatitude()), Double.parseDouble(latLng.getLongitude()));
-
+			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(), latLng.getLongitude());
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ApiException e) {

@@ -24,6 +24,7 @@ import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
  * Created by Franck Aragão on 4/27/17.
@@ -90,16 +91,18 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         private String message = null;
         private List<InstituicaoCaridade> instituicoesResult;
         private RecyclerItemClickListener.OnItemClickListener clickListener;
+        private SharedPrefManager sharedPrefManager;
 
         public MainSearchInstituicoesFragmentTask(RecyclerItemClickListener.OnItemClickListener clickListener) {
             instituicaoRemoteService = new InstituicaoRemoteService(getContext());
             this.clickListener = clickListener;
+            sharedPrefManager = new SharedPrefManager(getContext());
         }
 
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
-                instituicoesResult = instituicaoRemoteService.getInstituicoes();
+                instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(sharedPrefManager.getLocation());
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
