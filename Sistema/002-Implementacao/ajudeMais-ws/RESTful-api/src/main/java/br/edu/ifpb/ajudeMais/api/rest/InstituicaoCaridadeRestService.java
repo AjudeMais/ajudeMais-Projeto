@@ -63,7 +63,7 @@ public class InstituicaoCaridadeRestService {
 	 * End point para buscar todas as instituições de caridade.
 	 * @return
 	 */
-	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<InstituicaoCaridade>> findAll() {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.findAll();
