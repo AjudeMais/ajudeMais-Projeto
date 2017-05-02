@@ -30,6 +30,7 @@ public class FacebookAccount {
         Profile profile = Profile.getCurrentProfile();
         String facebookId = profile.getId();
         String nome = profile.getName();
+        String username = nome.toLowerCase().trim();
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
@@ -50,6 +51,6 @@ public class FacebookAccount {
         List<String> grupos = new ArrayList<>();
         grupos.add("ROLE_DOADOR");
 
-        return new Doador(nome, facebookId, new Conta(email, grupos));
+        return new Doador(nome, facebookId, new Conta(username, email, grupos));
     }
 }

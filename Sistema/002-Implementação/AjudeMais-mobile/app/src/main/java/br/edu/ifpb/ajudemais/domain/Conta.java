@@ -28,7 +28,8 @@ public class Conta implements Serializable{
         this.senha = senha;
     }
 
-    public Conta(String email, List<String> grupos) {
+    public Conta(String username, String email, List<String> grupos) {
+        this.username = username;
         this.email = email;
         this.grupos = grupos;
     }

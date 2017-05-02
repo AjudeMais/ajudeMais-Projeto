@@ -27,6 +27,7 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
@@ -82,6 +83,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Doador doador = FacebookAccount.userFacebookData(loginResult);
+
+                new CreateAccounTask(doador, getApplicationContext()).execute();
+
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -259,6 +263,81 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             } else {
                 showResult(message);
             }
+        }
+
+    }
+
+    private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
+
+        private String message;
+        private Doador doador;
+        private String password;
+        private DoadorRemoteService doadorRemoteService;
+        private AuthRemoteService authRemoteService;
+
+        public CreateAccounTask(Doador doador, Context context) {
+            this.doador = doador;
+            doadorRemoteService = new DoadorRemoteService(context);
+            authRemoteService = new AuthRemoteService(context);
+        }
+
+        /**
+         *
+         */
+        @Override
+        protected void onPreExecute() {
+            showLoadingProgressDialog();
+
+        }
+
+        /**
+         *
+         * @param params
+         * @return
+         */
+        @Override
+        protected Conta doInBackground(Void... params) {
+
+            try {
+                password = doador.getConta().getSenha();
+                doador = doadorRemoteService.saveDoador(doador);
+                Conta conta = authRemoteService.createAuthenticationToken(
+                        new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+
+                return conta;
+
+            } catch (RestClientException e) {
+                message = e.getMessage();
+                e.printStackTrace();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+
+        /**
+         *
+         * @param conta
+         */
+        @Override
+        protected void onPostExecute(Conta conta) {
+            dismissProgressDialog();
+            if (conta != null) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Conta", conta);
+                startActivity(intent);
+
+                finish();
+
+            } else {
+                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+            }
+
         }
 
     }
