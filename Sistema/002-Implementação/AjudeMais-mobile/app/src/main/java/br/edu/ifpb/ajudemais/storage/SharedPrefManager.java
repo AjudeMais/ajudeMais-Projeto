@@ -7,6 +7,7 @@ import android.util.Log;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Grupo;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
  * Classe utilitaria para armazenamento em preferências do app.
@@ -17,10 +18,13 @@ import br.edu.ifpb.ajudemais.domain.Grupo;
 public class SharedPrefManager {
 
     private static final String SHARED_PREF_NAME = "authPrefs";
+    private static final String SHARED_PREF_LOCATION = "br.edu.ifpb.ajudemais.location";
 
     private static final String KEY_ACCESS_TOKEN = "authToken";
     private static final  String USER_SESSION_USERNAME = "userSessionUsername";
     private static final  String USER_SESSION_MAIL = "userSessionMail";
+    private static final  String LOCATION_LAT = "location_lat";
+    private static final  String LOCATION_LONG = "location_lng";
 
     private static Context context;
 
@@ -79,6 +83,21 @@ public class SharedPrefManager {
     }
 
     /**
+     * Salva a localização do doador
+     * @param latLng
+     * @return
+     */
+    public boolean storeLatLng(LatLng latLng) {
+        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LOCATION_LAT,  Double.toString(latLng.getLatitude()));
+        editor.putString(LOCATION_LONG, Double.toString(latLng.getLongitude()));
+        editor.apply();
+        return true;
+    }
+
+    /**
      * Obtem token
      *
      * @return token salvo nas preferencias do app.
@@ -101,6 +120,21 @@ public class SharedPrefManager {
         conta.setUsername(username);
         conta.setEmail(mail);
         return conta;
+    }
+
+    /**
+     *retorna a última localização salva.
+     * @return
+     */
+    public LatLng getLocation() {
+        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        String lat = sharedPreferences.getString(LOCATION_LAT, null);
+        String lgn = sharedPreferences.getString(LOCATION_LONG, null);
+
+        LatLng latLng = new LatLng();
+        latLng.setLatitude(Double.parseDouble(lat));
+        latLng.setLongitude(Double.parseDouble(lgn));
+        return latLng;
     }
 
     /**

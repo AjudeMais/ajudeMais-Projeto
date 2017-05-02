@@ -94,7 +94,7 @@ public class InstituicaoCaridadeRestService {
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoCoordinates")
-	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(@Valid @RequestBody LatLng latLng) {
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(@RequestBody LatLng latLng) {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCloseForLatAndLng(latLng);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);

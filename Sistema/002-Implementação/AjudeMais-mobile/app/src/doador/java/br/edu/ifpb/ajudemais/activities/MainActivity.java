@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragmentMain;
+import br.edu.ifpb.ajudemais.dto.LatLng;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import me.drakeet.materialdialog.MaterialDialog;
 
 public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener, LocationListener  {
@@ -31,6 +33,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
     private MaterialDialog mMaterialDialog;
+    private SharedPrefManager sharedPrefManager;
     private static final int REQUEST_PERMISSIONS_CODE = 128;
 
 
@@ -42,6 +45,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPrefManager = new SharedPrefManager(this);
 
         callAccessLocation(findViewById(android.R.id.content));
 
@@ -61,8 +65,10 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, MainSearchActivity.class);
+                sharedPrefManager.storeLatLng(readMyCurrentCoordinates());
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -163,7 +169,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     /**
      * Busca minha localização atual utilizandoo GPS.
      */
-    private void readMyCurrentCoordinates() {
+    private LatLng readMyCurrentCoordinates() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         boolean isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -197,7 +203,10 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             }
 
             Log.i("LOCATION","lat:"+latitude+" :log:"+longitude);
+
         }
+        return new LatLng(latitude, longitude);
+
     }
 
     @Override
