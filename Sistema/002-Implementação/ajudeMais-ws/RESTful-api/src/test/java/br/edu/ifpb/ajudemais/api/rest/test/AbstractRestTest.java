@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.api.rest.test;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import java.io.IOException;
@@ -63,22 +64,20 @@ public class AbstractRestTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Before
-	public void init() throws Exception {
-		if (!inited.contains(getClass())) {
-			doInit();
-			inited.add(getClass());
-		}
-	}
+    @Before
+    public void init() throws Exception {
+        if (!inited.contains(getClass())) {
+            doInit();
+            inited.add(getClass());
+        }
+    }
 
-	/**
-	 * Deve ser sobrescrevido em classes que extendam desta. 
-	 * Irá funcionar um o @Before
-	 * 
-	 * @throws Exception
-	 */
-	protected void doInit() throws Exception {
-	}
+    /**
+     * 
+     * @throws Exception
+     */
+    protected void doInit() throws Exception {
+    }
 
 	/**
 	 * 
@@ -116,6 +115,23 @@ public class AbstractRestTest {
 				.content(json(auth))
 				.contentType(MediaType.APPLICATION_JSON));
 	}
+	
+	/**
+	 * Testa uma autenticação passada por parametro e
+	 * cria uma autenticação base para ser usada nos testes;
+	 * 
+	 * @param username
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	protected String getAuth(String username, String password) throws Exception {
+        final String token = extractToken(login(username, password)
+        		.andExpect(jsonPath("$.token").exists())
+        		.andReturn());
+        
+        return token;
+	}
 
 	/**
 	 * 
@@ -124,8 +140,7 @@ public class AbstractRestTest {
 	 * @throws UnsupportedEncodingException
 	 */
 	protected String extractToken(MvcResult result) throws UnsupportedEncodingException {
-		return JsonPath.read(result.getResponse()
-				.getContentAsString(), "$.token");
+		return JsonPath.read(result.getResponse().getContentAsString(), "$.token");
 	}
 
 	/**
@@ -134,8 +149,7 @@ public class AbstractRestTest {
 	 * @return header
 	 */
 	protected String extractTokenHeader(MvcResult result) {
-		return result.getResponse()
-				.getHeader("Authorization");
+		return result.getResponse().getHeader("Authorization");
 	}
 
 }

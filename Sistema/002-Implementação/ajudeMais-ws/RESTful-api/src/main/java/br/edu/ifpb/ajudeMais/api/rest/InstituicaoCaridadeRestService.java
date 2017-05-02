@@ -42,7 +42,7 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<InstituicaoCaridade> save(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade) throws AjudeMaisException {
 		InstituicaoCaridade instituicaoSalva = instituicaoService.save(instituicaoCaridade);
-		return new ResponseEntity<>(instituicaoSalva, HttpStatus.OK);
+		return new ResponseEntity<>(instituicaoSalva, HttpStatus.CREATED);
 	}
 	
 	/**

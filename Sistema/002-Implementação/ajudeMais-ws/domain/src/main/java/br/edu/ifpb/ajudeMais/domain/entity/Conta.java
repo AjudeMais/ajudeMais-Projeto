@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -39,8 +38,8 @@ public class Conta {
 	 */
 	@NotBlank 
 	@NotNull
-	@Size(min=4, max=100)
-	@Column(length=100, nullable=false, unique = true)
+	@Size(min=4, max=30)
+	@Column(length=30, nullable=false, unique = true)
 	private String username;
 
 	/**
@@ -49,7 +48,6 @@ public class Conta {
 	@NotBlank 
 	@NotNull 
 	@Size(min=4, max=100)
-	@Basic(fetch = FetchType.LAZY)
     @Column(length=100, nullable=false)
 	private String senha;
 

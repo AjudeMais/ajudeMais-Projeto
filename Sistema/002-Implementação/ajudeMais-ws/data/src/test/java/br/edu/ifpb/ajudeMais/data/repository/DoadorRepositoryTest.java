@@ -1,6 +1,6 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +17,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 
 /**
@@ -25,23 +26,23 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
  *
  */
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-	TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
+		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @DatabaseSetup("/doador-entries.xml")
 @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/doador-entries.xml" })
 @DirtiesContext
 public class DoadorRepositoryTest {
-	
+
 	@Autowired
 	private DoadorRepository doadorRepository;
-	
+
 	@Test
 	public void findByIdTest() {
-		
+
 		Doador doador = doadorRepository.findOne(1l);
 		assertNotNull(doador);
-		
+
 	}
 
 }

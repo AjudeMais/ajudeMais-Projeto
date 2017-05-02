@@ -49,7 +49,7 @@ public class AuthRestServiceTest extends AbstractRestTest {
 	 * @throws Exception
 	 */
     @Test
-    public void loginNok() throws Exception {
+    public void loginNotOk() throws Exception {
         login("bernadette", "microbiologic")
         .andExpect(status().isUnauthorized());
     }

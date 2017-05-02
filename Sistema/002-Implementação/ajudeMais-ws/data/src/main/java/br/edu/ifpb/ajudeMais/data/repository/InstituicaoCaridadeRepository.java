@@ -24,6 +24,12 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 */
 	Optional<InstituicaoCaridade> findOneByDocumento(String documento);
 	
+	/**
+	 * 
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 */
     public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(@Param("localidade") String localidade, @Param("uf") String uf);
 
 
