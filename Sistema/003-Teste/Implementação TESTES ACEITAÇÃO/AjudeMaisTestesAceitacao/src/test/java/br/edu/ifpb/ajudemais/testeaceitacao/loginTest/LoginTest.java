@@ -73,6 +73,32 @@ public class LoginTest {
 		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.",
 				houveCampoObgSenha && houveCampoObgUsername);
 	}
+	
+	/**
+	 * Faz login sem preencher username
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void fazerLoginSemUsername() throws InterruptedException{
+		loginPage.fazerLogin("dedede", "");
+		
+		boolean houveCampoObgUsername = loginPage.houveErroUsername("Nome do Usuário deve ser informado");
+		
+		assertTrue("A operação devia ter exibido as mensagens informando que o username é obg.",!houveCampoObgUsername);
+	}
+	
+	/**
+	 * Faz login sem preencher campo senha
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void fazerLoginSemSenha() throws InterruptedException{
+		loginPage.fazerLogin("", "dedede");
+		
+		boolean houveCampoObgSenha = loginPage.houveErroSenha("Senha deve ser informada");
+		
+		assertTrue("A operação devia ter exibido as mensagens informando que a senha é obg",!houveCampoObgSenha);
+	}
 
 	/**
 	 * Faz login com login invalido

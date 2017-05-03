@@ -52,7 +52,7 @@ public class LoginPage extends AbstractPage{
 	 * 
 	 */
 	public boolean houveErroUsername(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/form/fieldset/div[1]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/form/fieldset/div[1]/div")).toString().contains(message);
 	}
 	
 	/**
@@ -61,7 +61,7 @@ public class LoginPage extends AbstractPage{
 	 * @return
 	 */
 	public boolean houveErroSenha(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/form/fieldset/div[2]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/form/fieldset/div[2]/div")).toString().contains(message);
 	}
 	
 	
@@ -71,7 +71,7 @@ public class LoginPage extends AbstractPage{
 	 * @return
 	 */
 	public boolean houveLoginInvalido(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/div")).toString().contains(message);
 	}
 	
 

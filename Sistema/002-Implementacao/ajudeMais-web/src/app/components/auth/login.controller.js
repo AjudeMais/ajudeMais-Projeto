@@ -28,6 +28,9 @@
                 if (response.status == 401) {
                     vm.error = "Nome de usuário ou senha inválido";
                 }
+                else {
+                    vm.error = response.msg;
+                }
             });
         };
     };
