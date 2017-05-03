@@ -4,6 +4,9 @@
 /Sistema/003-Teste/Implementação TESTES ACEITAÇÃO/AjudeMaisTestesAceitacao/build/reports
 
 
+/Sistema/002-Implementacao/ajudeMais-ws/RESTful-api/src/main/resources/application-prod.properties
+
+
 ######################
 # Project Specific
 ######################
@@ -158,3 +161,5 @@ Servers
 
 .springBeans
 .tern-project
+
+
