@@ -94,6 +94,7 @@ public class SharedPrefManager {
         editor.putString(LOCATION_LAT,  Double.toString(latLng.getLatitude()));
         editor.putString(LOCATION_LONG, Double.toString(latLng.getLongitude()));
         editor.apply();
+
         return true;
     }
 
