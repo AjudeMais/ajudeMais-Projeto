@@ -14,8 +14,6 @@
 
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--Tela login-->
     <string name="hitCpfNumber">CPF Mensageiro</string>
@@ -36,6 +34,8 @@
     <string name="msgPermitionUsingGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a permissão do uso de sua localização</string>
     <string name="msgPermitionTurnOnGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
     <string name="permission">Permissão</string>
+    <string name="permissionDenied">"Permissão para localização negada."</string>
+
     <string name="yes">Sim</string>
     <string name="no">Não</string>
 

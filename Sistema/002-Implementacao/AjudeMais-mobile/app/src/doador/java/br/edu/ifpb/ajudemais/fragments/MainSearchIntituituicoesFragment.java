@@ -22,6 +22,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.InstituicaoActivity;
 import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
@@ -36,6 +37,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     private static View view;
     private GoogleMap map;
     private List<InstituicaoCaridade> instituicoes;
+    private LatLng latLng;
 
     /**
      *
@@ -102,7 +104,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
-                instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(sharedPrefManager.getLocation());
+                latLng = sharedPrefManager.getLocation();
+                if(latLng != null) {
+                    instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
+
+                }else {
+                    instituicoesResult = instituicaoRemoteService.getInstituicoes();
+                }
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
@@ -115,6 +123,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         @Override
         protected void onPostExecute(List<InstituicaoCaridade> result) {
             if (result != null) {
+
                 instituicoes = result;
                 view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
                 view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
