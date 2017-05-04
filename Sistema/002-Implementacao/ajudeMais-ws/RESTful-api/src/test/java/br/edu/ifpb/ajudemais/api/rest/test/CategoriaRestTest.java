@@ -30,17 +30,17 @@ public class CategoriaRestTest extends AbstractRestTest{
 	protected void doInit() throws Exception {
 			
 		Conta contaAdmin = new Conta();
-		contaAdmin.setUsername("sheldonCupper");
+		contaAdmin.setUsername("sheldonCupper1");
 		contaAdmin.setSenha("bazinga");
 		contaAdmin.setGrupos(Arrays.asList("ROLE_ADMIN"));
-		contaAdmin.setEmail("cupper@gmail.com");
+		contaAdmin.setEmail("cupper1@gmail.com");
 		contaService.save(contaAdmin);
 		
 		Conta contaInst = new Conta();
-		contaInst.setUsername("instituicaoXPTO");
-		contaInst.setSenha("myinst");
+		contaInst.setUsername("instituicaoXPTO1");
+		contaInst.setSenha("myinst1");
 		contaInst.setGrupos(Arrays.asList("ROLE_INSTITUICAO"));
-		contaInst.setEmail("inst@gmail.com");
+		contaInst.setEmail("inst1@gmail.com");
 		contaService.save(contaInst);		
 	}
 	
@@ -55,7 +55,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 
 		mockMvc.perform(post("/categoria")
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", getAuth("instituicaoXPTO", "myinst"))
+				.header("Authorization", getAuth("instituicaoXPTO1", "myinst1"))
 				.content(toJson(categoria)))
 				.andExpect(status().isCreated());
 	}
@@ -68,7 +68,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 	public void createCategoriaNull() throws IOException, Exception {
 		mockMvc.perform(post("/categoria")
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", getAuth("instituicaoXPTO", "myinst"))
+				.header("Authorization", getAuth("instituicaoXPTO1", "myinst1"))
 				.content(toJson(categoria)))
 				.andExpect(status().isBadRequest());
 	}
@@ -83,7 +83,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 		categoria.setNome(null);
 		mockMvc.perform(post("/categoria")
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", getAuth("instituicaoXPTO", "myinst"))
+				.header("Authorization", getAuth("instituicaoXPTO1", "myinst1"))
 				.content(toJson(categoria)))
 				.andExpect(status().isUnprocessableEntity());
 	}
@@ -98,7 +98,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 		categoria.setDescricao(null);
 		mockMvc.perform(post("/categoria")
 				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", getAuth("instituicaoXPTO", "myinst"))
+				.header("Authorization", getAuth("instituicaoXPTO1", "myinst1"))
 				.content(toJson(categoria)))
 				.andExpect(status().isUnprocessableEntity());
 	}
@@ -123,7 +123,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 	@Test
 	public void getCategoriaNotAuthorization() throws IOException, Exception {
        mockMvc.perform(get("/categoria")
-    	.header("Authorization", getAuth("sheldonCupper", "bazinga")))
+    	.header("Authorization", getAuth("sheldonCupper1", "bazinga")))
         .andExpect(status().isForbidden());
 
 	}
@@ -135,7 +135,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 	@Test
 	public void getCategoriasOk() throws IOException, Exception {
         mockMvc.perform(get("/categoria")
-        		.header("Authorization", getAuth("instituicaoXPTO", "myinst")))
+        		.header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
         		.andExpect(status().isOk());
 	}
 	
@@ -148,7 +148,7 @@ public class CategoriaRestTest extends AbstractRestTest{
 	@Test
 	public void findCategoriaIdOk() throws IOException, Exception {
         mockMvc.perform(get("/categoria/100")
-        		.header("Authorization", getAuth("instituicaoXPTO", "myinst")))
+        		.header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
         		.andExpect(status().isOk());
 	}
 	
