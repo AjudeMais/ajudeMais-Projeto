@@ -37,7 +37,7 @@ public class CategoriaRestService {
 	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria) throws AjudeMaisException{
 		
 		Categoria categoriaSalva = categoriaService.save(categoria);
-		return new ResponseEntity<>(categoriaSalva, HttpStatus.OK);
+		return new ResponseEntity<>(categoriaSalva, HttpStatus.CREATED);
 	}
 	/**
 	 * 
