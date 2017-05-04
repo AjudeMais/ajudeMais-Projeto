@@ -19,24 +19,46 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link AuthRestService}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para disponibilização de serviços de autenticações da API.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @RestController
 @RequestMapping("/auth")
 public class AuthRestService {
-	
+
+	/**
+	 * 
+	 */
 	@Autowired
 	private AuthService authService;
-	
+
+	/**
+	 * 
+	 */
 	@Value("${jwt.header}")
 	private String tokenHeader;
 
 	/**
+	 * End ppoint para criar autenticaçao do usuário
 	 * 
 	 * @param conta
+	 * 
 	 * @param device
+	 *            tipo de dispositivo que faz requisição
+	 * 
 	 * @return
+	 * 
 	 * @throws AuthenticationException
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -49,24 +71,31 @@ public class AuthRestService {
 	}
 
 	/**
+	 * Atualiza token de autorização
 	 * 
 	 * @param request
+	 * 
 	 * @return
+	 * 
 	 */
 	@RequestMapping(value = "/atualizar", method = RequestMethod.GET)
 	public ResponseEntity<?> refreshAuthenticationToken(HttpServletRequest request) {
 		String token = request.getHeader(tokenHeader);
 		JwtToken tokenAtualizado = authService.atualizaAutenticacao(new JwtToken(token));
-		
-		if(tokenAtualizado != null){
+
+		if (tokenAtualizado != null) {
 			return ResponseEntity.ok(tokenAtualizado);
-		}else{
+		} else {
 			return new ResponseEntity<Object>("token inválido", HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 	}
-	
+
 	/**
+	 * 
+	 * <p>
+	 * Obtém usuário que faz requisição
+	 * </p>
 	 * 
 	 * @param request
 	 * @return
@@ -78,8 +107,12 @@ public class AuthRestService {
 
 		return ResponseEntity.ok(conta);
 	}
-	
+
 	/**
+	 * 
+	 * <p>
+	 * Verifica se token do usuário está valido.
+	 * </p>
 	 * 
 	 * @param request
 	 * @return
