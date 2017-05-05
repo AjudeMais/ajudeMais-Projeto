@@ -25,18 +25,30 @@ import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException
 /**
  * 
  * <p>
- * <b> RestExceptionHandler </b>
+ * {@link RestExceptionHandler}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para controle de exceções não taradas pela API. Utiliza
+ * {@link ControllerAdvice}
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 @ControllerAdvice(basePackageClasses = { DoadorRestService.class })
 public class RestExceptionHandler {
 
 	/**
+	 * Handler de erro para tratamento de exceções do {@link BeanValidation}
 	 * 
 	 * @param req
+	 * 
 	 * @param manvex
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -60,7 +72,12 @@ public class RestExceptionHandler {
 
 	/**
 	 * 
+	 * <p>
+	 * Tratammento de erro para exceção {@link UniqueConstraintAlreadyException}
+	 * </p>
+	 * 
 	 * @param e
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(UniqueConstraintAlreadyException.class)
@@ -68,10 +85,15 @@ public class RestExceptionHandler {
 	public ResponseEntity<MessageErrorDTO> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
 		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
 	}
-	
+
 	/**
 	 * 
+	 * <p>
+	 * Tratamento para exceção {@link AccessDeniedException}
+	 * </p>
+	 * 
 	 * @param e
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(AccessDeniedException.class)

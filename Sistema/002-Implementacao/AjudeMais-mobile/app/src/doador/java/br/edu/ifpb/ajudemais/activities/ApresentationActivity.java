@@ -11,6 +11,8 @@ import android.view.MenuItem;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+
 import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
@@ -112,7 +114,7 @@ public class ApresentationActivity extends AppCompatActivity {
         @Override
         protected Conta doInBackground(Void... params) {
             try {
-                if (authRemoteService.logged()) {
+                if (authRemoteService.logged() | AccessToken.getCurrentAccessToken() != null) {
 
                         conta = SharedPrefManager.getInstance(context).getUser();
                         return conta;

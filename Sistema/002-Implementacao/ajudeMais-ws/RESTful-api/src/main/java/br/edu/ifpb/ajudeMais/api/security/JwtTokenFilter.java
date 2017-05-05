@@ -1,3 +1,14 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.security;
 
 import java.io.IOException;
@@ -20,17 +31,38 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtTokenUtil;
 
 /**
  * 
+ * <p>
+ * {@link JwtTokenFilter}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementação de verificação de requisições com
+ * cabeçalho de autorização.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private UserDetailsService userDetailsService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	/**
+	 * 
+	 */
 	@Value("${jwt.header}")
 	private String tokenHeader;
 
@@ -40,9 +72,10 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
+		
 		String authToken = request.getHeader(this.tokenHeader);
 		String username = jwtTokenUtil.getUsernameFromToken(authToken);
-		
+
 		if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 			UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
@@ -59,7 +92,16 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		chain.doFilter(request, response);
 
 	}
-	
+
+	/**
+	 * Pega token atualizado
+	 * <p>
+	 * </p>
+	 * 
+	 * @param currentToken
+	 * 
+	 * @return token atualizado
+	 */
 	private String refreshToken(String currentToken) {
 		return jwtTokenUtil.refreshToken(currentToken);
 	}

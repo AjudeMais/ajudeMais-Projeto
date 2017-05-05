@@ -59,7 +59,7 @@ public class InstituicaoCaridade {
 	private Conta conta;
 	
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
 	

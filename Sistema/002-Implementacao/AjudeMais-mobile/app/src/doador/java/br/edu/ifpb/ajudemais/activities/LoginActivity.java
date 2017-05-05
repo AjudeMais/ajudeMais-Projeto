@@ -91,18 +91,18 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         });
 
         callbackManager = CallbackManager.Factory.create();
-        btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email", "phone_number"));
+        btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Doador doador = FacebookAccount.userFacebookData(loginResult);
 
-                new CreateAccounTask(doador, getApplicationContext()).execute();
-
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+
+                new CreateAccounTask(doador, getApplicationContext()).execute();
             }
 
             @Override

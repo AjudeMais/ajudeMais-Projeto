@@ -1,3 +1,14 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.security;
 
 import java.io.IOException;
@@ -12,28 +23,42 @@ import org.springframework.stereotype.Component;
 
 /**
  * 
+ * <p>
+ * {@link JwtTokenFilter}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementação de filtro exceção do JWT para token de segurança.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Component
 public class JwtEntryPoint implements AuthenticationEntryPoint, Serializable {
 
-    private static final long serialVersionUID = -8970718410437077606L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8970718410437077606L;
 
-    /**
-     * 
-     */
-    @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
-    	
-        String message;
-        if(authException.getCause() != null) {
-            message = authException.getCause().getMessage();
-        } else {
-            message = authException.getMessage();
-        }
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
-    }
+	
+	/**
+	 * implementação de método
+	 */
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException authException) throws IOException {
+
+		String message;
+		if (authException.getCause() != null) {
+			message = authException.getCause().getMessage();
+		} else {
+			message = authException.getMessage();
+		}
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, message);
+	}
 }

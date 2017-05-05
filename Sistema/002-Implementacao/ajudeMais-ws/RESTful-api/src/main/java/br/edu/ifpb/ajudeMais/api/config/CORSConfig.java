@@ -1,3 +1,14 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.config;
 
 import org.springframework.context.annotation.Bean;
@@ -9,14 +20,29 @@ import org.springframework.web.filter.CorsFilter;
 /**
  * 
  * <p>
- * <b> CORSConfig </b>
+ * {@link CORSConfig}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para configurar filtros CORS do spring.
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 @Configuration
 public class CORSConfig {
 
+	/**
+	 * 
+	 * <p>
+	 * 
+	 * </p>
+	 * @return
+	 */
 	@Bean
 	public CorsFilter corsFilter() {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
