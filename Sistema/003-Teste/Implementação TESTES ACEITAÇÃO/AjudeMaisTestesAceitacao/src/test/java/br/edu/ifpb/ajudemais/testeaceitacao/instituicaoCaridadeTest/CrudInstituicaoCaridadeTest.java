@@ -302,7 +302,7 @@ public class CrudInstituicaoCaridadeTest {
 				"zefao2002edit@teste.com", "69800-000", "Rua Francisco Coelho", "1709", "Nova Humaitá", "casa");
 
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-				foiEditadoComSucesso && foiCadastradoComSucesso );
+				foiCadastradoComSucesso && foiEditadoComSucesso);
 
 	}
 }
