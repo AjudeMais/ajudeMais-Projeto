@@ -70,12 +70,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private TextView tvEmail;
     private Conta conta;
 
-    private GoogleApiClient mGoogleApiClient;
+    protected GoogleApiClient mGoogleApiClient;
     private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
-    private LocationManager locationManager;
+    protected LocationManager locationManager;
     protected Location mLastLocation;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    protected Context mContext;
 
 
     /**
@@ -87,6 +88,24 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.menuNav);
     }
+
+    /**
+     * Recupera a localização do device
+     * @return
+     */
+    protected Location getLocation() {
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        }
+
+
+
+        return mLastLocation;
+    }
+
 
     /**
      *
@@ -104,7 +123,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Set Action Bar na tela de exibição.
      */
     protected void setUpToggle() {
         setSupportActionBar(mToolbar);
@@ -120,7 +139,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
@@ -150,7 +169,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Set Configuração para Navegation Drawer
      */
     protected void setupNavDrawer() {
         final ActionBar actionBar = getSupportActionBar();
@@ -196,7 +215,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Inicia serviço Google API client
      */
     protected void initGoogleAPIClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(AbstractActivity.this)
@@ -207,7 +226,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Checa se o device pertence ao SDK versão 23 para exibir permissão
      */
     protected void checkPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -223,7 +242,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     * Exibi dialog para ligar GPS no device.
      */
     private void showSettingDialog() {
         LocationRequest locationRequest = LocationRequest.create();
@@ -263,7 +282,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
+     * Requisita permissão para acessar GPS do device.
      */
     private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(AbstractActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -308,13 +327,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     };
 
     /**
-     *
+     * Verifica se GPS está ativado, se não pede para ligar
      */
     private BroadcastReceiver gpsLocationReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            mContext = context;
             if (intent.getAction().matches(BROADCAST_ACTION)) {
                 locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 

@@ -80,6 +80,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         btnOpenApp.setOnClickListener(this);
 
         tvRecoveryPassword.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             *
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -93,6 +98,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         callbackManager = CallbackManager.Factory.create();
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            /**
+             *
+             * @param loginResult
+             */
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Doador doador = FacebookAccount.userFacebookData(loginResult);
@@ -105,6 +115,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 new CreateAccounTask(doador, getApplicationContext()).execute();
             }
 
+            /**
+             *
+             */
             @Override
             public void onCancel() {
                 Toast toast = new Toast(getApplicationContext());
@@ -113,6 +126,10 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 toast.show();
             }
 
+            /**
+             *
+             * @param error
+             */
             @Override
             public void onError(FacebookException error) {
                 Toast toast = new Toast(getApplicationContext());

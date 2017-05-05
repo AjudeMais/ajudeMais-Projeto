@@ -133,13 +133,17 @@ public class SharedPrefManager {
      * @return
      */
     public LatLng getLocation() {
+        LatLng latLng = null;
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
         String lat = sharedPreferences.getString(LOCATION_LAT, null);
         String lgn = sharedPreferences.getString(LOCATION_LONG, null);
 
-        LatLng latLng = new LatLng();
-        latLng.setLatitude(Double.parseDouble(lat));
-        latLng.setLongitude(Double.parseDouble(lgn));
+        if(lat != null && lgn !=null) {
+            latLng = new LatLng();
+            latLng.setLatitude(Double.parseDouble(lat));
+            latLng.setLongitude(Double.parseDouble(lgn));
+        }
+
         return latLng;
     }
 

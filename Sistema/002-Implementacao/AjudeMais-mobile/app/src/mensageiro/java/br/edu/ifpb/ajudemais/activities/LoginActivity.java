@@ -17,6 +17,19 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 
+
+/**
+ * <p>
+ * <b>LoginActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar Login.
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Button btnOpenApp;
@@ -135,6 +148,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     }
 
     /**
+     * Exibi Toast com resultado da operação de acesso ao RESt.
      * @param result
      */
     private void showResult(String result) {
@@ -143,6 +157,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     }
 
 
+    /**
+     * Classe auxiliar para acessar Serviços
+     */
     private class LoginTask extends AsyncTask<Void, Void, Conta> {
 
         private String message = null;
@@ -151,6 +168,12 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private String username;
         private String senha;
 
+        /**
+         *
+         * @param context
+         * @param username
+         * @param senha
+         */
         public LoginTask(Context context, String username, String senha) {
             this.authRemoteService = new AuthRemoteService(context);
             this.username = username;
@@ -158,12 +181,20 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         }
 
+        /**
+         *
+         */
         @Override
         protected void onPreExecute() {
            showLoadingProgressDialog();
 
         }
 
+        /**
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Conta doInBackground(Void... params) {
 
@@ -183,6 +214,10 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             return null;
         }
 
+        /**
+         *
+         * @param conta
+         */
         @Override
         protected void onPostExecute(Conta conta) {
            dismissProgressDialog();

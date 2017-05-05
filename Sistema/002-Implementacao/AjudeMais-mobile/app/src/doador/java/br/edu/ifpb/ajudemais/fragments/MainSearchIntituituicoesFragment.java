@@ -132,6 +132,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
                 latLng = sharedPrefManager.getLocation();
+
                 if(latLng != null) {
                     instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
 

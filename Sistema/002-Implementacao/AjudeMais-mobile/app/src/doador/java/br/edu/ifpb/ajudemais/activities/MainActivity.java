@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 import br.edu.ifpb.ajudemais.R;
@@ -16,17 +15,17 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 
-
 /**
  * <p>
  * <b>MainActivity</b>
  * </p>
  * <p>
- *     Activity para controlar Login.
+ * Activity para controlar Login.
  * <p>
- *
+ * <p>
  * </p>
-  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -65,14 +64,12 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, MainSearchActivity.class);
-
+                mLastLocation = getLocation();
                 if (mLastLocation != null) {
-                    Log.e("ERRO", mLastLocation.toString());
                     sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
                 }
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MainSearchActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -83,14 +80,12 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
 
 
-
     /**
      *
      */
     private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String> {
 
         /**
-         *
          * @param params
          * @return
          */
@@ -100,7 +95,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         }
 
         /**
-         *
          * @param message
          */
         @Override
