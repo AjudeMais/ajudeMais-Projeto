@@ -7,8 +7,19 @@ import android.support.v4.app.FragmentTransaction;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragmentMainSearch;
 
+
 /**
- * @author Franck Aragão
+ * <p>
+ * <b>MainSearchActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar tela de consultas para doação.
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+
  */
 public class MainSearchActivity extends AbstractAsyncActivity {
 
@@ -16,7 +27,10 @@ public class MainSearchActivity extends AbstractAsyncActivity {
     private FragmentTransaction mFragmentTransaction;
 
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

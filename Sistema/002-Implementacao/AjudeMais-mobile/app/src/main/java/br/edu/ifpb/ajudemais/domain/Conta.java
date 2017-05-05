@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by rafaelfeitosa on 10/04/17.
- * Classe que representa um Doador no sistema.
+ * <p>
+ * <b>Conta</b>
+ * </p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 public class Conta implements Serializable{
 
     private Long id;
@@ -17,23 +20,49 @@ public class Conta implements Serializable{
     private String email;
     private List<String> grupos;
 
+    /**
+     *
+     */
     public Conta(){}
 
+    /**
+     *
+     * @param email
+     */
     public Conta(String email) {
         this.email = email;
     }
 
+    /**
+     *
+     * @param username
+     * @param senha
+     */
     public Conta(String username, String senha) {
         this.username = username;
         this.senha = senha;
     }
 
+    /**
+     *
+     * @param username
+     * @param email
+     * @param grupos
+     */
     public Conta(String username, String email, List<String> grupos) {
         this.username = username;
         this.email = email;
         this.grupos = grupos;
     }
 
+    /**
+     *
+     * @param username
+     * @param senha
+     * @param ativo
+     * @param email
+     * @param grupos
+     */
     public Conta(String username, String senha, boolean ativo, String email, List<String> grupos) {
         this.username = username;
         this.senha = senha;
@@ -139,6 +168,10 @@ public class Conta implements Serializable{
         this.email = email;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Conta{" +

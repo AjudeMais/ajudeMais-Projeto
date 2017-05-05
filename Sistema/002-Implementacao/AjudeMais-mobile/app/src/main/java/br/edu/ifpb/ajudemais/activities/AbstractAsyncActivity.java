@@ -6,12 +6,17 @@ import android.support.v7.app.AppCompatActivity;
 import br.edu.ifpb.ajudemais.R;
 
 /**
- * Created by rafaelfeitosa on 12/04/17.
- * Créditos:
- * @author Roy Clarkson
- * @author Pierre-Yves Ricau
+ * <p>
+ * <b>AbstractActivity</b>
+ * </p>
+ * <p>
+ *     Activity base para reaproveitar métodos
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class AbstractAsyncActivity extends AppCompatActivity implements AsyncActivity {
 
     protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();

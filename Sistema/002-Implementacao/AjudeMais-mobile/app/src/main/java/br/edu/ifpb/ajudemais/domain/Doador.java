@@ -3,10 +3,13 @@ package br.edu.ifpb.ajudemais.domain;
 import java.io.Serializable;
 
 /**
- * Created by rafaelfeitosa on 10/04/17.
- * Classe que representa um doador no Sistema.
+ * <p>
+ * <b>Doador</b>
+ * </p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 public class Doador implements Serializable{
 
     private Long id;
@@ -17,8 +20,19 @@ public class Doador implements Serializable{
     private Conta conta;
     private Foto foto;
 
+    /**
+     *
+     */
     public Doador(){}
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param facebookID
+     * @param tokenFCM
+     * @param conta
+     */
     public Doador(String nome, String telefone, String facebookID, String tokenFCM, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
@@ -27,6 +41,13 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param facebookID
+     * @param conta
+     */
     public Doador(String nome, String telefone, String facebookID, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
@@ -34,6 +55,12 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param conta
+     */
     public Doador(String nome, String telefone, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;

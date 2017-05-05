@@ -11,9 +11,16 @@ import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
- * Classe que fornece serviços relacionados a autenticação do usuário no app.
+ * <p>
+ * <b>{@link AuthRemoteService}</b>
+ * </p>
+ * <p>
+ * <p>
+ * Handler ReponseError Spring
+ * </p>
  *
- * @author Rafael / Franck
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * @author <a href="https://github.com/franckaj">Franck Aragão</a>
  */
 
 public class AuthRemoteService extends AbstractRemoteService {
@@ -39,6 +46,7 @@ public class AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
+     * recupera a conta do usuário com base no grupo e token de acesso.
      * @return
      */
     public Conta getUser(Grupo grupo) {
@@ -53,6 +61,7 @@ public class AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
+     * Verifica se conta está autorizada.
      * @return
      */
     public Boolean isAuth() {
@@ -65,6 +74,7 @@ public class AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
+     * Verificar Se usuário já está logado
      * @return
      */
     public boolean logged() {
@@ -80,7 +90,7 @@ public class AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
-     *
+     *Guada token de acesso.
      * @param token
      */
     private void storageToken(String token) {
@@ -88,7 +98,7 @@ public class AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
-     *
+     *Valida se usário possível acesso ao app.
      * @param conta
      * @param grupo
      */

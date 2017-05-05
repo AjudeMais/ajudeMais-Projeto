@@ -12,7 +12,6 @@ package br.edu.ifpb.ajudemais.domain;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-
 public class Mensageiro {
 
     private Long id;

@@ -15,11 +15,11 @@ import br.edu.ifpb.ajudemais.TabFragment;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais</b>
+ * <b>MainActivity</b>
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ *  Activity inicial para Mensageiro
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
@@ -30,6 +30,10 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,9 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
     }
 
+    /**
+     *Classe auxiliar para acessar Serviços
+     */
     private class LoadingColetasTask extends AsyncTask<Void, Void, String> {
 
         @Override

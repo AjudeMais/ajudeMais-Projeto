@@ -22,9 +22,17 @@ import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
+
 /**
- * Created by rafaelfeitosa on 10/04/17.
+ * <p>
+ * <b>{@link DoadorRemoteService}</b>
+ * </p>
+ * <p>
+ * <p>
  * Faz comunicação com API RestFul para os serviços relacionandos a doador.
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
 public class DoadorRemoteService extends AbstractRemoteService{

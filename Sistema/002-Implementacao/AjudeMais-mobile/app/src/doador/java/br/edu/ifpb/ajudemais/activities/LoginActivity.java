@@ -30,6 +30,19 @@ import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
+
+/**
+ * <p>
+ * <b>LoginActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar Login.
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Button btnCreateAccount;
@@ -67,6 +80,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         btnOpenApp.setOnClickListener(this);
 
         tvRecoveryPassword.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             *
+             * @param v
+             */
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -80,6 +98,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         callbackManager = CallbackManager.Factory.create();
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            /**
+             *
+             * @param loginResult
+             */
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Doador doador = FacebookAccount.userFacebookData(loginResult);
@@ -92,6 +115,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 new CreateAccounTask(doador, getApplicationContext()).execute();
             }
 
+            /**
+             *
+             */
             @Override
             public void onCancel() {
                 Toast toast = new Toast(getApplicationContext());
@@ -100,6 +126,10 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 toast.show();
             }
 
+            /**
+             *
+             * @param error
+             */
             @Override
             public void onError(FacebookException error) {
                 Toast toast = new Toast(getApplicationContext());
@@ -204,6 +234,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
     }
 
+    /**
+     * Classe para carregar recursos da api REST.
+     */
     private class LoginTask extends AsyncTask<Void, Void, Conta> {
 
         private String message = null;
@@ -222,12 +255,20 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         }
 
+        /**
+         *
+         */
         @Override
         protected void onPreExecute() {
             showLoadingProgressDialog();
 
         }
 
+        /**
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected Conta doInBackground(Void... params) {
 
@@ -247,6 +288,10 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             return null;
         }
 
+        /**
+         *
+         * @param conta
+         */
         @Override
         protected void onPostExecute(Conta conta) {
             dismissProgressDialog();
@@ -267,6 +312,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
     }
 
+    /**
+     *
+     */
     private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
 
         private String message;

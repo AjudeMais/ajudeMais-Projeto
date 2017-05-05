@@ -22,8 +22,17 @@ import br.edu.ifpb.ajudemais.R;
 
 /**
  * Created by rafaelfeitosa on 07/04/17.
- * Créditos <https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2>
  */
+
+/**
+ * <p>
+ * <b>br.edu.ifpb.ajudemais.utils</b>
+ * </p>
+ *  Créditos <https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2>
+
+ * <p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>**/
 
 public class ImagePicker {
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
@@ -32,6 +41,11 @@ public class ImagePicker {
     public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
 
 
+    /**
+     * Abri modal para selecionar opção para fazer mudar foto profile.
+     * @param context
+     * @return
+     */
     public static Intent getPickImageIntent(Context context) {
         Intent chooserIntent = null;
 
@@ -55,6 +69,13 @@ public class ImagePicker {
         return chooserIntent;
     }
 
+    /**
+     *
+     * @param context
+     * @param list
+     * @param intent
+     * @return
+     */
     private static List<Intent> addIntentsToList(Context context, List<Intent> list, Intent intent) {
         List<ResolveInfo> resInfo = context.getPackageManager().queryIntentActivities(intent, 0);
         for (ResolveInfo resolveInfo : resInfo) {
@@ -68,6 +89,13 @@ public class ImagePicker {
     }
 
 
+    /**
+     * Get result form Image Bitmap.
+     * @param context
+     * @param resultCode
+     * @param imageReturnedIntent
+     * @return
+     */
     public static Bitmap getImageFromResult(Context context, int resultCode,
                                             Intent imageReturnedIntent) {
         Log.d(TAG, "getImageFromResult, resultCode: " + resultCode);
@@ -93,12 +121,25 @@ public class ImagePicker {
     }
 
 
+    /**
+     * Get file save.
+     * @param context
+     * @return
+     */
     private static File getTempFile(Context context) {
         File imageFile = new File(context.getExternalCacheDir(), TEMP_IMAGE_NAME);
         imageFile.getParentFile().mkdirs();
         return imageFile;
     }
 
+
+    /**
+     *
+     * @param context
+     * @param theUri
+     * @param sampleSize
+     * @return
+     */
     private static Bitmap decodeBitmap(Context context, Uri theUri, int sampleSize) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = sampleSize;
@@ -135,6 +176,13 @@ public class ImagePicker {
     }
 
 
+    /**
+     *
+     * @param context
+     * @param imageUri
+     * @param isCamera
+     * @return
+     */
     private static int getRotation(Context context, Uri imageUri, boolean isCamera) {
         int rotation;
         if (isCamera) {
@@ -146,6 +194,12 @@ public class ImagePicker {
         return rotation;
     }
 
+    /**
+     *
+     * @param context
+     * @param imageFile
+     * @return
+     */
     private static int getRotationFromCamera(Context context, Uri imageFile) {
         int rotate = 0;
         try {
@@ -173,6 +227,13 @@ public class ImagePicker {
         return rotate;
     }
 
+
+    /**
+     *
+     * @param context
+     * @param imageUri
+     * @return
+     */
     public static int getRotationFromGallery(Context context, Uri imageUri) {
         int result = 0;
         String[] columns = {MediaStore.Images.Media.ORIENTATION};
@@ -194,6 +255,12 @@ public class ImagePicker {
     }
 
 
+    /**
+     *
+     * @param bm
+     * @param rotation
+     * @return
+     */
     private static Bitmap rotate(Bitmap bm, int rotation) {
         if (rotation != 0) {
             Matrix matrix = new Matrix();

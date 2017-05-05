@@ -3,9 +3,13 @@ package br.edu.ifpb.ajudemais.domain;
 import java.io.Serializable;
 
 /**
- * Created by Franck Aragão on 4/27/17.
+ * <p>
+ * <b>Endereco</b>
+ * </p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 public class Endereco implements Serializable{
 
     private Long id;

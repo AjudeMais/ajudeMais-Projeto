@@ -16,11 +16,19 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
-
 /**
- * Created by Franck Aragão on 4/29/17.
- */
+ * <p>
+ * <b>InstituicaoDetailFragment</b>
+ * </p>
+ * <p>
+ *     InstituicaoDetailFragment para lista de instituições
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
 
+ */
 public class InstituicaoDetailFragment extends Fragment {
 
     private static RecyclerView recyclerView;
@@ -31,6 +39,13 @@ public class InstituicaoDetailFragment extends Fragment {
     private CardView cardViewEmail;
     private InstituicaoCaridade instituicaoCaridade;
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +57,11 @@ public class InstituicaoDetailFragment extends Fragment {
         return v;
     }
 
+    /**
+     *
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -54,6 +74,9 @@ public class InstituicaoDetailFragment extends Fragment {
 
     }
 
+    /**
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();

@@ -16,9 +16,16 @@ import java.util.Arrays;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
- * Created by Franck on 4/22/17.
+ * <p>
+ * <b>RequestResponseInterceptor</b>
+ * </p>
+ * <p>
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class RequestResponseInterceptor implements ClientHttpRequestInterceptor {
 
     private Context context;

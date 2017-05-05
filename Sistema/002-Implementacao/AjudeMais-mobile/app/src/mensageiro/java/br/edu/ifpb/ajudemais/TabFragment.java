@@ -14,6 +14,13 @@ import android.view.ViewGroup;
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
 
+/**
+ * <p>
+ * <b>TabFragment</b>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class TabFragment extends Fragment {
 
     public static TabLayout tabLayout;
@@ -51,6 +58,9 @@ public class TabFragment extends Fragment {
 
     }
 
+    /**
+     *
+     */
     class MyAdapter extends FragmentPagerAdapter {
 
         public MyAdapter(FragmentManager fm) {
@@ -60,7 +70,6 @@ public class TabFragment extends Fragment {
         /**
          * Return fragment with respect to Position .
          */
-
         @Override
         public Fragment getItem(int position)
         {
@@ -71,6 +80,10 @@ public class TabFragment extends Fragment {
             return null;
         }
 
+        /**
+         *
+         * @return
+         */
         @Override
         public int getCount() {
 

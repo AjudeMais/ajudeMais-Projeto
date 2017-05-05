@@ -149,7 +149,6 @@ public class CrudInstituicaoCaridadeTest {
 
 			boolean docJaEstaSendoUtilizado = createInstituicaoCaridadePage.houveUmErrorCampoInformadoJaExiste("CPF/CNPJ já esta sendo usado");
 			
-			System.out.println(docJaEstaSendoUtilizado);
 			assertTrue("Deveria de sido cadastrada um instituição no cadastro da outra ser exibido uma msg com Documento já em uso",
 					instituicaoCadastradaComSucesso && docJaEstaSendoUtilizado);
 
@@ -303,7 +302,7 @@ public class CrudInstituicaoCaridadeTest {
 				"zefao2002edit@teste.com", "69800-000", "Rua Francisco Coelho", "1709", "Nova Humaitá", "casa");
 
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-				foiEditadoComSucesso && foiCadastradoComSucesso );
+				foiCadastradoComSucesso && foiEditadoComSucesso);
 
 	}
 }

@@ -14,7 +14,17 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 
 /**
- * Created by Franck Aragão on 4/27/17.
+ * <p>
+ * <b>InstituicoesAdapter</b>
+ * </p>
+ * <p>
+ *     Adapter para lista de instituições
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+
  */
 public class InstituicoesAdapter extends RecyclerView.Adapter<InstituicoesAdapter.ViewHolder>{
 

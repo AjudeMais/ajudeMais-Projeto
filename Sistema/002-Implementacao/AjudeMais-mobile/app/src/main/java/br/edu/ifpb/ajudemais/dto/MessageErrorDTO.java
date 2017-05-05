@@ -1,9 +1,16 @@
 package br.edu.ifpb.ajudemais.dto;
 
 /**
- * Created by Franck Aragão on 4/27/17.
+ * <p>
+ * <b>MessageErrorDTO</b>
+ * </p>
+ * <p>
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class MessageErrorDTO {
 
     private String msg;

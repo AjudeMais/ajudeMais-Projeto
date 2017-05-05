@@ -26,7 +26,18 @@ import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 
 /**
- * Created by Rafael / Franck
+ * <p>
+ * <b>CreateAccountActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar Conta Usuário.
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a> and
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+
  */
 public class CreateAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -237,6 +248,9 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     }
 
 
+    /**
+     * Carrega recursos da API REST.
+     */
     private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
 
         private String message;

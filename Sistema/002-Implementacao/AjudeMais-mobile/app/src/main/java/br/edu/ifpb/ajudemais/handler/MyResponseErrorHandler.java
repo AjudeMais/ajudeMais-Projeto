@@ -34,11 +34,22 @@ public class MyResponseErrorHandler implements ResponseErrorHandler {
 
     private ResponseErrorHandler myErrorHandler = new DefaultResponseErrorHandler();
 
+    /**
+     *
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @Override
    public boolean hasError(ClientHttpResponse response) throws IOException {
         return myErrorHandler.hasError(response);
     }
 
+    /**
+     *
+     * @param response
+     * @throws IOException
+     */
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
         String body = IOUtils.toString(response.getBody()).replace("[", "").replace("]", "");

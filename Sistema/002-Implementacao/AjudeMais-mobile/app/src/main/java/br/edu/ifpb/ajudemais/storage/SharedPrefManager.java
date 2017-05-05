@@ -2,29 +2,34 @@ package br.edu.ifpb.ajudemais.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.Settings;
 import android.util.Log;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
- * Classe utilitaria para armazenamento em preferências do app.
- *
- * Created by Franck Aragão
- */
+ * <p>
+ * <b>SharedPrefManager</b>
+ * </p>
+ *  Classe utilitaria para armazenamento em preferências do app.
 
+ * <p>
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ */
 public class SharedPrefManager {
 
     private static final String SHARED_PREF_NAME = "authPrefs";
     private static final String SHARED_PREF_LOCATION = "br.edu.ifpb.ajudemais.location";
 
     private static final String KEY_ACCESS_TOKEN = "authToken";
-    private static final  String USER_SESSION_USERNAME = "userSessionUsername";
-    private static final  String USER_SESSION_MAIL = "userSessionMail";
-    private static final  String LOCATION_LAT = "location_lat";
-    private static final  String LOCATION_LONG = "location_lng";
+    private static final String USER_SESSION_USERNAME = "userSessionUsername";
+    private static final String USER_SESSION_MAIL = "userSessionMail";
+    private static final String LOCATION_LAT = "location_lat";
+    private static final String LOCATION_LONG = "location_lng";
 
     private static Context context;
 
@@ -35,7 +40,7 @@ public class SharedPrefManager {
      *
      * @param context
      */
-    public SharedPrefManager(Context context){
+    public SharedPrefManager(Context context) {
         this.context = context;
     }
 
@@ -44,8 +49,8 @@ public class SharedPrefManager {
      * @param context
      * @return
      */
-    public static  synchronized SharedPrefManager getInstance(Context context) {
-        if(instance == null)
+    public static synchronized SharedPrefManager getInstance(Context context) {
+        if (instance == null)
             instance = new SharedPrefManager(context);
         return instance;
 
@@ -67,7 +72,7 @@ public class SharedPrefManager {
     }
 
     /**
-     *
+     *Guarda  a conta de acesso do usuário para o mesmo não precisar inserir suas credencias novamente
      * @param conta
      * @return
      */
@@ -91,7 +96,7 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(LOCATION_LAT,  Double.toString(latLng.getLatitude()));
+        editor.putString(LOCATION_LAT, Double.toString(latLng.getLatitude()));
         editor.putString(LOCATION_LONG, Double.toString(latLng.getLongitude()));
         editor.apply();
 
@@ -109,7 +114,7 @@ public class SharedPrefManager {
     }
 
     /**
-     *
+     *Recupera Usuário.
      * @return
      */
     public Conta getUser() {
@@ -128,18 +133,22 @@ public class SharedPrefManager {
      * @return
      */
     public LatLng getLocation() {
+        LatLng latLng = null;
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
         String lat = sharedPreferences.getString(LOCATION_LAT, null);
         String lgn = sharedPreferences.getString(LOCATION_LONG, null);
 
-        LatLng latLng = new LatLng();
-        latLng.setLatitude(Double.parseDouble(lat));
-        latLng.setLongitude(Double.parseDouble(lgn));
+        if(lat != null && lgn !=null) {
+            latLng = new LatLng();
+            latLng.setLatitude(Double.parseDouble(lat));
+            latLng.setLongitude(Double.parseDouble(lgn));
+        }
+
         return latLng;
     }
 
     /**
-     *
+     *Limpa dados armazenados da conta do usuário no device.
      */
     public void clearSharedPrefs() {
         SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);

@@ -7,6 +7,18 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+/**
+ * <p>
+ * <b>RecyclerItemClickListener</b>
+ * </p>
+ * <p>
+ *  implementação para o RecyclerItemClickListener
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ */
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
 
     protected OnItemClickListener listener;
@@ -18,11 +30,22 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     private int childViewPosition;
 
+    /**
+     *
+     * @param context
+     * @param listener
+     */
     public RecyclerItemClickListener(Context context, OnItemClickListener listener) {
         this.gestureDetector = new GestureDetector(context, new GestureListener());
         this.listener = listener;
     }
 
+    /**
+     *
+     * @param view
+     * @param event
+     * @return
+     */
     @Override
     public boolean onInterceptTouchEvent(RecyclerView view, MotionEvent event) {
         childView = view.findChildViewUnder(event.getX(), event.getY());
@@ -31,11 +54,20 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
         return childView != null && gestureDetector.onTouchEvent(event);
     }
 
+    /**
+     *
+     * @param view
+     * @param event
+     */
     @Override
     public void onTouchEvent(RecyclerView view, MotionEvent event) {
         // Not needed.
     }
 
+    /**
+     *
+     * @param disallowIntercept
+     */
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
@@ -92,8 +124,16 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     }
 
+    /**
+     *
+     */
     protected class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
+        /**
+         *
+         * @param event
+         * @return
+         */
         @Override
         public boolean onSingleTapUp(MotionEvent event) {
             if (childView != null) {
@@ -103,6 +143,10 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
             return true;
         }
 
+        /**
+         *
+         * @param event
+         */
         @Override
         public void onLongPress(MotionEvent event) {
             if (childView != null) {
@@ -110,10 +154,14 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
             }
         }
 
+        /**
+         *
+         * @param event
+         * @return
+         */
         @Override
         public boolean onDown(MotionEvent event) {
-            // Best practice to always return true here.
-            // http://developer.android.com/training/gestures/detector.html#detect
+
             return true;
         }
 
