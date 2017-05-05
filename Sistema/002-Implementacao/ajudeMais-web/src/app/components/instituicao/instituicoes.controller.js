@@ -52,4 +52,5 @@
             $state.go("home.instituicaoDetail", {instituicaoDetail: JSON.stringify(instituicao)});
         }
     }
+
 })();

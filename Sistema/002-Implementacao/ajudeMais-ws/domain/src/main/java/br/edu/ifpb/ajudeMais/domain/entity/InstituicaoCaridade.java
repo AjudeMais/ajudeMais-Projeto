@@ -1,3 +1,14 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
@@ -20,32 +31,58 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 
+ * <p>
+ * {@link InstituicaoCaridade}
+ * </p>
+ * 
+ * <p>
+ * Classe representa a entidade de négocio Instituição de caridade.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Entity
 @Table(name = "intituicao_caridade")
 @NamedQueries({
-@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf")})
+		@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf") })
 
 public class InstituicaoCaridade {
 
+	/**
+	 * 
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
+	/**
+	 * 
+	 */
 	@Size(min = 2, max = 100)
 	@NotNull
 	@NotBlank(message = "nome deve ser informado")
 	private String nome;
-	
+
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank(message = "A descrição deve ser informado")
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String descricao;
 
+	/**
+	 * 
+	 */
 	private String telefone;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank(message = "CPF/CNPJ deve ser informando")
 	private String documento;
@@ -54,120 +91,138 @@ public class InstituicaoCaridade {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Endereco endereco;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
-	
 
+	/**
+	 * 
+	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
-	
 
 	/**
-	 * @return the id
+	 * @return o atributo id
 	 */
 	public Long getId() {
 		return id;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param o
+	 *            parametro id é setado em id
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return the nome
+	 * @return o atributo nome
 	 */
 	public String getNome() {
 		return nome;
 	}
 
 	/**
-	 * @param nome
-	 *            the nome to set
+	 * @param o
+	 *            parametro nome é setado em nome
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	/**
-	 * @return the telefone
-	 */
-	public String getTelefone() {
-		return telefone;
-	}
-
-	/**
-	 * @param telefone
-	 *            the telefone to set
-	 */
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-	/**
-	 * @return the documento
-	 */
-	public String getDocumento() {
-		return documento;
-	}
-
-	/**
-	 * @param documento
-	 *            the documento to set
-	 */
-	public void setDocumento(String documento) {
-		this.documento = documento;
-	}
-
-	/**
-	 * @return the endereco
-	 */
-	public Endereco getEndereco() {
-		return endereco;
-	}
-
-	/**
-	 * @param endereco
-	 *            the endereco to set
-	 */
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
-	}
-
-	/**
-	 * @return the conta
-	 */
-	public Conta getConta() {
-		return conta;
-	}
-
-	/**
-	 * @param conta
-	 *            the conta to set
-	 */
-	public void setConta(Conta conta) {
-		this.conta = conta;
-	}
-	
-	
-
-	/**
-	 * @return the descricao
+	 * @return o atributo descricao
 	 */
 	public String getDescricao() {
 		return descricao;
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param o
+	 *            parametro descricao é setado em descricao
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+
+	/**
+	 * @return o atributo telefone
+	 */
+	public String getTelefone() {
+		return telefone;
+	}
+
+	/**
+	 * @param o
+	 *            parametro telefone é setado em telefone
+	 */
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+
+	/**
+	 * @return o atributo documento
+	 */
+	public String getDocumento() {
+		return documento;
+	}
+
+	/**
+	 * @param o
+	 *            parametro documento é setado em documento
+	 */
+	public void setDocumento(String documento) {
+		this.documento = documento;
+	}
+
+	/**
+	 * @return o atributo endereco
+	 */
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	/**
+	 * @param o
+	 *            parametro endereco é setado em endereco
+	 */
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	/**
+	 * @return o atributo conta
+	 */
+	public Conta getConta() {
+		return conta;
+	}
+
+	/**
+	 * @param o
+	 *            parametro conta é setado em conta
+	 */
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
+	/**
+	 * @return o atributo itensDoaveis
+	 */
+	public List<Categoria> getItensDoaveis() {
+		return itensDoaveis;
+	}
+
+	/**
+	 * @param o
+	 *            parametro itensDoaveis é setado em itensDoaveis
+	 */
+	public void setItensDoaveis(List<Categoria> itensDoaveis) {
+		this.itensDoaveis = itensDoaveis;
 	}
 
 	/*

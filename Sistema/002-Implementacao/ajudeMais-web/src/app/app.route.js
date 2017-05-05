@@ -76,6 +76,15 @@
                 data: {
                     pageTitle: 'Detalhes de Instituição'
                 }
+            })
+            .state('home.categoria', {
+                url: "/categoria",
+                templateUrl: "app/components/categoria/categorias.html",
+                controller: "CategoriaController",
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Itens Doáveis'
+                }
             });
     });
 })();

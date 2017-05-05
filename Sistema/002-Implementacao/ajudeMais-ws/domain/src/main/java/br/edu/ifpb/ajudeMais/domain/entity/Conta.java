@@ -1,3 +1,15 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
@@ -16,39 +28,42 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * <p>
- * <b> Doador </b>
+ * <b> {@link Conta} </b>
  * </p>
  *
  * <p>
  * Entidade que representa a conta de usuário no sistema.
  * </p>
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
- * And <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a> And
+ *         <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  *
  */
 @Entity
 public class Conta {
 
+	/**
+	 * 
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 	/**
 	 * 	
 	 */
-	@NotBlank 
+	@NotBlank
 	@NotNull
-	@Size(min=4, max=30)
-	@Column(length=30, nullable=false, unique = true)
+	@Size(min = 4, max = 30)
+	@Column(length = 30, nullable = false, unique = true)
 	private String username;
 
 	/**
 	 * 
 	 */
-	@NotBlank 
-	@NotNull 
-	@Size(min=4, max=100)
-    @Column(length=100, nullable=false)
+	@NotBlank
+	@NotNull
+	@Size(min = 4, max = 100)
+	@Column(length = 100, nullable = false)
 	private String senha;
 
 	/**
@@ -61,7 +76,7 @@ public class Conta {
 	 * 
 	 */
 	private boolean ativo;
-	
+
 	/**
 	 * 
 	 */
@@ -76,7 +91,8 @@ public class Conta {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -90,7 +106,8 @@ public class Conta {
 	}
 
 	/**
-	 * @param username the username to set
+	 * @param username
+	 *            the username to set
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -104,7 +121,8 @@ public class Conta {
 	}
 
 	/**
-	 * @param senha the senha to set
+	 * @param senha
+	 *            the senha to set
 	 */
 	public void setSenha(String senha) {
 		this.senha = senha;
@@ -118,7 +136,8 @@ public class Conta {
 	}
 
 	/**
-	 * @param grupos the grupos to set
+	 * @param grupos
+	 *            the grupos to set
 	 */
 	public void setGrupos(List<String> grupos) {
 		this.grupos = grupos;
@@ -132,12 +151,12 @@ public class Conta {
 	}
 
 	/**
-	 * @param ativo the ativo to set
+	 * @param ativo
+	 *            the ativo to set
 	 */
 	public void setAtivo(boolean ativo) {
 		this.ativo = ativo;
 	}
-
 
 	/**
 	 * @return the email
@@ -147,13 +166,16 @@ public class Conta {
 	}
 
 	/**
-	 * @param email the email to set
+	 * @param email
+	 *            the email to set
 	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -161,7 +183,5 @@ public class Conta {
 		return "Conta [id=" + id + ", username=" + username + ", senha=" + senha + ", grupos=" + grupos + ", ativo="
 				+ ativo + ", email=" + email + "]";
 	}
-	
-	
-	
+
 }

@@ -1,3 +1,15 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import javax.persistence.Column;
@@ -21,6 +33,9 @@ import javax.persistence.Transient;
 @Entity
 public class Foto {
 
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "id", unique = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -31,8 +46,14 @@ public class Foto {
 	 */
 	private String nome;
 
+	/**
+	 * 
+	 */
 	private String pathFoto;
 
+	/**
+	 * 
+	 */
 	@Transient
 	private byte[] imagem;
 
