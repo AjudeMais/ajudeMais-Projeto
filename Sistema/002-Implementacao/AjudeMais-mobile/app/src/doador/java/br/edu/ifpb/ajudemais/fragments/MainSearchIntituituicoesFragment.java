@@ -28,7 +28,16 @@ import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
- * Created by Franck Aragão on 4/27/17.
+ * <p>
+ * <b>MainSearchIntituituicoesFragment</b>
+ * </p>
+ * <p>
+ *     MainSearchIntituituicoesFragment para pesquisa de formas de doar
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
@@ -63,12 +72,20 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         return view;
     }
 
+    /**
+     *
+     */
     @Override
     public void onStart() {
         super.onStart();
         new MainSearchInstituicoesFragmentTask(this).execute();
     }
 
+    /**
+     *
+     * @param childView View of the item that was clicked.
+     * @param position  Position of the item that was clicked.
+     */
     @Override
     public void onItemClick(View childView, int position) {
         InstituicaoCaridade instituicaoCaridade = instituicoes.get(position);
@@ -79,6 +96,11 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     }
 
+    /**
+     *
+     * @param childView View of the item that was long pressed.
+     * @param position  Position of the item that was long pressed.
+     */
     @Override
     public void onItemLongPress(View childView, int position) {
 
@@ -101,6 +123,11 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             sharedPrefManager = new SharedPrefManager(getContext());
         }
 
+        /**
+         *
+         * @param voids
+         * @return
+         */
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
@@ -120,6 +147,10 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             return instituicoesResult;
         }
 
+        /**
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(List<InstituicaoCaridade> result) {
             if (result != null) {

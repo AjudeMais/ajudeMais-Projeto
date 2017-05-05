@@ -15,6 +15,20 @@ import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
+
+
+/**
+ * <p>
+ * <b>MainActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar Login.
+ * <p>
+ *
+ * </p>
+  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FragmentManager mFragmentManager;
@@ -75,11 +89,20 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
      */
     private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String> {
 
+        /**
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(Void... params) {
             return null;
         }
 
+        /**
+         *
+         * @param message
+         */
         @Override
         protected void onPostExecute(String message) {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);

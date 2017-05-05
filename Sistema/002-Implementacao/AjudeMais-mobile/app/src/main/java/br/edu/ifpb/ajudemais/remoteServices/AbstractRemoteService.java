@@ -13,9 +13,16 @@ import br.edu.ifpb.ajudemais.filter.RequestResponseInterceptor;
 import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
 
 /**
- * Created by Franck on 4/22/17.
+ * <p>
+ * <b>AbstractRemoteService</b>
+ * </p>
+ * <p>
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public abstract class AbstractRemoteService {
 
     protected static final String API = "http://192.168.0.106:8080";

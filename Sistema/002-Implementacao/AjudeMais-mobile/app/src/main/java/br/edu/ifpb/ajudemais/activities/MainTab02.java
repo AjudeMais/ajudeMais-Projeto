@@ -10,10 +10,28 @@ import android.view.ViewGroup;
 
 import br.edu.ifpb.ajudemais.R;
 
-
+/**
+ * <p>
+ * <b>MainTab02</b>
+ * </p>
+ * <p>
+ *
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class MainTab02 extends Fragment {
 
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

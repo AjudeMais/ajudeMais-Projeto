@@ -13,13 +13,30 @@ import android.view.ViewGroup;
 
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
-
+/**
+ * <p>
+ * <b>TabFragmentMain</b>
+ * </p>
+ * <p>
+ *  <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ */
 public class TabFragmentMain extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
     public static int int_items = 2 ;
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         /**
@@ -51,6 +68,9 @@ public class TabFragmentMain extends Fragment {
 
     }
 
+    /**
+     *
+     */
     class MyAdapter extends FragmentPagerAdapter {
 
         public MyAdapter(FragmentManager fm) {
@@ -60,7 +80,6 @@ public class TabFragmentMain extends Fragment {
         /**
          * Return fragment with respect to Position .
          */
-
         @Override
         public Fragment getItem(int position)
         {
@@ -71,6 +90,10 @@ public class TabFragmentMain extends Fragment {
             return null;
         }
 
+        /**
+         *
+         * @return
+         */
         @Override
         public int getCount() {
 
@@ -81,7 +104,6 @@ public class TabFragmentMain extends Fragment {
         /**
          * This method returns the title of the tab according to the position.
          */
-
         @Override
         public CharSequence getPageTitle(int position) {
 

@@ -149,7 +149,6 @@ public class CrudInstituicaoCaridadeTest {
 
 			boolean docJaEstaSendoUtilizado = createInstituicaoCaridadePage.houveUmErrorCampoInformadoJaExiste("CPF/CNPJ já esta sendo usado");
 			
-			System.out.println(docJaEstaSendoUtilizado);
 			assertTrue("Deveria de sido cadastrada um instituição no cadastro da outra ser exibido uma msg com Documento já em uso",
 					instituicaoCadastradaComSucesso && docJaEstaSendoUtilizado);
 

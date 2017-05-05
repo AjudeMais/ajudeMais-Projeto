@@ -32,6 +32,10 @@ public class CapturePhotoUtils {
         this.context = context;
     }
 
+    /**
+     * Salva image no Storage do device.
+     * @param image
+     */
     public void saveToInternalStorage(Bitmap image){
         File pictureFile = getOutputMediaFile();
         if (pictureFile == null) {
@@ -52,6 +56,10 @@ public class CapturePhotoUtils {
 
     }
 
+    /**
+     * Delete image armazenada no storage do device.
+     * @return
+     */
     public boolean deleteImageProfile(){
         File file =new File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"
@@ -62,7 +70,10 @@ public class CapturePhotoUtils {
 
     }
 
-    /** Create a File for saving an image or video */
+    /**
+     * Get Foto profile.
+     * @return
+     */
     private  File getOutputMediaFile(){
 
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
@@ -80,6 +91,10 @@ public class CapturePhotoUtils {
         return new File(mediaStorageDir.getPath() + File.separator + mImageName);
     }
 
+    /**
+     * Carrega Image do Store do device
+     * @return
+     */
     public Bitmap loadImageFromStorage()
     {
 

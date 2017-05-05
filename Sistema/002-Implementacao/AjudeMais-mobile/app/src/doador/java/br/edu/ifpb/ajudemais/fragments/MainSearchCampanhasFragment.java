@@ -10,11 +10,26 @@ import android.view.ViewGroup;
 import br.edu.ifpb.ajudemais.R;
 
 /**
- * Created by Franck on 4/27/17.
+ * <p>
+ * <b>MainSearchCampanhasFragment</b>
+ * </p>
+ * <p>
+ *     MainSearchCampanhasFragment para pesquisa de formas de doar
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class MainSearchCampanhasFragment extends Fragment{
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

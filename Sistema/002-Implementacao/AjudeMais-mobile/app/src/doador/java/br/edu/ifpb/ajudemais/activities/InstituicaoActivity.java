@@ -16,7 +16,17 @@ import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.fragments.InstituicaoDetailFragment;
 
 /**
+ * <p>
+ * <b>InstituicaoActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar tela Instituicoes
+ * <p>
  *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+
  */
 public class InstituicaoActivity extends AppCompatActivity {
 
@@ -25,6 +35,10 @@ public class InstituicaoActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private Toolbar mToolbar;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +75,11 @@ public class InstituicaoActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

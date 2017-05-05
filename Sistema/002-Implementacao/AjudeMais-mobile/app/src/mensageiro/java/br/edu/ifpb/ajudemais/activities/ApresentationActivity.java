@@ -21,9 +21,7 @@ import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
-/**
- *
- */
+
 public class ApresentationActivity extends AppCompatActivity {
 
     @Override

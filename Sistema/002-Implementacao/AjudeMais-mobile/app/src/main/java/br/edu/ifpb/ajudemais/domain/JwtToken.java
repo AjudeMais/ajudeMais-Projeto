@@ -2,22 +2,32 @@ package br.edu.ifpb.ajudemais.domain;
 
 import java.util.Date;
 
-/**
- * Created by rafaelfeitosa on 12/04/17.
- *
- * Representa objeto que tem o token de acesso ao sistema.
- */
 
+/**
+ * <p>
+ * <b>JwtToken</b>
+ * </p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class JwtToken {
 
     private String token;
 
     private Date date = new Date();
 
+    /**
+     *
+     */
     public JwtToken() {
 
     }
 
+    /**
+     *
+     * @param token
+     */
     public JwtToken(String token) {
         this.token = token;
     }

@@ -46,7 +46,16 @@ import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 /**
- * Created by Franck on 4/26/17.
+ * <p>
+ * <b>AbstractActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar tele inicial de carregamento do aplicativo.
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -69,6 +78,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
 
 
+    /**
+     *
+     */
     protected void init() {
         capturePhotoUtils = new CapturePhotoUtils(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -76,6 +88,11 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         mNavigationView = (NavigationView) findViewById(R.id.menuNav);
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -86,6 +103,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         return false;
     }
 
+    /**
+     *
+     */
     protected void setUpToggle() {
         setSupportActionBar(mToolbar);
 
@@ -99,6 +119,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    /**
+     *
+     */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
@@ -126,6 +149,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    /**
+     *
+     */
     protected void setupNavDrawer() {
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -169,6 +195,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     *
+     */
     protected void initGoogleAPIClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(AbstractActivity.this)
                 .addApi(LocationServices.API)
@@ -177,6 +206,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    /**
+     *
+     */
     protected void checkPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(AbstractActivity.this,
@@ -190,6 +222,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    /**
+     *
+     */
     private void showSettingDialog() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -227,6 +262,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    /**
+     *
+     */
     private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(AbstractActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
             ActivityCompat.requestPermissions(AbstractActivity.this,
@@ -241,12 +279,18 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    /**
+     *
+     */
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(gpsLocationReceiver, new IntentFilter(BROADCAST_ACTION));
     }
 
+    /**
+     *
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -254,12 +298,18 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
             unregisterReceiver(gpsLocationReceiver);
     }
 
+    /**
+     *
+     */
     private Runnable sendUpdatesToUI = new Runnable() {
         public void run() {
             showSettingDialog();
         }
     };
 
+    /**
+     *
+     */
     private BroadcastReceiver gpsLocationReceiver = new BroadcastReceiver() {
 
         @Override
@@ -282,11 +332,22 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     };
 
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 

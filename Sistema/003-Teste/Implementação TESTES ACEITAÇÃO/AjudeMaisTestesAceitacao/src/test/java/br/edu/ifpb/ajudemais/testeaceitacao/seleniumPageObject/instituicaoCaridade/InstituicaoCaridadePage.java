@@ -1,10 +1,9 @@
 
 package br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade;
 
-import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
-
+import static com.codeborne.selenide.Condition.appears;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -58,7 +57,7 @@ public class InstituicaoCaridadePage extends AbstractPage {
 	 * @return
 	 */
 	public CreateInstituicaoCaridadePage novo() {
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/div/div/div[1]/div/button")).click();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/div/div/div[1]/div/button")).click();
 
 		return new CreateInstituicaoCaridadePage(driver);
 	}
@@ -97,7 +96,7 @@ public class InstituicaoCaridadePage extends AbstractPage {
 
 		$("#zipCode").setValue(cep);
 		
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
 
 		$("#nome").setValue(nome);
 		
@@ -116,7 +115,7 @@ public class InstituicaoCaridadePage extends AbstractPage {
 		$("#logradouro").setValue(logradouro);
 		$("#numero").setValue(numeroEndereco);
 
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[2]/div/div/form/div[2]/input")).click();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/form/div[2]/input")).click();
 		
 
 	}
