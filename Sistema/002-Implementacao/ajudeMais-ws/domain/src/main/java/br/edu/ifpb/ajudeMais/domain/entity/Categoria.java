@@ -1,15 +1,12 @@
 package br.edu.ifpb.ajudeMais.domain.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -62,12 +59,8 @@ public class Categoria {
 	 */
 	private Boolean ativo;
 
-	/**
-	 * 
-	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "categoria_id")
-	private List<Categoria> categorias;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private InstituicaoCaridade instituicaoCaridade;
 
 	/**
 	 * @return o atributo id
@@ -130,17 +123,18 @@ public class Categoria {
 	}
 
 	/**
-	 * @return o atributo categorias
+	 * @return o atributo instituicaoCaridade
 	 */
-	public List<Categoria> getCategorias() {
-		return categorias;
+	public InstituicaoCaridade getInstituicaoCaridade() {
+		return instituicaoCaridade;
 	}
 
 	/**
 	 * @param o
-	 *            parametro categorias é setado em categorias
+	 *            parametro instituicaoCaridade é setado em instituicaoCaridade
 	 */
-	public void setCategorias(List<Categoria> categorias) {
-		this.categorias = categorias;
+	public void setInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
+		this.instituicaoCaridade = instituicaoCaridade;
 	}
+
 }

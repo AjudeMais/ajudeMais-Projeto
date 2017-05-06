@@ -1,17 +1,15 @@
 /**
  * @ngdoc Controller
- * @name Login Controller
  *
- * @description Controller para pagina de login
  *
  * @author <a href="https://franckaj.github.io/">Franck Aragão</a>
  */
 (function () {
-    angular.module('amApp').controller('LoginController', LoginController);
+    angular.module('amApp').controller('PasswordController', PasswordController);
 
-    LoginController.$inject = ['authenticationService', '$state'];
+    PasswordController.$inject = ['authenticationService', '$state'];
 
-    function LoginController(authenticationService, $state) {
+    function PasswordController(authenticationService, $state) {
         var vm = this;
         vm.account = {};
 
@@ -34,12 +32,15 @@
             });
         };
 
-        function redirect() {
-            if (isFirstAccess()) {
-                $state.go("home");
+        vm.toHome = function () {
+            $state.go("home");
+        }
 
-            } else {
+        function redirect() {
+            if(isFirstAccess()) {
                 $state.go("home");
+            }else {
+                $state.go("firstAccess");
             }
         }
 
@@ -48,7 +49,7 @@
          */
         function isFirstAccess() {
             var user = sessionStorage.sessionUser;
-            if (user && user.ultimoAcesso) {
+            if(user && user.ultimoAcesso) {
                 return false;
             }
             else {

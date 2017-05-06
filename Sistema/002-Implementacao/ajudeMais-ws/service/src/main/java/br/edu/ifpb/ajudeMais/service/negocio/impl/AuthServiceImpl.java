@@ -102,8 +102,6 @@ public class AuthServiceImpl implements AuthService{
 		String username = jwtTokenUtil.getUsernameFromToken(token.getToken());
 		UsuarioSistema userDetails = (UsuarioSistema) userDetailsService.loadUserByUsername(username);
 		Conta conta = userDetails.getConta();
-		conta.setSenha("[PROTEGIDA]");
-		
 		return conta;
 	}
 	

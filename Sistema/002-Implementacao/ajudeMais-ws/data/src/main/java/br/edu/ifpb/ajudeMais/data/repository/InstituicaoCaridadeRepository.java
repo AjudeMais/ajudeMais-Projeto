@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
@@ -23,6 +24,15 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 * @return
 	 */
 	Optional<InstituicaoCaridade> findOneByDocumento(String documento);
+	
+	/**
+	 * 
+	 * <p>
+	 * </p>
+	 * @param conta
+	 * @return
+	 */
+	Optional<InstituicaoCaridade> findOneByConta(Conta conta);
 	
 	/**
 	 * 

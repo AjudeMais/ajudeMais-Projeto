@@ -93,6 +93,15 @@ a.custom-link {
 }
 
 /*
+ * Pagina: Alterar senha
+ * ----------------------
+ */
+.pass-panel {
+    margin-top: 25%;
+    color: #777777;
+}
+
+/*
  * Pagina: 400 e 500
  * ------------------------------
  */

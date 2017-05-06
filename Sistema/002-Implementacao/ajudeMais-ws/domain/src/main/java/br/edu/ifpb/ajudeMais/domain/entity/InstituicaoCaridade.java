@@ -29,6 +29,8 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * 
  * <p>
@@ -101,7 +103,8 @@ public class InstituicaoCaridade {
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value="instituicaoCaridade")
+	@OneToMany(	cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade")
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
 
