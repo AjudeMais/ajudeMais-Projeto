@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Toast;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
@@ -33,7 +34,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
-    private SharedPrefManager sharedPrefManager;
 
 
     /**
@@ -65,6 +65,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 mLastLocation = getLocation();
+
                 if (mLastLocation != null) {
                     sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
                 }
@@ -77,7 +78,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         new LoadingCampanhasDoacoesTask().execute();
     }
-
 
 
     /**

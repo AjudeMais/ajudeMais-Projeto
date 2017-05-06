@@ -9,8 +9,10 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -41,6 +43,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
@@ -50,14 +53,14 @@ import br.edu.ifpb.ajudemais.utils.ImagePicker;
  * <b>AbstractActivity</b>
  * </p>
  * <p>
- *     Activity para controlar tele inicial de carregamento do aplicativo.
+ * Activity para controlar tele inicial de carregamento do aplicativo.
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -69,6 +72,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private TextView tvUserName;
     private TextView tvEmail;
     private Conta conta;
+    protected SharedPrefManager sharedPrefManager;
 
     protected GoogleApiClient mGoogleApiClient;
     private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
@@ -77,6 +81,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     protected Location mLastLocation;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     protected Context mContext;
+
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // no minimo 10m de deslocamento pra atualizar
+    private static final long MIN_TIME_BW_UPDATES = 0; //1000 * 60 * 1; // 1 minuto no minimo
 
 
     /**
@@ -91,6 +98,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     /**
      * Recupera a localização do device
+     *
      * @return
      */
     protected Location getLocation() {
@@ -99,8 +107,19 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        }
 
+            if (mLastLocation == null) {
+
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+
+                if (locationManager != null) {
+                    mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                } else {
+                    Log.e("LOCATION", "----nNULLLLLLLLLLLLLLLLLLLLLLLLLLL");
+                }
+            }
+
+        }
 
 
         return mLastLocation;
@@ -108,18 +127,14 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
      * @param item
      * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+        return mToggle.onOptionsItemSelected(item);
 
-        return false;
     }
 
     /**
@@ -263,12 +278,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 final LocationSettingsStates state = result.getLocationSettingsStates();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
-
+                        onLocationChanged(getLocation());
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
 
                         try {
                             status.startResolutionForResult(AbstractActivity.this, REQUEST_CHECK_SETTINGS);
+
                         } catch (IntentSender.SendIntentException e) {
                             e.printStackTrace();
                         }
@@ -333,13 +349,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            mContext = context;
             if (intent.getAction().matches(BROADCAST_ACTION)) {
                 locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-                }
+                onLocationChanged(getLocation());
 
             } else {
                 new Handler().postDelayed(sendUpdatesToUI, 10);
@@ -352,7 +364,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
      * @param item
      * @return
      */
@@ -362,7 +373,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -408,11 +418,34 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
                 } else {
                     Toast.makeText(AbstractActivity.this, getString(R.string.permissionDenied), Toast.LENGTH_SHORT).show();
-                    requestLocationPermission();
                 }
             }
         }
     }
 
 
+    /**
+     * @param location
+     */
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            sharedPrefManager.storeLatLng(new LatLng(location.getLatitude(), location.getAltitude()));
+        }
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 }

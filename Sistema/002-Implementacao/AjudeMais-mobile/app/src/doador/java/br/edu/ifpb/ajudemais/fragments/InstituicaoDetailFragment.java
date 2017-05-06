@@ -16,22 +16,22 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
+
 /**
  * <p>
  * <b>InstituicaoDetailFragment</b>
  * </p>
  * <p>
- *     InstituicaoDetailFragment para lista de instituições
+ * InstituicaoDetailFragment para lista de instituições
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
-
  */
 public class InstituicaoDetailFragment extends Fragment {
 
-    private static RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private TextView descricaoInstituicao;
     private TextView emailInstituicao;
     private TextView logradouroInstituicao;
@@ -40,7 +40,6 @@ public class InstituicaoDetailFragment extends Fragment {
     private InstituicaoCaridade instituicaoCaridade;
 
     /**
-     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -58,7 +57,6 @@ public class InstituicaoDetailFragment extends Fragment {
     }
 
     /**
-     *
      * @param view
      * @param savedInstanceState
      */

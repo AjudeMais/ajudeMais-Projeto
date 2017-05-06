@@ -11,16 +11,16 @@ public interface AsyncActivity {
     /**
      * Chama Loading
      */
-    public void showLoadingProgressDialog();
+    void showLoadingProgressDialog();
 
     /**
      * Cria Loading modal
      * @param message
      */
-    public void showProgressDialog(CharSequence message);
+    void showProgressDialog(CharSequence message);
 
     /**
      * Fecha Progress Dialog
      */
-    public void dismissProgressDialog();
+    void dismissProgressDialog();
 }

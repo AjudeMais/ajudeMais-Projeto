@@ -41,7 +41,7 @@ public class SharedPrefManager {
      * @param context
      */
     public SharedPrefManager(Context context) {
-        this.context = context;
+        SharedPrefManager.context = context;
     }
 
     /**
@@ -63,7 +63,7 @@ public class SharedPrefManager {
      * @return
      */
     public boolean storeToken(String token) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_ACCESS_TOKEN, token);
         editor.apply();
@@ -77,7 +77,7 @@ public class SharedPrefManager {
      * @return
      */
     public boolean storeUser(Conta conta) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_SESSION_USERNAME, conta.getUsername());
@@ -93,7 +93,7 @@ public class SharedPrefManager {
      * @return
      */
     public boolean storeLatLng(LatLng latLng) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOCATION_LAT, Double.toString(latLng.getLatitude()));
@@ -109,7 +109,7 @@ public class SharedPrefManager {
      * @return token salvo nas preferencias do app.
      */
     public String getToken() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
     }
 
@@ -118,7 +118,7 @@ public class SharedPrefManager {
      * @return
      */
     public Conta getUser() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(USER_SESSION_USERNAME, null);
         String mail = sharedPreferences.getString(USER_SESSION_MAIL, null);
 
@@ -134,7 +134,7 @@ public class SharedPrefManager {
      */
     public LatLng getLocation() {
         LatLng latLng = null;
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
         String lat = sharedPreferences.getString(LOCATION_LAT, null);
         String lgn = sharedPreferences.getString(LOCATION_LONG, null);
 
@@ -151,7 +151,7 @@ public class SharedPrefManager {
      *Limpa dados armazenados da conta do usuário no device.
      */
     public void clearSharedPrefs() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();

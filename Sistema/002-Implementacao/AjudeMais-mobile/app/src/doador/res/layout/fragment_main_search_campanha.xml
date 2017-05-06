@@ -12,7 +12,7 @@
         android:id="@+id/exampleText"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/background_dark"
-        android:text="CAMPANHAS"/>
+        android:text="@string/campanhas"/>
 
 
 </RelativeLayout>

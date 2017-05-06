@@ -1,12 +1,19 @@
 package br.edu.ifpb.ajudemais.fragments;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,9 +39,9 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  * <b>MainSearchIntituituicoesFragment</b>
  * </p>
  * <p>
- *     MainSearchIntituituicoesFragment para pesquisa de formas de doar
+ * MainSearchIntituituicoesFragment para pesquisa de formas de doar
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
@@ -82,7 +89,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
-     *
      * @param childView View of the item that was clicked.
      * @param position  Position of the item that was clicked.
      */
@@ -97,7 +103,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
-     *
      * @param childView View of the item that was long pressed.
      * @param position  Position of the item that was long pressed.
      */
@@ -116,6 +121,8 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         private List<InstituicaoCaridade> instituicoesResult;
         private RecyclerItemClickListener.OnItemClickListener clickListener;
         private SharedPrefManager sharedPrefManager;
+        private Location mLastLocation;
+
 
         public MainSearchInstituicoesFragmentTask(RecyclerItemClickListener.OnItemClickListener clickListener) {
             instituicaoRemoteService = new InstituicaoRemoteService(getContext());
@@ -123,20 +130,39 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             sharedPrefManager = new SharedPrefManager(getContext());
         }
 
+        private Location getUpdateLocation() {
+            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                }
+
+            }
+
+            return mLastLocation;
+        }
+
+
         /**
-         *
          * @param voids
          * @return
          */
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
             try {
+
                 latLng = sharedPrefManager.getLocation();
 
-                if(latLng != null) {
+                mLastLocation = getUpdateLocation();
+                if (mLastLocation != null) {
+                    latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                }
+
+                if (latLng != null) {
                     instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
 
-                }else {
+                } else {
                     instituicoesResult = instituicaoRemoteService.getInstituicoes();
                 }
             } catch (RestClientException e) {
@@ -149,7 +175,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         }
 
         /**
-         *
          * @param result
          */
         @Override
