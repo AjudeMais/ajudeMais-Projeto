@@ -1,4 +1,14 @@
-
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
@@ -38,6 +48,9 @@ import org.hibernate.validator.constraints.br.CPF;
 query = "SELECT m,e FROM Mensageiro m JOIN FETCH m.enderecos e WHERE e.logradouro like :logradouro and e.bairro like :bairro and e.localidade like :localidade and e.uf like :uf")})
 public class Mensageiro {
 
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "id", unique = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -63,11 +76,20 @@ public class Mensageiro {
 	@NotNull(message = "O telefone deve ser informado")
 	private String telefone;
 
+	/**
+	 * 
+	 */
 	private String tokenFCM;
 
+	/**
+	 * 
+	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	private Conta conta;
 
+	/**
+	 * 
+	 */
 	@LazyCollection(LazyCollectionOption.TRUE)
 	@OneToMany(cascade = { CascadeType.ALL })
 	@JoinColumn(name = "mensageiro_id")
@@ -207,8 +229,4 @@ public class Mensageiro {
 		return "Mensageiro [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", tokenFCM="
 				+ tokenFCM + ", conta=" + conta + ", enderecos=" + enderecos + ", foto=" + foto + "]";
 	}
-
-	
-	
-	
 }

@@ -36,6 +36,21 @@
  * Css do layouts: AdminLTE com modificações
  * ----------------------------------------
  */
+
+/*
+ * Componentes: Bootstrap Switch
+ * ----------------------------------------
+ */
+.bootstrap-switch-normal{
+    width: 200px;
+}
+
+.bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-primary, .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-primary {
+    color: #fff;
+    background: #12A7B5;
+}
+
+
 a.inline {
     display: inline;
     margin: 5px;
@@ -1645,7 +1660,7 @@ table.dataTable thead .sorting:after {
     left: 50%;
     margin-left: -15px;
     margin-top: -15px;
-    color: #000;
+    color: #10929e;
     font-size: 30px;
 }
 

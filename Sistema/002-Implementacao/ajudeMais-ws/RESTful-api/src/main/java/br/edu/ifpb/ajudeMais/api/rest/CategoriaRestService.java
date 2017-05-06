@@ -1,3 +1,15 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.rest;
 
 import java.util.List;
@@ -18,10 +30,26 @@ import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 
+/**
+ * 
+ * <p>{@link CategoriaRestService} </p>
+ * 
+ * <p>
+ * Classe utilizada para 
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author Elson
+ *
+ */
 @RestController
 @RequestMapping("/categoria")
 public class CategoriaRestService {
-	
+	/**
+	 * 
+	 */
 	@Autowired
 	private CategoriaService categoriaService;
 	
@@ -39,6 +67,7 @@ public class CategoriaRestService {
 		Categoria categoriaSalva = categoriaService.save(categoria);
 		return new ResponseEntity<>(categoriaSalva, HttpStatus.CREATED);
 	}
+	
 	/**
 	 * 
 	 * end point criado para atualização dos dados de uma categoria
@@ -54,6 +83,7 @@ public class CategoriaRestService {
 		Categoria categorias = categoriaService.update(categoria);
 		return new ResponseEntity<>(categorias, HttpStatus.OK);
 	}
+	
 	/**
 	 * end point criado para recuperar todas as categorias cadastradas
 	 * @return
@@ -66,6 +96,7 @@ public class CategoriaRestService {
 		return new ResponseEntity<>(categorias,HttpStatus.OK);
 		
 	}
+	
 	/**
 	 * busca categorias por seu identificador
 	 * 
@@ -80,6 +111,7 @@ public class CategoriaRestService {
 		
 		return new ResponseEntity<>(categoria, HttpStatus.OK);
 	}
+	
 	/**
 	 * exclui uma categoria pesquisada pelo identificador
 	 * 
