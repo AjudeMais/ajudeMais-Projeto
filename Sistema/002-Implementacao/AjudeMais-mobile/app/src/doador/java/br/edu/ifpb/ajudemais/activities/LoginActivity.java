@@ -105,14 +105,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Doador doador = FacebookAccount.userFacebookData(loginResult);
-
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-                new CreateAccounTask(doador, getApplicationContext()).execute();
+                goToMainActivity();
             }
 
             /**
@@ -138,6 +131,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 toast.show();
             }
         });
+    }
+
+    private void goToMainActivity() {
+        Intent intent = new Intent();
+        intent.setClass(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /**
@@ -390,4 +390,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
