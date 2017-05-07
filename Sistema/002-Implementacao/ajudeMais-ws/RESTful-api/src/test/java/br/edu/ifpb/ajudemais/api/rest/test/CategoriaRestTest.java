@@ -68,6 +68,7 @@ public class CategoriaRestTest extends AbstractRestTest {
 		contaAdmin.setSenha("bazinga");
 		contaAdmin.setGrupos(Arrays.asList("ROLE_ADMIN"));
 		contaAdmin.setEmail("cupper1@gmail.com");
+		contaAdmin.setAtivo(true);
 		contaService.save(contaAdmin);
 
 		Conta contaInst = new Conta();
@@ -75,6 +76,7 @@ public class CategoriaRestTest extends AbstractRestTest {
 		contaInst.setSenha("myinst1");
 		contaInst.setGrupos(Arrays.asList("ROLE_INSTITUICAO"));
 		contaInst.setEmail("inst1@gmail.com");
+		contaInst.setAtivo(true);
 		contaService.save(contaInst);
 	}
 
@@ -91,7 +93,6 @@ public class CategoriaRestTest extends AbstractRestTest {
 	@Test
 	public void createCategoriaOk() throws IOException, Exception {
 		getCategoria();
-
 		mockMvc.perform(post("/categoria").contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuth("instituicaoXPTO1", "myinst1")).content(toJson(categoria)))
 				.andExpect(status().isCreated());
@@ -259,5 +260,6 @@ public class CategoriaRestTest extends AbstractRestTest {
 		categoria = new Categoria();
 		categoria.setNome("Informatica");
 		categoria.setDescricao("equipamentos de informatica");
+		categoria.setAtivo(true);
 	}
 }

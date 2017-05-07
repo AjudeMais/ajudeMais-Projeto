@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -90,7 +91,7 @@ public class AuthServiceImpl implements AuthService {
 			UsuarioSistema springUser = (UsuarioSistema) authentication.getPrincipal();
 			return springUser.getConta();
 		}
-		return null;
+		throw new BadCredentialsException("nenhum usuário encontrado");
 	}
 
 	/**

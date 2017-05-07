@@ -128,6 +128,7 @@ public class AuthRestServiceTest extends AbstractRestTest {
 		conta.setUsername(username);
 		conta.setSenha(password);
 		conta.setEmail(email);
+		conta.setAtivo(true);
 
 		return mockMvc.perform(post("/conta").contentType(MediaType.APPLICATION_JSON).content(toJson(conta)));
 	}

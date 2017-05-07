@@ -86,9 +86,7 @@ public class CategoriaRestService {
 
 		if (instituicaoOp.isPresent()) {
 			categoria.setInstituicaoCaridade(instituicaoOp.get());
-		} else {
-			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
+		} 
 
 		Categoria categoriaSalva = categoriaService.save(categoria);
 		return new ResponseEntity<>(categoriaSalva, HttpStatus.CREATED);

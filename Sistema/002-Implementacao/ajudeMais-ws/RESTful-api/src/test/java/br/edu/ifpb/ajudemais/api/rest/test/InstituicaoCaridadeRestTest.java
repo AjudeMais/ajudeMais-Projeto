@@ -60,6 +60,7 @@ public class InstituicaoCaridadeRestTest extends AbstractRestTest {
 		contaAdmin.setSenha("bazinga");
 		contaAdmin.setGrupos(Arrays.asList("ROLE_ADMIN"));
 		contaAdmin.setEmail("coopper@gmail.com");
+		contaAdmin.setAtivo(true);
 		contaService.save(contaAdmin);
 
 		final Conta contaInst = new Conta();
@@ -67,6 +68,7 @@ public class InstituicaoCaridadeRestTest extends AbstractRestTest {
 		contaInst.setSenha("myinst");
 		contaInst.setGrupos(Arrays.asList("ROLE_INSTITUICAO"));
 		contaInst.setEmail("inst@gmail.com");
+		contaInst.setAtivo(true);
 		contaService.save(contaInst);
 	}
 
