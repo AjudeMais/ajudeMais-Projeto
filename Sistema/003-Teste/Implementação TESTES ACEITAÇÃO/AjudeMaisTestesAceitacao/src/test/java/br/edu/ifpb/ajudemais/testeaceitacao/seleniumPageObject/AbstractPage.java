@@ -26,6 +26,8 @@ public abstract class AbstractPage {
 	private static final String URL_BASE = "http://localhost:8000/#!";
 	private static final String USERNAME = "admin123";
 	private static final String PASSWORD = "admin123";
+	private static final String USUARIO = "zefa";
+	private static final String SENHA = "123456";
 
 	/**
 	 * 
@@ -50,6 +52,14 @@ public abstract class AbstractPage {
 	public void fazlogin() {
 		$("#tLogin").setValue(USERNAME);
 		$("#tSenha").setValue(PASSWORD);
+		$("#btnLogin").click();
+	}
+	/**
+	 * 
+	 */
+	public void fazLoginInstituicao(){
+		$("#tLogin").setValue(USUARIO);
+		$("#tSenha").setValue(SENHA);
 		$("#btnLogin").click();
 	}
 
