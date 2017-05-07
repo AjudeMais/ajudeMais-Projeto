@@ -27,14 +27,14 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private ContaRepository usuarioRepository;
+	private ContaRepository contaRepository;
 	
 	/**
 	 * 
 	 */
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		
-		Optional<Conta> usuarioOptional = usuarioRepository.findOneByUsername(login);
+		Optional<Conta> usuarioOptional = contaRepository.findOneByUsernameAndAtivo(login, true);
 		Conta usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha inválidos"));
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
 		List<String> permissoes = usuario.getGrupos();

@@ -38,7 +38,11 @@
                                 </td>
                                 <td>{{categoria.nome}}</td>
                                 <td>{{categoria.descricao}}</td>
-                                <td>{{categoria.ativo? 'Sim':'Não'}}</td>
+                                <td>
+                                    <span ng-class="{'label label-danger': !categoria.ativo,
+													'label label-success': categoria.ativo}">{{categoria.ativo? 'Sim': 'Não'}}
+                                </span>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

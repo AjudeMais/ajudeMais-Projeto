@@ -19,6 +19,9 @@
 
         if ($stateParams.instituicaoEdit) {
             vm.instituicao = $stateParams.instituicaoEdit;
+        } else {
+            vm.instituicao.conta = {};
+            vm.instituicao.conta.ativo = true;
         }
 
         /**
@@ -26,7 +29,6 @@
          */
         vm.save = function () {
             if (!vm.isEdited()) {
-                _setDefaultAccount(vm.instituicao);
                 instituicaoService.save(vm.instituicao, function (response) {
                     growl.success("<b>Instituição</b> criada com sucesso");
                     $state.go('home.instituicao');

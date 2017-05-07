@@ -20,6 +20,7 @@
                                 <th width="30%">Nome</th>
                                 <th width="15%">Nome de Usuário</th>
                                 <th width="15%">Telefone</th>
+                                <th width="10%">Status</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -39,6 +40,10 @@
                                 <td>{{instituicao.nome}}</td>
                                 <td>{{instituicao.conta.username}}</td>
                                 <td>{{instituicao.telefone | brPhoneNumber}}</td>
+                                <td><span ng-class="{'label label-danger': !instituicao.conta.ativo,
+													'label label-success': instituicao.conta.ativo}">{{instituicao.conta.ativo? 'Ativa': 'Inativa'}}
+                                </span>
+                                </td>
                             </tr>
                             </tbody>
                         </table>

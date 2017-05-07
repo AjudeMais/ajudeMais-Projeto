@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +68,7 @@ public class CategoriaRestService {
 
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
-
+	
 	/**
 	 * end point criado para cadastro de uma categoria no sistema
 	 * 
@@ -77,7 +78,7 @@ public class CategoriaRestService {
 	 */
 	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria)
+	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria, HttpServletRequest request)
 			throws AjudeMaisException {
 
 		Conta conta = authService.getCurrentUser();
@@ -85,6 +86,8 @@ public class CategoriaRestService {
 
 		if (instituicaoOp.isPresent()) {
 			categoria.setInstituicaoCaridade(instituicaoOp.get());
+		} else {
+			return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
 		Categoria categoriaSalva = categoriaService.save(categoria);

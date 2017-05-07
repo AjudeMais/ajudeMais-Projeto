@@ -128,6 +128,13 @@
                                 <td ng-if="vm.instituicao.conta.resetSenha">{{vm.instituicao.conta.resetSenha | date: "dd/MM/yyyy hh:mm:ss"}}</td>
                                 <td ng-if="!vm.instituicao.conta.resetSenha">Não alterada</td>
                             </tr>
+                            <tr>
+                                <th>Status da conta</th>
+                                <td><span ng-class="{'label label-danger': !vm.instituicao.conta.ativo,
+													'label label-success': vm.instituicao.conta.ativo}">{{vm.instituicao.conta.ativo? 'Ativa': 'Inativa'}}
+                                </span></td>
+                            </tr>
+
                         </table>
                     </div>
                 </div>
