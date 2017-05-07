@@ -8,20 +8,31 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CreateInstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.InstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.login.LoginPage;
 /**
  * 
  * @author elson
  *
  */
 public class CategoriaPage extends AbstractPage{
+	
+	private static final String USERNAME_INSTIUTICAO = "42199149196";
+	private static final String PASSWORD_INSTIUTICAO = "42199149196";
+	private LoginPage loginPage;
+	private InstituicaoCaridadePage instituicaoCaridadePage;
+	
 	/**
 	 * 
 	 * @param driver
 	 */
 	public CategoriaPage(WebDriver driver) {
 		super(driver);
-		// TODO Auto-generated constructor stub
+		loginPage = new LoginPage(driver);
+		instituicaoCaridadePage = new InstituicaoCaridadePage(driver);
 	}
+	
 	/**
 	 * 
 	 * @param nome
@@ -47,8 +58,54 @@ public class CategoriaPage extends AbstractPage{
 	 */
 	public void visita() {
 		open(getUrlBase() + "/home/categoria");
-		fazLoginInstituicao();
-		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
+		
+		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
+		
+		try {
+			Thread.sleep(1000);
+			
+			
+			boolean houveLoginInvalido = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
+			
+			if(houveLoginInvalido){
+				addInstituicao();
+				
+				Thread.sleep(400);
+				
+				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/a")).click();
+				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/ul/div/ul/a[2]")).click();
+				
+				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
+			}
+			
+
+			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
+
+
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+	private void addInstituicao(){
+		instituicaoCaridadePage.visita();
+
+		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+
+		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade(
+				"INSTIUTIÇÂO P TESTE",
+				"CRIADA EM CATEGORIA PAGE",
+				USERNAME_INSTIUTICAO, 
+				"(83) 99812-2196", 
+				"testecat123@teste.com", 
+				"58500-000",
+				"Rua Teste",
+				"123", 
+				"Centro",
+				"casa");
 	}
 	
 	/**

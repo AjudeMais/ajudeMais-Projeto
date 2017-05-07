@@ -22,6 +22,9 @@ import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public class InstituicaoCaridadePage extends AbstractPage {
+	
+	private static final String USERNAME = "admin123";
+	private static final String PASSWORD = "admin123";
 
 	/**
 	 * @param driver
@@ -48,7 +51,7 @@ public class InstituicaoCaridadePage extends AbstractPage {
 	 */
 	public void visita() {
 		open(getUrlBase() + "/home/instituicao");
-		fazlogin();
+		fazlogin(USERNAME, PASSWORD);
 		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[3]/a")).click();
 	}
 
