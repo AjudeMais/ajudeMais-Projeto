@@ -38,5 +38,13 @@ public interface AuthService {
 	 * @return
 	 */
 	Boolean autenticacaoValida(JwtToken token);
+	
+	/**
+	 * 
+	 * <p>
+	 * </p>
+	 * @return
+	 */
+	String getCurrentUserLogin(); 
 
 }

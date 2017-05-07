@@ -52,7 +52,8 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
  * <pre>
  * </pre
  *
- * @author Elson Franck
+ * @author Elson
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @RestController
@@ -118,7 +119,7 @@ public class CategoriaRestService {
 	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasRole ('INSTITUICAO')")
+	@PreAuthorize("hasRole ('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Categoria>> findAll() {
 		List<Categoria> categorias = categoriaService.findAll();

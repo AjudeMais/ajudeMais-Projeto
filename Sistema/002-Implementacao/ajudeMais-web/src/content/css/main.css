@@ -31,6 +31,22 @@
     margin-bottom: -10px;
 }
 
+.am-help-block {
+    color: #a94442
+}
+.am-pass-change-intro {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.am-pass-change-btn {
+    padding-top: 15px;
+}
+
+.am-pass-change-form {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
 /*
  * Componentes: Layout
  * Css do layouts: AdminLTE com modificações

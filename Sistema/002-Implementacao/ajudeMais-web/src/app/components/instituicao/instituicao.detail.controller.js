@@ -8,9 +8,9 @@
         var vm = this;
         vm.instituicao = {};
         var instituicaoDetailparam = JSON.parse($stateParams.instituicaoDetail);
-
         if (instituicaoDetailparam) {
             vm.instituicao = instituicaoDetailparam;
+            console.log(vm.instituicao);
 
         }
 

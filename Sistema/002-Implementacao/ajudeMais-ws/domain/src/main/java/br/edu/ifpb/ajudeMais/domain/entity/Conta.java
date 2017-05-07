@@ -91,7 +91,7 @@ public class Conta {
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "reset_senha")
-	private Date restSenha;
+	private Date resetSenha;
 
 	/**
 	 * @return o atributo id
@@ -184,18 +184,18 @@ public class Conta {
 	}
 
 	/**
-	 * @return o atributo restSenha
+	 * @return o atributo resetSenha
 	 */
-	public Date getRestSenha() {
-		return restSenha;
+	public Date getResetSenha() {
+		return resetSenha;
 	}
 
 	/**
 	 * @param o
-	 *            parametro restSenha é setado em restSenha
+	 *            parametro resetSenha é setado em resetSenha
 	 */
-	public void setRestSenha(Date restSenha) {
-		this.restSenha = restSenha;
+	public void setResetSenha(Date resetSenha) {
+		this.resetSenha = resetSenha;
 	}
 
 }

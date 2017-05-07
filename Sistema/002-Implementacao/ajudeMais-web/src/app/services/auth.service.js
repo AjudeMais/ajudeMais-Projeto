@@ -59,7 +59,7 @@
         function _getUserLogged(callback) {
             $http.get(Api + "/auth/user").then(function (response) {
                 $sessionStorage.sessionUser = response.data;
-                callback();
+                callback(response.data);
             });
         };
 
