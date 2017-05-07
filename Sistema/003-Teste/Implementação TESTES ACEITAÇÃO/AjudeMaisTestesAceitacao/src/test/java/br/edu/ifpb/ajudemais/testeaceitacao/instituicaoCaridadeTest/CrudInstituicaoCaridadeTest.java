@@ -274,7 +274,7 @@ public class CrudInstituicaoCaridadeTest {
 
 	
 	/**
-	 * Tenta adicionar uma instituição de caridade com documento CNPJ inválido.
+	 * Adicionar uma instituição de caridade e testa sua edição.
 	 */
 	@Test
 	public void editarInstituicaoCaridade() {
