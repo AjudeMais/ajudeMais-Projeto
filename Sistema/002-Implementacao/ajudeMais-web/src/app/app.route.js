@@ -24,6 +24,16 @@
             }
         })
 
+            .state('passwdChange', {
+                url: '/passwdChange',
+                templateUrl: 'app/components/auth/password/password.html',
+                controller: "PasswordController",
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Primeiro Acesso'
+                }
+            })
+
             .state('home.403', {
                 url: '/403',
                 templateUrl: 'app/components/auth/403/403.html',

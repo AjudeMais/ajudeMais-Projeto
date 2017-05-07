@@ -19,6 +19,7 @@
             save: _save,
             update: _update,
             getCategorias: _getCategorias,
+            getCategoriasByInstituicao: _getCategoriasByInstituicao,
             remove: _remove
         };
         return service;
@@ -60,6 +61,17 @@
          */
         function _getCategorias(callback) {
             $http.get(Api + "/categoria").then(function (response) {
+                callback(response.data);
+            });
+        };
+
+        /**
+         *
+         * @param callback
+         * @private
+         */
+        function _getCategoriasByInstituicao(callback) {
+            $http.get(Api + "/categoria/instituicao").then(function (response) {
                 callback(response.data);
             });
         };

@@ -24,7 +24,7 @@
          *
          */
         vm.getCategorias = function () {
-            categoriaService.getCategorias(function (response) {
+            categoriaService.getCategoriasByInstituicao(function (response) {
                 vm.categorias = response;
             });
         }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.CategoriaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 
@@ -88,5 +89,13 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Transactional
 	public void remover(Categoria categoria) {
 		categoriaRepository.delete(categoria);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public List<Categoria> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
+		return categoriaRepository.findByInstituicaoCaridade(instituicaoCaridade);
 	}
 }

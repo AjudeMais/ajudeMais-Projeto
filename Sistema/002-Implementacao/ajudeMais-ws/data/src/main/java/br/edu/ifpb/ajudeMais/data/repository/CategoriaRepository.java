@@ -12,10 +12,13 @@
  */
 package br.edu.ifpb.ajudeMais.data.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
@@ -30,11 +33,21 @@ import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
  * <pre>
  * </pre
  *
- * @author Elson
+ * @author Elson / Franck
  *
  */
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 
+	/**
+	 * 
+	 * <p>
+	 * Busca itens doaveis por sua localidade
+	 * </p>
+	 * 
+	 * @param instituicaoCaridade
+	 * @return
+	 */
+	List<Categoria> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
 
 }
