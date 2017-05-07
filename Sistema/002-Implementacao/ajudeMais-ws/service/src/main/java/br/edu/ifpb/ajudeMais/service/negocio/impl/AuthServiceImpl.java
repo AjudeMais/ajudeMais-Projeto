@@ -83,6 +83,20 @@ public class AuthServiceImpl implements AuthService {
 	 * 
 	 */
 	@Override
+	public Conta getCurrentUser() {
+		SecurityContext securityContext = SecurityContextHolder.getContext();
+		Authentication authentication = securityContext.getAuthentication();
+		if (authentication != null) {
+			UsuarioSistema springUser = (UsuarioSistema) authentication.getPrincipal();
+			return springUser.getConta();
+		}
+		return null;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
 	public JwtToken atualizaAutenticacao(JwtToken tokenAtual) {
 		String tokenAtualizado = jwtTokenUtil.refreshToken(tokenAtual.getToken());
 		return tokenAtualizado != null ? new JwtToken(tokenAtualizado) : null;

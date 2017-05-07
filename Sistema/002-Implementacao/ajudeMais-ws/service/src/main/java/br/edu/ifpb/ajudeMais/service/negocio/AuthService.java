@@ -46,5 +46,13 @@ public interface AuthService {
 	 * @return
 	 */
 	String getCurrentUserLogin(); 
+	
+	/**
+	 * 
+	 * <p>
+	 * </p>
+	 * @return
+	 */
+	Conta getCurrentUser();
 
 }

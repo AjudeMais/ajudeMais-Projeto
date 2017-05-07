@@ -183,7 +183,7 @@ public class CategoriaRestTest extends AbstractRestTest {
 	 */
 	@Test
 	public void getCategoriaNotAuthorization() throws IOException, Exception {
-		mockMvc.perform(get("/categoria").header("Authorization", getAuth("sheldonCoopper1", "bazinga")))
+		mockMvc.perform(get("/categoria").header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
 				.andExpect(status().isForbidden());
 
 	}
@@ -199,7 +199,22 @@ public class CategoriaRestTest extends AbstractRestTest {
 	 */
 	@Test
 	public void getCategoriasOk() throws IOException, Exception {
-		mockMvc.perform(get("/categoria").header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
+		mockMvc.perform(get("/categoria").header("Authorization", getAuth("sheldonCoopper1", "bazinga")))
+				.andExpect(status().isOk());
+	}
+	
+	/**
+	 * <p>
+	 * Teste para obtenção de categorias por insituição, deveria retornar {@link HttpStatus}
+	 * 200.
+	 * </p>
+	 * 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	@Test
+	public void getCategoriasByInstituicaoOk() throws IOException, Exception {
+		mockMvc.perform(get("/categoria/instituicao").header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
 				.andExpect(status().isOk());
 	}
 

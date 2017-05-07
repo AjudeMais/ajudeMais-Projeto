@@ -16,11 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,7 +35,6 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
-import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
 
 /**
  * 
@@ -65,9 +62,6 @@ public class CategoriaRestService {
 	@Autowired
 	private CategoriaService categoriaService;
 
-	@Value("${jwt.header}")
-	private String tokenHeader;
-
 	@Autowired
 	private AuthService authService;
 
@@ -83,11 +77,10 @@ public class CategoriaRestService {
 	 */
 	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria, HttpServletRequest request)
+	public ResponseEntity<Categoria> save(@Valid @RequestBody Categoria categoria)
 			throws AjudeMaisException {
 
-		String token = request.getHeader(tokenHeader);
-		Conta conta = authService.getContaPorToken(new JwtToken(token));
+		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
 		if (instituicaoOp.isPresent()) {
@@ -151,10 +144,9 @@ public class CategoriaRestService {
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/instituicao")
-	public ResponseEntity<List<Categoria>> findByInstituicao(HttpServletRequest request) {
+	public ResponseEntity<List<Categoria>> findByInstituicao() {
 
-		String token = request.getHeader(tokenHeader);
-		Conta conta = authService.getContaPorToken(new JwtToken(token));
+		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
 		List<Categoria> categorias = new ArrayList<>();
