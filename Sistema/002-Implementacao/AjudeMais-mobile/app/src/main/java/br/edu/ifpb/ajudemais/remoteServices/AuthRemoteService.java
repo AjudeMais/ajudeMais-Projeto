@@ -10,6 +10,8 @@ import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
+import static br.edu.ifpb.ajudemais.remoteServices.AbstractRemoteService.API;
+
 /**
  * <p>
  * <b>{@link AuthRemoteService}</b>
@@ -23,7 +25,8 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  * @author <a href="https://github.com/franckaj">Franck Aragão</a>
  */
 
-public class AuthRemoteService extends AbstractRemoteService {
+public class
+AuthRemoteService extends AbstractRemoteService {
 
 
     /**
