@@ -10,13 +10,14 @@
 /src/test/javascript/PhantomJS*/
 
 ######################
-# Node
+# WEB
 ######################
 /node/
 node_tmp/
 node_modules/
 npm-debug.log.*
-
+/Sistema/002-Implementacao/ajudeMais-web/src/vendors
+/Sistema/002-Implementacao/ajudeMais-web/node_modules
 ######################
 # SASS
 ######################
