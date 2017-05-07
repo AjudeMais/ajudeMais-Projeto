@@ -16,13 +16,18 @@
         vm.account = {};
 
         /**
+         * Remove informações do usuário salvas no browser.
+         */
+        authenticationService.doLogout(function (response) {})
+
+        /**
          *
          */
         vm.doLogin = function () {
             authenticationService.doLogin(vm.account, function (response) {
                 authenticationService.storageToken(response.token);
-                authenticationService.getUserLogged(function () {
-                    redirect();
+                authenticationService.getUserLogged(function (response) {
+                    redirect(response);
                 });
             }, function (response) {
                 if (response.status == 401) {
@@ -34,9 +39,9 @@
             });
         };
 
-        function redirect() {
-            if (isFirstAccess()) {
-                $state.go("home");
+        function redirect(user) {
+            if (isFirstAccess(user)) {
+                $state.go("passwdChange");
 
             } else {
                 $state.go("home");
@@ -46,9 +51,8 @@
         /**
          *
          */
-        function isFirstAccess() {
-            var user = sessionStorage.sessionUser;
-            if (user && user.ultimoAcesso) {
+        function isFirstAccess(user) {
+            if (user && user.resetSenha) {
                 return false;
             }
             else {

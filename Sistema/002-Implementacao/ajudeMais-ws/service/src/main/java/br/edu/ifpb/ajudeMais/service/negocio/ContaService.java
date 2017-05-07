@@ -8,5 +8,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
  *
  */
 public interface ContaService extends Service<Conta, Long>{
+	
+	void changePassword(String password);
 
 }

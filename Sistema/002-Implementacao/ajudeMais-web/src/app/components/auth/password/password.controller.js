@@ -7,53 +7,36 @@
 (function () {
     angular.module('amApp').controller('PasswordController', PasswordController);
 
-    PasswordController.$inject = ['authenticationService', '$state'];
+    PasswordController.$inject = ['accountService', '$state'];
 
-    function PasswordController(authenticationService, $state) {
+    function PasswordController(accountService, $state) {
         var vm = this;
-        vm.account = {};
+        vm.sSenha;
+        vm.rSenha;
+        vm.msgError;
 
         /**
          *
          */
-        vm.doLogin = function () {
-            authenticationService.doLogin(vm.account, function (response) {
-                authenticationService.storageToken(response.token);
-                authenticationService.getUserLogged(function () {
-                    redirect();
-                });
-            }, function (response) {
-                if (response.status == 401) {
-                    vm.error = "Nome de usuário ou senha inválido";
-                }
-                else {
-                    vm.error = response.msg;
-                }
-            });
+        vm.change = function () {
+            if (isEquals(vm.nSenha, vm.rSenha)) {
+                accountService.changePassword(vm.nSenha, function (response) {
+                    $state.go("home");
+                })
+            } else {
+                vm.error = "Senhas não conferem";
+            }
         };
 
-        vm.toHome = function () {
-            $state.go("home");
-        }
-
-        function redirect() {
-            if(isFirstAccess()) {
-                $state.go("home");
-            }else {
-                $state.go("firstAccess");
-            }
-        }
-
         /**
          *
          */
-        function isFirstAccess() {
-            var user = sessionStorage.sessionUser;
-            if(user && user.ultimoAcesso) {
-                return false;
+        function isEquals(nSenha, rSenha) {
+            if (angular.equals(nSenha, rSenha)) {
+                return true;
             }
             else {
-                return true;
+                return false;
             }
         }
     };
