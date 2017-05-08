@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +26,9 @@ public class InstituicaoCaridade implements Serializable{
     private Endereco endereco;
 
     private Conta conta;
+
+    private List<Categoria> itensDoaveis;
+
 
     /**
      *
@@ -152,5 +156,39 @@ public class InstituicaoCaridade implements Serializable{
      */
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Categoria> getItensDoaveis() {
+        return itensDoaveis;
+    }
+
+    /**
+     *
+     * @param itensDoaveis
+     */
+    public void setItensDoaveis(List<Categoria> itensDoaveis) {
+        this.itensDoaveis = itensDoaveis;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return "InstituicaoCaridade{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", documento='" + documento + '\'' +
+                ", endereco=" + endereco +
+                ", conta=" + conta +
+                ", itensDoaveis=" + itensDoaveis +
+                '}';
     }
 }

@@ -6,7 +6,9 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,10 @@ import android.widget.TextView;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.adapters.CategoriasAdapter;
+import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
+import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 
 /**
  * <p>
@@ -38,6 +43,7 @@ public class InstituicaoDetailFragment extends Fragment {
     private TextView localidadeInstituicao;
     private CardView cardViewEmail;
     private InstituicaoCaridade instituicaoCaridade;
+    private CategoriasAdapter categoriasAdapter;
 
     /**
      * @param inflater
@@ -51,7 +57,8 @@ public class InstituicaoDetailFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_instituicao_detail, container, false);
         setHasOptionsMenu(true);
-        recyclerView = (RecyclerView) v.findViewById(R.id.list_campanhas_insituicao_detail);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recycle_view_list);
+
 
         return v;
     }
@@ -64,11 +71,21 @@ public class InstituicaoDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        Intent intentInstituicao = getActivity().getIntent();
+        instituicaoCaridade = (InstituicaoCaridade) intentInstituicao.getSerializableExtra("instituicao");
+
         descricaoInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_descricao);
         emailInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_email);
         logradouroInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_logradouro);
         localidadeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_localidade);
         cardViewEmail = (CardView) getView().findViewById(R.id.card_view_intituicao_detail_email);
+
+        RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layout);
+        categoriasAdapter = new CategoriasAdapter(instituicaoCaridade.getItensDoaveis(), getActivity());
+        recyclerView.setAdapter(categoriasAdapter);
+
+//        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
 
     }
 
@@ -79,8 +96,6 @@ public class InstituicaoDetailFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        Intent intentInstituicao = getActivity().getIntent();
-        instituicaoCaridade = (InstituicaoCaridade) intentInstituicao.getSerializableExtra("instituicao");
 
         descricaoInstituicao.setText(instituicaoCaridade.getDescricao());
         emailInstituicao.setText(instituicaoCaridade.getConta().getEmail());
@@ -97,6 +112,9 @@ public class InstituicaoDetailFragment extends Fragment {
                 sendEmail(instituicaoCaridade.getConta().getEmail());
             }
         });
+
+
+
     }
 
     /**

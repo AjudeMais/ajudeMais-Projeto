@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public class Conta implements Serializable{
     private boolean ativo;
     private String email;
     private List<String> grupos;
+    private Date resetSenha;
+
 
     /**
      *
@@ -172,6 +175,22 @@ public class Conta implements Serializable{
      *
      * @return
      */
+    public Date getResetSenha() {
+        return resetSenha;
+    }
+
+    /**
+     *
+     * @param resetSenha
+     */
+    public void setResetSenha(Date resetSenha) {
+        this.resetSenha = resetSenha;
+    }
+
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Conta{" +
@@ -181,6 +200,7 @@ public class Conta implements Serializable{
                 ", ativo=" + ativo +
                 ", email='" + email + '\'' +
                 ", grupos=" + grupos +
+                ", resetSenha=" + resetSenha +
                 '}';
     }
 }

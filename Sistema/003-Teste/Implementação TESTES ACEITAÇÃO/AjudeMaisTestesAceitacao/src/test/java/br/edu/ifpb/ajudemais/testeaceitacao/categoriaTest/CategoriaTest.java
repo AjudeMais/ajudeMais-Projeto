@@ -217,16 +217,16 @@ public class CategoriaTest{
 		
 		CriarCategoriaPage criarCategoria = categoriaPage.novo();
 		
-		criarCategoria.adicionarOuEditarCategoria("zefa", "categoria da zefa", true);
+		criarCategoria.adicionarOuEditarCategoria("Roupas2", "categoria da zefa", true);
 		
-		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("zefa");
+		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Roupas2");
 		
 		
 		RemoverCategoriaPage removerCategoriaPage = categoriaPage.remove();
 		
 		removerCategoriaPage.remover();
 		
-		boolean categoriaRemovidaComSucesso = categoriaPage.categoriaRemovidaComSucesso("zefa");
+		boolean categoriaRemovidaComSucesso = categoriaPage.categoriaRemovidaComSucesso("Roupas2");
 		
 		
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",

@@ -16,5 +16,6 @@
 
     <string name="cancelOperation">"Operação cancelada"</string>
     <string name="campanhas">CAMPANHAS</string>
+    <string name="lista_de_itens_do_veis">Lista de itens doáveis</string>
 
 </resources>

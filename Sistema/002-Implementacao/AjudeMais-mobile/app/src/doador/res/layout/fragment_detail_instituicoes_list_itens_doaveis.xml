@@ -6,7 +6,7 @@
 
 
     <FrameLayout
-        android:id="@+id/containerViewSearchInst"
+        android:id="@+id/containerViewItensDoaveis"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_list"
+                android:id="@+id/recycle_view_itens_doaveis"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:paddingTop="2dp"
