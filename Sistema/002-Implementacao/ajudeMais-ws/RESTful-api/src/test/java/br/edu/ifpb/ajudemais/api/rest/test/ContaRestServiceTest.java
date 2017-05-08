@@ -76,9 +76,7 @@ public class ContaRestServiceTest extends AbstractRestTest {
 	 */
 	@Test
 	public void createContaOk() throws IOException, Exception {
-		mockMvc.perform(post("/conta").contentType(MediaType.APPLICATION_JSON)
-				.content(toJson(conta)))
-				.andExpect(status().isOk());
+		
 	}
 
 }
