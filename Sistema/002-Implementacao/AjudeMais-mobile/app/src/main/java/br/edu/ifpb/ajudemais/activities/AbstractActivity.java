@@ -30,6 +30,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -164,7 +167,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
 
-        if (conta != null) {
+        if (conta != null  || AccessToken.getCurrentAccessToken() != null) {
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
@@ -216,17 +219,25 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
-                SharedPrefManager.getInstance(this).clearSharedPrefs();
-                System.out.println(capturePhotoUtils.deleteImageProfile());
-
-                Intent intent = new Intent();
-                intent.setClass(this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
-
-                break;
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut();
+                    goToLoginScreen();
+                    break;
+                } else {
+                    SharedPrefManager.getInstance(this).clearSharedPrefs();
+                    System.out.println(capturePhotoUtils.deleteImageProfile());
+                    goToLoginScreen();
+                    break;
+                }
         }
+    }
+
+    private void goToLoginScreen() {
+        Intent intent = new Intent();
+        intent.setClass(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
     /**
