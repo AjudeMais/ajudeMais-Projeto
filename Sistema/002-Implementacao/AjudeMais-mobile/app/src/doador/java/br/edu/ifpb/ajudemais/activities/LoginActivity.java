@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -323,14 +324,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         private String message;
         private Doador doador;
-        private String password;
         private DoadorRemoteService doadorRemoteService;
-        private AuthRemoteService authRemoteService;
 
         public CreateAccounTask(Doador doador, Context context) {
             this.doador = doador;
             doadorRemoteService = new DoadorRemoteService(context);
-            authRemoteService = new AuthRemoteService(context);
         }
 
         /**
@@ -349,15 +347,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
          */
         @Override
         protected Conta doInBackground(Void... params) {
-
             try {
-                password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
-                Conta conta = authRemoteService.createAuthenticationToken(
-                        new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
-
-                return conta;
-
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
@@ -381,7 +372,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", conta);
+                intent.putExtra("Conta", doador.getConta());
                 startActivity(intent);
 
                 finish();

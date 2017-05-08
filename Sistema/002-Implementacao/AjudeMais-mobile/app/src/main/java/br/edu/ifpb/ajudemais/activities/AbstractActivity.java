@@ -33,6 +33,7 @@ import android.widget.Toast;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -48,6 +49,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
@@ -74,7 +76,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private static final int PICK_IMAGE_ID = 234;
     private TextView tvUserName;
     private TextView tvEmail;
-    private Conta conta;
+    private Conta conta = new Conta();
     protected SharedPrefManager sharedPrefManager;
 
     protected GoogleApiClient mGoogleApiClient;
@@ -166,10 +168,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
-
-        if (conta != null  || AccessToken.getCurrentAccessToken() != null) {
-            tvUserName.setText(conta.getUsername());
-            tvEmail.setText(conta.getEmail());
+        if (conta != null ) {
+            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
+            tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
         }
         Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 
