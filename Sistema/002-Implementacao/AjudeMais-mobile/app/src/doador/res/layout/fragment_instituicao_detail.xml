@@ -9,9 +9,9 @@
         android:id="@+id/tv_instituicao_detail_descricao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:gravity="center"
         android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textAlignment="center"
         android:textColor="@color/textSecond"
         android:textSize="18dp" />
 
@@ -21,10 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp"
         card_view:cardMaxElevation="3dp"
         card_view:cardPreventCornerOverlap="false"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="2dp">
+        card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -60,10 +60,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="2dp"
         card_view:cardMaxElevation="3dp"
         card_view:cardPreventCornerOverlap="false"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="2dp">
+        card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -73,10 +73,10 @@
 
             <ImageView
                 android:id="@+id/cardview_end"
-                android:layout_marginTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
                 android:src="@drawable/ic_location" />
 
             <TextView
@@ -94,19 +94,31 @@
                 android:id="@+id/tv_instituicao_detail_localidade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textSecond"
-                android:textSize="16sp"
                 android:layout_below="@+id/tv_instituicao_detail_logradouro"
-                android:layout_toRightOf="@+id/cardview_end"/>
+                android:layout_toRightOf="@+id/cardview_end"
+                android:textColor="@color/textSecond"
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 
+    <TextView
+        android:id="@+id/tv_list_itens_doaveis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lista_de_itens_do_veis"
+        android:textAlignment="center"
+        android:textColor="@color/textSecond"
+        android:textSize="18sp" />
+
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/list_campanhas_insituicao_detail"
+        android:id="@+id/recycle_view_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:paddingTop="2dp"
         android:scrollbars="vertical" />
+
 
 </LinearLayout>

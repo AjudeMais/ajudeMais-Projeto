@@ -13,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +70,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_instituicoes);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
 
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);

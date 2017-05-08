@@ -13,7 +13,7 @@
 
         function responseError(rejection) {
             if (rejection.status === 401 || rejection.status === -1) {
-                delete $sessionStorage.authToken;
+                delete $sessionStorage.at;
                 $location.path('/login');
             }
             return $q.reject(rejection);

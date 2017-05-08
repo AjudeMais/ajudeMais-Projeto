@@ -22,7 +22,7 @@
 
         function request(config) {
             config.headers = config.headers || {};
-            var token = $sessionStorage.authToken;
+            var token = $sessionStorage.at;
             if (token && (!config.url.startsWith('https://viacep.com.br/ws'))) {
                 config.headers.Authorization = token;
             }
@@ -32,7 +32,7 @@
         function response(config) {
             var token = config.headers.Authorization;
             if (token) {
-                $sessionStorage.authToken = token;
+                $sessionStorage.at = token;
             }
             return config;
         }

@@ -45,8 +45,8 @@
          * @private
          */
         function _doLogout(callback) {
-            delete $localStorage.authToken;
-            delete $sessionStorage.authToken;
+            delete $localStorage.at;
+            delete $sessionStorage.at;
             $sessionStorage.sessionUser = undefined;
             callback();
         }
@@ -69,7 +69,7 @@
          * @private
          */
         function _logged(callback) {
-            if ($sessionStorage.authToken === undefined) {
+            if ($sessionStorage.at === undefined) {
                 callback(false);
             } else if ($sessionStorage.sessionUser === undefined) {
                 $http.get(Api + "/auth/user").then(function (response) {
@@ -111,7 +111,7 @@
          * @private
          */
         function _storageToken(jwt) {
-            $sessionStorage.authToken = jwt;
+            $sessionStorage.at = jwt;
         }
     };
 })();
