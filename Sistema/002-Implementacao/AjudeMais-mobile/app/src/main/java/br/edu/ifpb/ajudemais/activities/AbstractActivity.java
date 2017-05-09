@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -32,21 +32,19 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
-import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 /**
  * <p>
@@ -60,7 +58,7 @@ import br.edu.ifpb.ajudemais.utils.ImagePicker;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
+public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult>, LocationListener {
 
     protected DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
@@ -81,6 +79,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     protected Location mLastLocation;
     protected LocationRequest locationRequest;
     protected int REQUEST_CHECK_SETTINGS = 100;
+
+    private LocationRequest mLocationRequest;
+    private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    private long FASTEST_INTERVAL = 2000; /* 2 sec */
 
 
     /**
@@ -105,6 +107,16 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
+            if (mLastLocation == null) {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                String provider = locationManager.getBestProvider(criteria, false);
+                mLastLocation = locationManager.getLastKnownLocation(provider);
+
+            } else {
+                Log.e("LOCATION", "lt:" + mLastLocation.getLatitude());
+
+            }
         }
 
         return mLastLocation;
@@ -143,16 +155,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
      * Inicia serviço Google API client
      */
     protected void initGoogleAPIClient() {
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
-                .addConnectionCallbacks(AbstractActivity.this)
+                .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
-        mGoogleApiClient.connect();
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 1000);
-        locationRequest.setFastestInterval(5 * 1000);
     }
 
     /**
@@ -172,7 +178,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     * Exibi dialog para ligar GPS no device.
+     * Exibe dialog para ligar GPS no device.
      */
     private void showSettingDialog() {
         LocationRequest locationRequest = LocationRequest.create();
@@ -184,31 +190,8 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
         builder.setAlwaysShow(true);
 
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(@NonNull LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                final LocationSettingsStates state = result.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        //onLocationChanged(getLocation());
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-
-                        try {
-                            status.startResolutionForResult(AbstractActivity.this, REQUEST_CHECK_SETTINGS);
-
-                        } catch (IntentSender.SendIntentException e) {
-                            e.printStackTrace();
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        break;
-                }
-            }
-        });
+        PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+        result.setResultCallback(this);
     }
 
     /**
@@ -290,6 +273,20 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     /**
      *
      */
+    @Override
+    protected void onStop() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.disconnect();
+        }
+        super.onStop();
+    }
+
+
+    /**
+     *
+     */
     private Runnable sendUpdatesToUI = new Runnable() {
         public void run() {
             showSettingDialog();
@@ -305,11 +302,8 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches(BROADCAST_ACTION)) {
                 locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-               // onLocationChanged(getLocation());
-
             } else {
                 new Handler().postDelayed(sendUpdatesToUI, 10);
-                Log.e("About GPS", "GPS is Disabled in your device");
             }
 
         }
@@ -325,7 +319,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
     }
-
 
 
     /**
@@ -356,22 +349,23 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-        PendingResult<LocationSettingsResult> result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        mGoogleApiClient,
-                        builder.build()
-                );
-        result.setResultCallback(this);
+        Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mCurrentLocation != null) {
+            Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
+            mLastLocation = mCurrentLocation;
+        }
+        startLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
+        if (i == CAUSE_SERVICE_DISCONNECTED) {
+            Toast.makeText(this, getString(R.string.disconnected), Toast.LENGTH_SHORT).show();
+        } else if (i == CAUSE_NETWORK_LOST) {
+            Toast.makeText(this, getString(R.string.failConnect), Toast.LENGTH_SHORT).show();
+        }
 
     }
 
@@ -380,24 +374,51 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
+    }
+
+    /**
+     *
+     */
+    protected void startLocationUpdates() {
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(UPDATE_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL);
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                    mLocationRequest, this);
+        }
+    }
+
 
     @Override
     public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
-                // NO need to show the dialog;
-
                 break;
 
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                //  GPS turned off, Show the user a dialog
+                try {
+                    status.startResolutionForResult(AbstractActivity.this, REQUEST_CHECK_SETTINGS);
 
-
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
                 break;
 
             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                // Location settings are unavailable so not possible to show any dialog now
                 break;
         }
     }
@@ -408,13 +429,17 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         if (requestCode == REQUEST_CHECK_SETTINGS) {
 
             if (resultCode == RESULT_OK) {
+                mLastLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(mGoogleApiClient);
 
-                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
-            } else {
-
-                Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_LONG).show();
             }
-
         }
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null)
+            mLastLocation = location;
+    }
+
 }

@@ -75,8 +75,10 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mLastLocation = getLocation();
 
+                if (mLastLocation == null) {
+                    mLastLocation = getLocation();
+                }
                 if (mLastLocation != null) {
                     sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
                 }
@@ -101,7 +103,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta != null ) {
+        if (conta != null) {
             tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
             tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
         }
