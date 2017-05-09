@@ -1,3 +1,18 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.Date;
@@ -16,6 +31,18 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
 /**
  * 
+ * <p>
+ * {@link ContaServiceImpl}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementação dos serviços definidos em
+ * {@link ContaService}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
@@ -27,7 +54,7 @@ public class ContaServiceImpl implements ContaService {
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Autowired
 	private AuthService authService;
 
@@ -76,11 +103,12 @@ public class ContaServiceImpl implements ContaService {
 
 		return contaRepository.save(entity);
 	}
-	
+
 	/**
 	 * 
 	 * <p>
 	 * </p>
+	 * 
 	 * @param password
 	 */
 	public void changePassword(String password) {

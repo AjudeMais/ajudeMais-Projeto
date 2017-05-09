@@ -65,14 +65,16 @@ public class AuthRestService {
 	private String tokenHeader;
 
 	/**
-	 * End ppoint para criar autenticaçao do usuário
+	 * <p>
+	 * POST /auth/login : Endpoint para criar autenticaçao do usuário. <br>
+	 * ROLE: PUBLIC
+	 * </p>
 	 * 
 	 * @param conta
 	 * 
-	 * @param device
-	 *            tipo de dispositivo que faz requisição
+	 * @param device - tipo de dispositivo que faz requisição
 	 * 
-	 * @return
+	 * @return autenticação em forma de token
 	 * 
 	 * @throws AuthenticationException
 	 */
@@ -86,7 +88,10 @@ public class AuthRestService {
 	}
 
 	/**
-	 * Atualiza token de autorização
+	 * <p>
+	 * GET /auth/atualizar : Atualiza token de autorização. <br>
+	 * ROLE: *
+	 * </p>
 	 * 
 	 * @param request
 	 * 
@@ -107,9 +112,9 @@ public class AuthRestService {
 	}
 
 	/**
-	 * 
 	 * <p>
-	 * Obtém usuário que faz requisição
+	 * GET /auth/user : Obtém usuário que faz requisição. <br>
+	 * ROLE: *
 	 * </p>
 	 * 
 	 * @param request
@@ -126,8 +131,10 @@ public class AuthRestService {
 	/**
 	 * 
 	 * <p>
-	 * Verifica se token do usuário está valido.
+	 * GET /auth/valida : verifica se requisição de autenticação é váldia. <br>
+	 * ROLE: PUBLIC
 	 * </p>
+	 * 
 	 * 
 	 * @param request
 	 * @return
