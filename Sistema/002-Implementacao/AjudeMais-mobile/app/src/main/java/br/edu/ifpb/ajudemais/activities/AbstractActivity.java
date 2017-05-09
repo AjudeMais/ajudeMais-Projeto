@@ -396,7 +396,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
                 mLocationRequest, this);
-        
+
     }
 
 

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private InstituicoesAdapter instituicoesAdapter;
     private static RecyclerView recyclerView;
@@ -51,6 +52,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     private List<InstituicaoCaridade> instituicoes;
     private LatLng latLng;
     private Location mLastLocation;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /**
      *
@@ -66,9 +68,12 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
@@ -126,6 +131,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     }
 
+    @Override
+    public void onRefresh() {
+        new MainSearchInstituicoesFragmentTask(this).execute();
+        swipeRefreshLayout.setRefreshing(false);
+
+    }
+
     /**
      *
      */
@@ -143,8 +155,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             this.clickListener = clickListener;
             sharedPrefManager = new SharedPrefManager(getContext());
         }
-
-
 
 
         /**
