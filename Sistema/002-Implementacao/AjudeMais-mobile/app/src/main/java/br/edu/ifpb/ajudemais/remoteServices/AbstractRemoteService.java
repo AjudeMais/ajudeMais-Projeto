@@ -18,14 +18,13 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  * </p>
  * <p>
  * <p>
- *
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 public abstract class AbstractRemoteService {
 
-    protected static final String API = "http://192.168.0.105:8080";
+    protected static final String API = "http://192.168.229.145:8080";
     protected RestTemplate restTemplate;
     protected Context context;
 

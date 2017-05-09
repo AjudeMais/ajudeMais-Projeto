@@ -47,6 +47,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
@@ -168,9 +169,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
+
         if (conta != null ) {
             tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
+            tvEmail.setText(conta.getEmail());
         }
         Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 

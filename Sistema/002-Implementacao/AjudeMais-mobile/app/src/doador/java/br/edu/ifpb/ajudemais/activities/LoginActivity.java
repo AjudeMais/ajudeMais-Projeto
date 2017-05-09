@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -136,6 +135,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
     private void goToMainActivity(LoginResult loginResult) {
         Doador doador = FacebookAccount.userFacebookData(loginResult);
+
         if (doador != null) {
             new CreateAccounTask(doador, this).execute();
         }
@@ -352,11 +352,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -374,9 +372,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", doador.getConta());
                 startActivity(intent);
-
                 finish();
-
             } else {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
