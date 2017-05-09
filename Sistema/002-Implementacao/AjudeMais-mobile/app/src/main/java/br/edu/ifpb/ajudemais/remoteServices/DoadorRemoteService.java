@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.springframework.http.HttpAuthentication;
 import org.springframework.http.HttpBasicAuthentication;

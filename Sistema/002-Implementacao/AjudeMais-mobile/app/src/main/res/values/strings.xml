@@ -35,6 +35,9 @@
     <string name="msgPermitionTurnOnGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
     <string name="permission">Permissão</string>
     <string name="permissionDenied">"Permissão para localização negada."</string>
+    <string name="disconnected">Desconectado, por favor ligue o GPS</string>
+    <string name="failConnect">Não existe conexão com a internet</string>
+
 
     <string name="yes">Sim</string>
     <string name="no">Não</string>

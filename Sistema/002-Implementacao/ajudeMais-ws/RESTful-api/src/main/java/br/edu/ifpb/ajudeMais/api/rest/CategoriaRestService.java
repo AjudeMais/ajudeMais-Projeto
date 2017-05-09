@@ -63,14 +63,23 @@ public class CategoriaRestService {
 	@Autowired
 	private CategoriaService categoriaService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private AuthService authService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
 	
 	/**
-	 * end point criado para cadastro de uma categoria no sistema
+	 * <p>
+	 * POST /categoria : endpoint criado para cadastro de uma categoria no sistema. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
 	 * 
 	 * @param categoria
 	 * @return
@@ -93,8 +102,10 @@ public class CategoriaRestService {
 	}
 
 	/**
-	 * 
-	 * end point criado para atualização dos dados de uma categoria
+	 * <p>
+	 * PUT /categoria : endpoint criado para atualização dos dados de uma categoria. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
 	 * 
 	 * @param categoria
 	 * @return
@@ -109,7 +120,11 @@ public class CategoriaRestService {
 	}
 
 	/**
-	 * end point criado para recuperar todas as categorias cadastradas
+	 * <p>
+	 * GET /categoria : endpoint criado para recuperar todas as categorias cadastradas. <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
 	 * 
 	 * @return
 	 */
@@ -123,7 +138,10 @@ public class CategoriaRestService {
 	}
 
 	/**
-	 * busca categorias por seu identificador
+	 * <p>
+	 * GET /categoria/id : busca categorias por seu identificador. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
 	 * 
 	 * @param id
 	 * @return
@@ -138,7 +156,10 @@ public class CategoriaRestService {
 	}
 
 	/**
-	 * busca categorias por insituição
+	 * <p>
+	 * GET /categoria/instituicao : busca categorias por insituição. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
 	 * 
 	 * @param id
 	 * @return
@@ -159,7 +180,10 @@ public class CategoriaRestService {
 	}
 
 	/**
-	 * exclui uma categoria pesquisada pelo identificador
+	 * <p>
+	 * DELETE /categoria/id : exclui uma categoria pesquisada pelo identificador. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
 	 * 
 	 * @param id
 	 * @return

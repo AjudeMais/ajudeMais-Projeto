@@ -1,4 +1,18 @@
-
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
@@ -72,6 +86,9 @@ public class MesageiroServiceImpl implements MensageiroService{
 		return mensageiroRepository.findOne(id);
 	}
 	
+	/**
+	 * 
+	 */
     public List<Object[]> filtersMensageiroCloser(String logradouro, String bairro, String localidade, String uf){
     	return mensageiroRepository.filtersMensageiroCloser(logradouro, bairro, localidade, uf);
     	

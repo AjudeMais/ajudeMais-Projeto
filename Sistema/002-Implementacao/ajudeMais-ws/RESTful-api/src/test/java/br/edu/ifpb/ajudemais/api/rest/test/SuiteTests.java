@@ -13,21 +13,24 @@
  * AJUDE MAIS - 2017®
  * 
  */
-package br.edu.ifpb.ajudeMais.service.maps;
-
+package br.edu.ifpb.ajudemais.api.rest.test;
 
 /**
  * 
  * <p>
- * <b> GoogleMapsServiceImlp.java </b>
- * </p>
- *
- * <p>
- * Interface para serviços do Google maps
+ * {@link SuiteTests}
  * </p>
  * 
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * <p>
+ * Classe utilizada para executar suíte de testes.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
-public interface GoogleMapsService{
+public class SuiteTests {
 
 }

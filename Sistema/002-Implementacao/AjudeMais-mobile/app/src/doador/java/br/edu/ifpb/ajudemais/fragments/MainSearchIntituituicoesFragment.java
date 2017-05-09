@@ -11,14 +11,13 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.GoogleMap;
 
 import org.springframework.web.client.RestClientException;
 
@@ -45,14 +44,15 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
+public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private InstituicoesAdapter instituicoesAdapter;
     private static RecyclerView recyclerView;
     private static View view;
-    private GoogleMap map;
     private List<InstituicaoCaridade> instituicoes;
     private LatLng latLng;
+    private Location mLastLocation;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     /**
      *
@@ -68,9 +68,12 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
      */
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
@@ -85,6 +88,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     public void onStart() {
         super.onStart();
         new MainSearchInstituicoesFragmentTask(this).execute();
+        mLastLocation = getUpdateLocation();
     }
 
     /**
@@ -102,11 +106,35 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
+     * Pega a Localização atual do device.
+     * @return
+     */
+    private Location getUpdateLocation() {
+        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            }
+
+        }
+
+        return mLastLocation;
+    }
+
+    /**
      * @param childView View of the item that was long pressed.
      * @param position  Position of the item that was long pressed.
      */
     @Override
     public void onItemLongPress(View childView, int position) {
+
+    }
+
+    @Override
+    public void onRefresh() {
+        new MainSearchInstituicoesFragmentTask(this).execute();
+        swipeRefreshLayout.setRefreshing(false);
 
     }
 
@@ -120,26 +148,12 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         private List<InstituicaoCaridade> instituicoesResult;
         private RecyclerItemClickListener.OnItemClickListener clickListener;
         private SharedPrefManager sharedPrefManager;
-        private Location mLastLocation;
 
 
         public MainSearchInstituicoesFragmentTask(RecyclerItemClickListener.OnItemClickListener clickListener) {
             instituicaoRemoteService = new InstituicaoRemoteService(getContext());
             this.clickListener = clickListener;
             sharedPrefManager = new SharedPrefManager(getContext());
-        }
-
-        private Location getUpdateLocation() {
-            LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
-
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                }
-
-            }
-
-            return mLastLocation;
         }
 
 

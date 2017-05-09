@@ -1,7 +1,11 @@
 /**
+ * <p>
  * Ajude Mais - Módulo Web Service
+ * </p>
  * 
+ * <p>
  * Sistema para potencializar o processo de doação.
+ * </p>
  * 
  * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
  * <a href="https://franckaj.github.io">Franck Aragão"></a>
@@ -211,8 +215,7 @@ public class InstituicaoCaridadeRestTest extends AbstractRestTest {
 
 	/**
 	 * <p>
-	 * Executa teste de criação de instituição para um caso de falha. Tenta
-	 * obter insituições sem autenticação.
+	 *Tenta obter insituições sem autenticação.
 	 * </p>
 	 * 
 	 * @throws IOException
@@ -226,8 +229,7 @@ public class InstituicaoCaridadeRestTest extends AbstractRestTest {
 
 	/**
 	 * <p>
-	 * Executa teste de criação de instituição para um caso de falha. tenta
-	 * obter intituições com usuário que não possui autorização para acessar
+	 * Tenta obter intituições com usuário que não possui autorização para acessar
 	 * endpoint.
 	 * </p>
 	 * 
