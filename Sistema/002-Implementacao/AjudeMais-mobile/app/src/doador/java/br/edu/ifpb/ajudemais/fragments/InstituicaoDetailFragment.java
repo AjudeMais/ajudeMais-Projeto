@@ -44,6 +44,7 @@ public class InstituicaoDetailFragment extends Fragment {
     private CardView cardViewEmail;
     private InstituicaoCaridade instituicaoCaridade;
     private CategoriasAdapter categoriasAdapter;
+    private TextView listInstituicoes;
 
     /**
      * @param inflater
@@ -78,7 +79,15 @@ public class InstituicaoDetailFragment extends Fragment {
         emailInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_email);
         logradouroInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_logradouro);
         localidadeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_localidade);
+
+        listInstituicoes = (TextView) getView().findViewById(R.id.tv_list_itens_doaveis);
+
+        if(instituicaoCaridade.getItensDoaveis().size()<1){
+            listInstituicoes.setVisibility(View.GONE);
+        }
+
         cardViewEmail = (CardView) getView().findViewById(R.id.card_view_intituicao_detail_email);
+
 
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);

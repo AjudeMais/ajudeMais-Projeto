@@ -100,6 +100,10 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     }
 
+    /**
+     * Pega a Localização atual do device.
+     * @return
+     */
     private Location getUpdateLocation() {
         LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
 
