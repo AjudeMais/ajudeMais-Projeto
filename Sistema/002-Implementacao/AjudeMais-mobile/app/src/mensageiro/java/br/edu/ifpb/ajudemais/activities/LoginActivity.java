@@ -228,7 +228,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
                 startActivity(intent);
-
                 finish();
 
             } else {

@@ -16,7 +16,7 @@
 
 
     <!--Tela login-->
-    <string name="hitCpfNumber">CPF Mensageiro</string>
+    <string name="hitUserName">Nome do usuário</string>
     <string name="hitPassword">**********</string>
     <string name="BtnOpenApp">ENTRAR</string>
     <string name="lbForgotPassword">Esqueceu a senha?</string>

@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,11 +44,6 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
-<<<<<<< HEAD
-import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.dto.LatLng;
-=======
->>>>>>> cf05356228ee99d5a518da1eb70fbe1c44443827
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
@@ -155,18 +151,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    protected void setUpAccount() {
-        View hView = mNavigationView.getHeaderView(0);
-        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
-        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
-        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
-        conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta != null ) {
-            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail());
-        }
-        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
-    }
+
 
     /**
      * Inicia serviço Google API client
@@ -292,9 +277,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
      */
     @Override
     protected void onStop() {
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
-
         if (mGoogleApiClient != null) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
             mGoogleApiClient.disconnect();
         }
         super.onStop();
