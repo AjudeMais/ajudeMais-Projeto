@@ -46,10 +46,15 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 @RequestMapping("/conta")
 public class ContaRestService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 
 	/**
+	 * POST /conta : Salva usuário
+	 * 
 	 * @param conta
 	 * @return response
 	 * @throws AjudeMaisException
