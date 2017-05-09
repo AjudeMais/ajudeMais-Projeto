@@ -58,9 +58,6 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.e("ONBIND", categories.get(position).getNome());
-        Log.e("ONBIND", categories.get(position).getDescricao());
-        Log.e("HOLDER", holder.categoryName.toString());
 
         holder.categoryName.setText(categories.get(position).getNome());
         holder.categoryDescription.setText(categories.get(position).getDescricao());

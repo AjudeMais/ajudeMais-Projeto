@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        card_view:cardCornerRadius="2dp"
+        card_view:cardCornerRadius="0.2dp"
         card_view:cardElevation="2dp"
         card_view:cardMaxElevation="3dp"
         card_view:cardPreventCornerOverlap="false"
@@ -105,10 +105,13 @@
 
     <TextView
         android:id="@+id/tv_list_itens_doaveis"
-        android:layout_width="match_parent"
+        android:layout_width="347dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:text="@string/lista_de_itens_do_veis"
-        android:textAlignment="center"
         android:textColor="@color/textSecond"
         android:textSize="18sp" />
 
@@ -118,7 +121,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:paddingTop="2dp"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        card_view:cardPreventCornerOverlap="false"
+        card_view:cardUseCompatPadding="true"/>
 
 
 </LinearLayout>
