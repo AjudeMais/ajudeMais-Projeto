@@ -77,6 +77,19 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
     }
 
 
+    // Clean all elements of the recycler
+    public void clear() {
+        categories.clear();
+        notifyDataSetChanged();
+    }
+
+    // Add a list of items
+    public void addAll(List<Categoria> list) {
+        categories.addAll(list);
+        notifyDataSetChanged();
+    }
+
+
 
     /**
      *

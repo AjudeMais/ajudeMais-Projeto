@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class Doador implements Serializable{
+public class Doador implements Serializable {
 
     private Long id;
     private String nome;

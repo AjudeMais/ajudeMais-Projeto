@@ -43,6 +43,11 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+<<<<<<< HEAD
+import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.dto.LatLng;
+=======
+>>>>>>> cf05356228ee99d5a518da1eb70fbe1c44443827
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
@@ -150,6 +155,18 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    protected void setUpAccount() {
+        View hView = mNavigationView.getHeaderView(0);
+        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
+        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
+        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
+        conta = (Conta) getIntent().getSerializableExtra("Conta");
+        if (conta != null ) {
+            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
+            tvEmail.setText(conta.getEmail());
+        }
+        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+    }
 
     /**
      * Inicia serviço Google API client
@@ -228,7 +245,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
-                System.out.println(capturePhotoUtils.deleteImageProfile());
+                capturePhotoUtils.deleteImageProfile();
                 break;
 
         }
@@ -390,15 +407,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest, this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+
     }
 
 
@@ -407,6 +422,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
+                onLocationChanged(getLocation());
                 break;
 
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:

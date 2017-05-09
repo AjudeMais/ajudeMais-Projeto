@@ -18,7 +18,6 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  * </p>
  * <p>
  * <p>
- *
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>

@@ -1,29 +1,17 @@
 package br.edu.ifpb.ajudemais.util;
 
-import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 
-import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Foto;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 
 /**
@@ -42,8 +30,6 @@ public class FacebookAccount {
     /**
      * Método responsável por obter dados de acesso de um usuário do facebook.
      * Dados como: Nome, e-mail e username
-     * @param loginResult
-     *         Resultado da solicitação de login via facebook
      * @return
      *          Um objeto do tipo doador
      */
@@ -57,14 +43,21 @@ public class FacebookAccount {
                                 email = object.optString("email");
                                 facebookId = object.optString("id");
                                 nome = object.optString("name");
-                                username = nome.toLowerCase().replace(' ', '_');
+                                username = email;
                                 doador.setNome(nome);
                                 doador.setFacebookID(facebookId);
                                 doador.setNomeUsuario(username);
+                                doador.setTelefone("1212345-8989");
                                 conta.setUsername(username);
+                                conta.setSenha(username);
                                 conta.setEmail(email);
                                 conta.setGrupos(Collections.singletonList(Grupo.DOADOR.toString()));
                                 doador.setConta(conta);
+
+                                System.out.println(doador.getConta().getEmail());
+                                System.out.println(doador.getNome());
+                                System.out.println(doador.getFacebookID());
+
                             }
                             else {
                                 System.out.println("json vazio");
