@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,10 +9,13 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
+import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 /**
  * <p>
@@ -65,6 +69,37 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         new LoadingColetasTask().execute();
 
     }
+
+
+    /**
+     * Set as informações do usuário logado no app
+     */
+    protected void setUpAccount() {
+        View hView = mNavigationView.getHeaderView(0);
+        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
+        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
+        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
+
+        conta = (Conta) getIntent().getSerializableExtra("Conta");
+        if (conta != null ) {
+            tvUserName.setText(conta.getUsername());
+            tvEmail.setText(conta.getEmail());
+        }
+        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+
+        if (bitmap != null) {
+            profilePhoto.setImageBitmap(bitmap);
+        }
+
+        profilePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
+                startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+            }
+        });
+    }
+
 
     /**
      *Classe auxiliar para acessar Serviços

@@ -285,8 +285,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
             try {
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
-                Conta conta = authRemoteService.createAuthenticationToken(
-                        new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
 
                 return conta;
 
