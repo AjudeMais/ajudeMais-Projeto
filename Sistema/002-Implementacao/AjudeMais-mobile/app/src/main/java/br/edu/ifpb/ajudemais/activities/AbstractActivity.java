@@ -228,7 +228,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
-                System.out.println(capturePhotoUtils.deleteImageProfile());
+                capturePhotoUtils.deleteImageProfile();
                 break;
 
         }
@@ -390,15 +390,13 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
                 .setFastestInterval(FASTEST_INTERVAL);
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
-                    mLocationRequest, this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
         }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient,
+                mLocationRequest, this);
+        
     }
 
 
@@ -407,6 +405,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         final Status status = locationSettingsResult.getStatus();
         switch (status.getStatusCode()) {
             case LocationSettingsStatusCodes.SUCCESS:
+                onLocationChanged(getLocation());
                 break;
 
             case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
