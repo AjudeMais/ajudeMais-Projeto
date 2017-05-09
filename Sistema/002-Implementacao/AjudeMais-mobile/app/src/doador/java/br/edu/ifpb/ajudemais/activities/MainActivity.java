@@ -92,21 +92,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         new LoadingCampanhasDoacoesTask().execute();
     }
 
-    /**
-     * Set dados do usuário logado
-     */
-    protected void setUpAccount() {
-        View hView = mNavigationView.getHeaderView(0);
-        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
-        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
-        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
-        conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta != null ) {
-            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail());
-        }
-        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
-    }
+
 
 
     /**
