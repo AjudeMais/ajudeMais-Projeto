@@ -9,12 +9,12 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -25,17 +25,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationRequest;
@@ -47,9 +44,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
@@ -65,18 +60,18 @@ import br.edu.ifpb.ajudemais.utils.ImagePicker;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, LocationListener {
+public class AbstractActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<LocationSettingsResult> {
 
-    private DrawerLayout mDrawerLayout;
+    protected DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private ImageView profilePhoto;
+    protected ImageView profilePhoto;
     private Toolbar mToolbar;
-    private NavigationView mNavigationView;
-    private CapturePhotoUtils capturePhotoUtils;
-    private static final int PICK_IMAGE_ID = 234;
-    private TextView tvUserName;
-    private TextView tvEmail;
-    private Conta conta = new Conta();
+    protected NavigationView mNavigationView;
+    protected CapturePhotoUtils capturePhotoUtils;
+    protected static final int PICK_IMAGE_ID = 234;
+    protected TextView tvUserName;
+    protected TextView tvEmail;
+    protected Conta conta = new Conta();
     protected SharedPrefManager sharedPrefManager;
 
     protected GoogleApiClient mGoogleApiClient;
@@ -84,11 +79,8 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
     protected LocationManager locationManager;
     protected Location mLastLocation;
-    private static final int REQUEST_CHECK_SETTINGS = 0x1;
-    protected Context mContext;
-
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 0; // no minimo 10m de deslocamento pra atualizar
-    private static final long MIN_TIME_BW_UPDATES = 0; //1000 * 60 * 1; // 1 minuto no minimo
+    protected LocationRequest locationRequest;
+    protected int REQUEST_CHECK_SETTINGS = 100;
 
 
     /**
@@ -113,19 +105,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-            if (mLastLocation == null) {
-
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-
-                if (locationManager != null) {
-                    mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                } else {
-                    Log.e("LOCATION", "----nNULLLLLLLLLLLLLLLLLLLLLLLLLLL");
-                }
-            }
-
         }
-
 
         return mLastLocation;
     }
@@ -158,98 +138,21 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    /**
-     * Set as informações do usuário logado no app
-     */
-    protected void setUpAccount() {
-        View hView = mNavigationView.getHeaderView(0);
-        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
-        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
-        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
-
-        conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta != null ) {
-            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
-        }
-        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
-
-        if (bitmap != null) {
-            profilePhoto.setImageBitmap(bitmap);
-        }
-
-        profilePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
-                startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-            }
-        });
-    }
-
-    /**
-     * Set Configuração para Navegation Drawer
-     */
-    protected void setupNavDrawer() {
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            if (mNavigationView != null && mDrawerLayout != null) {
-
-                mNavigationView.setNavigationItemSelectedListener(
-                        new NavigationView.OnNavigationItemSelectedListener() {
-                            @Override
-                            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                                menuItem.setChecked(true);
-                                mDrawerLayout.closeDrawers();
-                                onNavDrawerItemSelected(menuItem);
-                                return true;
-                            }
-                        });
-            }
-        }
-    }
-
-    /**
-     * @param menuItem
-     */
-    private void onNavDrawerItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-            case R.id.nav_config_conta:
-                break;
-            case R.id.nav_notificacoes:
-                break;
-            case R.id.nav_sair:
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    LoginManager.getInstance().logOut();
-                    goToLoginScreen();
-                    break;
-                } else {
-                    SharedPrefManager.getInstance(this).clearSharedPrefs();
-                    System.out.println(capturePhotoUtils.deleteImageProfile());
-                    goToLoginScreen();
-                    break;
-                }
-        }
-    }
-
-    private void goToLoginScreen() {
-        Intent intent = new Intent();
-        intent.setClass(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
-    }
 
     /**
      * Inicia serviço Google API client
      */
     protected void initGoogleAPIClient() {
-        mGoogleApiClient = new GoogleApiClient.Builder(AbstractActivity.this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
 
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(AbstractActivity.this)
+                .addOnConnectionFailedListener(this).build();
+        mGoogleApiClient.connect();
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);
     }
 
     /**
@@ -290,7 +193,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 final LocationSettingsStates state = result.getLocationSettingsStates();
                 switch (status.getStatusCode()) {
                     case LocationSettingsStatusCodes.SUCCESS:
-                        onLocationChanged(getLocation());
+                        //onLocationChanged(getLocation());
                         break;
                     case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
 
@@ -308,6 +211,45 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         });
     }
 
+    /**
+     * Set Configuração para Navegation Drawer
+     */
+    protected void setupNavDrawer() {
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (mNavigationView != null && mDrawerLayout != null) {
+
+                mNavigationView.setNavigationItemSelectedListener(
+                        new NavigationView.OnNavigationItemSelectedListener() {
+                            @Override
+                            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                                menuItem.setChecked(true);
+                                mDrawerLayout.closeDrawers();
+                                onNavDrawerItemSelected(menuItem);
+                                return true;
+                            }
+                        });
+            }
+        }
+    }
+
+    /**
+     * @param menuItem
+     */
+    private void onNavDrawerItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_config_conta:
+                break;
+            case R.id.nav_notificacoes:
+                break;
+            case R.id.nav_sair:
+                SharedPrefManager.getInstance(this).clearSharedPrefs();
+                System.out.println(capturePhotoUtils.deleteImageProfile());
+                break;
+
+        }
+    }
 
     /**
      * Requisita permissão para acessar GPS do device.
@@ -363,7 +305,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().matches(BROADCAST_ACTION)) {
                 locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                onLocationChanged(getLocation());
+               // onLocationChanged(getLocation());
 
             } else {
                 new Handler().postDelayed(sendUpdatesToUI, 10);
@@ -384,29 +326,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         return false;
     }
 
-    /**
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode != RESULT_CANCELED) {
-            if (requestCode == PICK_IMAGE_ID) {
-                if (data.getExtras() == null) {
-                    Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-                    profilePhoto.setImageBitmap(bitmap);
-                    capturePhotoUtils.saveToInternalStorage(bitmap);
-                } else {
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    profilePhoto.setImageBitmap(photo);
-                    capturePhotoUtils.saveToInternalStorage(photo);
-
-                }
-            }
-        }
-    }
 
     /**
      * @param requestCode
@@ -436,28 +356,65 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
-    /**
-     * @param location
-     */
+    
     @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            sharedPrefManager.storeLatLng(new LatLng(location.getLatitude(), location.getAltitude()));
+    public void onConnected(@Nullable Bundle bundle) {
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(
+                        mGoogleApiClient,
+                        builder.build()
+                );
+        result.setResultCallback(this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                // NO need to show the dialog;
+
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                //  GPS turned off, Show the user a dialog
+
+
+                break;
+
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                // Location settings are unavailable so not possible to show any dialog now
+                break;
         }
     }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
 
-    }
+            if (resultCode == RESULT_OK) {
 
-    @Override
-    public void onProviderEnabled(String provider) {
+                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_LONG).show();
+            } else {
 
-    }
+                Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_LONG).show();
+            }
 
-    @Override
-    public void onProviderDisabled(String provider) {
-
+        }
     }
 }
