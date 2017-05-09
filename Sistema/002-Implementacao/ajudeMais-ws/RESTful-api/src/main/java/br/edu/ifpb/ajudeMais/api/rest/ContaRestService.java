@@ -1,7 +1,11 @@
 /**
+ * <p>
  * Ajude Mais - Módulo Web Service
+ * </p>
  * 
+ * <p>
  * Sistema para potencializar o processo de doação.
+ * </p>
  * 
  * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
  * <a href="https://franckaj.github.io">Franck Aragão"></a>
@@ -46,10 +50,15 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 @RequestMapping("/conta")
 public class ContaRestService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 
 	/**
+	 * POST /conta : Salva usuário
+	 * 
 	 * @param conta
 	 * @return response
 	 * @throws AjudeMaisException

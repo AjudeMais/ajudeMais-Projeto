@@ -1,4 +1,18 @@
-
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.rest;
 
 import java.util.List;
@@ -35,7 +49,7 @@ public class MensageiroRestService {
 	private MensageiroService mensageiroService;
 
 	/**
-	 * End point para cadastro de um mensageiro no sistema.
+	 * Endpoint para cadastro de um mensageiro no sistema.
 	 * @param mensageiro
 	 * @return
 	 * @throws AjudeMaisException
@@ -48,7 +62,7 @@ public class MensageiroRestService {
 	}
 	
 	/**
-	 * End point para atualizar informações do mensageiro.
+	 * Endpoint para atualizar informações do mensageiro.
 	 * @param mensageiro
 	 * @return Mensageiro
 	 * @throws AjudeMaisException 
@@ -63,7 +77,7 @@ public class MensageiroRestService {
 	
 	
 	/**
-	 * End point para listar todos os mensageiros cadastros no sistema.
+	 * Endpoint para listar todos os mensageiros cadastros no sistema.
 	 * @return Mensageiro
 	 */
 	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
@@ -74,7 +88,7 @@ public class MensageiroRestService {
 	}
 	
 	/**
-	 * End point para buscar um mensageiro por seu identificador.
+	 * Endpoint para buscar um mensageiro por seu identificador.
 	 * @return  Mensageiro
 	 */
 	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")

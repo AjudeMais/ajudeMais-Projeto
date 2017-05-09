@@ -1,3 +1,18 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.ArrayList;
@@ -26,19 +41,39 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtTokenUtil;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link AuthServiceImpl}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementação de serviços definido em
+ * {@link AuthService}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private AuthenticationManager authenticationManager;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private UserDetailsService userDetailsService;
 

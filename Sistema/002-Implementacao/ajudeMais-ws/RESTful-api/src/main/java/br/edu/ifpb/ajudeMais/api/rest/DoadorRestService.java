@@ -1,3 +1,18 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.rest;
 
 import java.util.List;
@@ -20,7 +35,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 /**
  * 
  * <p>
- * <b> DoadorRestService </b>
+ * <b> {@link DoadorRestService} </b>
  * </p>
  *
  * <p>
@@ -33,29 +48,45 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 @RequestMapping(value = "/doador")
 public class DoadorRestService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DoadorService doadorService;
 
 	/**
+	 * 
+	 * <p>
+	 * POST /doador/ : Método disponibiliza recurso para salvar um doador. ROLE:
+	 * PUBLIC
+	 * </p>
+	 * 
 	 * @param doador
-	 * @return response
+	 * @return Htpp 201, caso cadastro tenha occorido com sucesso
 	 * @throws AjudeMaisException
 	 */
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<?> criar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
+	public ResponseEntity<?> save(@Valid @RequestBody Doador doador) throws AjudeMaisException {
 
 		Doador doadorCriado = doadorService.save(doador);
 		return new ResponseEntity<>(doadorCriado, HttpStatus.CREATED);
 	}
 
 	/**
+	 * 
+	 * <p>
+	 * PUT /doador/ : Método disponibiliza recurso para atualizar um doador.
+	 * ROLE: DOADOR
+	 * </p>
+	 * 
 	 * @param doador
-	 * @return
-	 * @throws AjudeMaisException 
+	 *            doador a ser atualizado.
+	 * @return 201 caso sucesso.
+	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<Doador> alterar(@Valid @RequestBody Doador doador) throws AjudeMaisException {
+	public ResponseEntity<Doador> update(@Valid @RequestBody Doador doador) throws AjudeMaisException {
 
 		Doador pacienteAtualizado = doadorService.update(doador);
 
@@ -64,11 +95,16 @@ public class DoadorRestService {
 
 	/**
 	 * 
+	 * <p>
+	 * GET /doador/ : Método disponibiliza recurso obter doadores cadastrados.
+	 * ROLE: DOADOR
+	 * </p>
+	 * 
 	 * @return
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<Doador>> buscarTodos() {
+	public ResponseEntity<List<Doador>> findAll() {
 
 		List<Doador> doador = doadorService.findAll();
 
