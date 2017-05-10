@@ -113,7 +113,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta != null) {
-            tvUserName.setText(Profile.getCurrentProfile().getName());
+            tvUserName.setText(conta.getUsername() != null? conta.getUsername(): Profile.getCurrentProfile().getName());
             tvEmail.setText(conta.getEmail());
         }
         if (AccessToken.getCurrentAccessToken() == null) {
