@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
+    private AndroidUtil androidUtil;
 
 
     /**
@@ -55,12 +58,18 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPrefManager = new SharedPrefManager(this);
+        androidUtil = new AndroidUtil(this);
 
         initGoogleAPIClient();
         checkPermissions();
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         findViewById(R.id.containerView).setVisibility(View.GONE);
+        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+
+        if (!androidUtil.isOnline()){
+            findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
+        }
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -94,35 +103,30 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
 
 
-
     /**
      * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
+        Bitmap bitmap = null;
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta != null) {
-            tvUserName.setText(Profile.getCurrentProfile().getName());
+            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername() );
             tvEmail.setText(conta.getEmail());
         }
-        if (AccessToken.getCurrentAccessToken() == null) {
-            Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 
-            if (bitmap != null) {
-                profilePhoto.setImageBitmap(bitmap);
-            }
+        if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
+             bitmap = FacebookAccount.getProfilePictureUser();
+        }else{
+            bitmap = capturePhotoUtils.loadImageFromStorage();
         }
 
-        if (AccessToken.getCurrentAccessToken().getUserId() != null) {
-            Bitmap bitmap = FacebookAccount.getProfilePictureUser();
-
-            if (bitmap != null) {
-                profilePhoto.setImageBitmap(bitmap);
-            }
+        if (bitmap != null) {
+            profilePhoto.setImageBitmap(bitmap);
         }
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {

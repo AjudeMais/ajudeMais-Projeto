@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -64,8 +65,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         setContentView(R.layout.activity_login);
 
-        contaFacebook = new Conta();
-
         init();
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
@@ -114,10 +113,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onCancel() {
-                Toast toast = new Toast(getApplicationContext());
-                toast.setText(R.string.cancelOperation);
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                goBackToLoginScreen();
+                Toast.makeText(getApplicationContext(), R.string.cancelOperation, Toast.LENGTH_LONG).show();
             }
 
             /**
@@ -126,12 +123,21 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onError(FacebookException error) {
-                Toast toast = new Toast(getApplicationContext());
-                toast.setText(error.getMessage());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                goBackToLoginScreen();
+                Toast.makeText(getApplicationContext(), R.string.errorOnLogin, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     * Método que retorna para a tela de login em casos de cancelamento de login via Facebook
+     * ou falha na tentativa de login
+     */
+    private void goBackToLoginScreen() {
+        Intent intent = new Intent();
+        intent.setClass(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /**
@@ -286,6 +292,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                     conta = contaFacebook;
                     return conta;
                 } else {
+                    Log.e("DOADOR SEM FACEBOk", "FODA......");
                     conta = new Conta(username, senha);
                     conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
                     return conta;
