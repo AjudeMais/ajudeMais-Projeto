@@ -1,7 +1,10 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +12,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,6 +28,7 @@ import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 
@@ -45,6 +50,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
+    private AndroidUtil androidUtil;
 
 
     /**
@@ -55,12 +61,18 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPrefManager = new SharedPrefManager(this);
+        androidUtil = new AndroidUtil(this);
 
         initGoogleAPIClient();
         checkPermissions();
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         findViewById(R.id.containerView).setVisibility(View.GONE);
+        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+
+        if (!androidUtil.isOnline()){
+            findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
+        }
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -91,7 +103,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         new LoadingCampanhasDoacoesTask().execute();
     }
-
 
 
 

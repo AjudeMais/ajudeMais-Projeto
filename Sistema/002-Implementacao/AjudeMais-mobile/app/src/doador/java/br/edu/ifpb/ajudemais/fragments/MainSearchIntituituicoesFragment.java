@@ -18,11 +18,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import org.springframework.web.client.RestClientException;
-
 import java.util.List;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.InstituicaoActivity;
 import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
@@ -31,6 +28,7 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
@@ -53,6 +51,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     private LatLng latLng;
     private Location mLastLocation;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private AndroidUtil androidUtil;
 
     /**
      *
@@ -72,6 +71,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -87,6 +87,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     @Override
     public void onStart() {
         super.onStart();
+        androidUtil = new AndroidUtil(getContext());
         new MainSearchInstituicoesFragmentTask(this).execute();
         mLastLocation = getUpdateLocation();
     }
@@ -107,6 +108,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     /**
      * Pega a Localização atual do device.
+     *
      * @return
      */
     private Location getUpdateLocation() {
@@ -133,9 +135,22 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     @Override
     public void onRefresh() {
-        new MainSearchInstituicoesFragmentTask(this).execute();
+        if (androidUtil.isOnline()) {
+            new MainSearchInstituicoesFragmentTask(this).execute();
+        } else {
+
+
+            setVisibleNoConnection();
+
+        }
         swipeRefreshLayout.setRefreshing(false);
 
+    }
+
+    public void setVisibleNoConnection() {
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
     }
 
     /**
@@ -163,20 +178,24 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
          */
         @Override
         protected List<InstituicaoCaridade> doInBackground(Void... voids) {
+
             try {
+                if (androidUtil.isOnline()) {
+                    latLng = sharedPrefManager.getLocation();
 
-                latLng = sharedPrefManager.getLocation();
+                    mLastLocation = getUpdateLocation();
+                    if (mLastLocation != null) {
+                        latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    }
 
-                mLastLocation = getUpdateLocation();
-                if (mLastLocation != null) {
-                    latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                }
+                    if (latLng != null) {
+                        instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
 
-                if (latLng != null) {
-                    instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
-
+                    } else {
+                        instituicoesResult = instituicaoRemoteService.getInstituicoes();
+                    }
                 } else {
-                    instituicoesResult = instituicaoRemoteService.getInstituicoes();
+                    setVisibleNoConnection();
                 }
             } catch (RestClientException e) {
                 message = e.getMessage();

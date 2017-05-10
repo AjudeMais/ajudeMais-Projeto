@@ -27,6 +27,8 @@
 
     </FrameLayout>
 
+    <include android:id="@+id/no_internet_fragment" layout="@layout/fragment_no_internet"/>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/loadingPanelMainSearchInst"
         style="@style/GenericProgressBackground">
