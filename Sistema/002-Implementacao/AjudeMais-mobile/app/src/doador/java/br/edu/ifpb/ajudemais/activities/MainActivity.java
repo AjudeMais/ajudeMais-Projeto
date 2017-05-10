@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.Profile;
@@ -24,6 +23,7 @@ import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 
@@ -106,13 +106,23 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta != null) {
-            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
+            tvUserName.setText(Profile.getCurrentProfile().getName());
+            tvEmail.setText(conta.getEmail());
         }
-        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 
-        if (bitmap != null) {
-            profilePhoto.setImageBitmap(bitmap);
+            if (bitmap != null) {
+                profilePhoto.setImageBitmap(bitmap);
+            }
+        }
+
+        if (AccessToken.getCurrentAccessToken().getUserId() != null) {
+            Bitmap bitmap = FacebookAccount.getProfilePictureUser();
+
+            if (bitmap != null) {
+                profilePhoto.setImageBitmap(bitmap);
+            }
         }
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {
