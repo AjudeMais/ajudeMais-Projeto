@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimary"
-            android:hint="@string/hitCpfNumber"
+            android:hint="@string/hitUserName"
             android:inputType="textPersonName"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"

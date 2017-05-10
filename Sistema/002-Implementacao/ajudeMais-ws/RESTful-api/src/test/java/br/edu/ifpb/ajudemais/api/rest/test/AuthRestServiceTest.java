@@ -67,9 +67,34 @@ public class AuthRestServiceTest extends AbstractRestTest {
 	public void loginNotOk() throws Exception {
 		login("bernadette", "microbiologic").andExpect(status().isUnauthorized());
 	}
+	
+	/**
+	 * <p>
+	 * Criar teste para login e deve obter error. Tenta efetuar login com apenas username.
+	 * </p>
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void loginWithPasswordNull() throws Exception {
+		login("bernadette", null).andExpect(status().isUnauthorized());
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * </p>
+	 * @throws Exception
+	 */
+	@Test
+	public void loginWithUsernameNull() throws Exception {
+		login(null, "bolo").andExpect(status().isUnauthorized());
+	}
+	
+
 
 	/**
-	 * Cria teste para exercitar end point que recupera o usuário.
+	 * Cria teste para exercitar endpoint que recupera o usuário.
 	 * 
 	 * @throws Exception
 	 */

@@ -93,6 +93,8 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     }
 
 
+
+
     /**
      * Set as informações do usuário logado no app
      */
@@ -198,7 +200,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         protected void onPostExecute(String message) {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             findViewById(R.id.containerView).setVisibility(View.VISIBLE);
-            Toast.makeText(getApplication(), "CARREGADO", Toast.LENGTH_LONG).show();
         }
     }
 }

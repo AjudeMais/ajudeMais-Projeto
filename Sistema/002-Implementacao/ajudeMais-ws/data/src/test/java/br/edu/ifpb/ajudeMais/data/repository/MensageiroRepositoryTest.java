@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -21,39 +20,44 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Doador;
-
 /**
  * 
+ * <p>{@link MensageiroRepositoryTest} </p>
+ * 
+ * <p>
+ * Classe utilizada para testes de {@link MensageiroRepositoryTest}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
+	TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@DatabaseSetup("/doador-entries.xml")
-@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/doador-entries.xml" })
+@DatabaseSetup("/mensageiro-entries.xml")
+@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/mensageiro-entries.xml" })
 @DirtiesContext
-public class DoadorRepositoryTest {
-
+public class MensageiroRepositoryTest {
+	
 	/**
 	 * 
 	 */
 	@Autowired
-	private DoadorRepository doadorRepository;
-
+	private MensageiroRepository mensageiroRepository;
+	
 	/**
 	 * 
 	 * <p>
 	 * </p>
 	 */
 	@Test
-	public void findByIdTest() {
-
-		Doador doador = doadorRepository.findOne(1l);
-		assertNotNull(doador);
-
+	public void filtersMensageiroCloserTest() {
+		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "centro", "Ouro velho", "PB");
+		assertTrue(mensageiros.size() > 0);
 	}
 	
 	/**
@@ -62,11 +66,9 @@ public class DoadorRepositoryTest {
 	 * </p>
 	 */
 	@Test
-	public void findByNomeTest() {
-		
-		List<Doador> doadores = doadorRepository.findByNome("Ze");
-		assertTrue("Deveria ter conteúdo na lista", doadores.size() > 0);
-		
+	public void filtersMensageiroCloserValidOnlyAddressTest() {
+		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "", "", "");
+		assertFalse(mensageiros.size() > 0);
 	}
 	
 	/**
@@ -75,10 +77,8 @@ public class DoadorRepositoryTest {
 	 * </p>
 	 */
 	@Test
-	public void findByNomeNotFoundTest() {
-		
-		List<Doador> doadores = doadorRepository.findByNome("Zefinha");
-		assertThat(true, is(doadores.size() == 0));
+	public void filtersMensageiroCloserNullParamsTest() {
+		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser(null, null, null, null);
+		assertFalse(mensageiros.size() > 0);
 	}
-
 }

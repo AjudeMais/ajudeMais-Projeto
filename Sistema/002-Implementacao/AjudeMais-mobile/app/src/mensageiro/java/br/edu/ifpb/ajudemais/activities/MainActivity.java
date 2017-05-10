@@ -8,14 +8,18 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.gms.location.LocationServices;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.utils.ImagePicker;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
  * <p>
@@ -23,7 +27,7 @@ import br.edu.ifpb.ajudemais.utils.ImagePicker;
  * </p>
  * <p>
  * <p>
- *  Activity inicial para Mensageiro
+ * Activity inicial para Mensageiro
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
@@ -35,7 +39,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FloatingActionButton fab;
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -59,10 +62,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
             }
         });
 
@@ -81,7 +81,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta != null ) {
+        if (conta != null) {
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
@@ -91,18 +91,57 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             profilePhoto.setImageBitmap(bitmap);
         }
 
-        profilePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
-                startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-            }
-        });
     }
 
 
     /**
-     *Classe auxiliar para acessar Serviços
+     * @param menuItem
+     */
+    private void onNavDrawerItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case R.id.nav_config_conta:
+                break;
+            case R.id.nav_notificacoes:
+                break;
+            case R.id.nav_sair:
+                SharedPrefManager.getInstance(this).clearSharedPrefs();
+                capturePhotoUtils.deleteImageProfile();
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(intent);
+                break;
+        }
+
+    }
+
+    /**
+     * Set Configuração para Navegation Drawer
+     */
+    protected void setupNavDrawer() {
+        final ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            if (mNavigationView != null && mDrawerLayout != null) {
+
+                mNavigationView.setNavigationItemSelectedListener(
+                        new NavigationView.OnNavigationItemSelectedListener() {
+                            @Override
+                            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                                menuItem.setChecked(true);
+                                mDrawerLayout.closeDrawers();
+                                onNavDrawerItemSelected(menuItem);
+                                return true;
+                            }
+                        });
+            }
+        }
+    }
+
+
+    /**
+     * Classe auxiliar para acessar Serviços
      */
     private class LoadingColetasTask extends AsyncTask<Void, Void, String> {
 
@@ -115,7 +154,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         protected void onPostExecute(String message) {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             findViewById(R.id.containerView).setVisibility(View.VISIBLE);
-            Toast.makeText(getApplication(), "CARREGADO", Toast.LENGTH_LONG).show();
         }
 
     }
