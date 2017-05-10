@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,8 +64,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-
-        contaFacebook = new Conta();
 
         init();
 
@@ -293,6 +292,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                     conta = contaFacebook;
                     return conta;
                 } else {
+                    Log.e("DOADOR SEM FACEBOk", "FODA......");
                     conta = new Conta(username, senha);
                     conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
                     return conta;

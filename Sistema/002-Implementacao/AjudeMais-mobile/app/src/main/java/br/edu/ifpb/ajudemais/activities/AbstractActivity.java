@@ -355,7 +355,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     public void onConnected(@Nullable Bundle bundle) {
         Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mCurrentLocation != null) {
-            Log.d("DEBUG", "current location: " + mCurrentLocation.toString());
             mLastLocation = mCurrentLocation;
         }
         startLocationUpdates();

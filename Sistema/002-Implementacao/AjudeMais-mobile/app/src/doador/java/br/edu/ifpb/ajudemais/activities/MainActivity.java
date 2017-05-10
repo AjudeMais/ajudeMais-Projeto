@@ -9,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -107,29 +108,25 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
      */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
+        Bitmap bitmap = null;
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta != null) {
-            tvUserName.setText(conta.getUsername() != null? conta.getUsername(): Profile.getCurrentProfile().getName());
+            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername() );
             tvEmail.setText(conta.getEmail());
         }
-        if (AccessToken.getCurrentAccessToken() == null) {
-            Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 
-            if (bitmap != null) {
-                profilePhoto.setImageBitmap(bitmap);
-            }
+        if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
+             bitmap = FacebookAccount.getProfilePictureUser();
+        }else{
+            bitmap = capturePhotoUtils.loadImageFromStorage();
         }
 
-        if (AccessToken.getCurrentAccessToken().getUserId() != null) {
-            Bitmap bitmap = FacebookAccount.getProfilePictureUser();
-
-            if (bitmap != null) {
-                profilePhoto.setImageBitmap(bitmap);
-            }
+        if (bitmap != null) {
+            profilePhoto.setImageBitmap(bitmap);
         }
 
         profilePhoto.setOnClickListener(new View.OnClickListener() {
