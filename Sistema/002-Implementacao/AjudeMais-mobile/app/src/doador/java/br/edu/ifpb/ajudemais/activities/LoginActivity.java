@@ -114,10 +114,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onCancel() {
-                Toast toast = new Toast(getApplicationContext());
-                toast.setText(R.string.cancelOperation);
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                goBackToLoginScreen();
+                Toast.makeText(getApplicationContext(), R.string.cancelOperation, Toast.LENGTH_LONG).show();
             }
 
             /**
@@ -126,12 +124,21 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onError(FacebookException error) {
-                Toast toast = new Toast(getApplicationContext());
-                toast.setText(error.getMessage());
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                goBackToLoginScreen();
+                Toast.makeText(getApplicationContext(), R.string.errorOnLogin, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    /**
+     * Método que retorna para a tela de login em casos de cancelamento de login via Facebook
+     * ou falha na tentativa de login
+     */
+    private void goBackToLoginScreen() {
+        Intent intent = new Intent();
+        intent.setClass(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /**
