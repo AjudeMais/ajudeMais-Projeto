@@ -24,7 +24,6 @@ import java.util.Arrays;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
@@ -52,7 +51,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private EditText edtPassword;
     private Resources resources;
     private CallbackManager callbackManager;
-    private Doador doadorFacebook;
+    private Conta contaFacebook;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -65,7 +64,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         setContentView(R.layout.activity_login);
 
-        doadorFacebook = new Doador();
+        contaFacebook = new Conta();
 
         init();
 
@@ -107,7 +106,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
              */
             @Override
             public void onSuccess(LoginResult loginResult) {
-                goToMainActivity(loginResult);
+                goToMainActivity(loginResult, getApplicationContext());
             }
 
             /**
@@ -135,12 +134,16 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         });
     }
 
-    private void goToMainActivity(LoginResult loginResult) {
-        doadorFacebook = FacebookAccount.userFacebookData(loginResult);
-
-        if (doadorFacebook != null) {
-            // TODO: 09/05/17
-        }
+    /**
+     * Método que obtem os dados de um usuário do facebook após uma solicitação bem sucedida
+     * de login. A partir deste resultado, encaminha o user para a tela principal da aplicação
+     * @param loginResult
+     *      Resultado da solicitação de login
+     * @param context
+     *      Contexto da aplicação
+     */
+    private void goToMainActivity(LoginResult loginResult, Context context) {
+        contaFacebook = FacebookAccount.userFacebookData(loginResult, context);
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -279,8 +282,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         @Override
         protected Conta doInBackground(Void... params) {
             try {
-                if (doadorFacebook.getFacebookID() != null) {
-                    conta = doadorFacebook.getConta();
+                if (contaFacebook != null) {
+                    conta = contaFacebook;
                     return conta;
                 } else {
                     conta = new Conta(username, senha);
