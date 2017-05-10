@@ -27,7 +27,6 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
 
@@ -53,6 +52,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private EditText edtPassword;
     private Resources resources;
     private CallbackManager callbackManager;
+    private Doador doadorFacebook;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -64,6 +64,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+
+        doadorFacebook = new Doador();
 
         init();
 
@@ -134,10 +136,10 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     }
 
     private void goToMainActivity(LoginResult loginResult) {
-        Doador doador = FacebookAccount.userFacebookData(loginResult);
+        doadorFacebook = FacebookAccount.userFacebookData(loginResult);
 
-        if (doador != null) {
-            new CreateAccounTask(doador, this).execute();
+        if (doadorFacebook != null) {
+            // TODO: 09/05/17
         }
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
@@ -276,13 +278,15 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
          */
         @Override
         protected Conta doInBackground(Void... params) {
-
             try {
-                conta = new Conta(username, senha);
-                conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
-
-                return conta;
-
+                if (doadorFacebook.getFacebookID() != null) {
+                    conta = doadorFacebook.getConta();
+                    return conta;
+                } else {
+                    conta = new Conta(username, senha);
+                    conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
+                    return conta;
+                }
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
@@ -307,80 +311,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
                 startActivity(intent);
-
                 finish();
-
             } else {
                 showResult(message);
             }
         }
 
     }
-
-    /**
-     *
-     */
-    private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
-
-        private String message;
-        private Doador doador;
-        private DoadorRemoteService doadorRemoteService;
-
-        public CreateAccounTask(Doador doador, Context context) {
-            this.doador = doador;
-            doadorRemoteService = new DoadorRemoteService(context);
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-
-        }
-
-        /**
-         *
-         * @param params
-         * @return
-         */
-        @Override
-        protected Conta doInBackground(Void... params) {
-            try {
-                doador = doadorRemoteService.saveDoador(doador);
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-
-        /**
-         *
-         * @param conta
-         */
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-            if (conta != null) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", doador.getConta());
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

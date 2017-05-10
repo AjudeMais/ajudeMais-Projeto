@@ -54,10 +54,6 @@ public class FacebookAccount {
                                 conta.setGrupos(Collections.singletonList(Grupo.DOADOR.toString()));
                                 doador.setConta(conta);
 
-                                System.out.println(doador.getConta().getEmail());
-                                System.out.println(doador.getNome());
-                                System.out.println(doador.getFacebookID());
-
                             }
                             else {
                                 System.out.println("json vazio");

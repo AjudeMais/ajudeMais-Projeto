@@ -104,8 +104,8 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta != null) {
-            tvUserName.setText(conta.getUsername() != null ? conta.getUsername() : Profile.getCurrentProfile().getName());
-            tvEmail.setText(conta.getEmail() != null ? conta.getEmail() : "Nenhum e-mail informado");
+            tvUserName.setText(Profile.getCurrentProfile().getName());
+            tvEmail.setText(conta.getEmail());
         }
         Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
 
