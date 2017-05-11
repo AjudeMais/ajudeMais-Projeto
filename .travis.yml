@@ -1,5 +1,5 @@
 language: java
-before_install: cd Sistema/002-Implementação/ajudeMais-ws
+before_install: cd Sistema/002-Implementacao/ajudeMais-ws
 script: 
   - mvn test
   - mvn clean install
