@@ -17,12 +17,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import com.codeborne.selenide.WebDriverRunner;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.CategoriaPage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.CriarCategoriaPage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.CreateCategoriaPage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.EditarCategoriaPage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.RemoverCategoriaPage;
 /**
  * 
- * classe que contém os testes de categoria
+ * classe que contém os testes de aceitção para categoria
  * @author elson
  *
  */
@@ -72,7 +72,7 @@ public class CategoriaTest{
 	public void adicionarCategoria() throws InterruptedException{
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		String nome = "utensílios";
 		criarCategoriaPage.adicionarOuEditarCategoria(nome, "qualquer tipo de utensílio", true);
 		Thread.sleep(2000);
@@ -89,7 +89,7 @@ public class CategoriaTest{
 	public void adicionarCategoriaComCampoNomeNaoPreenchido(){
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		
 		criarCategoriaPage.adicionarOuEditarCategoria("", "qualquer tipo de utensílio", true);
 		
@@ -98,6 +98,7 @@ public class CategoriaTest{
 		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.",
 				houveErroCamposObgsNaoInformados);
 	}
+	
 	/**
 	 * tenta adicionar uma categoria sem preencher o campo descrição
 	 */
@@ -105,7 +106,7 @@ public class CategoriaTest{
 	public void adicionarCategoriaComCampoDescricaoNaoPreenchido(){
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		
 		criarCategoriaPage.adicionarOuEditarCategoria("utensílios", "", true);
 		
@@ -114,6 +115,7 @@ public class CategoriaTest{
 		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.",
 				houveErroCamposObgsNaoInformados);
 	}
+	
 	/**
 	 * tenta adicionar categoria sem informar os campos obrigatórios
 	 */
@@ -121,7 +123,7 @@ public class CategoriaTest{
 	public void adicionarCategoriaSemCamposObrigatoriosPreenchidos(){
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		
 		criarCategoriaPage.adicionarOuEditarCategoria("", "", true);
 		
@@ -139,7 +141,7 @@ public class CategoriaTest{
 	public void editarCategoria(){
 		categoriaPage.visita();
 
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		criarCategoriaPage.adicionarOuEditarCategoria("Informatica ", "informatica em geral", true);
 		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Informatica");
 
@@ -159,6 +161,7 @@ public class CategoriaTest{
 		}
 
 	}
+	
 	/**
 	 * tenta editar uma categoria e desiste
 	 *  
@@ -167,7 +170,7 @@ public class CategoriaTest{
 	public void editarCategoriaEDesiste() {
 		categoriaPage.visita();
 
-		CriarCategoriaPage criarCategoriaPage = categoriaPage.novo();
+		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		criarCategoriaPage.adicionarOuEditarCategoria("Eletronicos ", "eletronicos em geral", true);
 		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Eletronicos");
 
@@ -186,6 +189,7 @@ public class CategoriaTest{
 		
 
 	}
+	
 	/**
 	 * tenta excluir uma categoria e desiste
 	 * 
@@ -194,7 +198,7 @@ public class CategoriaTest{
 	public void excluirCategoriaEDesiste(){
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoria = categoriaPage.novo();
+		CreateCategoriaPage criarCategoria = categoriaPage.novo();
 		
 		criarCategoria.adicionarOuEditarCategoria("Roupas", "tipos de roupas", true);
 		
@@ -222,7 +226,7 @@ public class CategoriaTest{
 	public void removerCategoria(){
 		categoriaPage.visita();
 		
-		CriarCategoriaPage criarCategoria = categoriaPage.novo();
+		CreateCategoriaPage criarCategoria = categoriaPage.novo();
 		
 		criarCategoria.adicionarOuEditarCategoria("Roupas2", "categoria da zefa", true);
 		

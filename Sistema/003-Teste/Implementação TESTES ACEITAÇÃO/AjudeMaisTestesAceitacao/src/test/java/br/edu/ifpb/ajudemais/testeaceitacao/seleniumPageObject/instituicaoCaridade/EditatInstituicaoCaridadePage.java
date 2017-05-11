@@ -16,12 +16,12 @@ import org.openqa.selenium.WebDriver;
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class EditInstituicaoCaridadePage extends InstituicaoCaridadePage{
+public class EditatInstituicaoCaridadePage extends InstituicaoCaridadePage{
 
 	/**
 	 * @param driver
 	 */
-	public EditInstituicaoCaridadePage(WebDriver driver) {
+	public EditatInstituicaoCaridadePage(WebDriver driver) {
 		super(driver);
 	}
 	

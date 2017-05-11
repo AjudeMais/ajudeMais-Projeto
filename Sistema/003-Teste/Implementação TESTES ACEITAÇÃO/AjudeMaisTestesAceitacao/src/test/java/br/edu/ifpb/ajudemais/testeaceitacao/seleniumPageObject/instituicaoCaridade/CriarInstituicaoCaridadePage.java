@@ -10,21 +10,21 @@ import org.openqa.selenium.WebDriver;
 /**
  * 
  * <p>
- * <b> CreateInstituicaoCaridadePage.java </b>
+ * <b> {@link CriarInstituicaoCaridadePage} </b>
  * </p>
  *
  * <p>
- * Entidade ...
+ * Apresenta métodos auxiliares para realizar ações na página de criação de instituição de caridade.
  * </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
+public class CriarInstituicaoCaridadePage extends InstituicaoCaridadePage {
 
 	/**
 	 * @param driver
 	 */
-	public CreateInstituicaoCaridadePage(WebDriver driver) {
+	public CriarInstituicaoCaridadePage(WebDriver driver) {
 		super(driver);
 	}
 	
@@ -193,7 +193,7 @@ public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	}
 	
 	/**
-	 * 
+	 * Verifica a existência de mensagens de erros nos campos obrigatórios no cadastro de isntiuições de caridade.
 	 * @return boolean
 	 */
 	public boolean houveUmErroTodosCamposObgs() {		
@@ -206,7 +206,7 @@ public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	
 	
 	/**
-	 * 
+	 * Verifica se houve um erro de email inválido. 
 	 * @return boolean
 	 */
 	public boolean houveUmErroCampoEmailInvalido() {				
@@ -216,7 +216,7 @@ public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	
 	
 	/**
-	 * 
+	 * Verifica se houve um erro de documento inválido
 	 * @return {@link Boolean}
 	 */
 	public boolean houveUmErroCampoDocumentoInvalido() {				
@@ -224,7 +224,7 @@ public class CreateInstituicaoCaridadePage extends InstituicaoCaridadePage {
 				
 	}
 	
-	/**
+	/**verifica se houve um erro de telefone inválido
 	 * 
 	 * @return {@link Boolean}
 	 */

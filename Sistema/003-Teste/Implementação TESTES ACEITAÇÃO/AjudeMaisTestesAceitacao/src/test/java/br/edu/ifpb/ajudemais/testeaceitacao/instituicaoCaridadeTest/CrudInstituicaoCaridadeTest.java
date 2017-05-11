@@ -17,9 +17,9 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.codeborne.selenide.WebDriverRunner;
 
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CreateInstituicaoCaridadePage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.DetailInstituicaoCaridadePage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.EditInstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CriarInstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.DetalhesInstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.EditatInstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.InstituicaoCaridadePage;
 
 /**
@@ -60,6 +60,10 @@ public class CrudInstituicaoCaridadeTest {
 
 	}
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		driver.close();
@@ -73,7 +77,7 @@ public class CrudInstituicaoCaridadeTest {
 	public void adicionarInstituicaoCaridadeComCpf() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES","ONG DE ALIMENTOS" ,"823.862.380-40",
 				"(83) 99812-2196", "zefao2000@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
@@ -92,7 +96,7 @@ public class CrudInstituicaoCaridadeTest {
 	public void adicionarDuasInstituicaoCaridadeMesmosEmail() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.01","ONG DE ALIMENTOS" ,"32.125.616/0001-85",
 				"(83) 99812-2196", "zefaomsminfo@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
@@ -130,7 +134,7 @@ public class CrudInstituicaoCaridadeTest {
 	public void adicionarDuasInstituicaoCaridadeMesmosDocumento() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.02","ONG DE ALIMENTOS2","43.122.425/0001-86",
 				"(83) 99812-2196", "zefaomsminfo2@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
@@ -167,7 +171,7 @@ public class CrudInstituicaoCaridadeTest {
 	@Test
 	public void adicionarInstituicaoCaridadeComCnpj() {
 		instituicaoCaridadePage.visita();
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ","ONG DE ALIMENTOS123",
 				"32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro",
@@ -187,7 +191,7 @@ public class CrudInstituicaoCaridadeTest {
 	public void adicionarInstituicaoCaridadeSemCamposObgs() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("","", "", "", "", "", "", "", "", "");
 
 		boolean houveErroCamposObgsNaoInformados = createInstituicaoCaridadePage.houveUmErroTodosCamposObgs();
@@ -204,7 +208,7 @@ public class CrudInstituicaoCaridadeTest {
 	@Test
 	public void adicionarInstituicaoCaridadeComCampoCpfInvalido() {
 		instituicaoCaridadePage.visita();
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV01","TESTE DESCRICAO",
 				"123.343.000-20", "(83) 99812-8196", "zefao2001123@yyr.com", "58500-000", "Rua Sete de setembro", "123", "Centro",
 				"casa");
@@ -223,7 +227,7 @@ public class CrudInstituicaoCaridadeTest {
 	@Test
 	public void adicionarInstituicaoCaridadeComCampoEmailInvalido() {
 		instituicaoCaridadePage.visita();
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV01","TESTE DESCRICAO",
 				"415.158.917-12", "(83) 99812-8196", "zefao2001", "58500-000", "Rua Sete de setembro", "123", "Centro",
 				"casa");
@@ -241,7 +245,7 @@ public class CrudInstituicaoCaridadeTest {
 	@Test
 	public void adicionarInstituicaoCaridadeComCampoCnpjInvalido() {
 		instituicaoCaridadePage.visita();
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV02","TESTE DESCRICAO",
 				"30.387.784/0001-02", "(83) 99812-8196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro",
 				"123", "Centro", "casa");
@@ -260,7 +264,7 @@ public class CrudInstituicaoCaridadeTest {
 	@Test
 	public void adicionarInstituicaoCaridadeComCampoTelefoneInvalido() {
 		instituicaoCaridadePage.visita();
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV02","TESTE DESCRICAO",
 				"557.438.467-15", "(83) 9981", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro", "123",
 				"Centro", "casa");
@@ -280,14 +284,14 @@ public class CrudInstituicaoCaridadeTest {
 	public void editarInstituicaoCaridade() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ EDIT01","TESTE DESCRICAO",
 				"97.587.963/0001-75", "(83) 9981-0010", "zefao2001edit@teste.com", "58500-000", "Rua Sete de setembro",
 				"123", "Centro", "casa");
 
 		boolean foiCadastradoComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("97587963000175");
 
-		EditInstituicaoCaridadePage editInstituicaoCaridadePage = instituicaoCaridadePage.edit("97587963000175");
+		EditatInstituicaoCaridadePage editInstituicaoCaridadePage = instituicaoCaridadePage.edit("97587963000175");
 		
 		editInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2",
 				"", "(83) 9981-0011", "zefao2002edit@teste.com", "69800-000", "Rua Francisco Coelho",
@@ -295,7 +299,7 @@ public class CrudInstituicaoCaridadeTest {
 		
 
 		
-		DetailInstituicaoCaridadePage detailInstituicaoCaridadePage = instituicaoCaridadePage.detail("97587963000175");
+		DetalhesInstituicaoCaridadePage detailInstituicaoCaridadePage = instituicaoCaridadePage.detail("97587963000175");
 		
 		boolean foiEditadoComSucesso = detailInstituicaoCaridadePage.validateFields(
 				"INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2", "97.587.963/0001-75", "(83) 9981-0011",

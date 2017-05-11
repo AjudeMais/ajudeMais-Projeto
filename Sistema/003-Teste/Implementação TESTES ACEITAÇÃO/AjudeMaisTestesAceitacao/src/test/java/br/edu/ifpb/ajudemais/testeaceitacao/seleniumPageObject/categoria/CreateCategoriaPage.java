@@ -5,16 +5,17 @@ import static com.codeborne.selenide.Selenide.$;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 /**
- * Entidade
+ * Representa o modal de criação/edição de categoria, nela está contidos os métodos relacionados a este modal. 
  * @author elson
  *
  */
-public class CriarCategoriaPage extends CategoriaPage{
+public class CreateCategoriaPage extends CategoriaPage{
+	
 	/**
-	 * 
+	 * construtor.
 	 * @param driver
 	 */
-	public CriarCategoriaPage(WebDriver driver) {
+	public CreateCategoriaPage(WebDriver driver) {
 		super(driver);
 		// TODO Auto-generated constructor stub
 	}
@@ -57,7 +58,7 @@ public class CriarCategoriaPage extends CategoriaPage{
 	}
 
 	/**
-	 * 
+	 * Verifica erros existentes nos campos obrigatórios.
 	 * @return boolean
 	 */
 	public boolean houveUmErroTodosCamposObgs() {		
