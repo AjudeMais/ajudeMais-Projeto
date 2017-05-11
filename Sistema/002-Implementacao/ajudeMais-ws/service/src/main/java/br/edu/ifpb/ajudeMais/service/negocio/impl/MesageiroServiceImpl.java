@@ -50,6 +50,14 @@ public class MesageiroServiceImpl implements MensageiroService{
 
 	/**
 	 * 
+	 * salva um mensageiro no BD
+	 * 
+	 * @param
+	 * 		mensageiro a ser salvo
+	 * 
+	 * 
+	 * @return
+	 * 		retorna o mensageiro salvo
 	 */
 	@Override
 	@Transactional
@@ -63,6 +71,14 @@ public class MesageiroServiceImpl implements MensageiroService{
 
 	/**
 	 * 
+	 * atualiza um mensageiro previamente cadastrado
+	 * 
+	 * @param mensageiro
+	 * 		mensageiro a ser atualizado no bd
+	 * 
+	 * @return
+	 * 		mensageiro atualizado
+	 * 
 	 */
 	@Override
 	@Transactional
@@ -72,6 +88,12 @@ public class MesageiroServiceImpl implements MensageiroService{
 
 	/**
 	 * 
+	 * busca e retorna todos os mensageiros cadastrados
+	 * 
+	 * 
+	 * @return
+	 * 		lista com todos os mensageiros
+	 * 
 	 */
 	@Override
 	public List<Mensageiro> findAll() {
@@ -79,7 +101,13 @@ public class MesageiroServiceImpl implements MensageiroService{
 	}
 
 	/**
+	 * busca e retorna um mensageiro específico
 	 * 
+	 * @param id
+	 * 		id do mensageiro
+	 * 
+	 * @return
+	 * 		o mensageiro, caso tenha sido encontrado no BD
 	 */
 	@Override
 	public Mensageiro findById(Long id) {
@@ -87,6 +115,22 @@ public class MesageiroServiceImpl implements MensageiroService{
 	}
 	
 	/**
+	 * busca e retorna os mensageiros mais próximos daquele local
+	 * 
+	 * @param logradouro
+	 * 		nome do logradouro
+	 * 
+	 * @param bairro
+	 * 		nome do bairro
+	 * 
+	 * @param localidade
+	 * 		nome da localidade
+	 * 
+	 * @param uf
+	 * 		sigla do estado
+	 * 
+	 * @return
+	 * 		lista com os mensageiros mais próximos do local
 	 * 
 	 */
     public List<Object[]> filtersMensageiroCloser(String logradouro, String bairro, String localidade, String uf){
@@ -96,6 +140,10 @@ public class MesageiroServiceImpl implements MensageiroService{
 
 
 	/**
+	 * remove um mensageiro previamente cadastrado
+	 * 
+	 * @param mensageiro
+	 * 		mensageiro a ser removido
 	 * 
 	 */
 	@Override

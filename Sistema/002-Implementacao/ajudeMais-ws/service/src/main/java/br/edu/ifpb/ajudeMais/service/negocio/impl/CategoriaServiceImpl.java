@@ -49,6 +49,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 	private CategoriaRepository categoriaRepository;
 	
 	/**
+	 * salva uma categoria no BD
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Override
@@ -59,6 +61,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	/**
+	 * atualiza uma categoria previamente salva
+	 * 
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Override
@@ -69,6 +74,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 	/**
 	 * 
+	 * busca e retorna todas as categorias salvas
+	 * 
 	 */
 	@Override
 	public List<Categoria> findAll() {
@@ -77,12 +84,16 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 	/**
 	 * 
+	 * busca uma categoria especifica pelo ID
+	 * 
 	 */
 	@Override
 	public Categoria findById(Long id) {
 		return categoriaRepository.findOne(id);
 	}
 	/**
+	 * 
+	 * remove uma categoria previamente cadastrada
 	 * 
 	 */
 	@Override
@@ -92,6 +103,9 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	/**
+	 * 
+	 * busca e retorna as categorias cadastradas por uma
+	 * instituicao de caridade em especifico
 	 * 
 	 */
 	@Override

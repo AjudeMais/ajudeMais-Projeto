@@ -66,6 +66,17 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	/**
 	 * 
+	 * salva uma instituição de caridade no BD
+	 * 
+	 * @param entity
+	 * 		entidade a ser salva
+	 * 
+	 * @return
+	 * 		instituição salva
+	 * 
+	 * 
+	 * @throws AjudeMaisException
+	 * 
 	 */
 	@Transactional
 	@Override
@@ -85,6 +96,16 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
+	 * 
+	 * atualiza uma instituição de caridade previamente cadastrada no BD
+	 * 
+	 * @param entity
+	 * 		entidade a ser atualizada
+	 * 
+	 * @return
+	 * 		instituição atualizada
+	 * 
+	 * 
 	 * @throws AjudeMaisException
 	 * 
 	 */
@@ -98,6 +119,11 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	/**
 	 * 
+	 * lista todas as instituições de caridade salvas no BD
+	 * 
+	 * @return
+	 * 		lista de instituições
+	 * 
 	 */
 	@Override
 	public List<InstituicaoCaridade> findAll() {
@@ -105,6 +131,13 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
+	 * busca e retorna uma instituição com base no id
+	 * 
+	 * @param id
+	 * 		id a ser buscada no BD
+	 * 
+	 * @return
+	 * 		instituição de caridade, caso exista
 	 * 
 	 */
 	@Override
@@ -113,6 +146,11 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
+	 * 
+	 * remove uma instituição de caridade previamente cadastrada
+	 * 
+	 * @param entity
+	 * 		instituição a ser removida
 	 * 
 	 */
 	@Transactional
@@ -123,7 +161,13 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 
 	/**
+	 * busca e retorna as instituições de caridade situadas aquele endereco
 	 * 
+	 * @param endereco
+	 * 		endereco pesquisado
+	 * 
+	 * @return
+	 * 		lista de instituicoes situadas
 	 */
 	@Override
 	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco) {
@@ -133,6 +177,14 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 
 	/**
+	 * 
+	 * busca e retorna instituicoes que estao situadas naquele ponto especifico
+	 * 
+	 * @param latLng
+	 * 		latitude e longitude daquele ponto especifico no mapa
+	 * 
+	 * @return
+	 * 		lista de instituicoes
 	 * 
 	 */
 	@Override

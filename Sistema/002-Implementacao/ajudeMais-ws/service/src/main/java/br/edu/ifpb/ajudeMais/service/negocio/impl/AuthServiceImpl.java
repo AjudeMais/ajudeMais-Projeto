@@ -117,6 +117,8 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * 
+	 * busca e retorna a conta do usuario atualmente logado
+	 * 
 	 */
 	@Override
 	public Conta getCurrentUser() {
@@ -131,6 +133,8 @@ public class AuthServiceImpl implements AuthService {
 
 	/**
 	 * 
+	 * atualiza o token de autenticacao
+	 * 
 	 */
 	@Override
 	public JwtToken atualizaAutenticacao(JwtToken tokenAtual) {
@@ -139,6 +143,8 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	/**
+	 * 
+	 * busca e retorna uma conta de acordo com o token
 	 * 
 	 */
 	@Override
@@ -150,6 +156,8 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	/**
+	 * 
+	 * valida a solicitacao de autenticacao do usuario de acordo com o token passado
 	 * 
 	 */
 	@Override

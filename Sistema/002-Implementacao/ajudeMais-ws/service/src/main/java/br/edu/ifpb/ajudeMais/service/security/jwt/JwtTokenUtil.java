@@ -49,6 +49,15 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.expirationMobile}")
 	private Long expirationMobile;
 
+	/**
+	 * Pega um token e retorna o username relacionado ao mesmo. Caso exista.
+	 * 
+	 * @param token
+	 * 		Token de usuário
+	 * 
+	 * @return
+	 * 		O username relacionado ao mesmo
+	 */
 	public String getUsernameFromToken(String token) {
 		String username;
 		try {
@@ -60,6 +69,15 @@ public class JwtTokenUtil implements Serializable {
 		return username;
 	}
 
+	/**
+	 * Pega e retorna a data de criação de um token
+	 * 
+	 * @param token
+	 * 		Token de usuário
+	 * 
+	 * @return
+	 * 		Data de criação
+	 */
 	public Date getCreatedDateFromToken(String token) {
 		Date created;
 		try {
@@ -71,6 +89,16 @@ public class JwtTokenUtil implements Serializable {
 		return created;
 	}
 
+	/**
+	 * 
+	 * Pega e retorna a data de expiração
+	 * 
+	 * @param token
+	 * 		Token de acesso
+	 * 
+	 * @return
+	 * 		Data de expiração
+	 */
 	public Date getExpirationDateFromToken(String token) {
 		Date expiration;
 		try {
@@ -82,6 +110,15 @@ public class JwtTokenUtil implements Serializable {
 		return expiration;
 	}
 
+	/**
+	 * Pega e retorna a audience
+	 * 
+	 * @param token
+	 * 		Token de acesso
+	 * 
+	 * @return
+	 * 		retorna a audience
+	 */
 	public String getAudienceFromToken(String token) {
 		String audience;
 		try {
@@ -93,6 +130,18 @@ public class JwtTokenUtil implements Serializable {
 		return audience;
 	}
 
+	/**
+	 * Gera um token de acordo com os dados informadoss
+	 * 
+	 * @param userDetails
+	 * 		detalhes do user
+	 * 
+	 * @param device
+	 * 		device usado
+	 * 
+	 * @return
+	 * 		token gerado
+	 */
 	public String generateToken(UserDetails userDetails, Device device) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
@@ -101,6 +150,18 @@ public class JwtTokenUtil implements Serializable {
 		return generateToken(claims);
 	}
 
+	
+	/**
+	 * Atualiza o token previamente gerado e retorna o novo token
+	 * 
+	 * 
+	 * @param token
+	 * 		token antigo
+	 * 
+	 * 
+	 * @return
+	 * 		novo token
+	 */
 	public String refreshToken(String token) {
 		String refreshedToken;
 		try {
@@ -113,12 +174,35 @@ public class JwtTokenUtil implements Serializable {
 		return refreshedToken;
 	}
 
+	/**
+	 * Valida um token de acordo com as credenciais do usuário
+	 * 
+	 * @param token
+	 * 		token utilizado
+	 * 
+	 * @param userDetails
+	 * 		os detalhes do usuário
+	 * 
+	 * @return
+	 * 		se o token passado é válido ou não
+	 */
 	public Boolean validateToken(String token, UserDetails userDetails) {
 		UsuarioSistema user = (UsuarioSistema) userDetails;
 		final String username = getUsernameFromToken(token);
 		return (username.equals(user.getUsername()) && !isTokenExpired(token));
 	}
 
+	/**
+	 * Pega e retorna as informações (Claims) utilizadas pelo JWT
+	 * 
+	 * 
+	 * @param token
+	 * 		Token passado
+	 * 
+	 * 
+	 * @return
+	 * 		os Claims relacionados aquele token
+	 */
 	private Claims getClaimsFromToken(String token) {
 		Claims claims;
 		try {
@@ -129,6 +213,19 @@ public class JwtTokenUtil implements Serializable {
 		return claims;
 	}
 
+	
+	/**
+	 * Pega e retorna a data de expriação de um token de acordo
+	 * com as Claims relacionadas ao mesmo
+
+	 * 
+	 * @param claims
+	 * 		As informações (Claims) relacionadas aquele token em questão
+	 * 
+	 * @return
+	 *		Data de expiração do mesmo 
+	 *
+	 */
 	private Date generateExpirationDate(Map<String, Object> claims) {
 		if (claims.get(CLAIM_KEY_AUDIENCE).equals(AUDIENCE_WEB)) {
 			return new Date(System.currentTimeMillis() + expirationWeb * 60 * 1000);
@@ -136,11 +233,32 @@ public class JwtTokenUtil implements Serializable {
 		return new Date(System.currentTimeMillis() + expirationMobile * 60 * 60 * 1000);
 	}
 
+	
+	/**
+	 * Verifica e retorna se o token passado por parâmetro está expirado
+	 * 
+	 * @param token
+	 * 		Token a ser verificado
+	 * 
+	 * @return
+	 * 		retorna se o token está expirado ou não
+	 */
 	private Boolean isTokenExpired(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
 
+	/**
+	 * Gera a audience relacionada aquele Device
+	 * 
+	 * 
+	 * @param device
+	 * 		device relacionado
+	 * 
+	 * @return
+	 * 		a qual audiencia aquele device está relacionado
+	 * 
+	 */
 	private String generateAudience(Device device) {
 		String audience = AUDIENCE_UNKNOWN;
 		if (device.isNormal()) {
@@ -153,6 +271,17 @@ public class JwtTokenUtil implements Serializable {
 		return audience;
 	}
 
+	
+	/**
+	 * Gera e retorna um token de acordo com as claims requeridas
+	 * 
+	 * @param claims
+	 * 		as informações (Claims) requeridas pelo mesmo
+	 * 
+	 * @return
+	 * 		retorna o token gerados
+	 * 
+	 */
 	private String generateToken(Map<String, Object> claims) {
 		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate(claims))
 				.signWith(SignatureAlgorithm.HS512, secret).compact();

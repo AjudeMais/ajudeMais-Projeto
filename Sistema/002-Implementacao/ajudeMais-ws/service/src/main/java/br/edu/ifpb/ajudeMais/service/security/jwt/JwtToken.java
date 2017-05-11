@@ -9,14 +9,32 @@ import java.util.Date;
  */
 public class JwtToken {
 
+	/**
+	 * 
+	 * 
+	 */
 	private String token;
 
+	/**
+	 * 
+	 * 
+	 */
 	private Date date = new Date();
 
+	/**
+	 * 
+	 * 
+	 */
 	public JwtToken() {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param token
+	 */
 	public JwtToken(String token) {
 		this.token = token;
 	}
