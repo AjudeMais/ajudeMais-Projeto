@@ -26,11 +26,20 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+	/**
+	 * Repositório para salvamento de conta
+	 */
 	@Autowired
 	private ContaRepository contaRepository;
 	
 	/**
+	 * Método responsável por carregar os detalhes de um usuário tendo como parametro
+	 * o seu login / username
+	 * @param login
+	 * 		O username do usuario a ser carregado
 	 * 
+	 * @return
+	 * 		Os demais dados do usuário, caso o mesmo exista no banco
 	 */
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
 		

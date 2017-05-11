@@ -49,16 +49,27 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 @Service
 public class ContaServiceImpl implements ContaService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaRepository contaRepository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private AuthService authService;
 
 	/**
+	 * salva uma conta no BD
+	 * 
 	 * @throws UniqueConstraintAlreadyException
 	 * 
 	 */
@@ -81,6 +92,8 @@ public class ContaServiceImpl implements ContaService {
 	}
 
 	/**
+	 * atualiza uma conta existente
+	 * 
 	 * @throws UniqueConstraintAlreadyException
 	 * 
 	 */
@@ -106,6 +119,10 @@ public class ContaServiceImpl implements ContaService {
 
 	/**
 	 * 
+	 * 
+	 * muda a senha de uma conta
+	 * 
+	 * 
 	 * <p>
 	 * </p>
 	 * 
@@ -122,6 +139,8 @@ public class ContaServiceImpl implements ContaService {
 
 	/**
 	 * 
+	 * busca e retorna todas as contas
+	 * 
 	 */
 	@Override
 	public List<Conta> findAll() {
@@ -130,6 +149,8 @@ public class ContaServiceImpl implements ContaService {
 
 	/**
 	 * 
+	 * busca e retorna uma conta especifica com base no id
+	 * 
 	 */
 	@Override
 	public Conta findById(Long id) {
@@ -137,6 +158,8 @@ public class ContaServiceImpl implements ContaService {
 	}
 
 	/**
+	 * 
+	 * retorna uma conta previamente cadastrada
 	 * 
 	 */
 	@Override

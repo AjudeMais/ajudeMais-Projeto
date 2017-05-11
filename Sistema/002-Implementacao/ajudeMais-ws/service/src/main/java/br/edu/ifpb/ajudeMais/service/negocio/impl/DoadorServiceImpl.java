@@ -40,16 +40,32 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 @Service
 public class DoadorServiceImpl implements DoadorService {
 
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	@Autowired
 	private DoadorRepository doadorRepository;
 
+	/**
+	 * 
+	 * 
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 
 	/**
 	 * 
+	 * salva um doador no BD
+	 * 
 	 * @param doador
+	 * 
+	 * 
 	 * @return
+	 * 
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Override
@@ -63,6 +79,10 @@ public class DoadorServiceImpl implements DoadorService {
 
 	/**
 	 * 
+	 * 
+	 * atualiza um doador previamente cadastrado
+	 * 
+	 * 
 	 */
 	@Override
 	@Transactional
@@ -72,17 +92,31 @@ public class DoadorServiceImpl implements DoadorService {
 
 	/**
 	 * 
+	 * busca e retorna todos os doadores
+	 * 
 	 */
 	@Override
 	public List<Doador> findAll() {
 		return doadorRepository.findAll();
 	}
 
+	
+	/**
+	 * 
+	 * busca e retorna um doador em especifico com base no id do mesmo
+	 * 
+	 */
 	@Override
 	public Doador findById(Long id) {
 		return doadorRepository.findOne(id);
 	}
 
+	
+	/**
+	 * 
+	 * remove um doador previamente cadastrado
+	 * 
+	 */
 	@Override
 	@Transactional
 	public void remover(Doador doador) {
