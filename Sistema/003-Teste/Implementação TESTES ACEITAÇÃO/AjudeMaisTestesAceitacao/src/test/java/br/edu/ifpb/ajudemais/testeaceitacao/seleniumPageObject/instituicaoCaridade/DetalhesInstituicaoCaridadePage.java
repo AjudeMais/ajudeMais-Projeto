@@ -14,20 +14,34 @@ import static com.codeborne.selenide.Selenide.$;
  * </p>
  *
  * <p>
- * Representa o acesso a tela de detalhes de instituição de caridade
+ * Apresenta métodos auxiliares para realizar ações na página de detalhes de instituição de caridade.
  * </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class DetailInstituicaoCaridadePage extends InstituicaoCaridadePage{
+public class DetalhesInstituicaoCaridadePage extends InstituicaoCaridadePage{
 
 	/**
 	 * @param driver
 	 */
-	public DetailInstituicaoCaridadePage(WebDriver driver) {
+	public DetalhesInstituicaoCaridadePage(WebDriver driver) {
 		super(driver);
 	}
 
+	/**
+	 * Verifica se todos os valores dos campos passados estão iguais aos apresentados na tela de detalhes da instituição.
+	 * @param nome
+	 * @param descricao
+	 * @param documento
+	 * @param telefone
+	 * @param email
+	 * @param cep
+	 * @param logradouro
+	 * @param numeroEndereco
+	 * @param bairro
+	 * @param complemento
+	 * @return
+	 */
 	
 	public boolean validateFields(String nome, String descricao,String documento, String telefone, String email, String cep,
 			String logradouro, String numeroEndereco, String bairro, String complemento){

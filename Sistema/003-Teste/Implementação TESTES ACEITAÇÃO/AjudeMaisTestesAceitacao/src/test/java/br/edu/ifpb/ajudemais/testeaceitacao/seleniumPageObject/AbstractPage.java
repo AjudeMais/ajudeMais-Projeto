@@ -42,7 +42,7 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Faz login e se for primeiro acesso preenche os campos com a mesma senha anterior.
 	 * @param username
 	 * @param senha
 	 */
@@ -67,7 +67,7 @@ public abstract class AbstractPage {
 
 
 	/**
-	 * 
+	 * Recuperar mensagem exibida
 	 * @return {@link SelenideElement}
 	 */
 	protected SelenideElement recuperarCaixaMensagem() {
@@ -76,7 +76,8 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Recuperar mensagem de sucesso exibida
+
 	 * @return {@link SelenideElement}
 	 */
 	protected SelenideElement recuperarCaixaMensagemSuc() {
@@ -85,7 +86,7 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * @return the urlBase
+	 * @return a URL base da aplicação 
 	 */
 	public static String getUrlBase() {
 		return URL_BASE;

@@ -8,7 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CreateInstituicaoCaridadePage;
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CriarInstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.InstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.login.LoginPage;
 
@@ -104,7 +104,7 @@ public class CategoriaPage extends AbstractPage {
 	private void addInstituicao() {
 		instituicaoCaridadePage.visita();
 
-		CreateInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P TESTE", "CRIADA EM CATEGORIA PAGE",
 				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Rua Teste", "123",
@@ -112,17 +112,17 @@ public class CategoriaPage extends AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Clicar no botão novo item e acessa a página de crição/edição de categoria de item doável.
 	 * @return
 	 */
-	public CriarCategoriaPage novo() {
+	public CreateCategoriaPage novo() {
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/div/div/div[1]/div/button")).click();
 
-		return new CriarCategoriaPage(driver);
+		return new CreateCategoriaPage(driver);
 	}
 
 	/**
-	 * 
+	 * Clicar no botão remover e abri confim dialog para exclusão. 
 	 * @param nome
 	 * @return
 	 */
@@ -133,7 +133,7 @@ public class CategoriaPage extends AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Clica no botão que representa a negação da remoçao. 
 	 * @return
 	 */
 	public RemoverCategoriaPage tentaRemoverCategoriaEDesiste() {
@@ -156,7 +156,7 @@ public class CategoriaPage extends AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Clicar no botão editar da categoria com nome passado.
 	 * @return
 	 */
 	public EditarCategoriaPage edit(String userName) {

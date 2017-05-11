@@ -35,6 +35,10 @@ public class LoginTest {
 
 	private LoginPage loginPage;
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver");
@@ -54,6 +58,10 @@ public class LoginTest {
 		WebDriverRunner.setWebDriver(driver);
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		driver.close();
