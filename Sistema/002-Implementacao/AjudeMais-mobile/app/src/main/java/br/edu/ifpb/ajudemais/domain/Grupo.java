@@ -2,7 +2,7 @@ package br.edu.ifpb.ajudemais.domain;
 
 /**
  * <p>
- * <b>Grupo</b>
+ * <b>{@link Grupo}</b>
  * </p>
  * </p>
  *

@@ -7,13 +7,11 @@ import android.util.Log;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.utils</b>
+ * <b>{@link AndroidUtil}</b>
  * </p>
  * <p>
- * <p>
- * Entidade que representa um foto.
+ * Classe com alguns métodos utilitários.
  * </p>
- *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
@@ -28,7 +26,7 @@ public class AndroidUtil {
 
 
     /**
-     * Verifica se o device possu
+     * Verifica se o device possui alguma conexão com a internet.
      * @return
      */
     public boolean isOnline() {

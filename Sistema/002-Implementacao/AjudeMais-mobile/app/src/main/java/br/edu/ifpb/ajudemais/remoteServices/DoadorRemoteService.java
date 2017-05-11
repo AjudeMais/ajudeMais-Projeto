@@ -11,7 +11,7 @@ import br.edu.ifpb.ajudemais.domain.Doador;
  * </p>
  * <p>
  * <p>
- * Faz comunicação com API RestFul para os serviços relacionandos a doador.
+ * Faz comunicação com API RestFul para os serviços relacionados a doador.
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>

@@ -21,16 +21,13 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 
 /**
- * Created by rafaelfeitosa on 07/04/17.
- */
-
-/**
  * <p>
- * <b>br.edu.ifpb.ajudemais.utils</b>
+ * <b>{@link ImagePicker}</b>
  * </p>
  *  Créditos <https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2>
-
  * <p>
+ *     Fornece métodos para acessar a camêra e galeria para selecionar um imagem.
+ * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>**/
 

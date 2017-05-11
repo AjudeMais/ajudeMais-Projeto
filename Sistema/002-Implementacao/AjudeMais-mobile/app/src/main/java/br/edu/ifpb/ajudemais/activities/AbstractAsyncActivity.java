@@ -7,15 +7,15 @@ import br.edu.ifpb.ajudemais.R;
 
 /**
  * <p>
- * <b>AbstractActivity</b>
+ * <b>{@link AbstractAsyncActivity}</b>
  * </p>
  * <p>
- *     Activity base para reaproveitar métodos
+ *     Activity base para reaproveitar métodos de carregamento de TASKS asycn
  * <p>
  *
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public class AbstractAsyncActivity extends AppCompatActivity implements AsyncActivity {
 

@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.domain</b>
+ * <b>{@link Categoria}</b>
  * </p>
  * <p>
  * <p>

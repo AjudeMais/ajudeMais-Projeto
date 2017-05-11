@@ -17,6 +17,7 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
  * <b>InstituicaoRemoteService</b>
  * </p>
  * <p>
+ *     Provê serviços Relacionados a instituições de caridade
  * <p>
  *
  * </p>
@@ -35,7 +36,7 @@ public class InstituicaoRemoteService extends AbstractRemoteService{
     }
 
     /**
-     * recupera todas instituições cadastradas.
+     * Recupera todas instituições cadastradas.
      * @return
      */
     public List<InstituicaoCaridade> getInstituicoes() {
@@ -46,7 +47,7 @@ public class InstituicaoRemoteService extends AbstractRemoteService{
     }
 
     /**
-     * Recupera as instituições com base na localização passada.
+     * Recupera as instituições com base na localização do device passada.
      * @param latLng
      * @return
      */

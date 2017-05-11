@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * <b>Doador</b>
+ * <b>{@link Doador}</b>
  * </p>
  * </p>
  *

@@ -33,6 +33,9 @@ public class CategoriaTest{
 	
 	private CategoriaPage categoriaPage;
 	
+	/**
+	 * 
+	 */
 	@Before
 	public void setUp(){
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver");
@@ -52,10 +55,15 @@ public class CategoriaTest{
 		WebDriverRunner.setWebDriver(driver);
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		driver.close();
 	}
+	
 	/**
 	 * adiciona uma categoria
 	 * @throws InterruptedException 
@@ -75,7 +83,6 @@ public class CategoriaTest{
 	
 	/**
 	 * tenta adicionar uma categoria sem preencher o campo nome
-	 *
 	 *
 	 */
 	@Test

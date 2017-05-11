@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -87,7 +86,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
+     *Inicializa algumas propriedades do layout.
      */
     protected void init() {
         capturePhotoUtils = new CapturePhotoUtils(this);
@@ -287,13 +286,14 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
+     *  Executa dialog para ligar o GPS do device.
      */
     private Runnable sendUpdatesToUI = new Runnable() {
         public void run() {
             showSettingDialog();
         }
     };
+
 
     /**
      * Verifica se GPS está ativado, se não pede para ligar
@@ -351,6 +351,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    /**
+     *
+     * @param bundle
+     */
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         Location mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -360,6 +364,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         startLocationUpdates();
     }
 
+    /**
+     *
+     * @param i
+     */
     @Override
     public void onConnectionSuspended(int i) {
         if (i == CAUSE_SERVICE_DISCONNECTED) {
@@ -370,11 +378,18 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     }
 
+    /**
+     *
+     * @param connectionResult
+     */
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
+    /**
+     *
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -384,7 +399,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
+     *  Busca atualizações na localização do device.
      */
     protected void startLocationUpdates() {
         mLocationRequest = LocationRequest.create()
@@ -401,6 +416,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
 
+    /**
+     *
+     * @param locationSettingsResult
+     */
     @Override
     public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
         final Status status = locationSettingsResult.getStatus();
@@ -423,6 +442,12 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -436,6 +461,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         }
     }
 
+    /**
+     *
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         if (location != null)

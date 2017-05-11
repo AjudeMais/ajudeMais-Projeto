@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * <b>Endereco</b>
+ * <b>{@link Endereco}</b>
  * </p>
  * </p>
  *

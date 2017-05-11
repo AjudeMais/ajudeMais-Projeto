@@ -10,23 +10,20 @@ import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
-import static br.edu.ifpb.ajudemais.remoteServices.AbstractRemoteService.API;
-
 /**
  * <p>
  * <b>{@link AuthRemoteService}</b>
  * </p>
  * <p>
  * <p>
- * Handler ReponseError Spring
+ * Provê os serviços para conta de usuário.
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  * @author <a href="https://github.com/franckaj">Franck Aragão</a>
  */
 
-public class
-AuthRemoteService extends AbstractRemoteService {
+public class AuthRemoteService extends AbstractRemoteService {
 
 
     /**
@@ -50,6 +47,7 @@ AuthRemoteService extends AbstractRemoteService {
 
     /**
      * recupera a conta do usuário com base no grupo e token de acesso.
+     *
      * @return
      */
     public Conta getUser(Grupo grupo) {
@@ -65,6 +63,7 @@ AuthRemoteService extends AbstractRemoteService {
 
     /**
      * Verifica se conta está autorizada.
+     *
      * @return
      */
     public Boolean isAuth() {
@@ -78,6 +77,7 @@ AuthRemoteService extends AbstractRemoteService {
 
     /**
      * Verificar Se usuário já está logado
+     *
      * @return
      */
     public boolean logged() {
@@ -93,7 +93,8 @@ AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
-     *Guada token de acesso.
+     * Guada token de acesso.
+     *
      * @param token
      */
     private void storageToken(String token) {
@@ -101,16 +102,17 @@ AuthRemoteService extends AbstractRemoteService {
     }
 
     /**
-     *Valida se usário possível acesso ao app.
+     * Valida se usário possível acesso ao app.
+     *
      * @param conta
      * @param grupo
      */
     private void verifyUserModule(Conta conta, final Grupo grupo) {
 
         for (String p : conta.getGrupos()) {
-            if(!p.contains(grupo.name())) {
+            if (!p.contains(grupo.name())) {
                 SharedPrefManager.getInstance(context).clearSharedPrefs();
-                throw  new RestClientException("Usuário não autorizado");
+                throw new RestClientException("Usuário não autorizado");
             }
         }
 
