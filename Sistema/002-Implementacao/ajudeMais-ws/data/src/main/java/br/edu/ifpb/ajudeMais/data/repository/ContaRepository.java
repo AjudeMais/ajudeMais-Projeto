@@ -23,30 +23,48 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link ContaRepository}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para acesso a dados relacionados a uma {@link Conta}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
-public interface ContaRepository extends JpaRepository<Conta, Long>{
-	
+public interface ContaRepository extends JpaRepository<Conta, Long> {
+
 	/**
+	 * Método busca uma conta pelo username e pelo seu estado=ativo/inativo
 	 * 
 	 * @param username
+	 *            nome de usuário
 	 */
 	Optional<Conta> findOneByUsernameAndAtivo(String username, Boolean ativo);
-	
+
 	/**
 	 * 
 	 * <p>
+	 * Método busca uma conta pelo nome de usuário
 	 * </p>
+	 * 
 	 * @param username
-	 * @return
+	 *            nome do usuário
+	 * @return Optional de uma conta
 	 */
 	Optional<Conta> findOneByUsername(String username);
-	
+
 	/**
+	 * Busca uma conta por email
 	 * 
 	 * @param email
-	 * @return
+	 *            - email a ser pesquisado
+	 * @return um Optional de uma conta
 	 */
 	Optional<Conta> findOneByEmail(String email);
 

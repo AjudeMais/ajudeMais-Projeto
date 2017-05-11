@@ -24,7 +24,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
  * </p>
  * 
  * <p>
- * Inteface para implementação de regras de negocio relacionadas a um doador.
+ * Interface para definição de operações de serviços de {@link Doador}.
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>

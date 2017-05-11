@@ -24,10 +24,18 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 /**
  * 
  * <p>
- * <b> DoadorRepository </b>
+ * {@link DoadorRepository}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para acesso a dados em BD de um {@link Doador}
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 public interface DoadorRepository extends JpaRepository<Doador, Long> {
 
@@ -35,7 +43,8 @@ public interface DoadorRepository extends JpaRepository<Doador, Long> {
 	 * Monta uma query filtrando um doador pelo nome
 	 * 
 	 * @param nome
-	 * @return
+	 *            do doador
+	 * @return uma lista de doadores que possui esse nome
 	 */
 	List<Doador> findByNome(String nome);
 }

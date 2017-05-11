@@ -1,3 +1,18 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -25,6 +40,17 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 
 /**
  * 
+ * <p>
+ * {@link DoadorRepositoryTest}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para testes relacionados a {@link DoadorRepository}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
@@ -46,6 +72,7 @@ public class DoadorRepositoryTest {
 	/**
 	 * 
 	 * <p>
+	 * testa busca de doador por id existente
 	 * </p>
 	 */
 	@Test
@@ -55,28 +82,30 @@ public class DoadorRepositoryTest {
 		assertNotNull(doador);
 
 	}
-	
+
 	/**
 	 * 
 	 * <p>
+	 * testa busca de doador por nome existente.
 	 * </p>
 	 */
 	@Test
 	public void findByNomeTest() {
-		
+
 		List<Doador> doadores = doadorRepository.findByNome("Ze");
 		assertTrue("Deveria ter conteúdo na lista", doadores.size() > 0);
-		
+
 	}
-	
+
 	/**
 	 * 
 	 * <p>
+	 * testa busca de doador por nome não existente.
 	 * </p>
 	 */
 	@Test
 	public void findByNomeNotFoundTest() {
-		
+
 		List<Doador> doadores = doadorRepository.findByNome("Zefinha");
 		assertThat(true, is(doadores.size() == 0));
 	}

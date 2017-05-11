@@ -20,7 +20,19 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link UserDetailsServiceImpl}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementção de autenticação customizada com spring
+ * security
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Service
@@ -31,18 +43,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	 */
 	@Autowired
 	private ContaRepository contaRepository;
-	
+
 	/**
-	 * Método responsável por carregar os detalhes de um usuário tendo como parametro
-	 * o seu login / username
-	 * @param login
-	 * 		O username do usuario a ser carregado
+	 * Método responsável por carregar os detalhes de um usuário tendo como
+	 * parametro o seu login / username
 	 * 
-	 * @return
-	 * 		Os demais dados do usuário, caso o mesmo exista no banco
+	 * @param login
+	 *            O username do usuario a ser carregado
+	 * 
+	 * @return Os demais dados do usuário, caso o mesmo exista no banco
 	 */
 	public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-		
+
 		Optional<Conta> usuarioOptional = contaRepository.findOneByUsernameAndAtivo(login, true);
 		Conta usuario = usuarioOptional.orElseThrow(() -> new UsernameNotFoundException("Usuário ou senha inválidos"));
 		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
@@ -50,6 +62,5 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		permissoes.forEach(p -> authorities.add(new SimpleGrantedAuthority(p.toUpperCase())));
 		return new UsuarioSistema(usuario, authorities);
 	}
-	
 
 }

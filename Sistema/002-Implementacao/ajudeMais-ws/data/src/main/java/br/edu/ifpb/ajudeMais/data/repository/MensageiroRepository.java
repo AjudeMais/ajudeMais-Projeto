@@ -29,7 +29,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
  * </p>
  *
  * <p>
- * 
+ * Repositório para acesso a dados de um {@link Mensageiro}
  * </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>

@@ -19,10 +19,12 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
- * <p>{@link ContaService} </p>
+ * <p>
+ * {@link ContaService}
+ * </p>
  * 
  * <p>
- * Classe utilizada para serviços referentes a uma {@link Conta}
+ * Interface para definição de operações de serviços de {@link Conta}.
  * </p>
  *
  * <pre>
@@ -39,7 +41,8 @@ public interface ContaService extends Service<Conta, Long> {
 	 * Método responsável por alter a senha de um usuário existente
 	 * </p>
 	 * 
-	 * @param password - nova senha
+	 * @param password
+	 *            - nova senha
 	 */
 	void changePassword(String password);
 

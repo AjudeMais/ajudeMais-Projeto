@@ -14,7 +14,18 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link UsuarioSistema}
+ * </p>
+ * 
+ * <p>
+ * Classe Pojo para recuperação de conta na autenticação
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 public class UsuarioSistema implements UserDetails {
@@ -30,17 +41,16 @@ public class UsuarioSistema implements UserDetails {
 	/**
 	 * 
 	 * @param conta
-	 * 		a conta de um usuário
+	 *            a conta de um usuário
 	 * 
 	 * @param authorities
-	 * 		permissoes concedidas
+	 *            permissoes concedidas
 	 * 
 	 */
 	public UsuarioSistema(Conta conta, Collection<? extends GrantedAuthority> authorities) {
 		this.conta = conta;
 		this.authorities = authorities;
 	}
-	
 
 	/**
 	 * pega e retorna o username
@@ -73,7 +83,6 @@ public class UsuarioSistema implements UserDetails {
 		return true;
 	}
 
-	
 	/**
 	 * 
 	 * 
@@ -86,7 +95,6 @@ public class UsuarioSistema implements UserDetails {
 		return true;
 	}
 
-	
 	/**
 	 * 
 	 * Pega e retorna a senha
@@ -98,7 +106,6 @@ public class UsuarioSistema implements UserDetails {
 		return conta.getSenha();
 	}
 
-	
 	/**
 	 * 
 	 * pega e retorna as permissões concedidas
@@ -108,7 +115,6 @@ public class UsuarioSistema implements UserDetails {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return authorities;
 	}
-	
 
 	/**
 	 * 

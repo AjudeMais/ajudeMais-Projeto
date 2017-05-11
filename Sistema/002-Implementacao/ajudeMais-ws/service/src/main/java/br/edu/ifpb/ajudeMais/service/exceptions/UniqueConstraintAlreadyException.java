@@ -37,7 +37,7 @@ public class UniqueConstraintAlreadyException extends AjudeMaisException {
 	
 	
 	/**
-	 * 
+	 * Construtor com messagem de exceção.
 	 */
 	public UniqueConstraintAlreadyException(String message) {
 		super(message);

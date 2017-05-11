@@ -27,35 +27,60 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
+ * <p>
+ * {@link InstituicaoCaridadeRepository}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para acesso a dados no BD de uma {@link InstituicaoCaridade}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Repository
-public interface InstituicaoCaridadeRepository extends JpaRepository<InstituicaoCaridade, Long>{
-	
-	/**
-	 * 
-	 * @param documento
-	 * @return
-	 */
-	Optional<InstituicaoCaridade> findOneByDocumento(String documento);
-	
+public interface InstituicaoCaridadeRepository extends JpaRepository<InstituicaoCaridade, Long> {
+
 	/**
 	 * 
 	 * <p>
+	 * Busca uma insituição filtrando pelo seu documento CPF ou CNPJ
 	 * </p>
-	 * @param conta
-	 * @return
+	 * 
+	 * @param documento
+	 *            CPF/CNPJ
+	 * @return um Optional de Instituição
 	 */
-	Optional<InstituicaoCaridade> findOneByConta(Conta conta);
-	
+	Optional<InstituicaoCaridade> findOneByDocumento(String documento);
+
 	/**
 	 * 
-	 * @param localidade
-	 * @param uf
-	 * @return
+	 * <p>
+	 * Busca uma insituição por sua conta
+	 * </p>
+	 * 
+	 * @param conta
+	 *            a ser pesquisada
+	 * @return um Optional de uma insituição
 	 */
-    public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(@Param("localidade") String localidade, @Param("uf") String uf);
+	Optional<InstituicaoCaridade> findOneByConta(Conta conta);
 
+	/**
+	 * 
+	 * <p>
+	 * Busca insituições por localidade e estado
+	 * </p>
+	 * 
+	 * @param localidade
+	 *            localidade a ser pesquisada
+	 * @param uf
+	 *            estado a ser pesquisada
+	 * @return lista de insituições
+	 */
+	public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(@Param("localidade") String localidade,
+			@Param("uf") String uf);
 
 }

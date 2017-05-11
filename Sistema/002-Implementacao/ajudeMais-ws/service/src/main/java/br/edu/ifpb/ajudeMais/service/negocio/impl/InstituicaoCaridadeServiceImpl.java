@@ -44,6 +44,8 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
  * </p>
  * 
  * <p>
+ * Classe utilizada para implementação de serviços definidos em
+ * {@link InstituicaoCaridadeService}
  * </p>
  *
  * <pre>
@@ -55,12 +57,21 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 @Service
 public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRespository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private GoogleMapsServiceImpl googleMapsResponse;
 
@@ -69,10 +80,9 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * salva uma instituição de caridade no BD
 	 * 
 	 * @param entity
-	 * 		entidade a ser salva
+	 *            entidade a ser salva
 	 * 
-	 * @return
-	 * 		instituição salva
+	 * @return instituição salva
 	 * 
 	 * 
 	 * @throws AjudeMaisException
@@ -100,10 +110,9 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * atualiza uma instituição de caridade previamente cadastrada no BD
 	 * 
 	 * @param entity
-	 * 		entidade a ser atualizada
+	 *            entidade a ser atualizada
 	 * 
-	 * @return
-	 * 		instituição atualizada
+	 * @return instituição atualizada
 	 * 
 	 * 
 	 * @throws AjudeMaisException
@@ -121,8 +130,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * 
 	 * lista todas as instituições de caridade salvas no BD
 	 * 
-	 * @return
-	 * 		lista de instituições
+	 * @return lista de instituições
 	 * 
 	 */
 	@Override
@@ -134,10 +142,9 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * busca e retorna uma instituição com base no id
 	 * 
 	 * @param id
-	 * 		id a ser buscada no BD
+	 *            id a ser buscada no BD
 	 * 
-	 * @return
-	 * 		instituição de caridade, caso exista
+	 * @return instituição de caridade, caso exista
 	 * 
 	 */
 	@Override
@@ -150,7 +157,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * remove uma instituição de caridade previamente cadastrada
 	 * 
 	 * @param entity
-	 * 		instituição a ser removida
+	 *            instituição a ser removida
 	 * 
 	 */
 	@Transactional
@@ -159,15 +166,13 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		instituicaoRespository.delete(entity);
 	}
 
-
 	/**
 	 * busca e retorna as instituições de caridade situadas aquele endereco
 	 * 
 	 * @param endereco
-	 * 		endereco pesquisado
+	 *            endereco pesquisado
 	 * 
-	 * @return
-	 * 		lista de instituicoes situadas
+	 * @return lista de instituicoes situadas
 	 */
 	@Override
 	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco) {
@@ -175,16 +180,14 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	}
 
-
 	/**
 	 * 
 	 * busca e retorna instituicoes que estao situadas naquele ponto especifico
 	 * 
 	 * @param latLng
-	 * 		latitude e longitude daquele ponto especifico no mapa
+	 *            latitude e longitude daquele ponto especifico no mapa
 	 * 
-	 * @return
-	 * 		lista de instituicoes
+	 * @return lista de instituicoes
 	 * 
 	 */
 	@Override

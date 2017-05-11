@@ -31,26 +31,28 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 
 /**
  * 
+ * <p>{@link DoadorServiceImpl} </p>
+ * 
  * <p>
- * <b> DoadorServiceImpl </b>
+ * Classe utilizada para implementação de serviços definidos em {@link DoadorService}
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 @Service
 public class DoadorServiceImpl implements DoadorService {
 
 	/**
 	 * 
-	 * 
-	 * 
 	 */
 	@Autowired
 	private DoadorRepository doadorRepository;
 
 	/**
-	 * 
-	 * 
 	 * 
 	 */
 	@Autowired

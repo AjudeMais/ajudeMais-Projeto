@@ -22,10 +22,12 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
- * <p>{@link CategoriaService} </p>
+ * <p>
+ * {@link CategoriaService}
+ * </p>
  * 
  * <p>
- * Classe utilizada para serviços de categoria
+ * Interface para definição de operações de serviços de {@link Categoria}.
  * </p>
  *
  * <pre>
@@ -34,13 +36,13 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
-public interface CategoriaService extends Service<Categoria, Long>{
-	
-	
+public interface CategoriaService extends Service<Categoria, Long> {
+
 	/**
-	 * 
+	 * Busca categoria por instituição de caridade
 	 * <p>
 	 * </p>
+	 * 
 	 * @param instituicaoCaridade
 	 * @return
 	 */

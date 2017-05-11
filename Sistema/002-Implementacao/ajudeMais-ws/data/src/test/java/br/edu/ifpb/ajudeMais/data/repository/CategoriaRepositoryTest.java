@@ -39,10 +39,13 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
- * <p>{@link CategoriaRepository} </p>
+ * <p>
+ * {@link CategoriaRepository}
+ * </p>
  * 
  * <p>
- * Classe utilizada para 
+ * Classe utilizada para execução de testes referentes a
+ * {@link CategoriaRepository}
  * </p>
  *
  * <pre>
@@ -52,58 +55,60 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
  *
  */
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-	TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
+		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @DatabaseSetup("/categoria-entries.xml")
 @DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/categoria-entries.xml" })
 @DirtiesContext
 public class CategoriaRepositoryTest {
-	
+
 	/**
 	 * 
 	 */
 	private InstituicaoCaridade instituicao;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
-	
+
 	/**
 	 * 
 	 * <p>
+	 * É executado antes de cada unidade
 	 * </p>
 	 */
 	@Before
 	public void setUp() {
 		instituicao = instituicaoRepository.findOne(1l);
-		
+
 	}
-	
-	
+
 	/**
 	 * 
 	 * <p>
+	 * teste para busca de categoria por instituição.
 	 * </p>
 	 */
 	@Test
 	public void findByInstituicaoCaridadeTest() {
-		
+
 		List<Categoria> instituicaoCaridades = categoriaRepository.findByInstituicaoCaridade(instituicao);
 		assertTrue(instituicaoCaridades.size() > 0);
 	}
-	
+
 	/**
 	 * 
 	 * <p>
+	 * Tenta buscar uma categoria passando uma insituição nula
 	 * </p>
 	 */
 	@Test

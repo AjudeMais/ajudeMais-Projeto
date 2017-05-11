@@ -24,6 +24,8 @@ import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
  * <p>
  * <b> {@link MensageiroService} </b>
  * </p>
+ * 
+ * Interface para definição de operações de serviços de {@link Mensageiro}.
  *
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>

@@ -26,6 +26,18 @@ import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 
 /**
  * 
+ * <p>
+ * {@link InstituicaoCaridadeService}
+ * </p>
+ * 
+ * <p>
+ * Interface para definição de operações de serviços de
+ * {@link InstituicaoCaridade}.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */

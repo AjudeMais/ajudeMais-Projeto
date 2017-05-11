@@ -22,50 +22,69 @@ import br.edu.ifpb.ajudeMais.service.security.jwt.JwtToken;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link AuthService}
+ * </p>
+ * 
+ * <p>
+ * interface para definição de operações de serviços de autenticação.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 public interface AuthService {
-	
+
 	/**
+	 * Cria autenticação para uma conta
 	 * 
 	 * @param conta
 	 * @return
 	 */
 	JwtToken criaAutenticao(Conta conta, Device device);
-	
+
 	/**
+	 * atualiza o token de acesso de um usuário
 	 * 
 	 * @return
 	 */
 	JwtToken atualizaAutenticacao(JwtToken tokenAtual);
-	
+
 	/**
+	 * recupera conta de usuário de acordo com token
 	 * 
 	 * @param token
 	 * @return
 	 */
 	Conta getContaPorToken(JwtToken token);
-	
+
 	/**
+	 * Verifica autenticação de usuário
 	 * 
 	 * @param token
 	 * @return
 	 */
 	Boolean autenticacaoValida(JwtToken token);
-	
+
 	/**
 	 * 
 	 * <p>
+	 * Busca login de usuário
 	 * </p>
+	 * 
 	 * @return
 	 */
-	String getCurrentUserLogin(); 
-	
+	String getCurrentUserLogin();
+
 	/**
 	 * 
 	 * <p>
+	 * recupera conta de usuário que faz requisição
 	 * </p>
+	 * 
 	 * @return
 	 */
 	Conta getCurrentUser();

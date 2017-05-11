@@ -15,7 +15,6 @@
  */
 package br.edu.ifpb.ajudeMais.service.exceptions;
 
-
 /**
  * 
  * <p>
@@ -36,7 +35,7 @@ public class AjudeMaisException extends Exception {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 
+	 * Construtor com messagem de exceção.
 	 */
 	public AjudeMaisException(String message) {
 		super(message);
