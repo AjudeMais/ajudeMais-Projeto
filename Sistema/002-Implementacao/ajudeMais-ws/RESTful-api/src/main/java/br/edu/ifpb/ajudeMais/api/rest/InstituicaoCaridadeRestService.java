@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.data.repository.CategoriaRepository;
+import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
@@ -61,6 +63,9 @@ public class InstituicaoCaridadeRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoService;
+	
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
 	/**
 	 * <p>
@@ -97,6 +102,9 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade)
 			throws AjudeMaisException {
+		
+		List<Categoria> categorias = categoriaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		instituicaoCaridade.setItensDoaveis(categorias);
 		InstituicaoCaridade instituicao = instituicaoService.update(instituicaoCaridade);
 
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);

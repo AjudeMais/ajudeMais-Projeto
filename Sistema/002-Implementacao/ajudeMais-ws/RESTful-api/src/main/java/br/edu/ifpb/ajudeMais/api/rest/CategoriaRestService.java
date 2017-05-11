@@ -115,6 +115,7 @@ public class CategoriaRestService {
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Categoria> update(@Valid @RequestBody Categoria categoria) throws AjudeMaisException {
+		System.out.println(categoria);
 		Categoria categorias = categoriaService.update(categoria);
 		return new ResponseEntity<>(categorias, HttpStatus.OK);
 	}

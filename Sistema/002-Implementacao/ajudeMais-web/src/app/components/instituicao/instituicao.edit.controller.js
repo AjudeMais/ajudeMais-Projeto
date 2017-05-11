@@ -85,7 +85,6 @@
             vm.instituicao.conta.username = instituicao.documento;
             vm.instituicao.conta.senha = instituicao.documento;
             vm.instituicao.conta.grupos = ['ROLE_INSTITUICAO'];
-            vm.instituicao.conta.ativo = true;
         }
 
         /**
