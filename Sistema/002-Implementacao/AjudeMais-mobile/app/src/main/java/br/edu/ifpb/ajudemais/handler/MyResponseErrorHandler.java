@@ -1,21 +1,14 @@
 package br.edu.ifpb.ajudemais.handler;
 
-import android.util.Log;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
-
 import java.io.IOException;
-
 import br.edu.ifpb.ajudemais.dto.MessageErrorDTO;
-import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
 
 /**
  * <p>
@@ -25,7 +18,6 @@ import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
  * <p>
  * Handler ReponseError Spring
  * </p>
- *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  * @author <a href="https://github.com/franckaj">Franck Aragão</a>
  */

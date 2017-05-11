@@ -2,7 +2,7 @@ package br.edu.ifpb.ajudemais.dto;
 
 /**
  * <p>
- * <b>MessageErrorDTO</b>
+ * <b>{@link MessageErrorDTO}</b>
  * </p>
  * <p>
  * <p>

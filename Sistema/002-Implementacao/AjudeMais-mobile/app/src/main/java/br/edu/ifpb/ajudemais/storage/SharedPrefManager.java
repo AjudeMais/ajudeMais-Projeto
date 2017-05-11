@@ -12,10 +12,9 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
  * <b>SharedPrefManager</b>
  * </p>
  *  Classe utilitaria para armazenamento em preferências do app.
-
  * <p>
  * <p>
- *
+ *   Gerencia informações constantemente usadas
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
@@ -45,7 +44,7 @@ public class SharedPrefManager {
     }
 
     /**
-     *
+     * Recupera a instância da classe.
      * @param context
      * @return
      */
@@ -67,7 +66,6 @@ public class SharedPrefManager {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_ACCESS_TOKEN, token);
         editor.apply();
-        Log.d("LOGIN", "guardando token.." + token);
         return true;
     }
 
@@ -83,12 +81,11 @@ public class SharedPrefManager {
         editor.putString(USER_SESSION_USERNAME, conta.getUsername());
         editor.putString(USER_SESSION_MAIL, conta.getEmail());
         editor.apply();
-        Log.d("LOGIN", "guardando user..");
         return true;
     }
 
     /**
-     * Salva a localização do doador
+     * Salva a localização do device.
      * @param latLng
      * @return
      */
@@ -129,7 +126,7 @@ public class SharedPrefManager {
     }
 
     /**
-     *retorna a última localização salva.
+     *Retorna a última localização salva.
      * @return
      */
     public LatLng getLocation() {

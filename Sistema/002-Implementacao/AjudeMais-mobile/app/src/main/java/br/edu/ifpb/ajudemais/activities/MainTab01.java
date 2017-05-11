@@ -10,13 +10,9 @@ import br.edu.ifpb.ajudemais.R;
 
 /**
  * <p>
- * <b>MainTab01</b>
+ * <b>{@link MainTab01}</b>
  * </p>
- * <p>
- *
- * <p>
- *
- * </p>
+ * <p></p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */

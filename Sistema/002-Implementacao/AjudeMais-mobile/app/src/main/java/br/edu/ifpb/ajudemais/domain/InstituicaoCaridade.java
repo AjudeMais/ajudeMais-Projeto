@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * <p>
- * <b>InstituicaoCaridade</b>
+ * <b>{@link InstituicaoCaridade}</b>
  * </p>
  * </p>
  *

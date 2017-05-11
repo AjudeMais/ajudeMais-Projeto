@@ -15,11 +15,11 @@ import java.io.IOException;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.utils</b>
+ * <b>{@link CapturePhotoUtils}</b>
  * </p>
  * <p>
  * <p>
- * Utilidade para salvar uma image local
+ * Utilitário para salvar uma image local
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>**/
@@ -57,7 +57,7 @@ public class CapturePhotoUtils {
     }
 
     /**
-     * Delete image armazenada no storage do device.
+     * Remove image armazenada no storage do device.
      * @return
      */
     public boolean deleteImageProfile(){
@@ -71,7 +71,7 @@ public class CapturePhotoUtils {
     }
 
     /**
-     * Get Foto profile.
+     * Recupera Foto do perfil.
      * @return
      */
     private  File getOutputMediaFile(){

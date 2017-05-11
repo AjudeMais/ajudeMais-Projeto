@@ -3,7 +3,7 @@ package br.edu.ifpb.ajudemais.domain;
 
 /**
  * <p>
- * <b>Foto</b>
+ * <b>{@link Foto}</b>
  * </p>
  * </p>
  *

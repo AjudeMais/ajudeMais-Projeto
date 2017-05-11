@@ -17,11 +17,10 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
  * <p>
- * <b>RequestResponseInterceptor</b>
+ * <b>{@link RequestResponseInterceptor}</b>
  * </p>
  * <p>
- * <p>
- *
+ *   Interneceptador para tratar header da  requisição com adição de token de acesso.
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
