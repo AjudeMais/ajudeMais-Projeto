@@ -119,7 +119,6 @@ public class CrudInstituicaoCaridadeTest {
 					instituicaoCadastradaComSucesso && emailJaEstaSendoUtilizado);
 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -157,7 +156,6 @@ public class CrudInstituicaoCaridadeTest {
 					instituicaoCadastradaComSucesso && docJaEstaSendoUtilizado);
 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

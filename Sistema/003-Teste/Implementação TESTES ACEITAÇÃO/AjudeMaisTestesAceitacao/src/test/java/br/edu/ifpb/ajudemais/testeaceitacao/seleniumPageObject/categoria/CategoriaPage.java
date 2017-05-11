@@ -49,6 +49,21 @@ public class CategoriaPage extends AbstractPage {
 		boolean categoria = driver.getPageSource().contains(nome);
 		return categoria;
 	}
+	
+	/**
+	 * Verifica se a categoria foi editada com sucesso.
+	 * 
+	 * @param nome
+	 * @return
+	 */
+	public boolean foiEditadoComSucessoCategoria(String nome, String descricao) {
+		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody")).should(appears);
+		
+		boolean nomeCategoria = driver.getPageSource().contains(nome);
+		boolean descriçãoCategoria = driver.getPageSource().contains(descricao);
+		return nomeCategoria && descriçãoCategoria;
+	}
+
 
 	/**
 	 * Verifica se a categoria foi removida com sucesso.
@@ -56,9 +71,9 @@ public class CategoriaPage extends AbstractPage {
 	 * @param msg
 	 * @return
 	 */
-	public boolean categoriaRemovidaComSucesso(String msg) {
+	public boolean categoriaRemovidaComSucesso(String nome) {
 		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody")).should(appears);
-		boolean categoria = driver.getPageSource().contains(msg);
+		boolean categoria = !(driver.getPageSource().contains(nome));
 		return categoria;
 	}
 
@@ -81,7 +96,7 @@ public class CategoriaPage extends AbstractPage {
 			if (houveLoginInvalido) {
 				addInstituicao();
 
-				Thread.sleep(400);
+				Thread.sleep(1000l);
 
 				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/a")).click();
 				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/ul/div/ul/a[2]")).click();
@@ -126,20 +141,13 @@ public class CategoriaPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
-	public RemoverCategoriaPage remove() {
-		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody/tr[5]/td[1]/button[2]")).click();
+	public RemoverCategoriaPage remove(String nome) {
+		String xpath = String.format("//*[@id=\"dtCategorias\"]/tbody/tr[td/text()=\"%s\"]/td/button[2]", nome);
+		$(By.xpath(xpath)).click();
 
 		return new RemoverCategoriaPage(driver);
 	}
 
-	/**
-	 * Clica no botão que representa a negação da remoçao. 
-	 * @return
-	 */
-	public RemoverCategoriaPage tentaRemoverCategoriaEDesiste() {
-		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody/tr[4]/td[1]/button[2]")).click();
-		return new RemoverCategoriaPage(driver);
-	}
 
 	/**
 	 * Adiciona ou edita uma categoria
@@ -159,8 +167,8 @@ public class CategoriaPage extends AbstractPage {
 	 * Clicar no botão editar da categoria com nome passado.
 	 * @return
 	 */
-	public EditarCategoriaPage edit(String userName) {
-		String xpath = String.format("//*[@id=\"dtCategorias\"]/tbody/tr[2]/td[1]/button[1]", userName);
+	public EditarCategoriaPage edit(String nome) {
+		String xpath = String.format("//*[@id=\"dtCategorias\"]/tbody/tr[td/text()=\"%s\"]/td/button[1]", nome);
 		$(By.xpath(xpath)).click();
 		return new EditarCategoriaPage(driver);
 	}
