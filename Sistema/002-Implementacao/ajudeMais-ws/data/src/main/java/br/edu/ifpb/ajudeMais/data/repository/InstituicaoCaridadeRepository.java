@@ -84,5 +84,11 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 */
 	public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(@Param("localidade") String localidade,
 			@Param("uf") String uf);
+	
+	/**
+	 * Lista todas as instituições ativas no sistema.
+	 * @return
+	 */
+	public List<InstituicaoCaridade> listAllInstituicoesAtivas();
 
 }

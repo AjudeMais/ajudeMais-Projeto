@@ -192,7 +192,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                         instituicoesResult = instituicaoRemoteService.postInstituicoesForLocation(latLng);
 
                     } else {
-                        instituicoesResult = instituicaoRemoteService.getInstituicoes();
+                        instituicoesResult = instituicaoRemoteService.getInstituicoesAtivas();
                     }
                 } else {
                     setVisibleNoConnection();

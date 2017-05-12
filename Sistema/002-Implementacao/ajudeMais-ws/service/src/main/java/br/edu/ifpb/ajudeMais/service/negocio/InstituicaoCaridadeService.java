@@ -70,5 +70,12 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 * @throws NumberFormatException
 	 */
 	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
+	
+	/**
+	 * Lista todas instituições com a situação ativa. 
+	 * @return
+	 */
+	public List<InstituicaoCaridade> listAllInstituicoesAtivas();
+
 
 }
