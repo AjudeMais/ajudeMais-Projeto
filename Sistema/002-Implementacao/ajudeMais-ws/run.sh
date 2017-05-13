@@ -11,7 +11,9 @@ elif [ $1 = "dev" ]; then
 
 elif [ $1 = "prod" ]; then
    echo "Running with production profile"
-   mvn spring-boot:run -Drun.profiles=prod
+   heroku login	
+   heroku deploy:jar target/ajudeMais-ws-0.5-SNAPSHOT.jar Procfile --app ajudemais-ws
+
 else
   echo "Running with default profile"
   mvn spring-boot:run
