@@ -8,6 +8,7 @@
 /target/www/**
 /src/test/javascript/coverage/
 /src/test/javascript/PhantomJS*/
+/Sistema/002-Implementacao/ajudeMais-ws/RESTful-api/src/main/resources/application-prod.properties
 
 ######################
 # WEB
