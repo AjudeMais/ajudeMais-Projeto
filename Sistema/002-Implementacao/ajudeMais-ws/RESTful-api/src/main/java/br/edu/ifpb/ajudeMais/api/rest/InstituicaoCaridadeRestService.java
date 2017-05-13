@@ -182,7 +182,7 @@ public class InstituicaoCaridadeRestService {
 	
 	/**
 	 * <p>
-	 * GET /insituicao/ativas
+	 * GET /instituicao/ativas
 	 * ROLE: ADMIN, DOADOR
 	 * </p>
 	 * 
@@ -190,11 +190,13 @@ public class InstituicaoCaridadeRestService {
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN,DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/ativas")
-	public ResponseEntity<List<InstituicaoCaridade>>  listAllInstituicoesAtivas() {
+	public ResponseEntity<List<InstituicaoCaridade>>  findByContaAtivo() {
 		
-		List<InstituicaoCaridade> instituicoes = instituicaoService.listAllInstituicoesAtivas();
+		List<InstituicaoCaridade> instituicoes = instituicaoService.findByContaAtivo(true);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 
 	}
+	
+
 }

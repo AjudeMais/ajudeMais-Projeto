@@ -49,5 +49,16 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 	 * @return
 	 */
 	List<Categoria> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+	
+	
+	/**
+	 *  <p>
+	 * Busca itens doaveis ativos ou inativos da instituição com ID passado.
+	 * </p>
+	 * @param idInstituicao
+	 * @return
+	 */
+	public List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo,Long id);
+	
 
 }

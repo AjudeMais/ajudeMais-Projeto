@@ -26,7 +26,6 @@ import br.edu.ifpb.ajudemais.domain.Categoria;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-
 public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.ViewHolder>{
 
     private List<Categoria> categories;
@@ -77,19 +76,6 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
     }
 
 
-    // Clean all elements of the recycler
-    public void clear() {
-        categories.clear();
-        notifyDataSetChanged();
-    }
-
-    // Add a list of items
-    public void addAll(List<Categoria> list) {
-        categories.addAll(list);
-        notifyDataSetChanged();
-    }
-
-
 
     /**
      *
@@ -101,8 +87,6 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            Log.e("VIEW HOLDER", "ENTROU");
-
             categoryName = (TextView) itemView.findViewById(R.id.tv_category_name);
             categoryDescription = (TextView) itemView.findViewById(R.id.tv_category_description);
         }

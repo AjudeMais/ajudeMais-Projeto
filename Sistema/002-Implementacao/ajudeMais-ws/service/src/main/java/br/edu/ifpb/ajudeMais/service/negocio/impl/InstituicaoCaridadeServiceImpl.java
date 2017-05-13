@@ -214,12 +214,12 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
-	 * Lista instituições ativas
+	 * Lista instituições por ativas ou não.
 	 */
 	@Override
-	public List<InstituicaoCaridade> listAllInstituicoesAtivas() {
+	public List<InstituicaoCaridade> findByContaAtivo(boolean ativo){
 	
-		return instituicaoRespository.listAllInstituicoesAtivas();
+		return instituicaoRespository.findByContaAtivo(ativo);
 	}
 
 }

@@ -112,4 +112,12 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public List<Categoria> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
 		return categoriaRepository.findByInstituicaoCaridade(instituicaoCaridade);
 	}
+
+	/**
+	 * Buscar todas as categorias ativas ou inativas da instituição com ID passado.
+	 */
+	@Override
+	public List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo,Long id){
+		return categoriaRepository.findByAtivoAndInstituicaoCaridadeId(ativo, id);
+	}
 }

@@ -139,7 +139,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             new MainSearchInstituicoesFragmentTask(this).execute();
         } else {
 
-
             setVisibleNoConnection();
 
         }

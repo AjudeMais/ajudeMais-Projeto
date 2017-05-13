@@ -200,5 +200,23 @@ public class CategoriaRestService {
 		categoriaService.remover(categoriaEncontrada);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	/**
+	 * <p>
+	 * DELETE /categoria/ativas/id : busca todas as categorias ativas da instituição com ID passado. <br>
+	 * ROLE: INSTITUICAO, DOADOR
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole ('INSTITUICAO','DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/ativas/{id}")
+	public ResponseEntity<List<Categoria>> listCategoriasAtivasToInstituicao(@PathVariable Long id) {
+
+		List<Categoria> categorias = categoriaService.findByAtivoAndInstituicaoCaridadeId(true, id);
+
+		return new ResponseEntity<>(categorias, HttpStatus.OK);
+	}
 
 }

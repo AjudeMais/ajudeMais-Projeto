@@ -71,11 +71,12 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 */
 	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
 	
+	
 	/**
-	 * Lista todas instituições com a situação ativa. 
+	 * @param ativo
 	 * @return
 	 */
-	public List<InstituicaoCaridade> listAllInstituicoesAtivas();
+	List<InstituicaoCaridade> findByContaAtivo(boolean ativo);
 
 
 }

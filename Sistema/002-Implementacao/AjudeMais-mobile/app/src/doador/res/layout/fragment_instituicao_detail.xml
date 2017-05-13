@@ -125,5 +125,18 @@
         card_view:cardPreventCornerOverlap="false"
         card_view:cardUseCompatPadding="true"/>
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loadingPanelMainSearchInst"
+        style="@style/GenericProgressBackground">
+
+        <ProgressBar
+            android:id="@+id/progress_presentation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:indeterminateTintMode="src_atop"
+            android:max="100" />
+    </RelativeLayout>
+
 
 </LinearLayout>
