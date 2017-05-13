@@ -29,8 +29,6 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * <p>
  * <b> {@link Conta} </b>
@@ -69,7 +67,6 @@ public class Conta {
 	@NotNull
 	@Size(min = 4, max = 100)
 	@Column(length = 100, nullable = false)
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String senha;
 
 	/**
