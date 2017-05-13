@@ -49,9 +49,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "intituicao_caridade")
-@NamedQueries({
-		@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf") })
-
+@NamedQueries({@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf and it.conta.ativo is true"),
+	@NamedQuery(name = "InstituicaoCaridade.listAllInstituicoesAtivas", query = "SELECT it FROM InstituicaoCaridade it WHERE it.conta.ativo is true")})
 public class InstituicaoCaridade {
 
 	/**

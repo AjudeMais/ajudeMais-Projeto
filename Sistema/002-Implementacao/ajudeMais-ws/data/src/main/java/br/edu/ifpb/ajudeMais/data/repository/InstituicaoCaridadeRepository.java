@@ -67,11 +67,13 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 * @return um Optional de uma insituição
 	 */
 	Optional<InstituicaoCaridade> findOneByConta(Conta conta);
-
+	
+	
+	
 	/**
 	 * 
 	 * <p>
-	 * Busca insituições por localidade e estado
+	 * Busca instituições  ativas pela localidade passada.
 	 * </p>
 	 * 
 	 * @param localidade
@@ -82,5 +84,11 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 */
 	public List<InstituicaoCaridade> filtersInstituicaoCaridadeClose(@Param("localidade") String localidade,
 			@Param("uf") String uf);
+	
+	/**
+	 * Lista todas as instituições ativas no sistema.
+	 * @return
+	 */
+	public List<InstituicaoCaridade> listAllInstituicoesAtivas();
 
 }

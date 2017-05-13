@@ -39,9 +39,9 @@ public class InstituicaoRemoteService extends AbstractRemoteService{
      * Recupera todas instituições cadastradas.
      * @return
      */
-    public List<InstituicaoCaridade> getInstituicoes() {
+    public List<InstituicaoCaridade> getInstituicoesAtivas() {
 
-        ResponseEntity<InstituicaoCaridade[]> responseEntity = restTemplate.getForEntity(API+"/instituicao", InstituicaoCaridade[].class);
+        ResponseEntity<InstituicaoCaridade[]> responseEntity = restTemplate.getForEntity(API+"/instituicao/ativas", InstituicaoCaridade[].class);
 
         return Arrays.asList(responseEntity.getBody());
     }

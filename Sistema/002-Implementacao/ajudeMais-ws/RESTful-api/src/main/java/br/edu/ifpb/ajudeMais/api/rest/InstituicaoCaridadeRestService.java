@@ -167,12 +167,7 @@ public class InstituicaoCaridadeRestService {
 	}
 
 	/**
-	 * <p>
-	 * GET /insituicao/id : Endpoint para buscar uma instituição de caridade
-	 * pelo ID. <br>
-	 * ROLE: ADMIN, INSTITUICAO
-	 * </p>
-	 * 
+	 * End point para buscar uma instituição de caridade pelo ID.
 	 * @param id
 	 * @return
 	 */
@@ -180,8 +175,26 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<InstituicaoCaridade> findById(@PathVariable Long id) {
 		InstituicaoCaridade instituicao = instituicaoService.findById(id);
-
+		
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);
+		
+	}
+	
+	/**
+	 * <p>
+	 * GET /insituicao/ativas
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
+	 * @return {@link List} lista de instituições ativas
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN,DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/ativas")
+	public ResponseEntity<List<InstituicaoCaridade>>  listAllInstituicoesAtivas() {
+		
+		List<InstituicaoCaridade> instituicoes = instituicaoService.listAllInstituicoesAtivas();
+
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 
 	}
 }

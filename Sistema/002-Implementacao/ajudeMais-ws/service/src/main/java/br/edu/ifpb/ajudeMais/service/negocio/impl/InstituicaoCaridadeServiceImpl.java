@@ -198,6 +198,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		try {
 			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 					latLng.getLongitude());
+		
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ApiException e) {
@@ -210,6 +211,15 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
 
+	}
+
+	/**
+	 * Lista instituições ativas
+	 */
+	@Override
+	public List<InstituicaoCaridade> listAllInstituicoesAtivas() {
+	
+		return instituicaoRespository.listAllInstituicoesAtivas();
 	}
 
 }
