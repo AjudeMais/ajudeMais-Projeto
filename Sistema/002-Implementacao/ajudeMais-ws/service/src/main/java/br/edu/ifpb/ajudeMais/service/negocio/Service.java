@@ -17,6 +17,9 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 
 /**
@@ -52,7 +55,7 @@ public interface Service<T, K> {
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	T save(T entity) throws AjudeMaisException;
+	T save(@Valid @NotNull T entity) throws AjudeMaisException;
 
 	/**
 	 * 
@@ -64,7 +67,7 @@ public interface Service<T, K> {
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	T update(T entity) throws AjudeMaisException;
+	T update(@Valid @NotNull T entity) throws AjudeMaisException;
 
 	/**
 	 * 
@@ -85,7 +88,7 @@ public interface Service<T, K> {
 	 * @param id
 	 * @return
 	 */
-	T findById(K id);
+	T findById(@NotNull K id);
 
 	/**
 	 * 
@@ -95,5 +98,5 @@ public interface Service<T, K> {
 	 * 
 	 * @param entity
 	 */
-	void remover(T entity);
+	void remover(@NotNull T entity);
 }

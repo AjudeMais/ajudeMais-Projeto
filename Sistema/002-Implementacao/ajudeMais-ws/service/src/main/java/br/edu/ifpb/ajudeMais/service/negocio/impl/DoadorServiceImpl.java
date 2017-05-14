@@ -18,6 +18,7 @@ package br.edu.ifpb.ajudeMais.service.negocio.impl;
 import java.util.List;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -121,7 +122,7 @@ public class DoadorServiceImpl implements DoadorService {
 	 */
 	@Override
 	@Transactional
-	public void remover(Doador doador) {
+	public void remover(@NotNull Doador doador) {
 		doadorRepository.delete(doador);
 	}
 

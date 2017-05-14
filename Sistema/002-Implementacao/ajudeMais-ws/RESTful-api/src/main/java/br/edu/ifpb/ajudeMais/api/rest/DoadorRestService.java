@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -109,5 +110,28 @@ public class DoadorRestService {
 		List<Doador> doador = doadorService.findAll();
 
 		return new ResponseEntity<List<Doador>>(doador, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /doador/id : Busca um doador pelo deu ID. Caso doador não exista um
+	 * NOT FOUNT será lançado para o cliente. <br/> 
+	 * ROLE: DOADOR
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PreAuthorize("hasRole('DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
+	public ResponseEntity<Doador> findById(@PathVariable Long id) {
+
+		Doador doador = doadorService.findById(id);
+
+		if (doador == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<Doador>(doador, HttpStatus.OK);
 	}
 }
