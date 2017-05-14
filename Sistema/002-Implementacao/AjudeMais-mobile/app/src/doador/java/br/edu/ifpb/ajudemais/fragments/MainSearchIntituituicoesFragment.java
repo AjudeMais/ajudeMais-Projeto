@@ -11,15 +11,24 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import org.springframework.web.client.RestClientException;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.InstituicaoActivity;
 import br.edu.ifpb.ajudemais.adapters.InstituicoesAdapter;
@@ -42,7 +51,7 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
     private InstituicoesAdapter instituicoesAdapter;
     private static RecyclerView recyclerView;
@@ -60,6 +69,16 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
+     * @param savedInstanceState
+     */
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+
+    }
+
+    /**
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -70,6 +89,8 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main_search_inst, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
 
@@ -77,6 +98,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
 
         return view;
     }
@@ -150,6 +172,76 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_view, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        instituicoesAdapter.setFilter(instituicoes);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        return true; // Return true to expand action view
+                    }
+                });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    private void showListEmpty(){
+        view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+    }
+
+    private void showListInstituicoes(){
+        view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<InstituicaoCaridade> filteredModelList = filter(instituicoes, newText);
+
+        if (filteredModelList.size() < 1) {
+            showListEmpty();
+        } else {
+            showListInstituicoes();
+            instituicoesAdapter.setFilter(filteredModelList);
+
+        }
+        return true;
+    }
+
+    private List<InstituicaoCaridade> filter(List<InstituicaoCaridade> models, String query) {
+        query = query.toLowerCase();
+        final List<InstituicaoCaridade> filteredModelList = new ArrayList<>();
+        for (InstituicaoCaridade model : models) {
+            final String text = model.getNome().toLowerCase();
+
+            if (text.contains(query)) {
+                filteredModelList.add(model);
+            }
+        }
+        return filteredModelList;
     }
 
     /**
@@ -212,15 +304,21 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         protected void onPostExecute(List<InstituicaoCaridade> result) {
             if (result != null) {
 
-                instituicoes = result;
-                view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-                view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
+                if (result.size() < 1) {
+                    view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
+                    view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+                    view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
 
-                instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
-                recyclerView.setAdapter(instituicoesAdapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                } else {
+                    instituicoes = result;
+                    view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
+                    view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.empty_list).setVisibility(View.GONE);
 
+                    instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
+                    recyclerView.setAdapter(instituicoesAdapter);
+                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                }
             } else {
                 showResult(message);
             }

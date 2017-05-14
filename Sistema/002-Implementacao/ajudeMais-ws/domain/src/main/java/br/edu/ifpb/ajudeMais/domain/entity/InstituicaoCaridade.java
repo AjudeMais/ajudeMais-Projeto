@@ -16,6 +16,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -103,7 +104,7 @@ public class InstituicaoCaridade {
 	 * 
 	 */
 	@JsonIgnoreProperties(value="instituicaoCaridade")
-	@OneToMany(	cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade")
+	@OneToMany(	cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade",fetch = FetchType.LAZY)
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
 
