@@ -50,6 +50,8 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+
  */
 public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
@@ -155,6 +157,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     }
 
+    /**
+     *
+     */
     @Override
     public void onRefresh() {
         if (androidUtil.isOnline()) {
@@ -168,6 +173,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     }
 
+    /**
+     * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
+     */
     public void setVisibleNoConnection() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
@@ -176,6 +184,11 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
 
+    /**
+     *
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.search_view, menu);
@@ -200,11 +213,19 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                 });
     }
 
+    /**
+     *
+     * @param query
+     * @return
+     */
     @Override
     public boolean onQueryTextSubmit(String query) {
         return false;
     }
 
+    /**
+     * Auxiliar para mostrar fragmento para lista vazia.
+     */
     private void showListEmpty(){
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
@@ -212,6 +233,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Auxiliar para mostrar lista de insituições e esconder demais fragmentos.
+     */
     private void showListInstituicoes(){
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
@@ -219,6 +243,11 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
+    /**
+     *
+     * @param newText
+     * @return
+     */
     @Override
     public boolean onQueryTextChange(String newText) {
         final List<InstituicaoCaridade> filteredModelList = filter(instituicoes, newText);
@@ -233,6 +262,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         return true;
     }
 
+
+    /**
+     * Filtra na lista de instituição pelo nome digitado
+     * @param models
+     * @param query
+     * @return
+     */
     private List<InstituicaoCaridade> filter(List<InstituicaoCaridade> models, String query) {
         query = query.toLowerCase();
         final List<InstituicaoCaridade> filteredModelList = new ArrayList<>();
@@ -263,7 +299,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             this.clickListener = clickListener;
             sharedPrefManager = new SharedPrefManager(getContext());
         }
-        
+
         /**
          * @param voids
          * @return
