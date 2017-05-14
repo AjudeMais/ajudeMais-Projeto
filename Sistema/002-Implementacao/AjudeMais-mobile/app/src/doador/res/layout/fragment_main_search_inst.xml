@@ -28,6 +28,7 @@
     </FrameLayout>
 
     <include android:id="@+id/no_internet_fragment" layout="@layout/fragment_no_internet"/>
+    <include android:id="@+id/empty_list" layout="@layout/fragment_list_empty"/>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/loadingPanelMainSearchInst"

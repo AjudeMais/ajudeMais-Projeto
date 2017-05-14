@@ -7,13 +7,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorFont"
     tools:context="br.edu.ifpb.ajudemais.activities.MainSearchActivity">
 
-    <include
-        layout="@layout/navigation_search"
+    <LinearLayout
+        android:id="@+id/componentActionBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <include
+            layout="@layout/navigation_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/containerViewMainSearch"

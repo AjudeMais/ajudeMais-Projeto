@@ -59,4 +59,10 @@
     <!--Detalhe intituição-->
     <string name="tv_inf_instituicao">Ajude Esta Instituição com:</string>
     <string name="no_internet">Sem conexão</string>
+    <string name="action_search">pesquisar</string>
+    <string name="search_hint">digite para buscar</string>
+    <string name="empty_list">OPS</string>
+    <string name="text_empty_sec">Não existem nenhuma informação para ser mostrada</string>
+    <string name="no_connection">imagem representa sem conexão com a internet</string>
+    <string name="no_connect_sec">Verifique sua conexão com a internet e tente novamente</string>
 </resources>
