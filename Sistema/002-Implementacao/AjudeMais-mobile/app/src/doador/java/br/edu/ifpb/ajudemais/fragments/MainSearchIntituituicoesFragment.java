@@ -206,12 +206,14 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     private void showListEmpty(){
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
     private void showListInstituicoes(){
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
@@ -261,8 +263,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             this.clickListener = clickListener;
             sharedPrefManager = new SharedPrefManager(getContext());
         }
-
-
+        
         /**
          * @param voids
          * @return
@@ -272,6 +273,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
             try {
                 if (androidUtil.isOnline()) {
+
                     latLng = sharedPrefManager.getLocation();
 
                     mLastLocation = getUpdateLocation();
@@ -305,15 +307,11 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             if (result != null) {
 
                 if (result.size() < 1) {
-                    view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-                    view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
-                    view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+                    showListEmpty();
 
                 } else {
                     instituicoes = result;
-                    view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-                    view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+                    showListInstituicoes();
 
                     instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
                     recyclerView.setAdapter(instituicoesAdapter);
