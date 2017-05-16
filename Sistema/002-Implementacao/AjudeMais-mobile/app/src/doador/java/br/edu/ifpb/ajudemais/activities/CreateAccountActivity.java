@@ -182,7 +182,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     private boolean validatePasswords(String password, String confirmPassword) {
 
         if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, R.string.msgPasswordAndConfirmPasswordNotCombined, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.msgPasswordAndConfirmPasswordDoesNotMatch, Toast.LENGTH_LONG).show();
             return false;
         }
 
