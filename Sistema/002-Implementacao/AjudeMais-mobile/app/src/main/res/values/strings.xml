@@ -24,10 +24,12 @@
 
     <string name="facebook">FACEBOOK</string>
     <string name="brandLogoApp">Logo do Ajude Mais</string>
+    <string name="msgPhoneNotCompleted">Complete o número do celular</string>
 
+    <string name="msgNameNotInformed">O nome deve ser informado.</string>
     <string name="msgUserNameNotInformed">O nome do usuário deve ser informado.</string>
     <string name="msgPasswordNotInformed">A senha do usuário deve ser informada.</string>
-    <string name="msgPhoneNotInformed">O telefone deve ser informado.</string>
+    <string name="msgPhoneNotInformed">O Celular deve ser informado.</string>
     <string name="msgEmailNotInformed">O e-mail deve ser informado.</string>
     <string name="msgEmailNotValid">E-mail inválido.</string>
     <string name="msgConfirmPasswordNotInformed">A confirmação da senha deve ser informada.</string>
@@ -41,6 +43,8 @@
 
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+
+    <string name="msgInvalideEmail">Informe um e-mail válido.</string>
 
     <string name="msgInvalidePassword">A senha deve conte no mínimo 6 caracteres.</string>
     <string name="msgInvalideUserName">Nome do usuário deve conte no mínimo 4 caracteres.</string>

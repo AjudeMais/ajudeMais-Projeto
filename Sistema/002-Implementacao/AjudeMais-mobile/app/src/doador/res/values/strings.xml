@@ -9,7 +9,7 @@
     <string name="separatorBtnsLogin">Ou</string>
 
     <!--Tela Criar Conta Doador sem rede social-->
-    <string name="hitPhone">Telefone</string>
+    <string name="hitPhone">Celular</string>
     <string name="hitPassword">Senha</string>
     <string name="hitConfirmationPassword">Confirmação da senha</string>
     <string name="hitEmail">E-mail</string>
