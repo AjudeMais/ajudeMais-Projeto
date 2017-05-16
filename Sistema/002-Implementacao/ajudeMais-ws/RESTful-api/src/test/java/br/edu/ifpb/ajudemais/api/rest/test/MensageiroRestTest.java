@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 /**
@@ -23,15 +24,21 @@ import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
  *
  */
 public class MensageiroRestTest extends AbstractRestTest {
-
+	/**
+	 * 
+	 */
 	private Mensageiro mensageiro;
-
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
-
+	/**
+	 * 
+	 */
 	@Override
 	protected void doInit() throws Exception {
-
+		
 		final Conta contaInst = new Conta();
 		contaInst.setUsername("instituicaoZEFA");
 		contaInst.setSenha("instituicaozefa");
@@ -41,13 +48,13 @@ public class MensageiroRestTest extends AbstractRestTest {
 		contaService.save(contaInst);
 	}
 	/**
-	 * testa a criação de um mensageiro através de um administrador, havendo sucesso retorna http 201
+	 * testa a criação de um mensageiro, havendo sucesso retorna http 201
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	
 	@Test
-	public void criarMensageiroOk() throws IOException, Exception {
+	public void createMensageiroOk() throws IOException, Exception {
 
 		getMensageiro();
 		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON)
@@ -61,7 +68,7 @@ public class MensageiroRestTest extends AbstractRestTest {
 	 */
 	
 	@Test
-	public void criarMensageironullBody() throws IOException, Exception {
+	public void createMensageiroNullBody() throws IOException, Exception {
 
 		getMensageiro();
 		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON)
@@ -70,6 +77,7 @@ public class MensageiroRestTest extends AbstractRestTest {
 				.andExpect(status().isBadRequest());
 
 	}
+	
 	/**
 	 * testa a criação de um mensageiro, sem autorização deve retornar status http 401
 	 * @throws IOException
@@ -77,7 +85,7 @@ public class MensageiroRestTest extends AbstractRestTest {
 	 */
 	
 	@Test
-	public void criarMensageiroSemAutorizacao() throws IOException, Exception {
+	public void createMensageiroWithoutAuth() throws IOException, Exception {
 
 		getMensageiro();
 		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON))
@@ -89,7 +97,7 @@ public class MensageiroRestTest extends AbstractRestTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void buscarTodosMesnsageirosSemAutorizacao() throws IOException, Exception {
+	public void findAllMesnsageirosWithoutAuth() throws IOException, Exception {
 
 		getMensageiro();
 		mockMvc.perform(get("/mensageiro").contentType(MediaType.APPLICATION_JSON))
@@ -97,12 +105,12 @@ public class MensageiroRestTest extends AbstractRestTest {
 
 	}
 	/**
-	 * retorna um http 200 caso haja sucesso na busca
+	 * retorna um status http 200 caso haja sucesso na busca
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
-	public void buscarTodosMensageirosOk() throws IOException, Exception {
+	public void findAllMensageirosOk() throws IOException, Exception {
 
 		getMensageiro();
 		mockMvc.perform(get("/mensageiro").contentType(MediaType.APPLICATION_JSON)
@@ -112,17 +120,17 @@ public class MensageiroRestTest extends AbstractRestTest {
 
 	}
 	/**
-	 * retorna um http 200 confirmando que a busca foi realizada
+	 * retorna um status http 200 confirmando que a busca foi realizada
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
-	public void buscarMensageirosPorIdOk() throws IOException, Exception {
+	public void findMensageiroByIdOk() throws IOException, Exception {
 
 		getMensageiro();
-		mockMvc.perform(get("/mensageiro").contentType(MediaType.APPLICATION_JSON)
+		mockMvc.perform(get("/mensageiro/50").contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuth("instituicaoZEFA", "instituicaozefa"))
-				.content(toJson(mensageiro.getId())))
+				.content(toJson(mensageiro)))
 				.andExpect(status().isOk());
 
 	}
@@ -138,6 +146,9 @@ public class MensageiroRestTest extends AbstractRestTest {
 		mensageiro.setEnderecos(getEndereco());
 		mensageiro.setNome("MENSAGEIRO 1");
 		mensageiro.setTelefone("83996885898");
+		
+		Imagem imagem = new Imagem();				
+		mensageiro.setFoto(imagem);
 
 		Conta conta = new Conta();
 		conta.setAtivo(true);
