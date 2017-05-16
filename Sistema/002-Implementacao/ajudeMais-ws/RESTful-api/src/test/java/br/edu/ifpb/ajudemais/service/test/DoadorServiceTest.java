@@ -190,7 +190,7 @@ public class DoadorServiceTest {
 	}
 
 	/**
-	 * Teste buscar todos os clientes normalmente.
+	 * Teste buscar todos os doadores.
 	 */
 	@Test
 	public void findAllDoadores() {

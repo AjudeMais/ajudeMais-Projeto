@@ -20,11 +20,13 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
+import br.edu.ifpb.ajudeMais.service.event.mensageiro.MensageiroEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
@@ -43,11 +45,20 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 @Service
 public class MesageiroServiceImpl implements MensageiroService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private MensageiroRepository mensageiroRepository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
 	/**
 	 * 
@@ -65,8 +76,11 @@ public class MesageiroServiceImpl implements MensageiroService {
 
 		Conta conta = contaService.save(mensageiro.getConta());
 		mensageiro.setConta(conta);
-
-		return mensageiroRepository.save(mensageiro);
+		
+		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
+		publisher.publishEvent(new MensageiroEditEvent(mensageiroSaved));
+		
+		return mensageiroSaved;
 	}
 
 	/**

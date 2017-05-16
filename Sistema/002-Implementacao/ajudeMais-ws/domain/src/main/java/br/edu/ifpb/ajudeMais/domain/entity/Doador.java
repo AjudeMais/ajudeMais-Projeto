@@ -69,7 +69,7 @@ public class Doador implements Serializable {
 	 * 
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
-	private Foto foto;
+	private Imagem foto;
 
 	/**
 	 * 
@@ -170,7 +170,7 @@ public class Doador implements Serializable {
 	/**
 	 * @return the foto
 	 */
-	public Foto getFoto() {
+	public Imagem getFoto() {
 		return foto;
 	}
 
@@ -178,7 +178,7 @@ public class Doador implements Serializable {
 	 * @param foto
 	 *            the foto to set
 	 */
-	public void setFoto(Foto foto) {
+	public void setFoto(Imagem foto) {
 		this.foto = foto;
 	}
 
