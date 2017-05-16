@@ -42,18 +42,15 @@
                 android:id="@+id/ltedtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="sans-serif"
                     android:hint="@string/hitName"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -62,19 +59,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ltedtNome"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/ltedtNome"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:hint="@string/hitUserName"
                     android:fontFamily="sans-serif"
-                    android:inputType="textPersonName"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:hint="@string/hitUserName"
+                    android:inputType="textPersonName" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -83,18 +77,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ltedtUserName"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:hint="@string/hitPhone"
                     android:fontFamily="sans-serif"
-                    android:inputType="phone"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary" />
+                    android:hint="@string/hitPhone"
+                    android:inputType="phone" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -103,19 +94,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ltedtPhone"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edtPhone"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:hint="@string/hitEmail"
                     android:fontFamily="sans-serif"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary"
+                    android:hint="@string/hitEmail"
                     android:inputType="textEmailAddress"
+
                     android:typeface="normal" />
 
             </android.support.design.widget.TextInputLayout>
@@ -125,18 +114,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ltedtEmail"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/edtEmail"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:hint="@string/hitPassword"
                     android:fontFamily="sans-serif"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary"
+                    android:hint="@string/hitPassword"
                     android:inputType="textPassword" />
 
             </android.support.design.widget.TextInputLayout>
@@ -146,17 +132,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ltedtPassword"
-                android:textColorHint="@color/colorPrimary">
+                android:theme="@style/TextLabel">
 
                 <EditText
                     android:id="@+id/edtConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
                     android:layout_below="@+id/edtPassword"
-                    android:textColor="@color/colorPrimary"
-                    android:textColorHint="@color/colorPrimary"
-                    android:backgroundTint="@color/colorPrimary"
+                    android:fontFamily="sans-serif"
                     android:hint="@string/hitConfirmationPassword"
                     android:inputType="textPassword" />
             </android.support.design.widget.TextInputLayout>
