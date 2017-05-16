@@ -29,6 +29,7 @@
         <item name="android:background">#FFFF</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small.Inverse">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -36,13 +37,9 @@
     </style>
     <!--Fim Style para tela de carregamento-->
 
-
-    <style name="TextLabel" parent="TextAppearance.AppCompat">
-        <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/textSecond2</item>
-        <item name="android:textSize">18sp</item>
-        <item name="colorAccent">@color/textSecond2</item>
-        <item name="colorControlNormal">@color/textSecond2</item>
-        <item name="colorControlActivated">@color/textSecond2</item>
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
     </style>
+
+
 </resources>
