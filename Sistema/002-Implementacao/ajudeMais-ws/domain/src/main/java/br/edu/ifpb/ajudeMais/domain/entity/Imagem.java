@@ -17,7 +17,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 
 /**
  * <p>
@@ -31,7 +30,7 @@ import javax.persistence.Transient;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 @Entity
-public class Foto {
+public class Imagem {
 
 	/**
 	 * 
@@ -49,82 +48,86 @@ public class Foto {
 	/**
 	 * 
 	 */
-	private String pathFoto;
+	private String path;
 
 	/**
 	 * 
 	 */
-	@Transient
-	private byte[] imagem;
+	private String contentType;
 
 	/**
-	 * @return the id
+	 * 
+	 * <p>
+	 * </p>
+	 *
+	 */
+	public Imagem() {
+	}
+
+	public Imagem(String nome, String contentType) {
+		super();
+		this.nome = nome;
+		this.contentType = contentType;
+	}
+
+	/**
+	 * @return o atributo id
 	 */
 	public Long getId() {
 		return id;
 	}
 
 	/**
-	 * @return the imagem
-	 */
-	public byte[] getImagem() {
-		return imagem;
-	}
-
-	/**
-	 * @param imagem
-	 *            the imagem to set
-	 */
-	public void setImagem(byte[] imagem) {
-		this.imagem = imagem;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
+	 * @param o
+	 *            parametro id é setado em id
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return the nome
+	 * @return o atributo nome
 	 */
 	public String getNome() {
 		return nome;
 	}
 
 	/**
-	 * @param nome
-	 *            the nome to set
+	 * @param o
+	 *            parametro nome é setado em nome
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	/**
-	 * @return the pathFoto
+	 * @return o atributo path
 	 */
-	public String getPathFoto() {
-		return pathFoto;
+	public String getPath() {
+		return path;
 	}
 
 	/**
-	 * @param pathFoto
-	 *            the pathFoto to set
+	 * @param o
+	 *            parametro path é setado em path
 	 */
-	public void setPathFoto(String pathFoto) {
-		this.pathFoto = pathFoto;
+	public void setPath(String path) {
+		this.path = path;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return o atributo contentType
 	 */
-	@Override
-	public String toString() {
-		return "Foto [id=" + id + ", nome=" + nome + ", pathFoto=" + pathFoto + "]";
+	public String getContentType() {
+		return contentType;
+	}
+
+	/**
+	 * @param o
+	 *            parametro contentType é setado em contentType
+	 */
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 
 }

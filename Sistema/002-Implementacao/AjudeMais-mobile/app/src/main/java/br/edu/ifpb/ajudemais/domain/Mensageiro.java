@@ -17,11 +17,24 @@ public class Mensageiro {
     private Long id;
     private String nome;
     private String cpf;
-    private String email;
     private String telefone;
     private String tokenFCM;
     private Conta conta;
     private Foto foto;
+
+    /**
+     *
+     * @param nome
+     * @param cpf
+     * @param telefone
+     * @param conta
+     */
+    public Mensageiro(String nome, String cpf, String telefone, Conta conta) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.conta = conta;
+    }
 
     /**
      *
@@ -69,22 +82,6 @@ public class Mensageiro {
      */
     public void setCpf(String cpf) {
         this.cpf = cpf;
-    }
-
-    /**
-     *
-     * @return String
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     *
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     /**

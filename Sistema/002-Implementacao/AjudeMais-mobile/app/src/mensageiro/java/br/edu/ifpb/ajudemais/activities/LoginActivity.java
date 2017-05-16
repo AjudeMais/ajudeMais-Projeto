@@ -28,7 +28,8 @@ import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
  *
  * </p>
  *
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a> and
+ * @author <a href="https://github.com/amslv">Ana Silva</a>
  */
 public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -36,6 +37,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private TextView tvRecoveryPassword;
     private EditText edtUserName;
     private EditText edtPassword;
+    private Button btnCreateAccount;
     private Resources resources;
 
     /**
@@ -63,6 +65,16 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
             }
         });
+
+        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(LoginActivity.this, CreateMensageiroAccountActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
 
     /**
@@ -73,6 +85,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         resources = getResources();
 
     }

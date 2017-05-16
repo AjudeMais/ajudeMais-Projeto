@@ -99,7 +99,7 @@ public class Mensageiro {
 	 * 
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
-	private Foto foto;
+	private Imagem foto;
 
 	/**
 	 * @return the id
@@ -195,7 +195,7 @@ public class Mensageiro {
 	/**
 	 * @return the foto
 	 */
-	public Foto getFoto() {
+	public Imagem getFoto() {
 		return foto;
 	}
 
@@ -203,7 +203,7 @@ public class Mensageiro {
 	 * @param foto
 	 *            the foto to set
 	 */
-	public void setFoto(Foto foto) {
+	public void setFoto(Imagem foto) {
 		this.foto = foto;
 	}
 

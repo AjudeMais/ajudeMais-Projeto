@@ -13,6 +13,7 @@ package br.edu.ifpb.ajudemais.api.rest.test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class DoadorRestTest extends AbstractRestTest {
 	 */
 	@Override
 	protected void doInit() throws Exception {
+
 	}
 
 	/**
@@ -71,6 +73,24 @@ public class DoadorRestTest extends AbstractRestTest {
 		getDoador();
 		mockMvc.perform(post("/doador").contentType(MediaType.APPLICATION_JSON).content(toJson(doador)))
 				.andExpect(status().isCreated());
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Tenta atualizar um doador existente. Deveria retornar Http 401.
+	 * Usuário autenticado para dispositivo web.
+	 * </p>
+	 * 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	@Test
+	public void updateDoadorModuleNotAllowed() throws IOException, Exception {
+		getDoador();
+		mockMvc.perform(put("/doador").contentType(MediaType.APPLICATION_JSON)
+				.content(toJson(doador)))
+				.andExpect(status().isUnauthorized());
 	}
 
 	/**

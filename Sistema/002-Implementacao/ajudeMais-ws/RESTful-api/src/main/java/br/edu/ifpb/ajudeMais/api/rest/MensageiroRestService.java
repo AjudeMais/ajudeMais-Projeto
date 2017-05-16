@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,7 +59,7 @@ public class MensageiroRestService {
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Mensageiro> save(@Valid @RequestBody Mensageiro mensageiro) throws AjudeMaisException {
 		Mensageiro mensageiroSaved = mensageiroService.save(mensageiro);
-		return new ResponseEntity<Mensageiro>(mensageiroSaved, HttpStatus.OK);
+		return new ResponseEntity<Mensageiro>(mensageiroSaved, HttpStatus.CREATED);
 	}
 	
 	/**
@@ -93,7 +94,7 @@ public class MensageiroRestService {
 	 */
 	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-	public ResponseEntity<Mensageiro> findById(Long id){
+	public ResponseEntity<Mensageiro> findById(@PathVariable Long id){
 		Mensageiro mensageiro = mensageiroService.findById(id);
 		return new ResponseEntity<Mensageiro>(mensageiro, HttpStatus.OK);
 	}

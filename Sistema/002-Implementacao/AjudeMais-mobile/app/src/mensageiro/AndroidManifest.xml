@@ -27,8 +27,9 @@
         <activity android:name=".activities.LoginActivity" />
         <activity
             android:name=".activities.RecoveryPasswordActivity"
-            android:label="@string/recoveryPasswordActivity"></activity>
-        <activity android:name=".activities.MainSearchDoacaoActivity"></activity>
+            android:label="@string/recoveryPasswordActivity" />
+        <activity android:name=".activities.MainSearchDoacaoActivity" />
+        <activity android:name=".activities.CreateMensageiroAccountActivity"></activity>
     </application>
 
 </manifest>
