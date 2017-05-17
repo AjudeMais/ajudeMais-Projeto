@@ -47,4 +47,16 @@ public interface DoadorRepository extends JpaRepository<Doador, Long> {
 	 * @return uma lista de doadores que possui esse nome
 	 */
 	List<Doador> findByNome(String nome);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca doador filtrando por username de sua conta.
+	 * </p>
+	 * 
+	 * @param username
+	 *            a ser buscado
+	 * @return doador encontrado.
+	 */
+	Doador findOneByContaUsername(String username);
 }

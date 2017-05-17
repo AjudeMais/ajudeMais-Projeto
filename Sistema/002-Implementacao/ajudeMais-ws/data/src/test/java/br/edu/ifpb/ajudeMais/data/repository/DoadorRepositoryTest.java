@@ -109,5 +109,32 @@ public class DoadorRepositoryTest {
 		List<Doador> doadores = doadorRepository.findByNome("Zefinha");
 		assertThat(true, is(doadores.size() == 0));
 	}
+	
+	/**
+	 * 
+	 * <p>
+	 * testa busca de doador filtrando por username de conta.
+	 * </p>
+	 */
+	@Test
+	public void findOneByContaUsernameTest() {
+
+		Doador doador = doadorRepository.findOneByContaUsername("zefao");
+		assertNotNull(doador);
+	}
+	
+	
+	/**
+	 * 
+	 * <p>
+	 * testa busca de doador filtrando por username de conta.
+	 * </p>
+	 */
+	@Test
+	public void findOneByContaUsernameNotFoundTest() {
+
+		Doador doador = doadorRepository.findOneByContaUsername("");
+		assertNull(doador);
+	}
 
 }

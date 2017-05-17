@@ -29,7 +29,18 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public interface DoadorService extends Service<Doador, Long>{
-	
+public interface DoadorService extends Service<Doador, Long> {
+
+	/**
+	 * 
+	 * <p>
+	 * Busca Daodor por conta, filtrando por username
+	 * </p>
+	 * 
+	 * @param username
+	 *            nome de usuário a ser buscado;
+	 * @return Doador encontrado.
+	 */
+	Doador findByContaUsername(String username);
 
 }

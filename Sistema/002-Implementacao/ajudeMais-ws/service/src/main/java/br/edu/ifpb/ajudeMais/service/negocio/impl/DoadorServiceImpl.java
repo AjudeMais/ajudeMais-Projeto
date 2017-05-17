@@ -32,10 +32,13 @@ import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 
 /**
  * 
- * <p>{@link DoadorServiceImpl} </p>
+ * <p>
+ * {@link DoadorServiceImpl}
+ * </p>
  * 
  * <p>
- * Classe utilizada para implementação de serviços definidos em {@link DoadorService}
+ * Classe utilizada para implementação de serviços definidos em
+ * {@link DoadorService}
  * </p>
  *
  * <pre>
@@ -76,7 +79,7 @@ public class DoadorServiceImpl implements DoadorService {
 	public Doador save(Doador doador) throws AjudeMaisException {
 		Conta conta = contaService.save(doador.getConta());
 		doador.setConta(conta);
-		
+
 		return doadorRepository.save(doador);
 	}
 
@@ -103,7 +106,6 @@ public class DoadorServiceImpl implements DoadorService {
 		return doadorRepository.findAll();
 	}
 
-	
 	/**
 	 * 
 	 * busca e retorna um doador em especifico com base no id do mesmo
@@ -114,7 +116,6 @@ public class DoadorServiceImpl implements DoadorService {
 		return doadorRepository.findOne(id);
 	}
 
-	
 	/**
 	 * 
 	 * remove um doador previamente cadastrado
@@ -124,6 +125,14 @@ public class DoadorServiceImpl implements DoadorService {
 	@Transactional
 	public void remover(@NotNull Doador doador) {
 		doadorRepository.delete(doador);
+	}
+
+	/**
+	 * Busca doador por conta, filtrando por username.
+	 */
+	@Override
+	public Doador findByContaUsername(String username) {
+		return doadorRepository.findOneByContaUsername(username);
 	}
 
 }

@@ -17,6 +17,7 @@ package br.edu.ifpb.ajudemais.service.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -201,6 +202,19 @@ public class DoadorServiceTest {
 		List<Doador> mockedDoadores = mockDoadorService.findAll();
 
 		assertThat(mockedDoadores, hasItems(doador, doador));
+	}
+	
+	/**
+	 * Teste buscar todos os doadores.
+	 */
+	@Test
+	public void findByContaUsernameTest() {
+		Doador doadore = getDoador();
+
+		when(mockDoadorService.findByContaUsername(doadore.getConta().getUsername())).thenReturn(doadore);
+		Doador mockedDoador = mockDoadorService.findByContaUsername(doadore.getConta().getUsername());
+
+		assertEquals(mockedDoador, doadore);
 	}
 
 	/**
