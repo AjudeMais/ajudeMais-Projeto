@@ -5,6 +5,7 @@
 
     <string name="btnCreateNewAccount">CRIAR CONTA</string>
     <string name="newAccountActivity">Nova Conta</string>
+    <string name="editAccount">Editar Conta</string>
 
     <string name="separatorBtnsLogin">Ou</string>
 
@@ -18,5 +19,8 @@
     <string name="campanhas">CAMPANHAS</string>
     <string name="lista_de_itens_do_veis">Lista de itens doáveis</string>
     <string name="errorOnLogin">Falha ao tentar efetuar login</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

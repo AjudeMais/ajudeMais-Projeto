@@ -14,11 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import org.springframework.web.client.RestClientException;
-
 import java.util.List;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.CategoriasAdapter;
 import br.edu.ifpb.ajudemais.domain.Categoria;

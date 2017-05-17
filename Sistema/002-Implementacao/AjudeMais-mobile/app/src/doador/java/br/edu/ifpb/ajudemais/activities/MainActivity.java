@@ -143,7 +143,12 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
      */
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
+
             case R.id.nav_config_conta:
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ProfileSettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 break;
             case R.id.nav_notificacoes:
                 break;
@@ -154,7 +159,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                     break;
                 } else {
                     SharedPrefManager.getInstance(this).clearSharedPrefs();
-                    System.out.println(capturePhotoUtils.deleteImageProfile());
                     goToLoginScreen();
                     break;
                 }

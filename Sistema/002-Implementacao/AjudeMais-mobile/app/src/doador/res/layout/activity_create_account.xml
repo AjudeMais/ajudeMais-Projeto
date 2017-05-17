@@ -46,7 +46,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -110,7 +110,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtEmail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,7 +155,7 @@
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
-                <EditText
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/edtConfirmPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
