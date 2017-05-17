@@ -12,32 +12,29 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import org.springframework.web.client.RestClientException;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
  * <b>CreateAccountActivity</b>
  * </p>
  * <p>
- *     Activity para controlar Conta Usuário.
+ * Activity para controlar Conta Usuário.
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a> and
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
-
  */
 public class CreateAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -51,6 +48,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     private EditText edtPassword;
     private EditText edtConfirmPassword;
     private Resources resources;
+    private AndroidUtil androidUtil;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -61,7 +59,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
-
+        androidUtil = new AndroidUtil(this);
         init();
 
         btnCreateAccount.setOnClickListener(this);
@@ -86,8 +84,9 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         edtPassword = (EditText) findViewById(R.id.edtPassword);
         edtConfirmPassword = (EditText) findViewById(R.id.edtConfirmPassword);
 
-
+        androidUtil.setMaskPhone(edtPhone);
     }
+
 
     /**
      * Implementação para controlar operações na action bar
@@ -110,6 +109,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         }
     }
 
+
     /**
      * Valida o cadastro de doador sem facebook,
      *
@@ -121,8 +121,23 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         String phone = edtPhone.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
+        String name = edtName.getText().toString().trim();
+        return ((!validateFieldsEmpty(name,userName, phone, email, confirmPassword, password) && (validateLengthFields(userName, phone, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
+    }
 
-        return ((!validateFieldsEmpty(userName, phone, email, confirmPassword, password) && validateLengthFields(userName, password, confirmPassword)) && (validatePasswords(password, confirmPassword) && validateEmail(edtEmail)));
+    /**
+     * Valida e-mail digita se o mesmo é válido
+     *
+     * @return
+     */
+    private boolean validateEmail() {
+
+        if (!androidUtil.isEmailValid(edtEmail.getText().toString().trim())) {
+            edtEmail.requestFocus();
+            edtEmail.setError(resources.getString(R.string.msgInvalideEmail));
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -133,12 +148,17 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
      * @param confirmPassword
      * @return boolean
      */
-    private boolean validateLengthFields(String userName, String password, String confirmPassword) {
+    private boolean validateLengthFields(String userName, String phone,  String password, String confirmPassword) {
 
         if (!(userName.length() > 3)) {
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
             return false;
+        } else if (!(phone.length() > 14 && phone.length()< 16)) {
+            edtPhone.requestFocus();
+            edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
+            return false;
+
         } else if (!(password.length() > 5)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
@@ -162,7 +182,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     private boolean validatePasswords(String password, String confirmPassword) {
 
         if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, R.string.msgPasswordAndConfirmPasswordNotCombined, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.msgPasswordAndConfirmPasswordDoesNotMatch, Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -176,24 +196,30 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
      * @param password
      * @return boolean
      */
-    private boolean validateFieldsEmpty(String userName, String phone, String email, String confirmPassword, String password) {
+    private boolean validateFieldsEmpty(String name, String userName, String phone, String email, String confirmPassword, String password) {
+        if (TextUtils.isEmpty(name)) {
+            edtName.requestFocus();
+            edtName.setError(resources.getString(R.string.msgNameNotInformed));
+            return true;
 
-        if (TextUtils.isEmpty(userName)) {
+        } else if (TextUtils.isEmpty(userName)) {
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
+            return true;
+
+        } else if (TextUtils.isEmpty(phone)) {
+            edtPhone.requestFocus();
+            edtPhone.setError(resources.getString(R.string.msgPhoneNotInformed));
+            return true;
+
+        } else if (TextUtils.isEmpty(email)) {
+            edtEmail.requestFocus();
+            edtEmail.setError(resources.getString(R.string.msgEmailNotInformed));
             return true;
 
         } else if (TextUtils.isEmpty(password)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
-            return true;
-        } else if (TextUtils.isEmpty(phone)) {
-            edtPhone.requestFocus();
-            edtPhone.setError(resources.getString(R.string.msgPhoneNotInformed));
-            return true;
-        } else if (TextUtils.isEmpty(email)) {
-            edtEmail.requestFocus();
-            edtEmail.setError(resources.getString(R.string.msgEmailNotInformed));
             return true;
 
         } else if (TextUtils.isEmpty(confirmPassword)) {
@@ -229,24 +255,6 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         }
     }
 
-    /**
-     *
-     * @param edtEmail
-     */
-    private boolean validateEmail(EditText edtEmail) {
-        String email = edtEmail.getText().toString().trim();
-
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-
-        if (!email.matches(emailPattern)) {
-            edtEmail.requestFocus();
-            edtEmail.setError(resources.getString(R.string.msgEmailNotValid));
-            return false;
-        }else {
-            return true;
-        }
-    }
-
 
     /**
      * Carrega recursos da API REST.
@@ -275,7 +283,6 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         }
 
         /**
-         *
          * @param params
          * @return
          */
@@ -302,7 +309,6 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
 
         /**
-         *
          * @param conta
          */
         @Override

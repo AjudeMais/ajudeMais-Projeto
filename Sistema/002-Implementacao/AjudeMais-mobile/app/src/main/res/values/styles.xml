@@ -29,12 +29,17 @@
         <item name="android:background">#FFFF</item>
         <item name="android:gravity">center</item>
     </style>
+
     <style name="GenericProgressIndicator" parent="@android:style/Widget.ProgressBar.Small.Inverse">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:indeterminate">true</item>
     </style>
     <!--Fim Style para tela de carregamento-->
+
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
 
 
 </resources>
