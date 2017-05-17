@@ -2,6 +2,9 @@ package br.edu.ifpb.ajudeMais.service.storage;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
+
 /**
  * 
  * <p>
@@ -40,8 +43,9 @@ public interface ImagemStorage {
 	 * 
 	 * @param nome
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
-	public byte[] getTmp(String nome);
+	public byte[] getTmp(String nome) throws AjudeMaisException;
 
 	/**
 	 * 
@@ -61,7 +65,8 @@ public interface ImagemStorage {
 	 * 
 	 * @param img
 	 * @return
+	 * @throws ImageErrorException 
 	 */
-	public byte[] get(String img);
+	public byte[] get(String img) throws AjudeMaisException;
 
 }

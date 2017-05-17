@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
 import br.edu.ifpb.ajudeMais.service.storage.ImagemStorage;
 
 /**
@@ -96,13 +97,14 @@ public class ImagemStorageImpl implements ImagemStorage {
 
 	/**
 	 * Recupera foto de diretório temporário.
+	 * @throws ImageErrorException 
 	 */
 	@Override
-	public byte[] getTmp(String nome) {
+	public byte[] getTmp(String nome) throws ImageErrorException {
 		try {
 			return Files.readAllBytes(this.localTmp.resolve(nome));
 		} catch (IOException e) {
-			throw new RuntimeException("Erro ao recuperar imagem temporaria", e);
+			throw new ImageErrorException("Ocorreu um erro ao tentar recuperar imagem temporaria.");
 		}
 	}
 
@@ -120,13 +122,15 @@ public class ImagemStorageImpl implements ImagemStorage {
 
 	/**
 	 * recupera imagem de diretório final
+	 * 
+	 * @throws ImageErrorException
 	 */
 	@Override
-	public byte[] get(String img) {
+	public byte[] get(String img) throws ImageErrorException {
 		try {
 			return Files.readAllBytes(this.local.resolve(img));
 		} catch (IOException e) {
-			throw new RuntimeException("Erro ao recuperar imagem", e);
+			throw new ImageErrorException("Ocorreu um erro ao tentar recuperar imagem.");
 		}
 	}
 

@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.edu.ifpb.ajudeMais.api.dto.MessageErrorDTO;
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
+import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
 /**
@@ -112,6 +113,22 @@ public class RestExceptionHandler {
 	@ResponseBody
 	public ResponseEntity<MessageErrorDTO> handleAccessDeniedException(AccessDeniedException e) {
 		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.FORBIDDEN);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Tratamento para exceção {@link ImageErrorException}
+	 * </p>
+	 * 
+	 * @param e
+	 * 
+	 * @return
+	 */
+	@ExceptionHandler(ImageErrorException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleImageError(ImageErrorException e) {
+		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 
 }
