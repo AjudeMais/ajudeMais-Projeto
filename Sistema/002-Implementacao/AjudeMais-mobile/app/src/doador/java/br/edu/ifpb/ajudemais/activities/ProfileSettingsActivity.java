@@ -15,12 +15,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
@@ -115,7 +115,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                         public void onClick(DialogInterface dialogBox, int id) {
 
                             if (newPassword.getText().toString().trim().length() > 5) {
-                                new ChangePasswordTask(password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
+                                new ChangePasswordTask(ProfileSettingsActivity.this,password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
                             } else {
                                 Toast.makeText(getApplication(), "A nova senha informada deve contém no mínimo 6 caracteres", Toast.LENGTH_LONG).show();
 
@@ -191,66 +191,4 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         }
     }
 
-    /**
-     *
-     */
-    private class ChangePasswordTask extends AsyncTask<Void, Void, Doador> {
-
-        private ContaRemoteService contaRemoteService;
-        private String message = null;
-        private String password;
-        private String newPassword;
-
-        public ChangePasswordTask(String password, String newPassword) {
-            this.password = password;
-            this.newPassword = newPassword;
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showLoadingProgressDialog();
-            contaRemoteService = new ContaRemoteService(getApplication());
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Doador doInBackground(Void... params) {
-            try {
-
-                if (androidUtil.isOnline()) {
-                    contaRemoteService.changePassword(new ChangePasswordDTO(password, newPassword));
-
-                } else {
-                }
-
-
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return doador;
-        }
-
-        @Override
-        protected void onPostExecute(Doador doador) {
-            dismissProgressDialog();
-            if (message != null) {
-                Toast.makeText(getApplication(), message, Toast.LENGTH_LONG).show();
-            } else {
-                Intent intent = new Intent(getApplication(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-            }
-        }
-    }
 }
