@@ -79,4 +79,11 @@
     <string name="btn_change_password">ALTERAR</string>
     <string name="cancelar">Cancelar</string>
     <string name="loading">Carregando...</string>
+    <string name="btnEditAccount">ATUALIZAR CONTA</string>
+    <string name="personalInfo">Informações Pessoais</string>
+    <string name="lblMsgName">Nome do Mensageiro</string>
+    <string name="lblUsername">Nome de Usuário</string>
+    <string name="lblcpfmsg">CPF</string>
+    <string name="lblNumPhone">Número de telefone</string>
+    <string name="lblMail">Endereço de e-mail</string>
 </resources>
