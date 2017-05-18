@@ -5,8 +5,24 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loadingPanelMainSearchInst"
+        style="@style/GenericProgressBackground">
+
+        <ProgressBar
+
+            android:id="@+id/progress_presentation"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:indeterminateTintMode="src_atop"
+            android:max="100" />
+    </RelativeLayout>
+
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/netScroll"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorFont"

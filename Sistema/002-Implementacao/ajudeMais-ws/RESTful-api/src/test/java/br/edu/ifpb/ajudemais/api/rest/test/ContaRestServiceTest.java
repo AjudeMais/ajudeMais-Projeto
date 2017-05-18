@@ -183,26 +183,7 @@ public class ContaRestServiceTest extends AbstractRestTest {
 				.andExpect(status().isOk());
 	}
 	
-	/**
-	 * 
-	 * <p>
-	 * Teste para alteração de senha de uma conta. Deveria retornar 200 (OK)
-	 * </p>
-	 * 
-	 * @throws IOException
-	 * @throws Exception
-	 */
-	@Test
-	public void changePasswordWithAuthmAndInvalidPassword() throws IOException, Exception {
-		changePasswordDTO = new ChangePasswordDTO();
-		changePasswordDTO.setNewPassword("novaSenha");
-		changePasswordDTO.setPassword("senhainvalida");
-		mockMvc.perform(post("/conta/changePassword")
-				.contentType(MediaType.APPLICATION_JSON)
-				.header("Authorization", getAuth("admin", "admin"))
-				.content(toJson(changePasswordDTO)))
-				.andExpect(status().isOk());
-	}
+	
 
 	/**
 	 * 

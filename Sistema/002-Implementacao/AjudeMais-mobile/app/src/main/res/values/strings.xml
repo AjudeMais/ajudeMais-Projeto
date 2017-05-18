@@ -78,4 +78,5 @@
     <string name="change_password_title">Alterar Senha</string>
     <string name="btn_change_password">ALTERAR</string>
     <string name="cancelar">Cancelar</string>
+    <string name="loading">Carregando...</string>
 </resources>
