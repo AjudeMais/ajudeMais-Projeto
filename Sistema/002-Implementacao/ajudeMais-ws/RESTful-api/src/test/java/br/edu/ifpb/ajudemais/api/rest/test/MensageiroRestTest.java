@@ -29,7 +29,9 @@ public class MensageiroRestTest extends AbstractRestTest {
 	 * 
 	 */
 	private Mensageiro mensageiro;
-	
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 	/**
@@ -56,22 +58,34 @@ public class MensageiroRestTest extends AbstractRestTest {
 	public void createMensageiroOk() throws IOException, Exception {
 		
 		getMensageiro();
-		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON).content(toJson(mensageiro))
-		.header("Authorization", getAuth("mensageiro", "mensageiro")).content(toJson(mensageiro)))
+		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON).content(toJson(mensageiro)))		
 		.andExpect(status().isCreated());
 	}
+	/**
+	 * tenta criar um mensageiro com body nulo, deve retornar um status http 400
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@Test
 	public void createMensageiroNullBody() throws IOException, Exception {
-		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON).content(toJson(null))
-		.header("Authorization", getAuth("mensageiro", "mensageiro")).content(toJson(mensageiro)))		
+		mockMvc.perform(post("/mensageiro").contentType(MediaType.APPLICATION_JSON).content(toJson(null)))
 		.andExpect(status().isBadRequest());
 	}
+	/**
+	 * tenta buscar 'sem autorização' todos os mensageiros, deve retornar um status http 401
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@Test
 	public void findAllMensageirowithoutAuth() throws IOException, Exception {
 		
-		mockMvc.perform(post("/mensageiro")).andExpect(status().isUnauthorized());
+		mockMvc.perform(get("/mensageiro")).andExpect(status().isUnauthorized());
 	}
-	
+	/**
+	 * tenta recuperar todos os mensageiros, em caso de sucesso retorna status http 200
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@Test
 	public void findAllMensageiroOk() throws IOException, Exception {
 		mockMvc.perform(get("/mensageiro").contentType(MediaType.APPLICATION_JSON)
@@ -79,7 +93,11 @@ public class MensageiroRestTest extends AbstractRestTest {
 		.andExpect(status().isOk());
 		
 	}
-	
+	/**
+	 * tenta recuperar um mensageiro através do seu identificador, retorna o status http 200
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@Test
 	public void findMensageiroByIdllOk() throws IOException, Exception {
 		mockMvc.perform(get("/mensageiro/200").contentType(MediaType.APPLICATION_JSON)
@@ -87,16 +105,18 @@ public class MensageiroRestTest extends AbstractRestTest {
 		.andExpect(status().isOk());
 		
 	}
-	
+	/**
+	 * tenta atualizar, sem autorização, um mensageiro. retorna um status http 401
+	 * @throws IOException
+	 * @throws Exception
+	 */
 	@Test
-	public void updateMensageiroWithout() throws IOException, Exception {
+	public void updateMensageiroWithoutAuth() throws IOException, Exception {
 		getMensageiro();
 		mockMvc.perform(put("/mensageiro").contentType(MediaType.APPLICATION_JSON).content(toJson(mensageiro)))
 		.andExpect(status().isUnauthorized());
 		
 	}
-	
-	
 
 	/**
 	 * metodo que cria um mensageiro para utilização dos testes
@@ -105,22 +125,20 @@ public class MensageiroRestTest extends AbstractRestTest {
 	 */
 	private Mensageiro getMensageiro() {
 		mensageiro = new Mensageiro();
+		mensageiro.setNome("MENSAGEIRO 1");
 		mensageiro.setCpf("127.547.642-24");
 		mensageiro.setEnderecos(getEndereco());
-		mensageiro.setNome("MENSAGEIRO 1");
 		mensageiro.setTelefone("83996885898");
 		
 		Imagem imagem = new Imagem();				
 		mensageiro.setFoto(imagem);
 
 		Conta conta = new Conta();
-		conta.setAtivo(true);
 		conta.setUsername("mensageiro");
 		conta.setSenha("mensageiro");
 		conta.setGrupos(Arrays.asList("ROLE_MENSAGEIRO"));
 		conta.setEmail("msg1@gmail.com");
-		
-		
+		conta.setAtivo(true);
 		mensageiro.setConta(conta);
 		return mensageiro;
 
