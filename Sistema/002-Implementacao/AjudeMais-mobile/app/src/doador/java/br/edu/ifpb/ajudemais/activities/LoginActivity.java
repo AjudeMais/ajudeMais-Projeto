@@ -292,7 +292,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                     conta = contaFacebook;
                     return conta;
                 } else {
-                    Log.e("DOADOR SEM FACEBOk", "FODA......");
                     conta = new Conta(username, senha);
                     conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
                     return conta;

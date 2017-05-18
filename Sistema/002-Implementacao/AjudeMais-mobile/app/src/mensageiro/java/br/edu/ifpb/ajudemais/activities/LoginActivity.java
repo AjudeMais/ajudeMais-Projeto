@@ -85,7 +85,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
-        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
+        btnCreateAccount = (Button) findViewById(R.id.btnEditAccount);
         resources = getResources();
 
     }

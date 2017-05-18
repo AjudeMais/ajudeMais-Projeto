@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFont"
-    tools:context="br.edu.ifpb.ajudemais.activities.CreateAccountActivity">
+    tools:context=".activities.EditMensageiroAccountActivity">
 
     <LinearLayout
         android:id="@+id/componenteActionBar"
@@ -75,6 +75,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="sans-serif"
                     android:hint="@string/hitUserName"
+                    android:clickable="false"
                     android:inputType="textPersonName"
                     android:textColor="@color/textSecond2"
                     android:textColorHint="@color/colorPrimary" />
@@ -125,11 +126,35 @@
 
             </android.support.design.widget.TextInputLayout>
 
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/ltEditCpf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ltedtEmail"
+                android:textColorHint="@color/colorPrimary"
+                app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/edtCpf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/edtPhone"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:fontFamily="sans-serif"
+                    android:hint="@string/hitCpf"
+                    android:clickable="false"
+                    android:textColor="@color/textSecond2"
+                    android:textColorHint="@color/colorPrimary"
+                    android:typeface="normal" />
+
+            </android.support.design.widget.TextInputLayout>
+
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/ltedtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/ltedtEmail"
+                android:layout_below="@+id/ltEditCpf"
                 android:textColorHint="@color/colorPrimary"
                 app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -171,7 +196,7 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/componentCreateBtnNewAccount"
+        android:id="@+id/componentCreateBtnEditAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -179,17 +204,18 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnCreateAccount"
+            android:id="@+id/btnEditAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:height="@dimen/LagHeigth"
             android:backgroundTint="@color/colorPrimary"
-            android:text="@string/btnCreateNewAccount"
+            android:text="@string/btnEditAccount"
             android:textColor="@color/colorFont"
             android:textSize="@dimen/fontLogin" />
     </RelativeLayout>
 </RelativeLayout>
+
 
 
 

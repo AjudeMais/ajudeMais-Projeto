@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
@@ -11,10 +10,10 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
  * <p>
  * <b>SharedPrefManager</b>
  * </p>
- *  Classe utilitaria para armazenamento em preferências do app.
+ * Classe utilitaria para armazenamento em preferências do app.
  * <p>
  * <p>
- *   Gerencia informações constantemente usadas
+ * Gerencia informações constantemente usadas
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
@@ -45,6 +44,7 @@ public class SharedPrefManager {
 
     /**
      * Recupera a instância da classe.
+     *
      * @param context
      * @return
      */
@@ -70,7 +70,8 @@ public class SharedPrefManager {
     }
 
     /**
-     *Guarda  a conta de acesso do usuário para o mesmo não precisar inserir suas credencias novamente
+     * Guarda  a conta de acesso do usuário para o mesmo não precisar inserir suas credencias novamente
+     *
      * @param conta
      * @return
      */
@@ -86,6 +87,7 @@ public class SharedPrefManager {
 
     /**
      * Salva a localização do device.
+     *
      * @param latLng
      * @return
      */
@@ -111,7 +113,8 @@ public class SharedPrefManager {
     }
 
     /**
-     *Recupera Usuário.
+     * Recupera Usuário.
+     *
      * @return
      */
     public Conta getUser() {
@@ -126,7 +129,8 @@ public class SharedPrefManager {
     }
 
     /**
-     *Retorna a última localização salva.
+     * Retorna a última localização salva.
+     *
      * @return
      */
     public LatLng getLocation() {
@@ -135,7 +139,7 @@ public class SharedPrefManager {
         String lat = sharedPreferences.getString(LOCATION_LAT, null);
         String lgn = sharedPreferences.getString(LOCATION_LONG, null);
 
-        if(lat != null && lgn !=null) {
+        if (lat != null && lgn != null) {
             latLng = new LatLng();
             latLng.setLatitude(Double.parseDouble(lat));
             latLng.setLongitude(Double.parseDouble(lgn));
@@ -145,11 +149,15 @@ public class SharedPrefManager {
     }
 
     /**
-     *Limpa dados armazenados da conta do usuário no device.
+     * Limpa dados armazenados da conta do usuário e localização no device.
      */
     public void clearSharedPrefs() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }

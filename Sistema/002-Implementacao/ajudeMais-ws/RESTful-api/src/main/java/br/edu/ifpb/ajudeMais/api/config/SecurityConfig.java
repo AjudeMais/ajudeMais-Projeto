@@ -128,7 +128,7 @@ public class SecurityConfig {
 				.authorizeRequests()
 					.antMatchers("/auth/login", "/auth/valida")
 					.permitAll()
-				.antMatchers(HttpMethod.POST, "/doador", "/conta")
+				.antMatchers(HttpMethod.POST, "/doador", "/conta", "/mensageiro")
 					.permitAll()
 					.antMatchers(HttpMethod.OPTIONS)
 				.permitAll()

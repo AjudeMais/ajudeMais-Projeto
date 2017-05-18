@@ -5,22 +5,28 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
+
 import org.springframework.web.client.RestClientException;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
@@ -41,14 +47,19 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
     private Toolbar mToolbar;
     private Button btnCreateAccount;
-    private EditText edtName;
-    private EditText edtUserName;
-    private EditText edtPhone;
-    private EditText edtEmail;
-    private EditText edtPassword;
-    private EditText edtConfirmPassword;
+    private TextInputEditText edtName;
+    private TextInputEditText edtUserName;
+    private TextInputEditText edtPhone;
+    private TextInputEditText edtEmail;
+    private TextInputEditText edtPassword;
+    private TextInputEditText edtConfirmPassword;
     private Resources resources;
     private AndroidUtil androidUtil;
+    private Doador doadorEdit;
+    private SharedPrefManager sharedPrefManager;
+    private TextInputLayout ltedtConfirmPassword;
+    private TextInputLayout ltedtPassword;
+    private TextInputLayout ltedtUserName;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -62,6 +73,9 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         androidUtil = new AndroidUtil(this);
         init();
 
+        if (doadorEdit != null) {
+            setEditValueInFields();
+        }
         btnCreateAccount.setOnClickListener(this);
 
     }
@@ -70,19 +84,28 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     private void init() {
+        doadorEdit = (Doador) getIntent().getSerializableExtra("Doador");
+        sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        if (doadorEdit != null) {
+            mToolbar.setTitle("Editar Conta");
+        }
+
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         resources = getResources();
 
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        edtName = (EditText) findViewById(R.id.edtNome);
-        edtUserName = (EditText) findViewById(R.id.edtUserName);
-        edtPhone = (EditText) findViewById(R.id.edtPhone);
-        edtEmail = (EditText) findViewById(R.id.edtEmail);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        edtConfirmPassword = (EditText) findViewById(R.id.edtConfirmPassword);
+        edtName = (TextInputEditText) findViewById(R.id.edtNome);
+        edtUserName = (TextInputEditText) findViewById(R.id.edtUserName);
+        edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
+        edtEmail = (TextInputEditText) findViewById(R.id.edtEmail);
+        edtPassword = (TextInputEditText) findViewById(R.id.edtPassword);
+        edtConfirmPassword = (TextInputEditText) findViewById(R.id.edtConfirmPassword);
+        ltedtConfirmPassword = (TextInputLayout) findViewById(R.id.ltedtConfirmPassword);
+        ltedtPassword = (TextInputLayout) findViewById(R.id.ltedtPassword);
+        ltedtUserName = (TextInputLayout) findViewById(R.id.ltedtUserName);
 
         androidUtil.setMaskPhone(edtPhone);
     }
@@ -99,6 +122,10 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(CreateAccountActivity.this, LoginActivity.class);
+
+                if (doadorEdit != null) {
+                    intent = new Intent(CreateAccountActivity.this, ProfileSettingsActivity.class);
+                }
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -111,7 +138,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
 
 
     /**
-     * Valida o cadastro de doador sem facebook,
+     * Valida o cadastro de doadorEdit sem facebook,
      *
      * @return boolean
      */
@@ -122,7 +149,19 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         String email = edtEmail.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
         String name = edtName.getText().toString().trim();
-        return ((!validateFieldsEmpty(name,userName, phone, email, confirmPassword, password) && (validateLengthFields(userName, phone, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
+        return ((!validateFieldsEmpty(name, userName, phone, email, confirmPassword, password) && (validateLengthFields(userName, phone, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
+    }
+
+    /**
+     * Valida o cadastro de doadorEdit sem facebook,
+     *
+     * @return boolean
+     */
+    private boolean validateDoadorEdit() {
+        String phone = edtPhone.getText().toString().trim();
+        String email = edtEmail.getText().toString().trim();
+        String name = edtName.getText().toString().trim();
+        return ((!validateFieldsEmpty(name, null, phone, email, null, null) && (validateLengthFields(null, phone, null, null))) && (validateEmail()));
     }
 
     /**
@@ -148,28 +187,46 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
      * @param confirmPassword
      * @return boolean
      */
-    private boolean validateLengthFields(String userName, String phone,  String password, String confirmPassword) {
+    private boolean validateLengthFields(String userName, String phone, String password, String confirmPassword) {
 
-        if (!(userName.length() > 3)) {
+        if (userName !=null && !(userName.length() > 3)) {
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
             return false;
-        } else if (!(phone.length() > 14 && phone.length()< 16)) {
+        } else if (!(phone.length() > 14 && phone.length() < 16)) {
             edtPhone.requestFocus();
             edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
 
-        } else if (!(password.length() > 5)) {
+        } else if (password != null && !(password.length() > 5)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
             return false;
 
-        } else if (!(confirmPassword.length() > 5)) {
+        } else if (confirmPassword != null && !(confirmPassword.length() > 5)) {
             edtConfirmPassword.requestFocus();
             edtConfirmPassword.setError(resources.getString(R.string.msgInvalidePassword));
             return false;
         }
         return true;
+    }
+
+    /**
+     * Set valores do Doador.
+     */
+    public void setEditValueInFields() {
+        if (doadorEdit != null) {
+            edtName.setText(doadorEdit.getNome());
+            edtUserName.setVisibility(View.GONE);
+            ltedtUserName.setVisibility(View.GONE);
+            edtPhone.setText(doadorEdit.getTelefone());
+            edtEmail.setText(doadorEdit.getConta().getEmail());
+            edtConfirmPassword.setVisibility(View.GONE);
+            edtPassword.setVisibility(View.GONE);
+            ltedtConfirmPassword.setVisibility(View.GONE);
+            ltedtPassword.setVisibility(View.GONE);
+            btnCreateAccount.setText("Editar");
+        }
     }
 
     /**
@@ -190,7 +247,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     }
 
     /**
-     * Recebe os campos de cadastro de um novo doador e verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
+     * Recebe os campos de cadastro de um novo doadorEdit e verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
      *
      * @param userName
      * @param password
@@ -202,7 +259,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
             edtName.setError(resources.getString(R.string.msgNameNotInformed));
             return true;
 
-        } else if (TextUtils.isEmpty(userName)) {
+        } else if (userName != null && TextUtils.isEmpty(userName)) {
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
             return true;
@@ -217,12 +274,12 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
             edtEmail.setError(resources.getString(R.string.msgEmailNotInformed));
             return true;
 
-        } else if (TextUtils.isEmpty(password)) {
+        } else if (password != null && TextUtils.isEmpty(password)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
             return true;
 
-        } else if (TextUtils.isEmpty(confirmPassword)) {
+        } else if (confirmPassword != null && TextUtils.isEmpty(confirmPassword)) {
             edtConfirmPassword.requestFocus();
             edtConfirmPassword.setError(resources.getString(R.string.msgConfirmPasswordNotInformed));
             return true;
@@ -239,19 +296,25 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnCreateAccount) {
-            if (validateDoadorCreate()) {
+            if (doadorEdit != null) {
+                if (validateDoadorEdit()) {
+                    new CreateAccounTask(doadorEdit, this).execute();
+                }
 
-                List<String> grupos = new ArrayList<>();
-                grupos.add("ROLE_DOADOR");
-                Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(),
-                        new Conta(edtUserName.getText().toString().trim(),
-                                edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));
+            } else {
+                if (validateDoadorCreate()) {
 
-                new CreateAccounTask(doador, this).execute();
+                    List<String> grupos = new ArrayList<>();
+                    grupos.add("ROLE_DOADOR");
+                    Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(),
+                            new Conta(edtUserName.getText().toString().trim(),
+                                    edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));
+
+                    new CreateAccounTask(doador, this).execute();
 
 
+                }
             }
-
         }
     }
 
@@ -266,6 +329,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         private String password;
         private DoadorRemoteService doadorRemoteService;
         private AuthRemoteService authRemoteService;
+        private Doador doadorUpdated;
 
         public CreateAccounTask(Doador doador, Context context) {
             this.doador = doador;
@@ -280,6 +344,13 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         protected void onPreExecute() {
             showLoadingProgressDialog();
 
+            if (doadorEdit != null){
+                Conta conta = doadorEdit.getConta();
+                conta.setEmail(edtEmail.getText().toString().trim());
+                doadorEdit.setNome(edtName.getText().toString().trim());
+                doadorEdit.setTelefone(edtPhone.getText().toString().trim());
+                doadorEdit.setConta(conta);
+            }
         }
 
         /**
@@ -290,11 +361,16 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
         protected Conta doInBackground(Void... params) {
 
             try {
-                password = doador.getConta().getSenha();
-                doador = doadorRemoteService.saveDoador(doador);
-                Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                if (doadorEdit == null) {
+                    password = doador.getConta().getSenha();
+                    doador = doadorRemoteService.saveDoador(doador);
+                    Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                    return conta;
 
-                return conta;
+                } else {
+                    doadorUpdated = doadorRemoteService.updateDoador(doadorEdit);
+                }
+                return null;
 
             } catch (RestClientException e) {
                 message = e.getMessage();
@@ -320,9 +396,13 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
                 startActivity(intent);
-
                 finish();
 
+            } else if (doador != null && doadorUpdated != null) {
+                Intent intent = new Intent(CreateAccountActivity.this, ProfileSettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }

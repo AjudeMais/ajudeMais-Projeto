@@ -25,6 +25,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
+import br.edu.ifpb.ajudeMais.api.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudeMais.api.rest.ContaRestService;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
@@ -52,7 +53,7 @@ public class ContaRestServiceTest extends AbstractRestTest {
 	 */
 	@Autowired
 	private ContaService contaService;
-
+	private ChangePasswordDTO changePasswordDTO;
 	/**
 	 * Inicia as configurações básicas para realização dos testes
 	 */
@@ -172,14 +173,17 @@ public class ContaRestServiceTest extends AbstractRestTest {
 	 */
 	@Test
 	public void changePasswordWithAuth() throws IOException, Exception {
-		String pass = "novaSenha";
-
+		changePasswordDTO = new ChangePasswordDTO();
+		changePasswordDTO.setNewPassword("novaSenha");
+		changePasswordDTO.setPassword("admin");
 		mockMvc.perform(post("/conta/changePassword")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("Authorization", getAuth("admin", "admin"))
-				.content(toJson(pass)))
+				.content(toJson(changePasswordDTO)))
 				.andExpect(status().isOk());
 	}
+	
+	
 
 	/**
 	 * 
@@ -193,11 +197,13 @@ public class ContaRestServiceTest extends AbstractRestTest {
 	 */
 	@Test
 	public void changePasswordWithoutAuth() throws IOException, Exception {
-		String pass = "novaSenha";
-
+		changePasswordDTO = new ChangePasswordDTO();
+		changePasswordDTO.setNewPassword( "novaSenha");
+		changePasswordDTO.setPassword("admin");
+		
 		mockMvc.perform(post("/conta/changePassword")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(toJson(pass)))
+				.content(toJson(changePasswordDTO)))
 				.andExpect(status().isUnauthorized());
 	}
 
