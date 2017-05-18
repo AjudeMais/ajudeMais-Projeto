@@ -43,7 +43,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 @RestController
-@RequestMapping("/mensageiro")
+@RequestMapping(value = "/mensageiro")
 public class MensageiroRestService {
 
 	@Autowired
@@ -55,11 +55,10 @@ public class MensageiroRestService {
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Mensageiro> save(@Valid @RequestBody Mensageiro mensageiro) throws AjudeMaisException {
+	public ResponseEntity<?> save(@Valid @RequestBody Mensageiro mensageiro) throws AjudeMaisException {
 		Mensageiro mensageiroSaved = mensageiroService.save(mensageiro);
-		return new ResponseEntity<Mensageiro>(mensageiroSaved, HttpStatus.CREATED);
+		return new ResponseEntity<>(mensageiroSaved, HttpStatus.CREATED);
 	}
 	
 	/**
@@ -68,7 +67,7 @@ public class MensageiroRestService {
 	 * @return Mensageiro
 	 * @throws AjudeMaisException 
 	 */
-	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
+	@PreAuthorize("hasRole('MENSAGEIRO')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Mensageiro> update(@Valid @RequestBody Mensageiro mensageiro) throws AjudeMaisException {
 		mensageiro = mensageiroService.update(mensageiro);
@@ -81,7 +80,7 @@ public class MensageiroRestService {
 	 * Endpoint para listar todos os mensageiros cadastros no sistema.
 	 * @return Mensageiro
 	 */
-	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
+	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Mensageiro>> findAll(){
 		List<Mensageiro> mensageiros = mensageiroService.findAll();
@@ -92,7 +91,7 @@ public class MensageiroRestService {
 	 * Endpoint para buscar um mensageiro por seu identificador.
 	 * @return  Mensageiro
 	 */
-	@PreAuthorize("hasAnyRole('INSTITUICAO','ADMIN')")
+	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Mensageiro> findById(@PathVariable Long id){
 		Mensageiro mensageiro = mensageiroService.findById(id);
