@@ -196,7 +196,7 @@
     </ScrollView>
 
     <RelativeLayout
-        android:id="@+id/componentCreateBtnNewAccount"
+        android:id="@+id/componentCreateBtnEditAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -204,7 +204,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnCreateAccount"
+            android:id="@+id/btnEditAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

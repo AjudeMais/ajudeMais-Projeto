@@ -72,7 +72,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         resources = getResources();
 
-        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
+        btnCreateAccount = (Button) findViewById(R.id.btnEditAccount);
         edtName = (EditText) findViewById(R.id.edtNome);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPhone = (EditText) findViewById(R.id.edtPhone);
@@ -251,7 +251,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnCreateAccount) {
+        if (v.getId() == R.id.btnEditAccount) {
             if (validateMensageiroAccountCreate()) {
 
                 List<String> grupos = new ArrayList<>();
