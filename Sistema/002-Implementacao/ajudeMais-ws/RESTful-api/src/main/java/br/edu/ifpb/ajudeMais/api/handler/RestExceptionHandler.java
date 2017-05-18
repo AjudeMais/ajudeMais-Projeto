@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import br.edu.ifpb.ajudeMais.api.dto.MessageErrorDTO;
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
 import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
+import br.edu.ifpb.ajudeMais.service.exceptions.InvalidAttributeException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
 /**
@@ -96,6 +97,23 @@ public class RestExceptionHandler {
 	@ExceptionHandler(UniqueConstraintAlreadyException.class)
 	@ResponseBody
 	public ResponseEntity<MessageErrorDTO> handleUniqueConstraintAlreadyException(UniqueConstraintAlreadyException e) {
+		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
+	}
+	
+
+	/**
+	 * 
+	 * <p>
+	 * Tratammento de erro para exceção {@link InvalidAttributeException}
+	 * </p>
+	 * 
+	 * @param e
+	 * 
+	 * @return
+	 */
+	@ExceptionHandler(InvalidAttributeException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleInvalidAttributeException(InvalidAttributeException e) {
 		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
 	}
 

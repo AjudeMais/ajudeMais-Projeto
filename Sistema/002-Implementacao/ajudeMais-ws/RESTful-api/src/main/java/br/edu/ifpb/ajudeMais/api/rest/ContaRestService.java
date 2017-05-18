@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.api.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
@@ -76,10 +77,11 @@ public class ContaRestService {
 	 *
 	 * @param nova senha
 	 * @return ResponseEntity 200 (ok) ou 400 (Bad Request)
+	 * @throws AjudeMaisException 
 	 */
 	@PostMapping(path = "/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody String password) {
-		contaService.changePassword(password);
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws AjudeMaisException {
+		contaService.changePassword(changePasswordDTO.getPassword(), changePasswordDTO.getNewPassword());
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

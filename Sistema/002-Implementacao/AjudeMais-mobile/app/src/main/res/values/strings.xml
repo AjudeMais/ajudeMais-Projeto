@@ -75,4 +75,7 @@
     <string name="btnCreateNewAccount">CRIAR CONTA</string>
     <string name="hitCpf">CPF</string>
     <string name="msgCpfNotInformed">CPF deve ser informado</string>
+    <string name="change_password_title">Alterar Senha</string>
+    <string name="btn_change_password">ALTERAR</string>
+    <string name="cancelar">Cancelar</string>
 </resources>

@@ -4,6 +4,8 @@
     <string name="hitName">Nome</string>
 
     <string name="btnCreateNewAccount">CRIAR CONTA</string>
+    <string name="btnEditAccount">ALTERAR SENHA</string>
+
     <string name="newAccountActivity">Nova Conta</string>
     <string name="editAccount">Editar Conta</string>
 
@@ -14,6 +16,8 @@
     <string name="hitPassword">Senha</string>
     <string name="hitConfirmationPassword">Confirmação da senha</string>
     <string name="hitEmail">E-mail</string>
+    <string name="hitPasswordAlterar">Senha atual</string>
+    <string name="hitNewPasswordAlterar">Nova Senha</string>
 
     <string name="cancelOperation">"Operação cancelada"</string>
     <string name="campanhas">CAMPANHAS</string>

@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.ContaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.InvalidAttributeException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
@@ -128,8 +130,16 @@ public class ContaServiceImpl implements ContaService {
 	 * 
 	 * @param password
 	 */
-	public void changePassword(String password) {
+	public void changePassword(String password, String newPassword) throws AjudeMaisException{
+		String passwodEncode = passwordEncoder.encode(password);
+		Optional<Conta> contaOption = contaRepository.findOneByUsername(authService.getCurrentUserLogin());
+		
+		if (contaOption.isPresent() && contaOption.get().getSenha().equals(passwodEncode)) {
+			throw new InvalidAttributeException("A senha atual informada inválida");
+
+		}
 		contaRepository.findOneByUsername(authService.getCurrentUserLogin()).ifPresent(user -> {
+		
 			String encryptedPassword = passwordEncoder.encode(password);
 			user.setSenha(encryptedPassword);
 			user.setResetSenha(new Date());

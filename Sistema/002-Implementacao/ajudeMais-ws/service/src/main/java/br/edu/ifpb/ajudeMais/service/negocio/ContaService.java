@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 
 /**
  * 
@@ -44,6 +45,6 @@ public interface ContaService extends Service<Conta, Long> {
 	 * @param password
 	 *            - nova senha
 	 */
-	void changePassword(String password);
+	void changePassword(String password, String newPassword) throws AjudeMaisException;
 
 }

@@ -1,13 +1,21 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputEditText;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import org.springframework.web.client.RestClientException;
 
@@ -18,7 +26,7 @@ import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
-public class ProfileSettingsActivity extends AppCompatActivity {
+public class ProfileSettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -26,15 +34,18 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private AndroidUtil androidUtil;
     private SharedPrefManager sharedPrefManager;
     private Doador doador;
+    private Button btnChangePassword;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
-
+        context = this;
         androidUtil = new AndroidUtil(this);
         sharedPrefManager = new SharedPrefManager(this);
 
+        btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -43,6 +54,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
+        new ProfileLoading().execute();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,9 +67,58 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             }
         });
 
-        new ProfileLoading().execute();
+        btnChangePassword.setOnClickListener(this);
 
+    }
 
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainSearchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnChangePassword) {
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+            View mView = layoutInflaterAndroid.inflate(R.layout.dialog_change_password, null);
+            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
+            alertDialogBuilderUserInput.setView(mView);
+
+            TextInputEditText password = (TextInputEditText) mView.findViewById(R.id.edtPassword);
+            TextInputEditText newPassword = (TextInputEditText) mView.findViewById(R.id.edtNewPassword);
+
+            alertDialogBuilderUserInput
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.btn_change_password, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialogBox, int id) {
+                            
+                        }
+                    })
+
+                    .setNegativeButton(R.string.cancelar,
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialogBox, int id) {
+                                    dialogBox.cancel();
+                                }
+                            });
+
+            AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+            alertDialogAndroid.show();
+        }
     }
 
     /**
@@ -78,7 +139,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
 
         /**
-         *
          * @param params
          * @return
          */
@@ -102,7 +162,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Doador doador) {
-            if (doador != null){
+            if (doador != null) {
 
                 collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
                 ProfileSettingsFragment fragment = new ProfileSettingsFragment();
