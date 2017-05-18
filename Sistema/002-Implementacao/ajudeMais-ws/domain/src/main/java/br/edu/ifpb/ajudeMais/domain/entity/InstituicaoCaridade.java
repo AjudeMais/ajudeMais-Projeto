@@ -50,8 +50,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @Table(name = "intituicao_caridade")
-@NamedQueries({@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf and it.conta.ativo is true"),
-				})
+@NamedQueries({
+		@NamedQuery(name = "InstituicaoCaridade.filtersInstituicaoCaridadeClose", query = "SELECT it FROM InstituicaoCaridade it WHERE it.endereco.localidade like :localidade and it.endereco.uf like :uf and it.conta.ativo is true"), })
 public class InstituicaoCaridade {
 
 	/**
@@ -103,8 +103,8 @@ public class InstituicaoCaridade {
 	/**
 	 * 
 	 */
-	@JsonIgnoreProperties(value="instituicaoCaridade")
-	@OneToMany(	cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade",fetch = FetchType.LAZY)
+	@JsonIgnoreProperties(value = "instituicaoCaridade")
+	@OneToMany(cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade", fetch = FetchType.LAZY)
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
 

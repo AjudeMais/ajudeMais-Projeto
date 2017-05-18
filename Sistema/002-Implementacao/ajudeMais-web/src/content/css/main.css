@@ -47,6 +47,11 @@
     padding-bottom: 15px;
 }
 
+.am-well-empty {
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
 /*
  * Componentes: Layout
  * Css do layouts: AdminLTE com modificações

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<mensageiro id="1" nome="Joao" cpf="102.106.104-50" telefone="999999999"/>
+	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" mensageiro_id="1"/>
+	
+	<conta id="1" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
+	<intituicao_caridade id="1" nome="Instituicao XPTO" descricao="Ajude gente" telefone="9999999" documento="19016014350" endereco_id="1" conta_id="1" />
+	
+	<mensageiro_associado id="1" status="TRUE" mensageiro_id="1" instituicao_caridade_id="1"/>
+	
+</dataset>

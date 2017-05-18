@@ -14,10 +14,11 @@
  */
 package br.edu.ifpb.ajudeMais.data.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,18 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
+
 /**
  * 
  * <p>
- * {@link MensageiroRepositoryTest}
+ * {@link MensageiroAssociadoRepositoryTest}
  * </p>
  * 
  * <p>
- * Classe utilizada para testes de {@link MensageiroRepositoryTest}
+ * Classe utilizada para testes de unidade referentes ao repositório
+ * {@link MensageiroAssociadoRepository}
  * </p>
  *
  * <pre>
@@ -54,51 +59,48 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 		TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
 @RunWith(SpringRunner.class)
 @DataJpaTest
-@DatabaseSetup("/mensageiro-entries.xml")
-@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/mensageiro-entries.xml" })
+@DatabaseSetup("/mensageiro-associado-entries.xml")
+@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/mensageiro-associado-entries.xml" })
 @DirtiesContext
-public class MensageiroRepositoryTest {
+public class MensageiroAssociadoRepositoryTest {
 
 	/**
 	 * 
 	 */
 	@Autowired
-	private MensageiroRepository mensageiroRepository;
+	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
+
+	private Conta conta;
 
 	/**
 	 * 
 	 * <p>
-	 * Filtra mensageiro pela localização
+	 * Configuração executada antes da execução de cada teste.
 	 * </p>
 	 */
-	@Test
-	public void filtersMensageiroCloserTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "centro", "Ouro velho",
-				"PB");
-		assertTrue(mensageiros.size() > 0);
+	@Before
+	public void setUp() {
+
+		conta = new Conta();
+		conta.setId(1l);
+
 	}
 
 	/**
 	 * 
 	 * <p>
-	 * Filtra mensageiro pela localização, passando apenas localidade
+	 * Exercita método de busca de associação por instituição filtrando por
+	 * conta.
 	 * </p>
 	 */
 	@Test
-	public void filtersMensageiroCloserValidOnlyAddressTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "", "", "");
-		assertFalse(mensageiros.size() > 0);
+	public void findByInstituicaoCaridadeContaTest() {
+
+		List<MensageiroAssociado> mensageiros = mensageiroAssociadoRepository
+				.findByInstituicaoCaridadeConta(this.conta);
+
+		assertFalse("", mensageiros.isEmpty());
+
 	}
 
-	/**
-	 * 
-	 * <p>
-	 * Filtra mensageiro pela localização passando paramentros nulos
-	 * </p>
-	 */
-	@Test
-	public void filtersMensageiroCloserNullParamsTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser(null, null, null, null);
-		assertFalse(mensageiros.size() > 0);
-	}
 }

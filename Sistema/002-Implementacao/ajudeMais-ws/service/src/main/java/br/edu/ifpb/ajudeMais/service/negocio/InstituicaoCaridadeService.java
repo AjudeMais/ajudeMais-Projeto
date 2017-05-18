@@ -17,9 +17,11 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import com.google.maps.errors.ApiException;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
@@ -53,7 +55,7 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 * @param uf
 	 * @return
 	 */
-	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco);
+	List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco);
 
 	/**
 	 * Busca todos as instituições e seu endereço que é proximo a localidade do
@@ -69,14 +71,25 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 * @throws ApiException
 	 * @throws NumberFormatException
 	 */
-	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
-	
-	
+	List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
+
 	/**
+	 * Busca instituição por conta, filtrando por conta ativa.
+	 * 
 	 * @param ativo
 	 * @return
 	 */
 	List<InstituicaoCaridade> findByContaAtivo(boolean ativo);
 
+	/**
+	 * 
+	 * <p>
+	 * Busca instituição por conta.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return
+	 */
+	Optional<InstituicaoCaridade> findOneByConta(Conta conta);
 
 }
