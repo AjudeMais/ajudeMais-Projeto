@@ -37,7 +37,7 @@
         };
 
         /**
-         * Busca mensageiros assiados por instituição.
+         * Busca mensageiros associados por instituição.
          * @param callback
          * @private
          */

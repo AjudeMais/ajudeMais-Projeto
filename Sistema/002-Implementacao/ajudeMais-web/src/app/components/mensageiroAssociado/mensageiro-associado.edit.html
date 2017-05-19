@@ -1,37 +1,74 @@
-<div class="row">
-    <div class="col-lg-12">
-        <form name="instituicaoForm" ng-submit="instituicaoForm.$valid && vm.save()" role="form" novalidate>
+<div class="modal-header">
+    <button type="button" ng-click="vm.cancel()" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Associar mensageiro</h4>
+</div>
 
-            <div class="box box-primary">
-                <div class="box-header with-border box-topic">
-                    <h3 class="box-title">Adicionar Mensageiro</h3>
+<form name="categoriaForm" ng-submit="categoriaForm.$valid && vm.save()" role="form" novalidate>
+    <div class="modal-body row" id="modal-body">
+        <label class="control-label">Buscar mensageiro</label>
+        <div class="input-group col-sm-12">
+
+            <input type="text" ng-model="vm.mensageiroAss.mensageiro" class="form-control"
+                   placeholder="E-mail do mensageiro"
+                   uib-typeahead="mensageiro as mensageiro.conta.email for mensageiro in vm.findMensageiro($viewValue)"
+                   typeahead-loading="loadingMens" typeahead-no-results="noResults"
+                   typeahead-editable="false"
+                   typeahead-template-url="app/components/partials/card-search.html">
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+
+        <div class="box am-card-result" ng-show="vm.mensageiroAss.mensageiro != null">
+            <div class="post am-card-result-content">
+                <div class="user-block">
+                    <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg"
+                         alt="user image">
+                    <span class="username">
+                                        {{vm.mensageiroAss.mensageiro.nome}}
+                                         <a ng-click="vm.removeCurrentMensageiro()" class="pull-right btn-box-tool"><i
+                                                 class="fa fa-1x fa-times"></i></a>
+                                    </span>
+                    <span class="description">{{vm.mensageiroAss.mensageiro.conta.username}} - {{vm.mensageiroAss.mensageiro.conta.email}}</span>
+                    <span class="description">{{vm.mensageiroAss.mensageiro.telefone}}</span>
                 </div>
+                <table class="table" style="font-size: 12px;">
+                    <thead>
+                    <tr>
+                        <th width="40%">Logradouro</th>
+                        <th width="10%">Bairro</th>
+                        <th width="10%">Localide</th>
+                        <th width="5%">UF</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="end in vm.mensageiroAss.mensageiro.enderecos">
 
-                <div class="row box-topic">
-                    <div class="col-lg-12">
-                        <div class="input-group">
-                            <input name="nome" id="nome" ng-model="vm.email" type="text" placeholder="Nome de usuário do mensageiro" class="form-control"
-                                   required/>
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary" ng-click="vm.findMensageiro()" type="button">Buscar Mensageiro
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <td>{{end.logradouro}}</td>
+                        <td>{{end.bairro}}</td>
+                        <td>{{end.localidade}}</td>
+                        <td>{{end.uf}}</td>
 
-                <div class="row am-well-empty">
-                    <div class="col-lg-12">
-                        <div class="well">Nehum mensageiro adicianado.</div>
-                    </div>
-                </div>
-
+                    </tr>
+                    </tbody>
+                </table>
             </div>
-
-            <div class="form-group">
-                <input class="btn btn-primary" type="submit" value="{{vm.isEdited() ? 'Alterar':'Salvar' }}"/>
-                <button class="btn btn-default" type="button" ng-click="vm.cancelar()">Cancelar</button>
+        </div>
+        <div class="am-card-result" ng-show="vm.mensageiroAss.mensageiro == null">
+            <div class="col-lg-12">
             </div>
-        </form>
+        </div>
     </div>
+
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value="Salvar"/>
+        <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancelar</button>
+    </div>
+
+</form>
+
+<div class="overlay" ng-show="vm.loading">
+    <i class="fa fa-refresh fa-spin"></i>
 </div>

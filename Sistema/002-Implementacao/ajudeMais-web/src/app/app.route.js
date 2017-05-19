@@ -104,18 +104,6 @@
                 data: {
                     pageTitle: 'Mensageiros Associados'
                 }
-            })
-            .state('home.mensageiroAssEdit', {
-                url: "/mensageiroAssEdit",
-                templateUrl: "app/components/mensageiroAssociado/mensageiro-associado.edit.html",
-                controller: "MensageiroAssociadoEditController",
-                controllerAs: 'vm',
-                params: {
-                    mensageiroAssEdit: null
-                },
-                data: {
-                    pageTitle: 'Edição de Mensageiro Associado'
-                }
             });
     });
 })();

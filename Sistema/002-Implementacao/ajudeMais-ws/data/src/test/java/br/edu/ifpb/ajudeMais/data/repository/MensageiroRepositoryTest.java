@@ -14,7 +14,8 @@
  */
 package br.edu.ifpb.ajudeMais.data.repository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -33,6 +34,8 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
 /**
  * 
@@ -64,6 +67,33 @@ public class MensageiroRepositoryTest {
 	 */
 	@Autowired
 	private MensageiroRepository mensageiroRepository;
+
+	/**
+	 * 
+	 * <p>
+	 * Teste para busca de mensageiro por conta, filtrando por email.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageirosEmailTest() {
+		List<Mensageiro> mensageiros = mensageiroRepository.findByContaEmailIgnoreCaseContaining("jao@mail.com");
+		assertTrue(mensageiros.size() > 0);
+
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Teste para busca de mensageiro por conta, filtrando por email não
+	 * existente.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageirosEmailNotPresentTest() {
+		List<Mensageiro> mensageiros = mensageiroRepository.findByContaEmailIgnoreCaseContaining("jajaja@mail.com");
+		assertFalse(mensageiros.size() > 0);
+
+	}
 
 	/**
 	 * 

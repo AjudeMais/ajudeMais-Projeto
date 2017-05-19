@@ -48,7 +48,18 @@ public interface MensageiroRepository extends JpaRepository<Mensageiro, Long> {
 	 * @param uf
 	 * @return
 	 */
-	public List<Object[]> filtersMensageiroCloser(@Param("logradouro") String logradouro,
-			@Param("bairro") String bairro, @Param("localidade") String localidade, @Param("uf") String uf);
+	List<Object[]> filtersMensageiroCloser(@Param("logradouro") String logradouro, @Param("bairro") String bairro,
+			@Param("localidade") String localidade, @Param("uf") String uf);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro por conta, filtrando por e-mail.
+	 * </p>
+	 * 
+	 * @param email
+	 * @return
+	 */
+	List<Mensageiro> findByContaEmailIgnoreCaseContaining(String email);
 
 }

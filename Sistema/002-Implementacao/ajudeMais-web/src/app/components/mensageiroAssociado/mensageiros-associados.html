@@ -16,31 +16,30 @@
                                class="table table-striped table-bordered table-hover" id="dtCategorias">
                             <thead>
                             <tr>
-                                <th width="10%">Ações</th>
-                                <th width="25%">Nome</th>
-                                <th width="50%">Descrição</th>
-                                <th width="10%">Ativo</th>
+                                <th width="8%">Ações</th>
+                                <th width="20%">Nome</th>
+                                <th width="20%">E-mail</th>
+                                <th width="15%">telefone</th>
+                                <th width="15%">Data Associação</th>
+                                <th width="15%">status</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="odd gradeX" ng-repeat="associacao in vm.associacoes">
+                            <tr class="odd gradeX" ng-repeat="associado in vm.associados">
                                 <td>
                                     <button type="button" ng-click="vm.editAssocicao(associacao)" title="Editar"
                                             data-toggle="tooltip" class="btn btn-xs btn-default"
                                             access-view="ROLE_INSTITUICAO">
                                         <i class='fa fa-pencil'></i>
                                     </button>
-                                    <button type="button" ng-click="vm.remove(associacao)"
-                                            title="Remover" data-toggle="tooltip"
-                                            class="btn btn-xs btn-danger" access-view="ROLE_INSTITUICAO">
-                                        <i class='fa fa-trash'></i>
-                                    </button>
                                 </td>
-                                <td>{{associacao.nome}}</td>
-                                <td>{{associacao.descricao}}</td>
+                                <td>{{associado.mensageiro.nome}}</td>
+                                <td>{{associado.mensageiro.conta.email}}</td>
+                                <td>{{associado.mensageiro.telefone}}</td>
+                                <td>{{associado.data | date : "dd/MM/yyyy"}}</td>
                                 <td>
-                                    <span ng-class="{'label label-danger': !categoria.ativo,
-													'label label-success': categoria.ativo}">{{categoria.ativo? 'Sim': 'Não'}}
+                                    <span ng-class="{'label label-danger': !associado.status,
+													'label label-success': associado.status}">{{associado.status? 'Ativo': 'Inativo'}}
                                 </span>
                                 </td>
                             </tr>

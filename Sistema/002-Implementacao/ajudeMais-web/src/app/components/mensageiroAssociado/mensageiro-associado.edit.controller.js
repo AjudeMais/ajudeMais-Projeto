@@ -10,61 +10,59 @@
     angular.module("amApp")
         .controller("MensageiroAssociadoEditController", MensageiroAssociadoEditController);
 
-    MensageiroAssociadoEditController.$inject = ['mensageiroAssociadoService', 'growl', '$stateParams', '$state'];
-
-    function MensageiroAssociadoEditController(mensageiroAssociadoService, growl, $stateParams, $state) {
+    function MensageiroAssociadoEditController(mensageiroAssociadoService, mensageiroService, growl, $uibModalInstance, mensageiroAss) {
 
         var vm = this;
         vm.mensageiroAss = {};
-        vm.email = "";
-        vm.mensageiro  = {};
-        if ($stateParams.mensageiroAssEdit) {
-            vm.mensageiroAss = $stateParams.mensageiroAssEdit;
-        }
 
-        vm.findMensageiro = function () {
-            mensageiroAssociadoService.findByContaEmail(function (response) {
-                vm.mensageiro = response.data;
-            })
+        angular.copy(mensageiroAss, vm.mensageiroAss);
+
+        /**
+         *
+         * @param email
+         */
+        vm.findMensageiro = function (email) {
+            return mensageiroService.findByContaEmail(email).then(function (response) {
+                return response.data;
+            });
         };
+
+        /**
+         *
+         * @param imageName
+         */
+        vm.getImage = function (imageName) {
+
+        };
+
+        vm.removeCurrentMensageiro = function () {
+            vm.mensageiroAss.mensageiro = null;
+        }
 
         /**
          * Editar/Salvar uma associação entre mensageiro e instituição
          */
         vm.save = function () {
-            if (!vm.isEdited()) {
-                mensageiroAssociadoService.save(vm.mensageiroAss, function (response) {
-                    growl.success("<b>Mensageiro</b> associado com sucesso");
-                    $state.go('home.mensageirosAss');
-                }, function (response) {
-                    var msgError = response.data.msg;
-                    growl.warning(msgError);
-                });
-
-            } else {
-                mensageiroAssociadoService.update(vm.mensageiroAss, function (response) {
-                    growl.success("<b>Associação</b> alterada com sucesso");
-                    $state.go('home.mensageirosAss');
-                }, function (response) {
-                    var msgError = response.data.msg;
-                    growl.warning(msgError);
-                });
-            }
+            vm.loading = true;
+            vm.mensageiroAss.status = true;
+            vm.mensageiroAss.data = new Date();
+            mensageiroAssociadoService.save(vm.mensageiroAss, function (response) {
+                growl.success("<b>Mensageiro</b> associado com sucesso");
+                angular.copy(response, mensageiroAss);
+                vm.loading = false;
+                $uibModalInstance.close(mensageiroAss);
+            }, function (response) {
+                var msgError = response.data.msg;
+                growl.warning(msgError);
+                vm.loading = false;
+            });
         };
 
         /**
          *
          */
-        vm.cancelar = function () {
-            $state.go('home.mensageirosAss');
+        vm.cancel = function () {
+            $uibModalInstance.dismiss('cancel');
         };
-
-        /**
-         *
-         */
-        vm.isEdited = function () {
-            return vm.mensageiroAss.id;
-        };
-
     };
 })();

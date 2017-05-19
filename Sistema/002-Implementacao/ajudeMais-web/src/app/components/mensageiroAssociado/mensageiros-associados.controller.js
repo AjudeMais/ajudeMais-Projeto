@@ -10,9 +10,9 @@
     angular.module('amApp')
         .controller('MensageiroAssociadoController', MensageiroAssociadoController);
 
-    MensageiroAssociadoController.$inject = ['mensageiroAssociadoService', 'DTOptionsBuilder', '$state', 'growl'];
+    MensageiroAssociadoController.$inject = ['mensageiroAssociadoService', 'DTOptionsBuilder', '$uibModal', 'growl'];
 
-    function MensageiroAssociadoController(mensageiroAssociadoService, DTOptionsBuilder, $state, growl) {
+    function MensageiroAssociadoController(mensageiroAssociadoService, DTOptionsBuilder, $uibModal, growl) {
 
         var vm = this;
         vm.associados = [];
@@ -26,15 +26,39 @@
         vm.getMensageirosAssociados = function () {
             mensageiroAssociadoService.getByInstituicao(function (response) {
                 vm.associados = response;
+                console.log(response);
             });
         }
         vm.getMensageirosAssociados();
+
+
+        /**
+         *
+         * @param categoria
+         */
+        function openModal(mensageiroAss) {
+            return $uibModal.open({
+                templateUrl: 'app/components/mensageiroAssociado/mensageiro-associado.edit.html',
+                controller: 'MensageiroAssociadoEditController',
+                controllerAs: 'vm',
+                backdrop: 'static',
+                resolve: {
+                    mensageiroAss: function () {
+                        return mensageiroAss;
+                    }
+                }
+            });
+        }
 
         /**
          *
          */
         vm.addAssociacao = function () {
-            $state.go("home.mensageiroAssEdit", {mensageiroAssEdit: null});
+            var modal = openModal({});
+
+            modal.result.then(function (mensageiroAss) {
+                vm.associados.push(mensageiroAss);
+            });
         }
 
         /**
