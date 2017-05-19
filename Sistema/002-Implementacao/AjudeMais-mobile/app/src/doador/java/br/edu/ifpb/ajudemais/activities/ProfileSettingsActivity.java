@@ -22,7 +22,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,17 +37,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UpdateDoadorTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
-public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem> {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -67,12 +68,17 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     private static final int SELECT_FILE = 13;
     private int PROFILE_PIC_COUNT = 0;
     protected CapturePhotoUtils capturePhotoUtils;
+    private UploadImageTask uploadImageTask;
+    private UpdateDoadorTask updateDoadorTask;
+    private Imagem imagemTemp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
         context = this;
+
         capturePhotoUtils = new CapturePhotoUtils(this);
         androidUtil = new AndroidUtil(this);
         sharedPrefManager = new SharedPrefManager(this);
@@ -240,7 +246,6 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     }
 
 
-
     /**
      * @param requestCode
      * @param resultCode
@@ -263,14 +268,16 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
         }
 
-        if (photo != null){
+        if (photo != null) {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            new ImageUploadTask(imageBytes).execute();
+            uploadImageTask = new UploadImageTask(this, imageBytes, doador);
+            uploadImageTask.delegate = this;
+            uploadImageTask.execute();
+
             imageView.setImageBitmap(photo);
             capturePhotoUtils.saveToInternalStorage(photo);
 
@@ -288,6 +295,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         inflater.inflate(R.menu.edit_profile_menu, menu);
         return true;
     }
+
 
     /**
      * @param v
@@ -328,6 +336,17 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             alertDialogAndroid.show();
         }
     }
+
+    /**
+     * Resultado da task Upload de Imagem.
+     *
+     * @param output
+     */
+    @Override
+    public void processFinish(Imagem output) {
+        this.imagemTemp = output;
+    }
+
 
     /**
      *
@@ -385,63 +404,5 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         }
     }
 
-    /**
-     *
-     */
-    private class ImageUploadTask extends AsyncTask<Void, Void, Imagem> {
-
-        private ImagemStorageRemoteService imagemStorageRemoteService;
-        private String message = null;
-        private Imagem imagem;
-        private DoadorRemoteService doadorRemoteService;
-        private byte[] array;
-
-        public ImageUploadTask(byte[] array) {
-            this.array = array;
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showLoadingProgressDialog();
-            doadorRemoteService = new DoadorRemoteService(getApplication());
-            imagemStorageRemoteService = new ImagemStorageRemoteService(getApplication());
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Imagem doInBackground(Void... params) {
-            try {
-
-                if (androidUtil.isOnline()) {
-                    imagem = imagemStorageRemoteService.uploadImage(array);
-                    doador.setFoto(imagem);
-                    doador = doadorRemoteService.updateDoador(doador);
-
-                } else {
-                }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return imagem;
-        }
-
-        @Override
-        protected void onPostExecute(Imagem imagem) {
-            dismissProgressDialog();
-            if (imagem != null) {
-                Toast.makeText(getApplicationContext(), "Imagem atualizada com sucesso",Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 
 }

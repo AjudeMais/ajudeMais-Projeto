@@ -94,4 +94,5 @@
     <string name="lblcpfmsg">CPF</string>
     <string name="lblNumPhone">Número de telefone</string>
     <string name="lblMail">Endereço de e-mail</string>
+    <string name="updatedImage">Imagem Atualizada atualizada com sucesso.</string>
 </resources>
