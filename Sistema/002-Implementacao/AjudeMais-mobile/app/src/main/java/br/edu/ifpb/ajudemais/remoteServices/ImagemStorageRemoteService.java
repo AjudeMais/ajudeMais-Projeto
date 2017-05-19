@@ -58,7 +58,7 @@ public class ImagemStorageRemoteService extends AbstractRemoteService {
 
 
     /**
-     * Transforma o objeto o array de bytes para Multpart para upload de image.
+     * Transforma o objeto o array de bytes para Multipart para upload de image.
      * @param array
      * @return
      */

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.storage.ImagemStorage;
 
 /**
@@ -53,6 +54,12 @@ public class DoadorListener {
 	 */
 	@EventListener(condition="#event.image" )
 	public void doadorEdited(DoadorEditEvent event) {
-		imagemStorage.save(event.getDoador().getFoto().getNome());
+		try {
+			if (imagemStorage.get(event.getDoador().getFoto().getNome()) == null ) {
+				imagemStorage.save(event.getDoador().getFoto().getNome());
+			}
+		} catch (AjudeMaisException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -21,7 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -84,14 +83,15 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         sharedPrefManager = new SharedPrefManager(this);
 
         btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
-        mToolbar = (Toolbar) findViewById(R.id.nav_action);
-        nestedScrollView = (NestedScrollView) findViewById(R.id.netScroll);
 
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.netScroll);
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_edit_profile);
         collapsingToolbarLayout.setTitle(getString(R.string.loading));
 
         imageView = (ImageView) findViewById(R.id.image_profile);
@@ -104,7 +104,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+               openDialog();
             }
         });
 
@@ -232,11 +232,12 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
                 return true;
+
             case R.id.action_seletec_image:
                 openDialog();
                 return true;
@@ -396,6 +397,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("doador", doador);
                 fragment.setArguments(bundle);
+
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(R.id.editprofile_fragment, fragment);
                 fragmentTransaction.commit();

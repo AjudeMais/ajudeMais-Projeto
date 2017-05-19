@@ -81,7 +81,7 @@
     <string name="btn_change_password">ALTERAR</string>
     <string name="cancelar">Cancelar</string>
     <string name="loading">Carregando...</string>
-    <string name="camera_action">Selecionar image para o perfil</string>
+    <string name="camera_action">Selecionar Foto</string>
     <string name="TakePhoto">Tirar Foto</string>
     <string name="selectPhoto">Selcione uma opção</string>
     <string name="gallery">Galeria</string>

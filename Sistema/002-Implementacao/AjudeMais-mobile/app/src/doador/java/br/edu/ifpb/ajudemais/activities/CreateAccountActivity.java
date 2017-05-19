@@ -399,6 +399,7 @@ public class CreateAccountActivity extends AbstractAsyncActivity implements View
                 finish();
 
             } else if (doador != null && doadorUpdated != null) {
+                SharedPrefManager.getInstance(getApplication()).storeUser(doador.getConta());
                 Intent intent = new Intent(CreateAccountActivity.this, ProfileSettingsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -27,7 +28,6 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
-import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 
 /**
@@ -50,6 +50,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FloatingActionButton fab;
     private AndroidUtil androidUtil;
     private CapturePhotoUtils capturePhotoUtils;
+    private RelativeLayout componentHeader;
 
 
     /**
@@ -59,6 +60,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sharedPrefManager = new SharedPrefManager(this);
         androidUtil = new AndroidUtil(this);
         capturePhotoUtils = new CapturePhotoUtils(this);
@@ -69,7 +71,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         findViewById(R.id.containerView).setVisibility(View.GONE);
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-
         if (!androidUtil.isOnline()){
             findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         }
@@ -113,10 +114,14 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         View hView = mNavigationView.getHeaderView(0);
         Bitmap bitmap = null;
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
+        componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
+        if (conta == null){
+            conta = sharedPrefManager.getUser();
+        }
         if (conta != null) {
             tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername() );
             tvEmail.setText(conta.getEmail());
@@ -132,14 +137,18 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             profilePhoto.setImageBitmap(bitmap);
         }
 
-        profilePhoto.setOnClickListener(new View.OnClickListener() {
+
+        componentHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent chooseImageIntent = ImagePicker.getPickImageIntent(getApplicationContext());
-                startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, ProfileSettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
     }
+
 
     /**
      * @param menuItem
@@ -148,10 +157,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         switch (menuItem.getItemId()) {
 
             case R.id.nav_config_conta:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, ProfileSettingsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
                 break;
             case R.id.nav_notificacoes:
                 break;

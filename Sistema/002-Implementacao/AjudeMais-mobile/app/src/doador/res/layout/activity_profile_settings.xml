@@ -53,37 +53,37 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/collapsing_toolbar_edit_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
+            android:descendantFocusability="blocksDescendants"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:expandedTitleGravity="bottom|center_horizontal"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             tools:ignore="RtlHardcoded,RtlSymmetry">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/nav_action"
-                android:textAlignment="center"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:clickable="true"
+                android:textAlignment="center"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_profile"
-                android:layout_marginTop="32dp"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_marginTop="32dp"
+                android:clickable="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_profile"
-                />
+                android:src="@drawable/ic_profile" />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
