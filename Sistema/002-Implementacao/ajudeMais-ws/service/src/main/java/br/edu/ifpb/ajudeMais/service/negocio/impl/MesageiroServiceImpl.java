@@ -169,4 +169,12 @@ public class MesageiroServiceImpl implements MensageiroService {
 		return mensageiroRepository.findByContaEmailIgnoreCaseContaining(email);
 	}
 
+	/**
+	 * Busca um mensageiro pelo username da conta.
+	 */
+	@Override
+	public Mensageiro findByContaUsername(String username) {
+		return mensageiroRepository.findOneByContaUsername(username);
+	}
+
 }

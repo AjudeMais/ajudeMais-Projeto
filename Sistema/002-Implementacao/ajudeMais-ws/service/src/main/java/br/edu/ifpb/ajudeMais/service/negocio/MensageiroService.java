@@ -17,6 +17,7 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.util.List;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
 /**
@@ -54,5 +55,17 @@ public interface MensageiroService extends Service<Mensageiro, Long> {
 	 * @return
 	 */
 	List<Mensageiro> findByContaEmail(String email);
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca Mensageiro por conta, filtrando por username
+	 * </p>
+	 * 
+	 * @param username
+	 *            nome de usuário a ser buscado;
+	 * @return Mensageiro encontrado.
+	 */
+	Mensageiro findByContaUsername(String username);
 
 }

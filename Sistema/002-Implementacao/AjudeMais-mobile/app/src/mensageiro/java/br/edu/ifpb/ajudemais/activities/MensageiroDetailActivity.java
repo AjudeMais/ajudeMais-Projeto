@@ -37,7 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.asycTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;

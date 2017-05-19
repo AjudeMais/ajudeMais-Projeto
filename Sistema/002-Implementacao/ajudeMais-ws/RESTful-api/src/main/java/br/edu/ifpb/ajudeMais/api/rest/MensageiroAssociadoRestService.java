@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
@@ -142,4 +141,7 @@ public class MensageiroAssociadoRestService {
 
 		return new ResponseEntity<List<MensageiroAssociado>>(mensageiros, HttpStatus.OK);
 	}
+	
+	
+	
 }

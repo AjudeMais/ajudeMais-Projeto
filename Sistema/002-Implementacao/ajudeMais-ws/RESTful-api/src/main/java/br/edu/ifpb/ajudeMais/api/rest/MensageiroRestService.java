@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
@@ -113,6 +112,26 @@ public class MensageiroRestService {
 	public ResponseEntity<List<Mensageiro>> findByContaEmail(@RequestParam("email") String email) {
 		List<Mensageiro> mensageiros = mensageiroService.findByContaEmail(email);
 		return new ResponseEntity<>(mensageiros, HttpStatus.OK);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * GET /mensageiro/filter/usermane : Busca um Mensageiro pela conta, filtrando pelo nome de
+	 * usuário. Caso mensageiro não exista um NOT FOUNT será lançado para o cliente.
+	 * <br/>
+	 * ROLE: DOADOR
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/username")
+	public ResponseEntity<Mensageiro> findByContaUsername(@RequestParam String username) {
+
+		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
+		return new ResponseEntity<Mensageiro>(mensageiro, HttpStatus.OK);
 	}
 
 }
