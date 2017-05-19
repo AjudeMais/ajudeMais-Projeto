@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorFont"
-    tools:context=".activities.CreateMensageiroAccountActivity">
+    tools:context=".activities.EditMensageiroAccountActivity">
 
     <LinearLayout
         android:id="@+id/componenteActionBar"
@@ -75,6 +75,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="sans-serif"
                     android:hint="@string/hitUserName"
+                    android:clickable="false"
                     android:inputType="textPersonName"
                     android:textColor="@color/textSecond2"
                     android:textColorHint="@color/colorPrimary" />
@@ -142,6 +143,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="sans-serif"
                     android:hint="@string/hitCpf"
+                    android:clickable="false"
                     android:textColor="@color/textSecond2"
                     android:textColorHint="@color/colorPrimary"
                     android:typeface="normal" />
@@ -208,11 +210,12 @@
             android:layout_gravity="bottom"
             android:height="@dimen/LagHeigth"
             android:backgroundTint="@color/colorPrimary"
-            android:text="@string/btnCreateNewAccount"
+            android:text="@string/btnEditAccount"
             android:textColor="@color/colorFont"
             android:textSize="@dimen/fontLogin" />
     </RelativeLayout>
 </RelativeLayout>
+
 
 
 

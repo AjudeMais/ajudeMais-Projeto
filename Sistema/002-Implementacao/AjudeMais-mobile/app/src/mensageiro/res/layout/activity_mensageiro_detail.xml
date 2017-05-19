@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_mensageiro_account"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorFont"
+    tools:context=".activities.MensageiroDetailActivity">
+
+    <LinearLayout
+        android:id="@+id/componenteActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/navigation_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/componenteActionBar"
+        android:background="@color/colorFont">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/componentesLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorFont"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <ImageView
+                android:id="@+id/ivProfilePicture"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/msgInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/personalInfo"
+                android:layout_below="@id/ivProfilePicture"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:id="@+id/lblNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblMsgName"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/msgInfo"/>
+
+            <TextView
+                android:id="@+id/tvNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblNome"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+
+
+            <TextView
+                android:id="@+id/lblNomeUsuario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblUsername"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/tvNome"/>
+
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblNomeUsuario"
+                android:fontFamily="sans-serif"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"/>
+
+
+            <TextView
+                android:id="@+id/lblCPF"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblcpfmsg"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/tvUsername"/>
+
+
+            <TextView
+                android:id="@+id/tvCpf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblCPF"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif"
+                />
+
+            <TextView
+                android:id="@+id/lblPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblNumPhone"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/tvCpf"/>
+
+
+            <TextView
+                android:id="@+id/tvPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblPhone"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif"/>
+
+            <TextView
+                android:id="@+id/lblEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/lblMail"
+                android:fontFamily="sans-serif"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/tvPhone"/>
+
+
+            <TextView
+                android:id="@+id/tvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lblEmail"
+                android:layout_marginTop="10dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif"/>
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

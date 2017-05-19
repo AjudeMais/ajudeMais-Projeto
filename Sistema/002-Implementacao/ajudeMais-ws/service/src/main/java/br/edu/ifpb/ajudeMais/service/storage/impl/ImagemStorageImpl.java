@@ -1,12 +1,12 @@
 package br.edu.ifpb.ajudeMais.service.storage.impl;
 
+import static java.nio.file.FileSystems.getDefault;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
-
-import static java.nio.file.FileSystems.getDefault;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -105,7 +105,7 @@ public class ImagemStorageImpl implements ImagemStorage {
 			return Files.readAllBytes(this.localTmp.resolve(nome));
 		} catch (IOException e) {
 			throw new ImageErrorException("Ocorreu um erro ao tentar recuperar imagem temporaria.");
-		}
+		}	
 	}
 
 	/**
