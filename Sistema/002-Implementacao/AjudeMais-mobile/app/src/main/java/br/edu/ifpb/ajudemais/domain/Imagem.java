@@ -1,5 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
+
 /**
  * <p>
  * <b>{@link Imagem}</b>
@@ -8,16 +10,27 @@ package br.edu.ifpb.ajudemais.domain;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class Imagem {
+public class Imagem implements Serializable{
 
+    /**
+     *
+     */
     private Long id;
-    private String nome;
-    private String contentType;
-    private String path;
 
-    public Imagem(String nome, String path, String contentType) {
+    /**
+     *
+     */
+    private String nome;
+
+    /**
+     *
+     */
+    private String contentType;
+
+
+
+    public Imagem(String nome, String contentType) {
         this.nome = nome;
-        this.path = path;
         this.contentType = contentType;
     }
 
@@ -60,22 +73,6 @@ public class Imagem {
      *
      * @return
      */
-    public String getPath() {
-        return path;
-    }
-
-    /**
-     *
-     * @param path
-     */
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    /**
-     *
-     * @return
-     */
     public String getContentType() {
         return contentType;
     }
@@ -98,7 +95,6 @@ public class Imagem {
                 "id=" + id +
                 ", nome='" + nome + '\'' +
                 ", contentType='" + contentType + '\'' +
-                ", path='" + path + '\'' +
                 '}';
     }
 }
