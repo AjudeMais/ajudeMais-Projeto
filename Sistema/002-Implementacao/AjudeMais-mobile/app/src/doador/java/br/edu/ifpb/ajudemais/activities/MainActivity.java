@@ -150,6 +150,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
+
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
