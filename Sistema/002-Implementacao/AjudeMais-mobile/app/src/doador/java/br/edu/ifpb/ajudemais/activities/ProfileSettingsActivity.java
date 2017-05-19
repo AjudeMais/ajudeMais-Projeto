@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -23,7 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,14 +33,18 @@ import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.ByteBuffer;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
@@ -240,58 +242,6 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         }
     }
 
-    /**
-     * @param context
-     * @param theUri
-     * @param sampleSize
-     * @return
-     */
-    private static Bitmap decodeBitmap(Context context, Uri theUri, int sampleSize) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = sampleSize;
-
-        AssetFileDescriptor fileDescriptor = null;
-        try {
-            fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(
-                fileDescriptor.getFileDescriptor(), null, options);
-
-        Log.d(TAG, options.inSampleSize + " sample method bitmap ... " +
-                actuallyUsableBitmap.getWidth() + " " + actuallyUsableBitmap.getHeight());
-
-        return actuallyUsableBitmap;
-    }
-
-
-    /**
-     * Get file save.
-     *
-     * @param context
-     * @return
-     */
-    private static File getTempFile(Context context) {
-        File imageFile = new File(context.getExternalCacheDir(), "tempImageProfile");
-        imageFile.getParentFile().mkdirs();
-        return imageFile;
-    }
-
-    /**
-     * Resize to avoid using too much memory loading big images (e.g.: 2560*1920)
-     **/
-    private static Bitmap getImageResized(Context context, Uri selectedImage) {
-        Bitmap bm = null;
-        int[] sampleSizes = new int[]{5, 3, 2, 1};
-        int i = 0;
-        do {
-            bm = decodeBitmap(context, selectedImage, sampleSizes[i]);
-            i++;
-        } while (bm.getWidth() < minWidthQuality && i < sampleSizes.length);
-        return bm;
-    }
 
 
     /**
@@ -302,30 +252,30 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Bitmap photo = null;
+
         if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-            imageView.setImageBitmap(photo);
-            capturePhotoUtils.saveToInternalStorage(photo);
-
-//                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
-//                imageView.setImageBitmap(bitmap);
-//
-//                //Converte para Bytes
-//                int bytes = bitmap.getByteCount();
-//                ByteBuffer buffer = ByteBuffer.allocate(bytes);
-//                bitmap.copyPixelsToBuffer(buffer);
-//                byte[] array = buffer.array();
+            photo = (Bitmap) data.getExtras().get("data");
 
         } else if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK) {
             Uri selectedImage;
-            Bitmap bm = null;
-            File imageFile = getTempFile(this);
+            File imageFile = capturePhotoUtils.getTempFile(this);
             selectedImage = data.getData();
-            bm = getImageResized(this, selectedImage);
+            photo = capturePhotoUtils.getImageResized(this, selectedImage);
 
-            imageView.setImageBitmap(bm);
-            capturePhotoUtils.saveToInternalStorage(bm);
+
+        }
+
+        if (photo != null){
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+            new ImageUploadTask(imageBytes).execute();
+            imageView.setImageBitmap(photo);
+            capturePhotoUtils.saveToInternalStorage(photo);
 
         }
     }
@@ -434,6 +384,61 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                 fragmentTransaction.add(R.id.editprofile_fragment, fragment);
                 fragmentTransaction.commit();
                 nestedScrollView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    private class ImageUploadTask extends AsyncTask<Void, Void, Imagem> {
+
+        private ImagemStorageRemoteService imagemStorageRemoteService;
+        private String message = null;
+        private Imagem imagem;
+        private byte[] array;
+
+        public ImageUploadTask(byte[] array) {
+            this.array = array;
+        }
+
+        /**
+         *
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showLoadingProgressDialog();
+            imagemStorageRemoteService = new ImagemStorageRemoteService(getApplication());
+        }
+
+        /**
+         * @param params
+         * @return
+         */
+        @Override
+        protected Imagem doInBackground(Void... params) {
+            try {
+
+                if (androidUtil.isOnline()) {
+                    imagem = imagemStorageRemoteService.uploadImage(array);
+
+                } else {
+                }
+            } catch (RestClientException e) {
+                message = e.getMessage();
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return imagem;
+        }
+
+        @Override
+        protected void onPostExecute(Imagem imagem) {
+            dismissProgressDialog();
+            if (imagem != null) {
+                Toast.makeText(getApplicationContext(), "Imagem atualizada com sucesso",Toast.LENGTH_LONG).show();
             }
         }
     }

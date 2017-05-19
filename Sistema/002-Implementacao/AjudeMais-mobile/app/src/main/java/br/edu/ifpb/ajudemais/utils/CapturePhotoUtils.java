@@ -1,8 +1,10 @@
 package br.edu.ifpb.ajudemais.utils;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -11,6 +13,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import static br.edu.ifpb.ajudemais.utils.ImagePicker.minWidthQuality;
 
 
 /**
@@ -114,5 +118,61 @@ public class CapturePhotoUtils {
 
         return null;
 
+    }
+    /**
+     * @param context
+     * @param theUri
+     * @param sampleSize
+     * @return
+     */
+    private  Bitmap decodeBitmap(Context context, Uri theUri, int sampleSize) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize;
+
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(
+                fileDescriptor.getFileDescriptor(), null, options);
+
+        Log.d("AjudeMais", options.inSampleSize + " sample method bitmap ... " +
+                actuallyUsableBitmap.getWidth() + " " + actuallyUsableBitmap.getHeight());
+
+        return actuallyUsableBitmap;
+    }
+
+
+
+
+    /**
+     * Get file save.
+     *
+     * @param context
+     * @return
+     */
+    public   File getTempFile(Context context) {
+        File imageFile = new File(context.getExternalCacheDir(), "tempImageProfile");
+        imageFile.getParentFile().mkdirs();
+        return imageFile;
+    }
+
+
+
+    /**
+     * Resize to avoid using too much memory loading big images (e.g.: 2560*1920)
+     **/
+    public  Bitmap getImageResized(Context context, Uri selectedImage) {
+        Bitmap bm = null;
+        int[] sampleSizes = new int[]{5, 3, 2, 1};
+        int i = 0;
+        do {
+            bm = decodeBitmap(context, selectedImage, sampleSizes[i]);
+            i++;
+        } while (bm.getWidth() < minWidthQuality && i < sampleSizes.length);
+        return bm;
     }
 }
