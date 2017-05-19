@@ -17,7 +17,7 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  * <b>AbstractRemoteService</b>
  * </p>
  * <p>
- *  Remote service base para os demais serviços providos pela API REST.
+ * Remote service base para os demais serviços providos pela API REST.
  * </p>
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
@@ -30,7 +30,8 @@ public abstract class AbstractRemoteService {
     protected Context context;
 
     /**
-     *  construtor
+     * construtor
+     *
      * @param context
      */
     public AbstractRemoteService(Context context) {

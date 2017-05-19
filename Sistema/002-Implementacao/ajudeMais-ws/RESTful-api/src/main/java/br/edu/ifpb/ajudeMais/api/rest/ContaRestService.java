@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,15 +74,34 @@ public class ContaRestService {
 	}
 
 	/**
-	 * POST /conta/changePassword : Altera senha do usuário
+	 * POST /conta/changePassword : Altera senha do usuário, considerando a
+	 * confirmação de senha (módulo mobile).
 	 *
-	 * @param nova senha
+	 * @param nova
+	 *            senha
 	 * @return ResponseEntity 200 (ok) ou 400 (Bad Request)
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	@PostMapping(path = "/changePassword")
-	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws AjudeMaisException {
+	public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO)
+			throws AjudeMaisException {
 		contaService.changePassword(changePasswordDTO.getPassword(), changePasswordDTO.getNewPassword());
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * POST /conta/changePassword/init : Altera senha do usuário para primeiro
+	 * acesso de usuários do módulo web (admin e instituicao).
+	 *
+	 * @param nova
+	 *            senha
+	 * @return ResponseEntity 200 (ok) ou 400 (Bad Request)
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, INSTITUICAO')")
+	@PostMapping(path = "/changePassword/init")
+	public ResponseEntity<?> changePassword(@RequestBody String password) throws AjudeMaisException {
+		contaService.changePasswordInit(password);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

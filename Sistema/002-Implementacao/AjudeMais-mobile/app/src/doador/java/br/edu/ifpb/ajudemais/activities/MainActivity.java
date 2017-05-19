@@ -9,7 +9,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -159,6 +158,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             case R.id.nav_config_conta:
 
                 break;
+
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:

@@ -1,1 +1,4 @@
-<resources></resources>
+<resources>
+    <string name="hitPasswordAlterar">Senha atual</string>
+    <string name="hitNewPasswordAlterar">Nova Senha</string>
+</resources>

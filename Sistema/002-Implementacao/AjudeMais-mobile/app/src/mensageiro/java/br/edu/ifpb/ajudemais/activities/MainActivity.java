@@ -14,8 +14,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.location.LocationServices;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
@@ -100,17 +98,21 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_config_conta:
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MensageiroDetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 break;
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
                 capturePhotoUtils.deleteImageProfile();
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                Intent intent2 = new Intent();
+                intent2.setClass(MainActivity.this, LoginActivity.class);
+                intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
-                startActivity(intent);
+                startActivity(intent2);
                 break;
         }
 

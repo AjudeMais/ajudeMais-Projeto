@@ -95,6 +95,15 @@
                 data: {
                     pageTitle: 'Itens Doáveis'
                 }
+            })
+            .state('home.mensageirosAss', {
+                url: "/mensageirosAss",
+                templateUrl: "app/components/mensageiroAssociado/mensageiros-associados.html",
+                controller: "MensageiroAssociadoController",
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Mensageiros Associados'
+                }
             });
     });
 })();

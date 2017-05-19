@@ -133,14 +133,22 @@ public class ContaServiceImpl implements ContaService {
 	public void changePassword(String password, String newPassword) throws AjudeMaisException{
 		Optional<Conta> contaOption = contaRepository.findOneByUsername(authService.getCurrentUserLogin());
 		
-		if (contaOption.isPresent() && !passwordEncoder.matches(password,contaOption.get().getSenha())) {
-			throw new InvalidAttributeException("A senha atual informada é inválida");
-
-		}
-		
-		contaRepository.findOneByUsername(authService.getCurrentUserLogin()).ifPresent(user -> {
-		
+		if (contaOption.isPresent()){
+			Conta conta = contaOption.get();
+			if(!passwordEncoder.matches(password,conta.getSenha())){
+				throw new InvalidAttributeException("A senha atual informada é inválida");
+			}
 			String encryptedPassword = passwordEncoder.encode(newPassword);
+			conta.setSenha(encryptedPassword);
+			conta.setResetSenha(new Date());
+			contaRepository.save(conta);
+		}
+	}
+	
+	@Override
+	public void changePasswordInit(String password) {
+		contaRepository.findOneByUsername(authService.getCurrentUserLogin()).ifPresent(user -> {
+			String encryptedPassword = passwordEncoder.encode(password);
 			user.setSenha(encryptedPassword);
 			user.setResetSenha(new Date());
 			contaRepository.save(user);
@@ -176,5 +184,4 @@ public class ContaServiceImpl implements ContaService {
 	public void remover(Conta entity) {
 		contaRepository.delete(entity);
 	}
-
 }
