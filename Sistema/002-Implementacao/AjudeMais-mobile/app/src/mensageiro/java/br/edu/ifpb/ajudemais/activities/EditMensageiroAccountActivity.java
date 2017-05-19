@@ -3,6 +3,7 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -16,13 +17,13 @@ import br.edu.ifpb.ajudemais.R;
 public class EditMensageiroAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
-    private EditText edtNome;
-    private EditText edtUsername;
-    private EditText edtPhone;
-    private EditText edtEmail;
-    private EditText edtCpf;
-    private EditText edtPassword;
-    private EditText edtConfirmPassword;
+    private TextInputEditText edtNome;
+    private TextInputEditText edtUsername;
+    private TextInputEditText edtPhone;
+    private TextInputEditText edtEmail;
+    private TextInputEditText edtCpf;
+    private TextInputEditText edtPassword;
+    private TextInputEditText edtConfirmPassword;
     private Button btnEditAccount;
     private Resources resources;
 
@@ -42,13 +43,13 @@ public class EditMensageiroAccountActivity extends AbstractAsyncActivity impleme
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         resources = getResources();
 
-        edtNome = (EditText) findViewById(R.id.edtNome);
-        edtUsername = (EditText) findViewById(R.id.edtUserName);
-        edtPhone = (EditText) findViewById(R.id.edtPhone);
-        edtEmail = (EditText) findViewById(R.id.edtEmail);
-        edtCpf = (EditText) findViewById(R.id.edtCpf);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        edtConfirmPassword = (EditText) findViewById(R.id.edtConfirmPassword);
+        edtNome = (TextInputEditText) findViewById(R.id.edtNome);
+        edtUsername = (TextInputEditText) findViewById(R.id.edtUserName);
+        edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
+        edtEmail = (TextInputEditText) findViewById(R.id.edtEmail);
+        edtCpf = (TextInputEditText) findViewById(R.id.edtCpf);
+        edtPassword = (TextInputEditText) findViewById(R.id.edtPassword);
+        edtConfirmPassword = (TextInputEditText) findViewById(R.id.edtConfirmPassword);
         btnEditAccount = (Button) findViewById(R.id.btnEditAccount);
     }
 
