@@ -37,6 +37,8 @@
     <string name="msgPermitionTurnOnGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
     <string name="permission">Permissão</string>
     <string name="permissionDenied">"Permissão para localização negada."</string>
+    <string name="permissionDeniedAccessCamera">"Permissão para acesso a camêra negada."</string>
+
     <string name="disconnected">Desconectado, por favor ligue o GPS</string>
     <string name="failConnect">Não existe conexão com a internet</string>
 
@@ -79,4 +81,9 @@
     <string name="btn_change_password">ALTERAR</string>
     <string name="cancelar">Cancelar</string>
     <string name="loading">Carregando...</string>
+    <string name="camera_action">Selecionar image para o perfil</string>
+    <string name="TakePhoto">Tirar Foto</string>
+    <string name="selectPhoto">Selcione uma opção</string>
+    <string name="gallery">Galeria</string>
+    <string name="NegativePermisionMsg">Permissão de acesso a camêra negada</string>
 </resources>

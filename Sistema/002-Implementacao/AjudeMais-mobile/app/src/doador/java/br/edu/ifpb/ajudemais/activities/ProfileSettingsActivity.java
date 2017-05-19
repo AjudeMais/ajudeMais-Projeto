@@ -1,33 +1,53 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
-import br.edu.ifpb.ajudemais.remoteServices.ContaRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
+
+import static br.edu.ifpb.ajudemais.utils.ImagePicker.minWidthQuality;
 
 public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -38,14 +58,23 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     private SharedPrefManager sharedPrefManager;
     private Doador doador;
     private Button btnChangePassword;
+    private ImageView imageView;
     private Context context;
     private NestedScrollView nestedScrollView;
+    private static final int PICK_IMAGE_ID = 104;
+    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
+    private static final int MY_PERMISSIONS_GRANTED_CAMERA = 12;
+    private static final int REQUEST_CAMERA = 1;
+    private static final int SELECT_FILE = 13;
+    private int PROFILE_PIC_COUNT = 0;
+    protected CapturePhotoUtils capturePhotoUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
         context = this;
+        capturePhotoUtils = new CapturePhotoUtils(this);
         androidUtil = new AndroidUtil(this);
         sharedPrefManager = new SharedPrefManager(this);
 
@@ -59,6 +88,20 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(getString(R.string.loading));
+
+        imageView = (ImageView) findViewById(R.id.image_profile);
+        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+
+        if (bitmap != null) {
+            imageView.setImageBitmap(bitmap);
+        }
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
         new ProfileLoading().execute();
@@ -79,6 +122,104 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     }
 
     /**
+     * Checa se o device pertence ao SDK versão 23 para exibir permissão
+     */
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermission();
+
+            }
+        }
+    }
+
+    /**
+     * Requisita permissão para realizar um ligação no device.
+     */
+    private void requestPermission() {
+        int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{Manifest.permission.CAMERA},
+                    MY_PERMISSIONS_REQUEST_CAMERA);
+        } else {
+            customDialog();
+        }
+    }
+
+    /**
+     * @param
+     */
+    public void customDialog() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+        }
+    }
+
+
+    private void openDialog() {
+        final CharSequence[] items = {getString(R.string.TakePhoto), getString(R.string.gallery), getString(R.string.cancelar)};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.selectPhoto));
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals(getString(R.string.TakePhoto))) {
+                    checkPermissions();
+                    PROFILE_PIC_COUNT = 1;
+                    int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+                    if (checkPermission == PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(
+                                ProfileSettingsActivity.this,
+                                new String[]{Manifest.permission.CAMERA},
+                                MY_PERMISSIONS_GRANTED_CAMERA);
+
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, REQUEST_CAMERA);
+                    }
+
+                } else if (items[item].equals(getString(R.string.gallery))) {
+                    PROFILE_PIC_COUNT = 1;
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, SELECT_FILE);
+
+                } else if (items[item].equals(getString(R.string.cancelar))) {
+                    PROFILE_PIC_COUNT = 0;
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+    /**
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openDialog();
+                } else {
+                    Toast.makeText(ProfileSettingsActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
      * @param item
      * @return
      */
@@ -91,13 +232,119 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                 startActivity(intent);
                 finish();
                 return true;
-
+            case R.id.action_seletec_image:
+                openDialog();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    /**
+     * @param context
+     * @param theUri
+     * @param sampleSize
+     * @return
+     */
+    private static Bitmap decodeBitmap(Context context, Uri theUri, int sampleSize) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = sampleSize;
 
+        AssetFileDescriptor fileDescriptor = null;
+        try {
+            fileDescriptor = context.getContentResolver().openAssetFileDescriptor(theUri, "r");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Bitmap actuallyUsableBitmap = BitmapFactory.decodeFileDescriptor(
+                fileDescriptor.getFileDescriptor(), null, options);
+
+        Log.d(TAG, options.inSampleSize + " sample method bitmap ... " +
+                actuallyUsableBitmap.getWidth() + " " + actuallyUsableBitmap.getHeight());
+
+        return actuallyUsableBitmap;
+    }
+
+
+    /**
+     * Get file save.
+     *
+     * @param context
+     * @return
+     */
+    private static File getTempFile(Context context) {
+        File imageFile = new File(context.getExternalCacheDir(), "tempImageProfile");
+        imageFile.getParentFile().mkdirs();
+        return imageFile;
+    }
+
+    /**
+     * Resize to avoid using too much memory loading big images (e.g.: 2560*1920)
+     **/
+    private static Bitmap getImageResized(Context context, Uri selectedImage) {
+        Bitmap bm = null;
+        int[] sampleSizes = new int[]{5, 3, 2, 1};
+        int i = 0;
+        do {
+            bm = decodeBitmap(context, selectedImage, sampleSizes[i]);
+            i++;
+        } while (bm.getWidth() < minWidthQuality && i < sampleSizes.length);
+        return bm;
+    }
+
+
+    /**
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CAMERA && resultCode == Activity.RESULT_OK) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+            imageView.setImageBitmap(photo);
+            capturePhotoUtils.saveToInternalStorage(photo);
+
+//                Bitmap bitmap = ImagePicker.getImageFromResult(this, resultCode, data);
+//                imageView.setImageBitmap(bitmap);
+//
+//                //Converte para Bytes
+//                int bytes = bitmap.getByteCount();
+//                ByteBuffer buffer = ByteBuffer.allocate(bytes);
+//                bitmap.copyPixelsToBuffer(buffer);
+//                byte[] array = buffer.array();
+
+        } else if (requestCode == SELECT_FILE && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage;
+            Bitmap bm = null;
+            File imageFile = getTempFile(this);
+            selectedImage = data.getData();
+            bm = getImageResized(this, selectedImage);
+
+            imageView.setImageBitmap(bm);
+            capturePhotoUtils.saveToInternalStorage(bm);
+
+        }
+    }
+
+
+    /**
+     * @param menu
+     * @return
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.edit_profile_menu, menu);
+        return true;
+    }
+
+    /**
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnChangePassword) {
@@ -115,7 +362,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                         public void onClick(DialogInterface dialogBox, int id) {
 
                             if (newPassword.getText().toString().trim().length() > 5) {
-                                new ChangePasswordTask(ProfileSettingsActivity.this,password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
+                                new ChangePasswordTask(ProfileSettingsActivity.this, password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
                             } else {
                                 Toast.makeText(getApplication(), "A nova senha informada deve contém no mínimo 6 caracteres", Toast.LENGTH_LONG).show();
 

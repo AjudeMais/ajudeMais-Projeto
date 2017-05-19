@@ -71,7 +71,7 @@ public class CapturePhotoUtils {
     }
 
     /**
-     * Recupera Foto do perfil.
+     * Recupera Imagem do perfil.
      * @return
      */
     private  File getOutputMediaFile(){

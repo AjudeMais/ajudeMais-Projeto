@@ -18,17 +18,15 @@ import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.asycTasks</b>
+ * <b>{@link ChangePasswordTask}</b>
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ * Auxiliar Task para mudar a senha do usuário
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
 public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
 
     private ContaRemoteService contaRemoteService;

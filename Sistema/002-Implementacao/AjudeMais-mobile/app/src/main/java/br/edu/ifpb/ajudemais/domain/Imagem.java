@@ -1,24 +1,27 @@
 package br.edu.ifpb.ajudemais.domain;
 
-
 /**
  * <p>
- * <b>{@link Foto}</b>
+ * <b>{@link Imagem}</b>
  * </p>
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class Foto {
+public class Imagem {
 
     private Long id;
     private String nome;
-    private String pathFoto;
+    private String contentType;
+    private String path;
 
-    public Foto(String nome, String pathFoto) {
+    public Imagem(String nome, String path, String contentType) {
         this.nome = nome;
-        this.pathFoto = pathFoto;
+        this.path = path;
+        this.contentType = contentType;
     }
+
+    public Imagem(){}
 
     /**
      *
@@ -57,27 +60,45 @@ public class Foto {
      *
      * @return
      */
-    public String getPathFoto() {
-        return pathFoto;
+    public String getPath() {
+        return path;
     }
 
     /**
      *
-     * @param pathFoto
+     * @param path
      */
-    public void setPathFoto(String pathFoto) {
-        this.pathFoto = pathFoto;
+    public void setPath(String path) {
+        this.path = path;
     }
 
     /**
+     *
+     * @return
+     */
+    public String getContentType() {
+        return contentType;
+    }
+
+    /**
+     *
+     * @param contentType
+     */
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    /**
+     *
      * @return
      */
     @Override
     public String toString() {
-        return "Foto{" +
+        return "Imagem{" +
                 "id=" + id +
                 ", nome='" + nome + '\'' +
-                ", pathFoto='" + pathFoto + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", path='" + path + '\'' +
                 '}';
     }
 }

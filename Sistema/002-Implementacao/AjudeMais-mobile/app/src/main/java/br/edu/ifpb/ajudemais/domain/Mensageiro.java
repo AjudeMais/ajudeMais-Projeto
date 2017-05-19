@@ -20,7 +20,7 @@ public class Mensageiro {
     private String telefone;
     private String tokenFCM;
     private Conta conta;
-    private Foto foto;
+    private Imagem foto;
 
     /**
      *
@@ -134,9 +134,9 @@ public class Mensageiro {
 
     /**
      *
-     * @return Foto
+     * @return Imagem
      */
-    public Foto getFoto() {
+    public Imagem getFoto() {
         return foto;
     }
 
@@ -144,7 +144,7 @@ public class Mensageiro {
      *
      * @param foto
      */
-    public void setFoto(Foto foto) {
+    public void setFoto(Imagem foto) {
         this.foto = foto;
     }
 }

@@ -6,16 +6,15 @@ import br.edu.ifpb.ajudemais.R;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.utils</b>
+ * <b>{@link ProgressDialog}</b>
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ * Auxilia a criação, exibição e finalização de ProgressDialog nas operações ao qual se necessite esperar.
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 
 public class ProgressDialog {
 
@@ -27,6 +26,9 @@ public class ProgressDialog {
         this.context = context;
     }
 
+    /**
+     * Cria ProgressDialog e o executa
+     */
     public void showProgressDialog() {
         if (this.progressDialog == null) {
             this.progressDialog = new android.app.ProgressDialog(context);
@@ -37,6 +39,9 @@ public class ProgressDialog {
         this.progressDialog.show();
     }
 
+    /**
+     * Finaliza ProgressDialog em execução
+     */
     public void dismissProgressDialog() {
         if (this.progressDialog != null) {
             this.progressDialog.dismiss();
