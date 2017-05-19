@@ -56,7 +56,7 @@ public class MesageiroServiceImpl implements MensageiroService {
 	 */
 	@Autowired
 	private ContaService contaService;
-	
+
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
@@ -76,10 +76,10 @@ public class MesageiroServiceImpl implements MensageiroService {
 
 		Conta conta = contaService.save(mensageiro.getConta());
 		mensageiro.setConta(conta);
-		
+
 		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
 		publisher.publishEvent(new MensageiroEditEvent(mensageiroSaved));
-		
+
 		return mensageiroSaved;
 	}
 
@@ -159,6 +159,14 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Transactional
 	public void remover(Mensageiro mensageiro) {
 		mensageiroRepository.delete(mensageiro);
+	}
+
+	/**
+	 * Busca um mensageiro por conta, filtrando pelo e-mail.
+	 */
+	@Override
+	public List<Mensageiro> findByContaEmail(String email) {
+		return mensageiroRepository.findByContaEmailIgnoreCaseContaining(email);
 	}
 
 }

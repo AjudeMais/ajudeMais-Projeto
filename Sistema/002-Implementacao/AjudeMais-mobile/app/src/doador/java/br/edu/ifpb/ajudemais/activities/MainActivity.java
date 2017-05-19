@@ -26,6 +26,7 @@ import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ImagePicker;
 
 
@@ -48,6 +49,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
     private AndroidUtil androidUtil;
+    private CapturePhotoUtils capturePhotoUtils;
 
 
     /**
@@ -59,6 +61,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         setContentView(R.layout.activity_main);
         sharedPrefManager = new SharedPrefManager(this);
         androidUtil = new AndroidUtil(this);
+        capturePhotoUtils = new CapturePhotoUtils(this);
 
         initGoogleAPIClient();
         checkPermissions();
@@ -157,12 +160,17 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                 if (AccessToken.getCurrentAccessToken() != null) {
                     LoginManager.getInstance().logOut();
                     goToLoginScreen();
+                    capturePhotoUtils.deleteImageProfile();
+
                     break;
                 } else {
                     SharedPrefManager.getInstance(this).clearSharedPrefs();
                     goToLoginScreen();
+                    capturePhotoUtils.deleteImageProfile();
+
                     break;
                 }
+
         }
     }
 

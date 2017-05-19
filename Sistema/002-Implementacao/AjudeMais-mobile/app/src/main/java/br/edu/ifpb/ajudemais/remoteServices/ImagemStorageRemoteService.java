@@ -51,6 +51,11 @@ public class ImagemStorageRemoteService extends AbstractRemoteService {
 
     }
 
+    public byte [] getImage(String name){
+        return restTemplate.getForObject(API + "/upload/imagem/{name}", byte[].class, name);
+    }
+
+
 
     /**
      * Transforma o objeto o array de bytes para Multpart para upload de image.

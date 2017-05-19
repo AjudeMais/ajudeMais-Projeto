@@ -47,4 +47,15 @@ public interface ContaService extends Service<Conta, Long> {
 	 */
 	void changePassword(String password, String newPassword) throws AjudeMaisException;
 
+	/**
+	 * 
+	 * <p>
+	 * Método responsável por alter a senha de um usuário existente. Utilizado
+	 * para primeiro acesso de usuários do módulo web.
+	 * </p>
+	 * 
+	 * @param password
+	 */
+	void changePasswordInit(String password);
+
 }

@@ -3,10 +3,10 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,9 +25,14 @@ import java.util.Arrays;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 
 /**
@@ -35,9 +40,9 @@ import br.edu.ifpb.ajudemais.util.FacebookAccount;
  * <b>LoginActivity</b>
  * </p>
  * <p>
- *     Activity para controlar Login.
+ * Activity para controlar Login.
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
@@ -143,10 +148,9 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     /**
      * Método que obtem os dados de um usuário do facebook após uma solicitação bem sucedida
      * de login. A partir deste resultado, encaminha o user para a tela principal da aplicação
-     * @param loginResult
-     *      Resultado da solicitação de login
-     * @param context
-     *      Contexto da aplicação
+     *
+     * @param loginResult Resultado da solicitação de login
+     * @param context     Contexto da aplicação
      */
     private void goToMainActivity(LoginResult loginResult, Context context) {
         contaFacebook = FacebookAccount.userFacebookData(loginResult, context);
@@ -259,12 +263,21 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private Conta conta;
         private AuthRemoteService authRemoteService;
         private String username;
+        private DoadorRemoteService doadorRemoteService;
+        private ImagemStorageRemoteService imagemStorageRemoteService;
         private String senha;
         private Context context;
+        private Doador doador;
+        private CapturePhotoUtils capturePhotoUtils;
+        private AndroidUtil androidUtil;
 
         public LoginTask(Context context, String username, String senha) {
             this.context = context;
             this.authRemoteService = new AuthRemoteService(context);
+            this.doadorRemoteService = new DoadorRemoteService(context);
+            this.imagemStorageRemoteService = new ImagemStorageRemoteService(context);
+            this.capturePhotoUtils = new CapturePhotoUtils(context);
+            this.androidUtil = new AndroidUtil(context);
             this.username = username;
             this.senha = senha;
 
@@ -281,7 +294,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
         /**
-         *
          * @param params
          * @return
          */
@@ -294,6 +306,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 } else {
                     conta = new Conta(username, senha);
                     conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
+                    doador = doadorRemoteService.getDoador(username);
+                    if (doador.getFoto() != null) {
+                        byte[] photo = imagemStorageRemoteService.getImage(doador.getFoto().getNome());
+                        Bitmap bitmap = androidUtil.convertBytesInBitmap(photo);
+                        capturePhotoUtils.saveToInternalStorage(bitmap);
+                    }
+
                     return conta;
                 }
             } catch (RestClientException e) {
@@ -307,7 +326,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
         /**
-         *
          * @param conta
          */
         @Override
@@ -327,6 +345,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         }
 
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

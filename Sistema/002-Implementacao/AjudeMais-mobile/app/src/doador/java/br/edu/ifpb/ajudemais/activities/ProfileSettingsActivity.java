@@ -22,6 +22,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,11 +36,9 @@ import org.springframework.web.client.RestClientException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.ByteBuffer;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.asycTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
@@ -48,8 +47,6 @@ import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
-
-import static br.edu.ifpb.ajudemais.utils.ImagePicker.minWidthQuality;
 
 public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
@@ -396,6 +393,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         private ImagemStorageRemoteService imagemStorageRemoteService;
         private String message = null;
         private Imagem imagem;
+        private DoadorRemoteService doadorRemoteService;
         private byte[] array;
 
         public ImageUploadTask(byte[] array) {
@@ -409,6 +407,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         protected void onPreExecute() {
             super.onPreExecute();
             showLoadingProgressDialog();
+            doadorRemoteService = new DoadorRemoteService(getApplication());
             imagemStorageRemoteService = new ImagemStorageRemoteService(getApplication());
         }
 
@@ -422,6 +421,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
                 if (androidUtil.isOnline()) {
                     imagem = imagemStorageRemoteService.uploadImage(array);
+                    doador.setFoto(imagem);
+                    doador = doadorRemoteService.updateDoador(doador);
 
                 } else {
                 }

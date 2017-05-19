@@ -222,4 +222,12 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		return instituicaoRespository.findByContaAtivo(ativo);
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public Optional<InstituicaoCaridade> findOneByConta(Conta conta) {
+		return instituicaoRespository.findOneByConta(conta);
+	}
+
 }

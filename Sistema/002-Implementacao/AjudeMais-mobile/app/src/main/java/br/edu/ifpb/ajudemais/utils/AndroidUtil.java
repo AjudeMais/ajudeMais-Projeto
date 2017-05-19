@@ -1,6 +1,8 @@
 package br.edu.ifpb.ajudemais.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -96,6 +98,16 @@ public class AndroidUtil {
             return true;
         else
             return false;
+    }
+
+    /**
+     * Transforma array de bytes em uma imagem bitmap.
+     * @param imagem
+     * @return
+     */
+    public Bitmap convertBytesInBitmap(byte[] imagem){
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imagem , 0, imagem .length);
+        return bitmap;
     }
 
 

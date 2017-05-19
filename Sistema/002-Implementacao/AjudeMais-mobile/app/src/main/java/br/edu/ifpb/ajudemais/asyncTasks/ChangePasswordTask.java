@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.asycTasks;
+package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +10,6 @@ import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.activities.LoginActivity;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudemais.remoteServices.ContaRemoteService;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;

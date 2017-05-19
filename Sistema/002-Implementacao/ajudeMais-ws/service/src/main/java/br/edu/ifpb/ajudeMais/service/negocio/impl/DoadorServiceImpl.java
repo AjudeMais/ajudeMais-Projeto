@@ -21,11 +21,13 @@ import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
+import br.edu.ifpb.ajudeMais.service.event.doador.DoadorEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
@@ -64,6 +66,12 @@ public class DoadorServiceImpl implements DoadorService {
 
 	/**
 	 * 
+	 */
+	@Autowired
+	private ApplicationEventPublisher publisher;
+
+	/**
+	 * 
 	 * salva um doador no BD
 	 * 
 	 * @param doador
@@ -93,7 +101,13 @@ public class DoadorServiceImpl implements DoadorService {
 	@Override
 	@Transactional
 	public Doador update(Doador doador) {
-		return doadorRepository.save(doador);
+		
+		doador = doadorRepository.save(doador);
+		
+		publisher.publishEvent(new DoadorEditEvent(doador));
+		
+		return doador;
+
 	}
 
 	/**
