@@ -123,7 +123,7 @@ public class MensageiroAssociadoServiceTest {
 	 * 
 	 * @throws AjudeMaisException
 	 */
-	@Test(expected = InvalidDataAccessApiUsageException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveNullMensageiroTest() throws AjudeMaisException {
 		mensageiroAssociado.setMensageiro(null);
 		mensageiroAssociadoService.save(mensageiroAssociado);
