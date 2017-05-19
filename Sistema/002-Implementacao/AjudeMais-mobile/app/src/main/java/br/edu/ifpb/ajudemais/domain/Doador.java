@@ -18,7 +18,7 @@ public class Doador implements Serializable {
     private String facebookID;
     private String tokenFCM;
     private Conta conta;
-    private Foto foto;
+    private Imagem foto;
 
     /**
      *
@@ -167,9 +167,9 @@ public class Doador implements Serializable {
 
     /**
      *
-     * @return Foto
+     * @return Imagem
      */
-    public Foto getFoto() {
+    public Imagem getFoto() {
         return foto;
     }
 
@@ -177,7 +177,7 @@ public class Doador implements Serializable {
      *
      * @param foto
      */
-    public void setFoto(Foto foto) {
+    public void setFoto(Imagem foto) {
         this.foto = foto;
     }
 

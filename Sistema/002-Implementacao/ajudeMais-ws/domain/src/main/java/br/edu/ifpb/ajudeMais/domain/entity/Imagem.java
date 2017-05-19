@@ -48,11 +48,6 @@ public class Imagem {
 	/**
 	 * 
 	 */
-	private String path;
-
-	/**
-	 * 
-	 */
 	private String contentType;
 
 	/**
@@ -98,21 +93,6 @@ public class Imagem {
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	/**
-	 * @return o atributo path
-	 */
-	public String getPath() {
-		return path;
-	}
-
-	/**
-	 * @param o
-	 *            parametro path é setado em path
-	 */
-	public void setPath(String path) {
-		this.path = path;
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.filter;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
@@ -80,7 +81,14 @@ public class RequestResponseInterceptor implements ClientHttpRequestInterceptor 
             wrapper.getHeaders().set("Authorization", token);
         }
 
-        wrapper.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+        if (request.getURI().getPath().equals("/upload/imagem")){
+          // wrapper.getHeaders().setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        }else {
+            wrapper.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        }
         wrapper.getHeaders().setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+
     }
 }

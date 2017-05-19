@@ -1,8 +1,10 @@
 package br.edu.ifpb.ajudemais.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -11,35 +13,44 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
 
 /**
  * <p>
  * <b>{@link ImagePicker}</b>
  * </p>
- *  Créditos <https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2>
+ * Créditos <https://gist.github.com/Mariovc/f06e70ebe8ca52fbbbe2>
  * <p>
- *     Fornece métodos para acessar a camêra e galeria para selecionar um imagem.
+ * Fornece métodos para acessar a camêra e galeria para selecionar um imagem.
  * </p>
  *
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>**/
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ **/
 
 public class ImagePicker {
     private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;        // min pixels
     private static final String TAG = "ImagePicker";
     private static final String TEMP_IMAGE_NAME = "tempImage";
     public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
+    private static final int REQUEST_CAMERA = 11;
 
+    private Context context;
 
     /**
      * Abri modal para selecionar opção para fazer mudar foto profile.
+     *
      * @param context
      * @return
      */
@@ -50,6 +61,8 @@ public class ImagePicker {
 
         Intent pickIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         pickIntent.putExtra("return-data", true);
         pickIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(context)));
@@ -66,8 +79,47 @@ public class ImagePicker {
         return chooserIntent;
     }
 
+
     /**
-     *
+     * Checa se o device pertence ao SDK versão 23 para exibir permissão
+     */
+    private static void checkPermissions(Context context) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermission(context);
+
+            }
+        }
+    }
+
+    /**
+     * Requisita permissão para realizar um ligação no device.
+     */
+    private static void requestPermission(Context context) {
+        int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
+        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    ((Activity) context),
+                    new String[]{Manifest.permission.CAMERA},
+                    REQUEST_CAMERA);
+        } else {
+            customDialog(context);
+        }
+    }
+
+    /**
+     * @param
+     */
+    public static void customDialog(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityCompat.requestPermissions(((Activity) context), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+
+        }
+    }
+
+    /**
      * @param context
      * @param list
      * @param intent
@@ -80,7 +132,6 @@ public class ImagePicker {
             Intent targetedIntent = new Intent(intent);
             targetedIntent.setPackage(packageName);
             list.add(targetedIntent);
-            Log.d(TAG, "Intent: " + intent.getAction() + " package: " + packageName);
         }
         return list;
     }
@@ -88,6 +139,7 @@ public class ImagePicker {
 
     /**
      * Get result form Image Bitmap.
+     *
      * @param context
      * @param resultCode
      * @param imageReturnedIntent
@@ -95,13 +147,13 @@ public class ImagePicker {
      */
     public static Bitmap getImageFromResult(Context context, int resultCode,
                                             Intent imageReturnedIntent) {
-        Log.d(TAG, "getImageFromResult, resultCode: " + resultCode);
+        checkPermissions(context);
         Bitmap bm = null;
         File imageFile = getTempFile(context);
         if (resultCode == Activity.RESULT_OK) {
             Uri selectedImage;
             boolean isCamera = (imageReturnedIntent == null ||
-                    imageReturnedIntent.getData() == null  ||
+                    imageReturnedIntent.getData() == null ||
                     imageReturnedIntent.getData().toString().contains(imageFile.toString()));
             if (isCamera) {     /** CAMERA **/
                 selectedImage = Uri.fromFile(imageFile);
@@ -120,6 +172,7 @@ public class ImagePicker {
 
     /**
      * Get file save.
+     *
      * @param context
      * @return
      */
@@ -131,7 +184,6 @@ public class ImagePicker {
 
 
     /**
-     *
      * @param context
      * @param theUri
      * @param sampleSize
@@ -174,7 +226,6 @@ public class ImagePicker {
 
 
     /**
-     *
      * @param context
      * @param imageUri
      * @param isCamera
@@ -192,7 +243,6 @@ public class ImagePicker {
     }
 
     /**
-     *
      * @param context
      * @param imageFile
      * @return
@@ -226,7 +276,6 @@ public class ImagePicker {
 
 
     /**
-     *
      * @param context
      * @param imageUri
      * @return
@@ -253,7 +302,6 @@ public class ImagePicker {
 
 
     /**
-     *
      * @param bm
      * @param rotation
      * @return
