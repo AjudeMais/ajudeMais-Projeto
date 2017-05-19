@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
@@ -45,7 +47,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
  */
 @Service
 public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoService {
-	
+
 	/**
 	 * 
 	 */
@@ -57,6 +59,12 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	@Override
 	public MensageiroAssociado save(MensageiroAssociado entity) throws AjudeMaisException {
+		Optional<MensageiroAssociado> mensageirosAssOp = mensageiroAssociadoRepository
+				.findByMensageiroId(entity.getMensageiro().getId());
+		if (mensageirosAssOp.isPresent()) {
+			throw new UniqueConstraintAlreadyException("Este mensageiro já esta associado a esta insituição.");
+		}
+		;
 		return mensageiroAssociadoRepository.save(entity);
 	}
 
@@ -99,6 +107,5 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	public List<MensageiroAssociado> findByInstituicaoConta(Conta conta) {
 		return mensageiroAssociadoRepository.findByInstituicaoCaridadeConta(conta);
 	}
-
 
 }

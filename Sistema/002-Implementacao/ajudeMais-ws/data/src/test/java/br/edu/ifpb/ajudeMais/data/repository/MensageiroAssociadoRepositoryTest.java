@@ -15,8 +15,10 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -101,6 +103,32 @@ public class MensageiroAssociadoRepositoryTest {
 
 		assertFalse("", mensageiros.isEmpty());
 
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Exercita método de busca de mensgeiro associado por ID do mensgeiro.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroIdTest() {
+		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository.findByMensageiroId(1l);
+
+		assertTrue(mensageiroAssOp.isPresent());
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Exercita método de busca de mensgeiro associado por ID do mensgeiro.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroIdNonexistTest() {
+		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository.findByMensageiroId(100l);
+
+		assertFalse(mensageiroAssOp.isPresent());
 	}
 
 }

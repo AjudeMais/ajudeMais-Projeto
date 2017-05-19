@@ -21,19 +21,18 @@
             .withPaginationType('simple_numbers').withDisplayLength(10).withBootstrap();
 
         /**
-         *
+         * Busca todos os mensageiros associados a instituição logada.
          */
         vm.getMensageirosAssociados = function () {
             mensageiroAssociadoService.getByInstituicao(function (response) {
                 vm.associados = response;
-                console.log(response);
             });
         }
         vm.getMensageirosAssociados();
 
 
         /**
-         *
+         * Abre modal, configurando template e controller
          * @param categoria
          */
         function openModal(mensageiroAss) {
@@ -68,38 +67,5 @@
         vm.editAssociacao = function (categoria) {
             openModal(categoria);
         }
-
-        /**
-         *
-         * @param categoria
-         */
-        vm.remove = function (categoria) {
-            var modalInstance = $uibModal
-                .open({
-                    animation: true,
-                    templateUrl: "app/components/partials/dialog.confirm.html",
-                    size: 'sm',
-                    backdrop: false,
-                    controller: function ($uibModalInstance, $scope) {
-                        $scope.sim = function () {
-                            $uibModalInstance.close(true);
-                        }
-
-                        $scope.cancelar = function () {
-                            $uibModalInstance.dismiss('cancel');
-                        }
-                    }
-                });
-
-            modalInstance.result.then(function (result) {
-                if (result) {
-                    categoriaService.remove(categoria.id, function () {
-                        growl.success("<b>Item</b> removido com sucesso");
-                        var index = vm.categorias.indexOf(categoria);
-                        vm.categorias.splice(index, 1);
-                    });
-                }
-            });
-        };
     }
 })();

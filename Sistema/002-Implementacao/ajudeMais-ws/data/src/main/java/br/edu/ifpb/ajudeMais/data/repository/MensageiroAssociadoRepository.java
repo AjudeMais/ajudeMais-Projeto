@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -51,5 +52,17 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @param conta
 	 */
 	List<MensageiroAssociado> findByInstituicaoCaridadeConta(Conta conta);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro associado por ID do mensageiro.
+	 * </p>
+	 * 
+	 * @param id
+	 *            a ser busacado
+	 * @return um optional contento o resultado da query.
+	 */
+	Optional<MensageiroAssociado> findByMensageiroId(Long id);
 
 }
