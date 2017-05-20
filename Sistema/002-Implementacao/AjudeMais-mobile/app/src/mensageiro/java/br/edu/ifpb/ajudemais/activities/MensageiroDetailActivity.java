@@ -22,6 +22,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -70,6 +71,8 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mensageiro_detail);
+
+        Log.e("AJUDERMA", "ON CREATE....");
         context = this;
         capturePhotoUtils = new CapturePhotoUtils(this);
         androidUtil = new AndroidUtil(this);
@@ -101,7 +104,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         });
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
-        new ProfileLoading().execute();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +117,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         });
 
         btnChangePassword.setOnClickListener(this);
+        new ProfileLoading().execute();
 
     }
 
@@ -157,6 +160,9 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     }
 
 
+    /**
+     * dialog para acessar opção para selecionar foto.
+     */
     private void openDialog() {
         final CharSequence[] items = {getString(R.string.TakePhoto), getString(R.string.gallery), getString(R.string.cancelar)};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -257,8 +263,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
             File imageFile = capturePhotoUtils.getTempFile(this);
             selectedImage = data.getData();
             photo = capturePhotoUtils.getImageResized(this, selectedImage);
-
-
         }
 
         if (photo != null){
@@ -351,6 +355,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected Mensageiro doInBackground(Void... params) {
             try {
+                Log.e("AJUDEMAIS TASK", "AJUDE");
 
                 if (androidUtil.isOnline()) {
                     mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
@@ -369,7 +374,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected void onPostExecute(Mensageiro mensageiro) {
             if (mensageiro != null) {
-
+                Log.e("AJUDEMAI", mensageiro.toString());
                 collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
                 ProfileSettingsFragment fragment = new ProfileSettingsFragment();
                 Bundle bundle = new Bundle();
@@ -379,6 +384,8 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
                 fragmentTransaction.add(R.id.editprofile_fragment, fragment);
                 fragmentTransaction.commit();
                 nestedScrollView.setVisibility(View.VISIBLE);
+            }else if (message !=null){
+                Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_LONG).show();
             }
         }
     }

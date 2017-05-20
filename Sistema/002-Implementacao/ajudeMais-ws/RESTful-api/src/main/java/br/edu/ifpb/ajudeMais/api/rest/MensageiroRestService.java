@@ -129,7 +129,7 @@ public class MensageiroRestService {
 	@PreAuthorize("hasRole('MENSAGEIRO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/username")
 	public ResponseEntity<Mensageiro> findByContaUsername(@RequestParam String username) {
-
+		System.out.println(username+"..................");
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
 		return new ResponseEntity<Mensageiro>(mensageiro, HttpStatus.OK);
 	}

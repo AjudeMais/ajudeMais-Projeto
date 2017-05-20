@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -23,6 +24,11 @@ public class Mensageiro implements Serializable {
     private String tokenFCM;
     private Conta conta;
     private Imagem foto;
+    private List<Endereco> enderecos;
+
+    public Mensageiro(){
+
+    }
 
     /**
      *
@@ -148,5 +154,35 @@ public class Mensageiro implements Serializable {
      */
     public void setFoto(Imagem foto) {
         this.foto = foto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    /**
+     *
+     * @param enderecos
+     */
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    @Override
+    public String toString() {
+        return "Mensageiro{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", tokenFCM='" + tokenFCM + '\'' +
+                ", conta=" + conta +
+                ", foto=" + foto +
+                ", enderecos=" + enderecos +
+                '}';
     }
 }

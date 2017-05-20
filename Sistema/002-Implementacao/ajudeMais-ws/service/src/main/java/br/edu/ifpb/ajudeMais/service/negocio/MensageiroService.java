@@ -17,7 +17,6 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.util.List;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
 /**
