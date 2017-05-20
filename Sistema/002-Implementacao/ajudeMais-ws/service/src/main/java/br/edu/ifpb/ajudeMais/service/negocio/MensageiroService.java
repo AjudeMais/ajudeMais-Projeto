@@ -54,5 +54,17 @@ public interface MensageiroService extends Service<Mensageiro, Long> {
 	 * @return
 	 */
 	List<Mensageiro> findByContaEmail(String email);
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca Mensageiro por conta, filtrando por username
+	 * </p>
+	 * 
+	 * @param username
+	 *            nome de usuário a ser buscado;
+	 * @return Mensageiro encontrado.
+	 */
+	Mensageiro findByContaUsername(String username);
 
 }

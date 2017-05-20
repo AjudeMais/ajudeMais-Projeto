@@ -61,5 +61,17 @@ public interface MensageiroRepository extends JpaRepository<Mensageiro, Long> {
 	 * @return
 	 */
 	List<Mensageiro> findByContaEmailIgnoreCaseContaining(String email);
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca Mensageiro filtrando por username
+	 * </p>
+	 * 
+	 * @param username
+	 *            nome de usuário a ser buscado;
+	 * @return Mensageiro encontrado.
+	 */
+	Mensageiro findOneByContaUsername(String username);
 
 }

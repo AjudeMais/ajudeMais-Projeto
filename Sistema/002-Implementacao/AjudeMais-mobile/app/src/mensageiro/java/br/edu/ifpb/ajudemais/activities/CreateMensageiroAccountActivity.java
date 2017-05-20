@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
@@ -24,6 +26,8 @@ import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
@@ -43,19 +47,26 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
 
     private Toolbar mToolbar;
     private Button btnCreateAccount;
-    private EditText edtName;
-    private EditText edtUserName;
-    private EditText edtPhone;
-    private EditText edtEmail;
-    private EditText edtCpf;
-    private EditText edtPassword;
-    private EditText edtConfirmPassword;
+    private TextInputEditText edtName;
+    private TextInputEditText edtUserName;
+    private TextInputEditText edtPhone;
+    private TextInputEditText edtEmail;
+    private TextInputEditText edtCpf;
+    private TextInputEditText edtPassword;
+    private TextInputEditText edtConfirmPassword;
     private Resources resources;
+    private AndroidUtil androidUtil;
+    private SharedPrefManager sharedPrefManager;
+    private TextInputLayout ltedtConfirmPassword;
+    private TextInputLayout ltedtPassword;
+    private TextInputLayout ltedtUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mensageiro_account);
+
+        androidUtil = new AndroidUtil(this);
 
         init();
 
@@ -73,13 +84,16 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         resources = getResources();
 
         btnCreateAccount = (Button) findViewById(R.id.btnEditAccount);
-        edtName = (EditText) findViewById(R.id.edtNome);
-        edtUserName = (EditText) findViewById(R.id.edtUserName);
-        edtPhone = (EditText) findViewById(R.id.edtPhone);
-        edtEmail = (EditText) findViewById(R.id.edtEmail);
-        edtCpf = (EditText) findViewById(R.id.edtCpf);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        edtConfirmPassword = (EditText) findViewById(R.id.edtConfirmPassword);
+        edtName = (TextInputEditText) findViewById(R.id.edtNome);
+        edtUserName = (TextInputEditText) findViewById(R.id.edtUserName);
+        edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
+        edtEmail = (TextInputEditText) findViewById(R.id.edtEmail);
+        edtCpf = (TextInputEditText) findViewById(R.id.edtCpf);
+        edtPassword = (TextInputEditText) findViewById(R.id.edtPassword);
+        edtConfirmPassword = (TextInputEditText) findViewById(R.id.edtConfirmPassword);
+
+
+        androidUtil.setMaskPhone(edtPhone);
     }
 
     /**

@@ -2,6 +2,9 @@ package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 
 /**
@@ -42,5 +45,28 @@ public class MensageiroRemoteService extends AbstractRemoteService {
     public Mensageiro saveMensageiro(Mensageiro mensageiro) {
         mensageiro = restTemplate.postForObject(API + "/mensageiro", mensageiro, Mensageiro.class);
         return mensageiro;
+    }
+
+
+    /**
+     * Atualiza mensageiro.
+     *
+     * @param mensageiro
+     * @return
+     */
+    public Mensageiro updateMensageiro(Mensageiro mensageiro){
+        HttpEntity<Mensageiro> requestUpdate = new HttpEntity<>(mensageiro);
+        HttpEntity<Mensageiro> response = restTemplate.exchange(API + "/doador", HttpMethod.PUT, requestUpdate, Mensageiro.class);
+        return response.getBody();
+    }
+
+    /**
+     * Recupera Doador pelo username de sua conta.
+     *
+     * @param username
+     * @return
+     */
+    public Mensageiro getMensageiro(String username) {
+        return restTemplate.getForObject(API + "/mensageiro/filter/username?username={username}", Mensageiro.class, username);
     }
 }
