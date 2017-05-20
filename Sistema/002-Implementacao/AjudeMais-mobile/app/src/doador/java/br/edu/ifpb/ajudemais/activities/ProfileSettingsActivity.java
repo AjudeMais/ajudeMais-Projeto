@@ -275,7 +275,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
 
-            uploadImageTask = new UploadImageTask(this, imageBytes, doador);
+            uploadImageTask = new UploadImageTask(this, imageBytes, doador, null);
             uploadImageTask.delegate = this;
             uploadImageTask.execute();
 

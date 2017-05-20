@@ -101,11 +101,11 @@ public class DoadorServiceImpl implements DoadorService {
 	@Override
 	@Transactional
 	public Doador update(Doador doador) {
-		
-		doador = doadorRepository.save(doador);
-		
+
 		publisher.publishEvent(new DoadorEditEvent(doador));
-		
+
+		doador = doadorRepository.save(doador);
+
 		return doador;
 
 	}

@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import br.edu.ifpb.ajudemais.R;
@@ -35,6 +36,8 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
+    private RelativeLayout componentHeader;
+
 
     /**
      * @param savedInstanceState
@@ -74,11 +77,15 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
      */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
+        componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
+        if (conta == null){
+            conta = SharedPrefManager.getInstance(this).getUser();
+        }
         if (conta != null) {
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
@@ -89,6 +96,15 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             profilePhoto.setImageBitmap(bitmap);
         }
 
+        componentHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MensageiroDetailActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -98,10 +114,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_config_conta:
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, MensageiroDetailActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
                 break;
             case R.id.nav_notificacoes:
                 break;

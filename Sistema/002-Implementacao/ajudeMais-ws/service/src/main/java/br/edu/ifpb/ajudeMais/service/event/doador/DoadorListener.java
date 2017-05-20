@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.storage.ImagemStorage;
 
 /**
@@ -27,8 +26,8 @@ import br.edu.ifpb.ajudeMais.service.storage.ImagemStorage;
  * </p>
  *
  * <p>
- * Classe utilizada para registro de eventos relacionados a doador. Sempre
- * que um evento for chamado e o mesmo esteja registrado nesta classe, então é
+ * Classe utilizada para registro de eventos relacionados a doador. Sempre que
+ * um evento for chamado e o mesmo esteja registrado nesta classe, então é
  * executada a tarefa para este listener.
  * </p>
  * 
@@ -52,14 +51,10 @@ public class DoadorListener {
 	 * 
 	 * @param event
 	 */
-	@EventListener(condition="#event.image" )
+	@EventListener(condition = "#event.image")
 	public void doadorEdited(DoadorEditEvent event) {
-		try {
-			if (imagemStorage.get(event.getDoador().getFoto().getNome()) == null ) {
-				imagemStorage.save(event.getDoador().getFoto().getNome());
-			}
-		} catch (AjudeMaisException e) {
-			e.printStackTrace();
-		}
+
+		imagemStorage.save(event.getDoador().getFoto().getNome());
+
 	}
 }

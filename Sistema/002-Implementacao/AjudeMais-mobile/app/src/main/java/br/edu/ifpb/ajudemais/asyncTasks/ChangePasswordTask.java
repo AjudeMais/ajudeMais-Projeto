@@ -87,6 +87,8 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             ((Activity) context).finish();
+            Toast.makeText(context, "Senha atualizada com sucesso, faça login novamente.", Toast.LENGTH_LONG).show();
+
 
         }
     }

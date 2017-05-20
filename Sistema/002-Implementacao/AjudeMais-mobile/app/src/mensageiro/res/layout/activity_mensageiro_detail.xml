@@ -44,7 +44,7 @@
         android:layout_gravity="bottom"
         android:height="@dimen/LagHeigth"
         android:backgroundTint="@color/colorPrimary"
-        android:text="@string/btnEditAccount"
+        android:text="@string/btn_change_password"
         android:textColor="@color/colorFont"
         android:textSize="@dimen/fontLogin" />
 

@@ -49,14 +49,14 @@ public class MensageiroRemoteService extends AbstractRemoteService {
 
 
     /**
-     * Atualiza mensageiro.
+     * Acessa o endpoint para Atualiza mensageiro.
      *
      * @param mensageiro
      * @return
      */
     public Mensageiro updateMensageiro(Mensageiro mensageiro){
         HttpEntity<Mensageiro> requestUpdate = new HttpEntity<>(mensageiro);
-        HttpEntity<Mensageiro> response = restTemplate.exchange(API + "/doador", HttpMethod.PUT, requestUpdate, Mensageiro.class);
+        HttpEntity<Mensageiro> response = restTemplate.exchange(API + "/mensageiro", HttpMethod.PUT, requestUpdate, Mensageiro.class);
         return response.getBody();
     }
 

@@ -3,9 +3,11 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,7 +17,12 @@ import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Grupo;
+import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 
 /**
@@ -180,6 +187,11 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private AuthRemoteService authRemoteService;
         private String username;
         private String senha;
+        private MensageiroRemoteService mensageiroRemoteService;
+        private ImagemStorageRemoteService imagemStorageRemoteService;
+        private Mensageiro mensageiro;
+        private AndroidUtil androidUtil;
+        private CapturePhotoUtils capturePhotoUtils;
 
         /**
          *
@@ -189,8 +201,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
          */
         public LoginTask(Context context, String username, String senha) {
             this.authRemoteService = new AuthRemoteService(context);
+            this.mensageiroRemoteService = new MensageiroRemoteService(context);
+            this.imagemStorageRemoteService = new ImagemStorageRemoteService(context);
+            capturePhotoUtils = new CapturePhotoUtils(context);
+            androidUtil = new AndroidUtil(context);
             this.username = username;
             this.senha = senha;
+
 
         }
 
@@ -214,7 +231,12 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             try {
                 conta = new Conta(username, senha);
                 conta = authRemoteService.createAuthenticationToken(conta, Grupo.MENSAGEIRO);
-
+                mensageiro = mensageiroRemoteService.getMensageiro(username);
+                if (mensageiro.getFoto() != null) {
+                    byte[] photo = imagemStorageRemoteService.getImage(mensageiro.getFoto().getNome());
+                    Bitmap bitmap = androidUtil.convertBytesInBitmap(photo);
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                }
                return conta;
 
             } catch (RestClientException e) {

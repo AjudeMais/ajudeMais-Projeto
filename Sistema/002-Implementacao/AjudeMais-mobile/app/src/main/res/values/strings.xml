@@ -17,7 +17,7 @@
 
     <!--Tela login-->
     <string name="hitUserName">Nome de usuário</string>
-    <string name="hitPassword">**********</string>
+    <string name="hitPassword">Senha</string>
     <string name="BtnOpenApp">ENTRAR</string>
     <string name="lbForgotPassword">Esqueceu a senha?</string>
     <string name="recoveryPasswordActivity">Esqueceu a senha</string>
@@ -78,7 +78,8 @@
     <string name="hitCpf">CPF</string>
     <string name="msgCpfNotInformed">CPF deve ser informado</string>
     <string name="change_password_title">Alterar Senha</string>
-    <string name="btn_change_password">ALTERAR</string>
+    <string name="btn_change_password">ALTERAR SENHA</string>
+    <string name="btn_edit">EDITAR</string>
     <string name="cancelar">Cancelar</string>
     <string name="loading">Carregando...</string>
     <string name="camera_action">Selecionar Foto</string>

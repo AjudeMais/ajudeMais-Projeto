@@ -271,6 +271,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private CapturePhotoUtils capturePhotoUtils;
         private AndroidUtil androidUtil;
 
+
         public LoginTask(Context context, String username, String senha) {
             this.context = context;
             this.authRemoteService = new AuthRemoteService(context);

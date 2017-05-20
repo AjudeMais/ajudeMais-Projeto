@@ -42,8 +42,10 @@ public class MensageiroListener {
 	 * 
 	 * @param event
 	 */
-	@EventListener(condition="#event.image" )
+	@EventListener(condition = "#event.image")
 	public void mensageiroEdited(MensageiroEditEvent event) {
+
 		imagemStorage.save(event.getMensageiro().getFoto().getNome());
+
 	}
 }

@@ -74,11 +74,13 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Transactional
 	public Mensageiro save(Mensageiro mensageiro) throws AjudeMaisException {
 
+		
 		Conta conta = contaService.save(mensageiro.getConta());
 		mensageiro.setConta(conta);
 
+		publisher.publishEvent(new MensageiroEditEvent(mensageiro));
+
 		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
-		publisher.publishEvent(new MensageiroEditEvent(mensageiroSaved));
 
 		return mensageiroSaved;
 	}
@@ -96,7 +98,13 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Override
 	@Transactional
 	public Mensageiro update(Mensageiro mensageiro) {
-		return mensageiroRepository.save(mensageiro);
+
+		publisher.publishEvent(new MensageiroEditEvent(mensageiro));
+
+		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
+
+		return mensageiroSaved;
+
 	}
 
 	/**

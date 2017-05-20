@@ -10,8 +10,10 @@ import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Imagem;
+import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
+import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
@@ -42,15 +44,19 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
     private Context context;
     private Doador doador;
     private DoadorRemoteService doadorRemoteService;
+    private Mensageiro mensageiro;
+    private MensageiroRemoteService mensageiroRemoteService;
 
 
-    public UploadImageTask(Context context, byte[] array, Doador doador) {
+    public UploadImageTask(Context context, byte[] array, Doador doador, Mensageiro mensageiro) {
         this.array = array;
         this.doador = doador;
+        this.mensageiro = mensageiro;
         this.context = context;
         progressDialog = new ProgressDialog(context);
         androidUtil = new AndroidUtil(context);
         imagemStorageRemoteService = new ImagemStorageRemoteService(context);
+        mensageiroRemoteService = new MensageiroRemoteService(context);
         doadorRemoteService = new DoadorRemoteService(context);
 
     }
@@ -76,8 +82,14 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
 
             if (androidUtil.isOnline()) {
                 imagem = imagemStorageRemoteService.uploadImage(array);
-                doador.setFoto(imagem);
-                doador = doadorRemoteService.updateDoador(doador);
+                if (doador !=null) {
+                    doador.setFoto(imagem);
+                    doador = doadorRemoteService.updateDoador(doador);
+
+                }else if (mensageiro !=null){
+                    mensageiro.setFoto(imagem);
+                    mensageiro = mensageiroRemoteService.updateMensageiro(mensageiro);
+                }
 
             } else {
             }
