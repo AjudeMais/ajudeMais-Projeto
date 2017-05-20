@@ -64,8 +64,8 @@
          *
          * @param categoria
          */
-        vm.editAssociacao = function (categoria) {
-            openModal(categoria);
+        vm.editAssociacao = function (mensageiroAss) {
+            openModal(mensageiroAss);
         }
     }
 })();

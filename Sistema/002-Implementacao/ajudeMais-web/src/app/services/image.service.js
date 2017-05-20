@@ -26,7 +26,7 @@
          * @private
          */
         function _getImage(imageName) {
-            return $http.get(Api + '/upload/imagem/'+ imageName);
+            return $http.get(Api + '/upload/imagem/'+ imageName, {responseType: "arraybuffer"});
         };
     };
 })();

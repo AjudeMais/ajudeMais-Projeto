@@ -17,7 +17,8 @@
 
         var service = {
             save: _save,
-            getByInstituicao: _getByInsituicao
+            getByInstituicao: _getByInsituicao,
+            update: _update
         };
         return service;
 
@@ -29,6 +30,21 @@
          */
         function _save(associacao, callback, callbackError) {
             $http.post(Api + "/associacao", associacao).then(function (response) {
+                callback(response.data);
+            }, function (response) {
+                callbackError(response);
+
+            });
+        }
+
+        /**
+         *
+         * @param associacao
+         * @param callback
+         * @private
+         */
+        function _update(associacao, callback, callbackError) {
+            $http.put(Api + "/associacao", associacao).then(function (response) {
                 callback(response.data);
             }, function (response) {
                 callbackError(response);
