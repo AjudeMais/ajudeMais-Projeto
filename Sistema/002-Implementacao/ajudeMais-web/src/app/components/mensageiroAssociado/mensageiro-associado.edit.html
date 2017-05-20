@@ -7,7 +7,7 @@
 
 <form name="categoriaForm" ng-submit="categoriaForm.$valid && vm.save()" role="form" novalidate>
     <div class="modal-body row" id="modal-body">
-        <div class="input-group col-sm-12">
+        <div class="input-group col-sm-12" ng-show="!vm.isEdited()">
 
             <input type="text" ng-model="vm.mensageiroAss.mensageiro" class="form-control"
                    placeholder="E-mail do mensageiro"
@@ -15,26 +15,31 @@
                    typeahead-loading="loadingMens" typeahead-no-results="noResults"
                    typeahead-editable="false"
                    typeahead-on-select="vm.onSelect($model)"
-                   typeahead-template-url="app/components/partials/card-search.html">
+                   typeahead-template-url="app/components/partials/card-search.html"
+                   uib-tooltip="Entre com o e-mail de um mensageiro"
+                   tooltip-placement="top"
+                   tooltip-trigger="'mouseenter'"
+                   tooltip-enable="!vm.mensageiroAss.mensageiro" autofocus>
             <span class="input-group-addon">
                 <i class="fa fa-search"></i>
             </span>
         </div>
-
-        <div class="box am-card-result" ng-show="vm.mensageiroAss.mensageiro != null">
+        <div class="am-card-result" ng-show="vm.mensageiroAss.mensageiro != null">
             <div class="post am-card-result-content">
                 <div class="user-block">
-                    <img ng-src="data:{{vm.mensageiroAss.mensageiro.foto.contentType}};base64,{{vm.image}}">
+                    <img class="img-responsive img-circle"
+                         data-ng-src="data:{{vm.mensageiroAss.mensageiro.foto.contentType}};base64,{{vm.image}}">
 
                     <span class="username">
-                                        {{vm.mensageiroAss.mensageiro.nome}}
-                                         <a ng-click="vm.removeCurrentMensageiro()" class="pull-right btn-box-tool"><i
-                                                 class="fa fa-1x fa-times"></i></a>
-                                    </span>
+                        {{vm.mensageiroAss.mensageiro.nome}}
+                        <a ng-click="vm.removeCurrentMensageiro()" ng-show="!vm.isEdited()"
+                           class="pull-right btn-box-tool"><i class="fa fa-1x fa-times"></i></a>
+                    </span>
+
                     <span class="description">{{vm.mensageiroAss.mensageiro.conta.username}} - {{vm.mensageiroAss.mensageiro.conta.email}}</span>
                     <span class="description">{{vm.mensageiroAss.mensageiro.telefone}}</span>
                 </div>
-                <table class="table" style="font-size: 12px;">
+                <table class="table" style="font-size: 13px;">
                     <thead>
                     <tr>
                         <th width="40%">Logradouro</th>
@@ -56,14 +61,16 @@
                 </table>
             </div>
         </div>
-        <div class="am-card-result" ng-show="vm.mensageiroAss.mensageiro == null">
-            <div class="col-lg-12">
-            </div>
+
+        <div class="col-sm-12" ng-show="vm.mensageiroAss.mensageiro != null">
+            Status<br/>
+            <input bs-switch name="ativo"
+                   switch-on-text="Ativo" switch-off-text="Inativo" switch-size="small"
+                   ng-model="vm.mensageiroAss.status" switch-off-color="danger" type="checkbox" class="form-control"/>
         </div>
     </div>
-
     <div class="modal-footer">
-        <input class="btn btn-primary" type="submit" value="Salvar"/>
+        <input class="btn btn-primary" type="submit" value="{{vm.isEdited() ? 'Alterar':'Salvar' }}"/>
         <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancelar</button>
     </div>
 

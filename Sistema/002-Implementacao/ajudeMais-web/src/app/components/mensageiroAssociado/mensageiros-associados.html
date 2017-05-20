@@ -27,8 +27,9 @@
                             <tbody>
                             <tr class="odd gradeX" ng-repeat="associado in vm.associados">
                                 <td>
-                                    <button type="button" ng-click="vm.editAssocicao(associacao)" title="Editar"
-                                            data-toggle="tooltip" class="btn btn-xs btn-default"
+                                    <button type="button" ng-click="vm.editAssociacao(associado)"
+                                            tooltip-placement="top" uib-tooltip="Editar Instituição"
+                                            class="btn btn-xs btn-default"
                                             access-view="ROLE_INSTITUICAO">
                                         <i class='fa fa-pencil'></i>
                                     </button>

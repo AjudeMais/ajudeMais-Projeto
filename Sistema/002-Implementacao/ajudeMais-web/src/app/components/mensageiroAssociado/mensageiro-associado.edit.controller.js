@@ -18,6 +18,13 @@
 
         angular.copy(mensageiroAss, vm.mensageiroAss);
 
+        if (edited()) {
+            _getImage(vm.mensageiroAss.mensageiro.foto);
+        } else {
+            vm.mensageiroAss.status = true;
+            vm.mensageiroAss.data = new Date();
+        }
+
         /**
          *
          * @param email
@@ -28,22 +35,29 @@
             });
         };
 
-        vm.onSelect = function(mensageiro) {
-            vm.getImage(mensageiro.foto.nome);
+        vm.onSelect = function (mensageiro) {
+            _getImage(mensageiro.foto);
         };
 
         /**
          *
          * @param imageName
          */
-        vm.getImage = function (imageName) {
-            imageService.getImage(imageName).then(function (response) {
-                vm.image = response.data;
-            })
+        function _getImage(image) {
+            if (image) {
+                imageService.getImage(image.nome).then(function (response) {
+                    vm.image = _arrayBufferToBase64(response.data);
+                })
+            }
         };
 
+        /**
+         * remove mensageiro buscado.
+         */
         vm.removeCurrentMensageiro = function () {
-            vm.mensageiroAss.mensageiro = null;
+            if (!edited()) {
+                vm.mensageiroAss.mensageiro = null;
+            }
         }
 
         /**
@@ -52,18 +66,29 @@
         vm.save = function () {
             if (vm.mensageiroAss.mensageiro != null) {
                 vm.loading = true;
-                vm.mensageiroAss.status = true;
-                vm.mensageiroAss.data = new Date();
-                mensageiroAssociadoService.save(vm.mensageiroAss, function (response) {
-                    growl.success("<b>Mensageiro</b> associado com sucesso");
-                    angular.copy(response, mensageiroAss);
-                    vm.loading = false;
-                    $uibModalInstance.close(mensageiroAss);
-                }, function (response) {
-                    var msgError = response.data.msg;
-                    growl.warning(msgError);
-                    vm.loading = false;
-                });
+                if (edited()) {
+                    mensageiroAssociadoService.update(vm.mensageiroAss, function (response) {
+                        growl.success("<b>Mensageiro</b> atualizado com sucesso");
+                        angular.copy(response, mensageiroAss);
+                        vm.loading = false;
+                        $uibModalInstance.close(mensageiroAss);
+                    }, function (response) {
+                        var msgError = response.data.msg;
+                        growl.warning(msgError);
+                        vm.loading = false;
+                    });
+                } else {
+                    mensageiroAssociadoService.save(vm.mensageiroAss, function (response) {
+                        growl.success("<b>Mensageiro</b> associado com sucesso");
+                        angular.copy(response, mensageiroAss);
+                        vm.loading = false;
+                        $uibModalInstance.close(mensageiroAss);
+                    }, function (response) {
+                        var msgError = response.data.msg;
+                        growl.warning(msgError);
+                        vm.loading = false;
+                    });
+                }
             }
         };
 
@@ -73,5 +98,38 @@
         vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');
         };
+
+
+        /**
+         * Necessário para converter array de bytes para base64.
+         * utilizado para recuperar foto da API.
+         * @param buffer
+         * @returns {string}
+         * @private
+         */
+        function _arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+        /**
+         *
+         */
+        function edited() {
+            return vm.mensageiroAss.id ? true : false;
+        };
+
+        /**
+         *
+         * @returns {*}
+         */
+        vm.isEdited = function () {
+            return edited();
+        }
     };
 })();
