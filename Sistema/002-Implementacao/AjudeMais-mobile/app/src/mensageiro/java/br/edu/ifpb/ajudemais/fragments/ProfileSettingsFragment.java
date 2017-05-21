@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.activities;
+package br.edu.ifpb.ajudemais.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,9 +10,7 @@ import android.widget.TextView;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 
-/**
- * Fragmento de edite de conta Doador.
- */
+
 public class ProfileSettingsFragment extends Fragment {
 
     private TextView tvNome;
@@ -50,7 +48,7 @@ public class ProfileSettingsFragment extends Fragment {
         tvEmail = (TextView) getView().findViewById(R.id.tv_edit_email);
         tvPhone = (TextView) getView().findViewById(R.id.tv_edit_celular);
 
-        mensageiro = (Mensageiro) getArguments().getSerializable("mensageiro");
+        mensageiro = (Mensageiro) getArguments().getSerializable("Mensageiro");
 
         if (mensageiro != null) {
             tvPhone.setText(mensageiro.getTelefone());
@@ -69,6 +67,4 @@ public class ProfileSettingsFragment extends Fragment {
 
 
     }
-
-
 }

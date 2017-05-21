@@ -31,7 +31,8 @@
         <activity android:name=".activities.MainSearchDoacaoActivity" />
         <activity android:name=".activities.CreateMensageiroAccountActivity" />
         <activity android:name=".activities.EditMensageiroAccountActivity" />
-        <activity android:name=".activities.MensageiroDetailActivity"></activity>
+        <activity android:name=".activities.MensageiroDetailActivity" />
+        <activity android:name=".activities.ProfileSettingsActivity" />
     </application>
 
 </manifest>
