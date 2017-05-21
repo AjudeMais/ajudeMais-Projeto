@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -24,8 +26,6 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 
 /**
@@ -62,9 +62,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         checkPermissions();
 
         init();
-        setUpAccount();
-        setUpToggle();
-        setupNavDrawer();
+
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         findViewById(R.id.containerView).setVisibility(View.GONE);
@@ -77,6 +75,9 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
 
+        setUpAccount();
+        setUpToggle();
+        setupNavDrawer();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,9 +124,13 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
             bitmap = FacebookAccount.getProfilePictureUser();
         } else {
-            if (getIntent().hasExtra("ImageByteArray")) {
-                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
-                capturePhotoUtils.saveToInternalStorage(bitmap);
+            if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
+
+                if (isStoragePermissionGranted()){
+                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                }
+
             } else {
                 bitmap = capturePhotoUtils.loadImageFromStorage();
             }
@@ -208,6 +213,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             }
         }
     }
+
 
 
     /**
