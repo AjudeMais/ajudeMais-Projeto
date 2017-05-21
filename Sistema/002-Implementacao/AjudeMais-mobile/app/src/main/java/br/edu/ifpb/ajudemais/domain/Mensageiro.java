@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,6 +43,8 @@ public class Mensageiro implements Serializable {
         this.cpf = cpf;
         this.telefone = telefone;
         this.conta = conta;
+
+        enderecos = new ArrayList<>();
     }
 
     /**
