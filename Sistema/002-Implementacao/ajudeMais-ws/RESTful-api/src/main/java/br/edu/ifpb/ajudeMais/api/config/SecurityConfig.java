@@ -59,11 +59,6 @@ public class SecurityConfig {
 	@Autowired
 	private UserDetailsService userDetailService;
 
-	/**
-	 * 
-	 */
-	@Autowired
-	private JwtEntryPoint unauthorizedHandler;
 
 	/**
 	 * 
@@ -96,6 +91,18 @@ public class SecurityConfig {
 	public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
 		return new JwtTokenFilter();
 	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Bean para exceção de autenticação.
+	 * </p>
+	 * @return
+	 */
+    @Bean
+    public JwtEntryPoint unauthorizedHandler() {
+        return new JwtEntryPoint();
+    }
 
 	/**
 	 * 
@@ -120,7 +127,7 @@ public class SecurityConfig {
 
 			http.csrf().disable()
 				.exceptionHandling()
-					.authenticationEntryPoint(unauthorizedHandler)
+					.authenticationEntryPoint(unauthorizedHandler())
 					.and()
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -130,9 +137,7 @@ public class SecurityConfig {
 					.permitAll()
 				.antMatchers(HttpMethod.POST, "/doador", "/conta", "/mensageiro")
 					.permitAll()
-					.antMatchers(HttpMethod.OPTIONS)
-				.permitAll()
-					.anyRequest()
+				.anyRequest()
 					.authenticated();
 
 			http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
