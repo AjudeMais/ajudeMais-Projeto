@@ -72,7 +72,9 @@ public class DoadorEditEvent {
 	 * @return
 	 */
 	public boolean isImage() {
-		if(doador.getFoto() == null) return false;
+		if(doador.getFoto() == null || doador.getFoto().getId() != null) 
+			return false;
+		
 		return !StringUtils.isEmpty(doador.getFoto().getNome());
 	}
 

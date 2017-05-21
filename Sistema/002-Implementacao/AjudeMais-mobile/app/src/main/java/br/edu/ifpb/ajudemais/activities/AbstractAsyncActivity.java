@@ -1,9 +1,11 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
@@ -24,6 +26,8 @@ public class AbstractAsyncActivity extends AppCompatActivity implements AsyncAct
     private ProgressDialog progressDialog;
 
     private boolean destroyed = false;
+
+
 
     /**
      * Destroy

@@ -64,7 +64,7 @@ public class MensageiroEditEvent {
 	 * @return
 	 */
 	public boolean isImage() {
-		if(mensageiro.getFoto() == null) return false;
+		if(mensageiro.getFoto() == null || mensageiro.getFoto().getId() != null) return false;
 		return !StringUtils.isEmpty(mensageiro.getFoto().getNome());
 	}
 

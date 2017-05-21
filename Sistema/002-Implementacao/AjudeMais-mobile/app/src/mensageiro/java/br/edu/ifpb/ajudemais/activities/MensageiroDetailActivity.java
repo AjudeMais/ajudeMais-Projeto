@@ -38,7 +38,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
@@ -47,7 +49,7 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
-public class MensageiroDetailActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class MensageiroDetailActivity extends AbstractAsyncActivity implements View.OnClickListener,AsyncResponse<Imagem> {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -66,13 +68,12 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     private static final int SELECT_FILE = 13;
     private int PROFILE_PIC_COUNT = 0;
     protected CapturePhotoUtils capturePhotoUtils;
+    private UploadImageTask uploadImageTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mensageiro_detail);
-
-        Log.e("AJUDERMA", "ON CREATE....");
         context = this;
         capturePhotoUtils = new CapturePhotoUtils(this);
         androidUtil = new AndroidUtil(this);
@@ -263,16 +264,20 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
             File imageFile = capturePhotoUtils.getTempFile(this);
             selectedImage = data.getData();
             photo = capturePhotoUtils.getImageResized(this, selectedImage);
+
+
         }
 
-        if (photo != null){
+        if (photo != null) {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
-            String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-            new ImageUploadTask(imageBytes).execute();
+            uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro );
+            uploadImageTask.delegate = this;
+            uploadImageTask.execute();
+
             imageView.setImageBitmap(photo);
             capturePhotoUtils.saveToInternalStorage(photo);
 
@@ -331,6 +336,11 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         }
     }
 
+    @Override
+    public void processFinish(Imagem output) {
+
+    }
+
     /**
      *
      */
@@ -355,8 +365,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected Mensageiro doInBackground(Void... params) {
             try {
-                Log.e("AJUDEMAIS TASK", "AJUDE");
-
                 if (androidUtil.isOnline()) {
                     mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
 
@@ -374,7 +382,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected void onPostExecute(Mensageiro mensageiro) {
             if (mensageiro != null) {
-                Log.e("AJUDEMAI", mensageiro.toString());
                 collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
                 ProfileSettingsFragment fragment = new ProfileSettingsFragment();
                 Bundle bundle = new Bundle();
@@ -390,58 +397,4 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         }
     }
 
-    /**
-     *
-     */
-    private class ImageUploadTask extends AsyncTask<Void, Void, Imagem> {
-
-        private ImagemStorageRemoteService imagemStorageRemoteService;
-        private String message = null;
-        private Imagem imagem;
-        private byte[] array;
-
-        public ImageUploadTask(byte[] array) {
-            this.array = array;
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showLoadingProgressDialog();
-            imagemStorageRemoteService = new ImagemStorageRemoteService(getApplication());
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Imagem doInBackground(Void... params) {
-            try {
-
-                if (androidUtil.isOnline()) {
-                    imagem = imagemStorageRemoteService.uploadImage(array);
-
-                } else {
-                }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return imagem;
-        }
-
-        @Override
-        protected void onPostExecute(Imagem imagem) {
-            dismissProgressDialog();
-            if (imagem != null) {
-                Toast.makeText(getApplicationContext(), "Imagem atualizada com sucesso",Toast.LENGTH_LONG).show();
-            }
-        }
-    }
 }

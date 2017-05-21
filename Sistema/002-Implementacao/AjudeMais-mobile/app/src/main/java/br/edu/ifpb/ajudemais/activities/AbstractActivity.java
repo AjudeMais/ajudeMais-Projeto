@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -44,6 +45,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 /**
@@ -83,6 +85,9 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private LocationRequest mLocationRequest;
     private long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
+    protected Bitmap bitmap;
+    protected AndroidUtil androidUtil;
+
 
 
     /**
@@ -90,6 +95,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
      */
     protected void init() {
         capturePhotoUtils = new CapturePhotoUtils(this);
+        androidUtil = new AndroidUtil(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.menuNav);
