@@ -36,17 +36,24 @@
 
             .state('home.403', {
                 url: '/403',
-                templateUrl: 'app/components/auth/403/403.html',
+                templateUrl: 'app/components/erros/403/403.html',
                 data: {
                     pageTitle: 'Acesso Negado'
                 }
             })
 
-            .state('home.500', {
+            .state('500', {
                 url: '/500',
-                templateUrl: 'app/components/auth/500/500.html',
+                templateUrl: 'app/components/erros/500/500.html',
                 data: {
                     pageTitle: 'Erro no Servidor'
+                }
+            })
+            .state('refused', {
+                url: '/refused',
+                templateUrl: 'app/components/erros/refused/refused.html',
+                data: {
+                    pageTitle: 'Erro na conexão com o servidor'
                 }
             })
             .state('home', {
