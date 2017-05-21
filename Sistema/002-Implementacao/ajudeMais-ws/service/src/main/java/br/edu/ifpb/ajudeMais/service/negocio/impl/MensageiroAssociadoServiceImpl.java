@@ -62,7 +62,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		Optional<MensageiroAssociado> mensageirosAssOp = mensageiroAssociadoRepository
 				.findByMensageiroId(entity.getMensageiro().getId());
 		if (mensageirosAssOp.isPresent()) {
-			throw new UniqueConstraintAlreadyException("Este mensageiro já esta associado a esta insituição.");
+			throw new UniqueConstraintAlreadyException("Este mensageiro já esta associado a esta instituição.");
 		}
 		;
 		return mensageiroAssociadoRepository.save(entity);
