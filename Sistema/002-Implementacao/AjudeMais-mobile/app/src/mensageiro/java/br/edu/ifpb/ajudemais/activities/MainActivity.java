@@ -19,6 +19,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
@@ -90,7 +91,13 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
-        Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+
+        if (getIntent().hasExtra("ImageByteArray")) {
+            bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+            capturePhotoUtils.saveToInternalStorage(bitmap);
+        } else {
+            bitmap = capturePhotoUtils.loadImageFromStorage();
+        }
 
         if (bitmap != null) {
             profilePhoto.setImageBitmap(bitmap);

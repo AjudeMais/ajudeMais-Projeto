@@ -1,7 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -24,8 +23,8 @@ import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 
@@ -47,9 +46,8 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
-    private AndroidUtil androidUtil;
-    private CapturePhotoUtils capturePhotoUtils;
     private RelativeLayout componentHeader;
+
 
 
     /**
@@ -60,17 +58,18 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPrefManager = new SharedPrefManager(this);
-        androidUtil = new AndroidUtil(this);
-        capturePhotoUtils = new CapturePhotoUtils(this);
-
         initGoogleAPIClient();
         checkPermissions();
+
+        init();
+        setUpAccount();
+        setUpToggle();
+        setupNavDrawer();
 
         findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
         findViewById(R.id.containerView).setVisibility(View.GONE);
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        if (!androidUtil.isOnline()){
+        if (!androidUtil.isOnline()) {
             findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         }
 
@@ -78,10 +77,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
 
-        init();
-        setUpAccount();
-        setUpToggle();
-        setupNavDrawer();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -105,31 +100,35 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     }
 
 
-
     /**
      * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
         View hView = mNavigationView.getHeaderView(0);
-        Bitmap bitmap = null;
         profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
         componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
-        if (conta == null){
-            conta = sharedPrefManager.getUser();
+
+        if (conta == null) {
+            conta = SharedPrefManager.getInstance(this).getUser();
         }
         if (conta != null) {
-            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername() );
+            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
 
         if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
-             bitmap = FacebookAccount.getProfilePictureUser();
-        }else{
-            bitmap = capturePhotoUtils.loadImageFromStorage();
+            bitmap = FacebookAccount.getProfilePictureUser();
+        } else {
+            if (getIntent().hasExtra("ImageByteArray")) {
+                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                capturePhotoUtils.saveToInternalStorage(bitmap);
+            } else {
+                bitmap = capturePhotoUtils.loadImageFromStorage();
+            }
         }
 
         if (bitmap != null) {

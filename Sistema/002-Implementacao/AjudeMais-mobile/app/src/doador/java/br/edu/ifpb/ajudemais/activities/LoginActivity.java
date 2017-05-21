@@ -268,8 +268,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private String senha;
         private Context context;
         private Doador doador;
-        private CapturePhotoUtils capturePhotoUtils;
         private AndroidUtil androidUtil;
+        private byte[] photo;
 
 
         public LoginTask(Context context, String username, String senha) {
@@ -277,7 +277,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
             this.authRemoteService = new AuthRemoteService(context);
             this.doadorRemoteService = new DoadorRemoteService(context);
             this.imagemStorageRemoteService = new ImagemStorageRemoteService(context);
-            this.capturePhotoUtils = new CapturePhotoUtils(context);
             this.androidUtil = new AndroidUtil(context);
             this.username = username;
             this.senha = senha;
@@ -309,9 +308,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                     conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
                     doador = doadorRemoteService.getDoador(username);
                     if (doador.getFoto() != null) {
-                        byte[] photo = imagemStorageRemoteService.getImage(doador.getFoto().getNome());
-                        Bitmap bitmap = androidUtil.convertBytesInBitmap(photo);
-                        capturePhotoUtils.saveToInternalStorage(bitmap);
+                        photo = imagemStorageRemoteService.getImage(doador.getFoto().getNome());
                     }
 
                     return conta;
@@ -338,6 +335,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
+                intent.putExtra("ImageByteArray", photo);
                 startActivity(intent);
                 finish();
             } else {

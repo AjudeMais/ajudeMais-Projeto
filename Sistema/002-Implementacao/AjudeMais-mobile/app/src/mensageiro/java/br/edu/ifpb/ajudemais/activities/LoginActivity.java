@@ -192,6 +192,8 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         private Mensageiro mensageiro;
         private AndroidUtil androidUtil;
         private CapturePhotoUtils capturePhotoUtils;
+        private byte[] photo;
+
 
         /**
          *
@@ -233,9 +235,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 conta = authRemoteService.createAuthenticationToken(conta, Grupo.MENSAGEIRO);
                 mensageiro = mensageiroRemoteService.getMensageiro(username);
                 if (mensageiro.getFoto() != null) {
-                    byte[] photo = imagemStorageRemoteService.getImage(mensageiro.getFoto().getNome());
-                    Bitmap bitmap = androidUtil.convertBytesInBitmap(photo);
-                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                    photo = imagemStorageRemoteService.getImage(mensageiro.getFoto().getNome());
                 }
                return conta;
 
@@ -262,6 +262,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
                 intent.setClass(LoginActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
+                intent.putExtra("ImageByteArray", photo);
                 startActivity(intent);
                 finish();
 
