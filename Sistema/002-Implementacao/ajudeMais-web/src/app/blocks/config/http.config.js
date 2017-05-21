@@ -13,8 +13,8 @@
     function httpConfig($httpProvider) {
 
         $httpProvider.interceptors.push('authInterceptor');
-        $httpProvider.interceptors.push('authDeniedInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');
+        $httpProvider.interceptors.push('authDeniedInterceptor');
         $httpProvider.interceptors.push('errorResolverInterceptor');
     }
 })();
