@@ -109,7 +109,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         });
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
+        fab.setEnabled(false);
         new ProfileLoading().execute();
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -402,6 +404,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                 fragmentTransaction.add(R.id.editprofile_fragment, fragment);
                 fragmentTransaction.commit();
                 nestedScrollView.setVisibility(View.VISIBLE);
+                fab.setEnabled(true);
+
             }
         }
     }

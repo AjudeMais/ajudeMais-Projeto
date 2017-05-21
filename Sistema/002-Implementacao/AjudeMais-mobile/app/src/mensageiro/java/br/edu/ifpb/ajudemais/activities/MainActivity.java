@@ -92,9 +92,12 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             tvEmail.setText(conta.getEmail());
         }
 
-        if (getIntent().hasExtra("ImageByteArray")) {
-            bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
-            capturePhotoUtils.saveToInternalStorage(bitmap);
+        if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
+            if (isStoragePermissionGranted()){
+                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                capturePhotoUtils.saveToInternalStorage(bitmap);
+            }
+
         } else {
             bitmap = capturePhotoUtils.loadImageFromStorage();
         }
@@ -160,6 +163,8 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             }
         }
     }
+
+
 
 
     /**

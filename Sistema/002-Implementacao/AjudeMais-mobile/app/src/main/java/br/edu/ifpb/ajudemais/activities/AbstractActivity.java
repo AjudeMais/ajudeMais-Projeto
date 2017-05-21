@@ -87,11 +87,11 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     private long FASTEST_INTERVAL = 2000; /* 2 sec */
     protected Bitmap bitmap;
     protected AndroidUtil androidUtil;
-
+    protected final int REQUEST_CODE_STORE_PERMISSION = 14;
 
 
     /**
-     *Inicializa algumas propriedades do layout.
+     * Inicializa algumas propriedades do layout.
      */
     protected void init() {
         capturePhotoUtils = new CapturePhotoUtils(this);
@@ -99,6 +99,26 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.menuNav);
+    }
+
+
+    /**
+     * Checa se permissão Para Gravar arquivo está aceita
+     *
+     * @return
+     */
+    public boolean isStoragePermissionGranted() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                return true;
+            } else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE_STORE_PERMISSION);
+                return false;
+            }
+        } else { //permission is automatically granted on sdk<23 upon installation
+            return true;
+        }
     }
 
     /**
@@ -155,7 +175,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
-
 
 
     /**
@@ -292,7 +311,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *  Executa dialog para ligar o GPS do device.
+     * Executa dialog para ligar o GPS do device.
      */
     private Runnable sendUpdatesToUI = new Runnable() {
         public void run() {
@@ -352,13 +371,21 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
                 } else {
                     Toast.makeText(AbstractActivity.this, getString(R.string.permissionDenied), Toast.LENGTH_SHORT).show();
                 }
+                break;
+            }
+            case REQUEST_CODE_STORE_PERMISSION: {
+                if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
+                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                    profilePhoto.setImageBitmap(bitmap);
+                }
+                break;
             }
         }
     }
 
 
     /**
-     *
      * @param bundle
      */
     @Override
@@ -371,7 +398,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
      * @param i
      */
     @Override
@@ -385,7 +411,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
      * @param connectionResult
      */
     @Override
@@ -405,7 +430,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *  Busca atualizações na localização do device.
+     * Busca atualizações na localização do device.
      */
     protected void startLocationUpdates() {
         mLocationRequest = LocationRequest.create()
@@ -423,7 +448,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
 
     /**
-     *
      * @param locationSettingsResult
      */
     @Override
@@ -449,7 +473,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -468,7 +491,6 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     }
 
     /**
-     *
      * @param location
      */
     @Override
