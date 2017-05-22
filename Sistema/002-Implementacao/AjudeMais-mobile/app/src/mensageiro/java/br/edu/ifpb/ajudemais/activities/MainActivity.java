@@ -82,9 +82,11 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
+
         if (conta == null){
             conta = SharedPrefManager.getInstance(this).getUser();
         }
+
         if (conta != null) {
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());

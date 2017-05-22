@@ -86,7 +86,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                     mLastLocation = getLocation();
                 }
                 if (mLastLocation != null) {
-                    sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                    SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
                 }
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, MainSearchActivity.class);
