@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -88,7 +86,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                     mLastLocation = getLocation();
                 }
                 if (mLastLocation != null) {
-                    sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                    SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
                 }
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this, MainSearchActivity.class);

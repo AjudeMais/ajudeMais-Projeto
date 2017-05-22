@@ -7,6 +7,7 @@ import org.junit.runners.Suite;
 import br.edu.ifpb.ajudemais.testeaceitacao.categoriaTest.CategoriaTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.instituicaoCaridadeTest.CrudInstituicaoCaridadeTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.loginTest.LoginTest;
+import br.edu.ifpb.ajudemais.testeaceitacao.mensageiroTest.MensageiroTest;
 
 /**
  * 
@@ -24,9 +25,10 @@ import br.edu.ifpb.ajudemais.testeaceitacao.loginTest.LoginTest;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({ 
-	LoginTest.class,
-	CrudInstituicaoCaridadeTest.class,
-	CategoriaTest.class
+	//LoginTest.class,
+	//CrudInstituicaoCaridadeTest.class,
+	//CategoriaTest.class,
+	MensageiroTest.class
 })
 public class SuiteTeste {
 

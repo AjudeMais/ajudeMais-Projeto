@@ -1,7 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +18,6 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
  * <p>
@@ -84,9 +82,11 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
 
         conta = (Conta) getIntent().getSerializableExtra("Conta");
+
         if (conta == null){
             conta = SharedPrefManager.getInstance(this).getUser();
         }
+
         if (conta != null) {
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
@@ -110,7 +110,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, MensageiroDetailActivity.class);
+                intent.setClass(MainActivity.this, CreateMensageiroAccountActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -124,8 +124,11 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.nav_config_conta:
-
-                break;
+                Intent intent = new Intent();
+                intent.setClass(this, ProfileSettingsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(intent);
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
@@ -136,7 +139,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                 intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent2);
-                break;
         }
 
     }

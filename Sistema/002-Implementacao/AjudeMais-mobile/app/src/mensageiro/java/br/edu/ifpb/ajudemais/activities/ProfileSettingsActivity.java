@@ -21,8 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,16 +38,17 @@ import java.io.File;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
-import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
+import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
-public class MensageiroDetailActivity extends AbstractAsyncActivity implements View.OnClickListener,AsyncResponse<Imagem> {
+public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem> {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -69,25 +68,30 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     private int PROFILE_PIC_COUNT = 0;
     protected CapturePhotoUtils capturePhotoUtils;
     private UploadImageTask uploadImageTask;
+    private UpdateMensageiroTask updateMensageiroTask;
+    private Imagem imagemTemp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mensageiro_detail);
+        setContentView(R.layout.activity_profile_settings);
         context = this;
+
         capturePhotoUtils = new CapturePhotoUtils(this);
         androidUtil = new AndroidUtil(this);
         sharedPrefManager = new SharedPrefManager(this);
 
         btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
-        mToolbar = (Toolbar) findViewById(R.id.nav_action);
-        nestedScrollView = (NestedScrollView) findViewById(R.id.netScroll);
 
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        nestedScrollView = (NestedScrollView) findViewById(R.id.netScroll);
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar_edit_profile);
         collapsingToolbarLayout.setTitle(getString(R.string.loading));
 
         imageView = (ImageView) findViewById(R.id.image_profile);
@@ -105,12 +109,15 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         });
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
+        fab.setEnabled(false);
+        new ProfileLoading().execute();
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MensageiroDetailActivity.this, EditMensageiroAccountActivity.class);
+                intent.setClass(ProfileSettingsActivity.this, CreateMensageiroAccountActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Mensageiro", mensageiro);
                 startActivity(intent);
@@ -118,7 +125,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         });
 
         btnChangePassword.setOnClickListener(this);
-        new ProfileLoading().execute();
 
     }
 
@@ -161,9 +167,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     }
 
 
-    /**
-     * dialog para acessar opção para selecionar foto.
-     */
     private void openDialog() {
         final CharSequence[] items = {getString(R.string.TakePhoto), getString(R.string.gallery), getString(R.string.cancelar)};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -178,7 +181,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
                     int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
                     if (checkPermission == PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(
-                                MensageiroDetailActivity.this,
+                                ProfileSettingsActivity.this,
                                 new String[]{Manifest.permission.CAMERA},
                                 MY_PERMISSIONS_GRANTED_CAMERA);
 
@@ -217,7 +220,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     openDialog();
                 } else {
-                    Toast.makeText(MensageiroDetailActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileSettingsActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -231,11 +234,12 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
                 return true;
+
             case R.id.action_seletec_image:
                 openDialog();
                 return true;
@@ -243,7 +247,6 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 
     /**
@@ -274,7 +277,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
 
-            uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro );
+            uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro);
             uploadImageTask.delegate = this;
             uploadImageTask.execute();
 
@@ -296,6 +299,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         return true;
     }
 
+
     /**
      * @param v
      */
@@ -316,7 +320,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
                         public void onClick(DialogInterface dialogBox, int id) {
 
                             if (newPassword.getText().toString().trim().length() > 5) {
-                                new ChangePasswordTask(MensageiroDetailActivity.this, password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
+                                new ChangePasswordTask(ProfileSettingsActivity.this, password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
                             } else {
                                 Toast.makeText(getApplication(), "A nova senha informada deve contém no mínimo 6 caracteres", Toast.LENGTH_LONG).show();
 
@@ -336,10 +340,16 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         }
     }
 
+    /**
+     * Resultado da task Upload de Imagem.
+     *
+     * @param output
+     */
     @Override
     public void processFinish(Imagem output) {
-
+        this.imagemTemp = output;
     }
+
 
     /**
      *
@@ -365,6 +375,7 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected Mensageiro doInBackground(Void... params) {
             try {
+
                 if (androidUtil.isOnline()) {
                     mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
 
@@ -382,19 +393,20 @@ public class MensageiroDetailActivity extends AbstractAsyncActivity implements V
         @Override
         protected void onPostExecute(Mensageiro mensageiro) {
             if (mensageiro != null) {
+
                 collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
                 ProfileSettingsFragment fragment = new ProfileSettingsFragment();
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("mensageiro", mensageiro);
+                bundle.putSerializable("Mensageiro", mensageiro);
                 fragment.setArguments(bundle);
+
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.add(R.id.editprofile_fragment, fragment);
                 fragmentTransaction.commit();
                 nestedScrollView.setVisibility(View.VISIBLE);
-            }else if (message !=null){
-                Toast.makeText(getApplicationContext(), message ,Toast.LENGTH_LONG).show();
+                fab.setEnabled(true);
+
             }
         }
     }
-
 }

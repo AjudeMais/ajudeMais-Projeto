@@ -77,6 +77,48 @@ public class AndroidUtil {
     }
 
     /**
+     * Coloca no edit text uma máscara para cpf.
+     * @param editText
+     */
+    public void setMaskCPF(EditText editText){
+        final MaskedTextChangedListener listener = new MaskedTextChangedListener(
+                "[000].[000].[000]-[00]",
+                true,
+                editText,
+                null,
+                new MaskedTextChangedListener.ValueListener() {
+                    @Override
+                    public void onTextChanged(boolean maskFilled, @NonNull final String extractedValue) {
+                        Log.d(MainActivity.class.getSimpleName(), extractedValue);
+                        Log.d(MainActivity.class.getSimpleName(), String.valueOf(maskFilled));
+                    }
+                }
+        );
+
+        editText.addTextChangedListener(listener);
+        editText.setOnFocusChangeListener(listener);
+    }
+
+    public void setMaskCep(EditText editText){
+        final MaskedTextChangedListener listener = new MaskedTextChangedListener(
+                "[00000]-[00]",
+                true,
+                editText,
+                null,
+                new MaskedTextChangedListener.ValueListener() {
+                    @Override
+                    public void onTextChanged(boolean maskFilled, @NonNull final String extractedValue) {
+                        Log.d(MainActivity.class.getSimpleName(), extractedValue);
+                        Log.d(MainActivity.class.getSimpleName(), String.valueOf(maskFilled));
+                    }
+                }
+        );
+
+        editText.addTextChangedListener(listener);
+        editText.setOnFocusChangeListener(listener);
+    }
+
+    /**
      * Verifica que o campo contém um e-mail válido
      * @param email
      * @return
