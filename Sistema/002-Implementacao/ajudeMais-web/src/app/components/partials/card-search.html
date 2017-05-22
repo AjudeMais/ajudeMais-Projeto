@@ -6,6 +6,7 @@
         <br/>
         <small>
             <span ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+            <span class="label label-default" ng-bind-html="match.model.conta.username | uibTypeaheadHighlight:query"></span>
         </small>
     </div>
 </a>

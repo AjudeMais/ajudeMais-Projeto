@@ -27,8 +27,10 @@
         <div class="am-card-result" ng-show="vm.mensageiroAss.mensageiro != null">
             <div class="post am-card-result-content">
                 <div class="user-block">
-                    <img class="img-responsive img-circle"
+                    <img class="img-responsive img-circle" ng-show="vm.mensageiroAss.mensageiro.foto && vm.image"
                          data-ng-src="data:{{vm.mensageiroAss.mensageiro.foto.contentType}};base64,{{vm.image}}">
+                    <img class="img-responsive img-circle" ng-show="!vm.mensageiroAss.mensageiro.foto"
+                         ng-src="{{vm.mockImage}}">
 
                     <span class="username">
                         {{vm.mensageiroAss.mensageiro.nome}}

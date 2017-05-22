@@ -3,7 +3,7 @@
 exports.base = {
     port: 8000,
     apiDev: 'http://localhost:8080',
-    apiProd: 'http://TODO',
+    apiProd: 'http://localhost:8080',
     constantTemplate: '(function () {\n' +
     '    angular.module(\'<%- moduleName %>\')\n' +
     '<% constants.forEach(function(constant) { %>        .constant(\'<%- constant.name %>\', <%= constant.value %>)\n<% }) %>;\n' +
@@ -24,6 +24,8 @@ exports.paths = {
     vendors: [
         'src/vendors/jquery/dist/jquery.min.js',
         'src/vendors/iCheck/icheck.js',
+        'src/vendors/bootstrap/dist/js/bootstrap.js',
+        'src/vendors/bootstrap-switch/dist/js/bootstrap-switch.min.js',
         'src/angular-route/angular-route.js',
         'src/vendors/datatables.net/js/jquery.dataTables.js',
         'src/vendors/angular/angular.js',
@@ -40,6 +42,7 @@ exports.paths = {
         'src/vendors/angular-input-masks/angular-input-masks.br.js',
         'src/vendors/angular-br-filters/release/angular-br-filters.js',
         'src/vendors/angular-viacep/dist/angular-viacep.js',
+        'src/vendors/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js'
 
     ], scripts: [
         'src/app/*.js',
@@ -59,6 +62,7 @@ exports.paths = {
     ],
     css: [
         'src/vendors/bootstrap/dist/css/bootstrap.min.css',
+        'src/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css',
         'src/content/css/main.css',
         'src/vendors/iCheck/skins/square/_all.css',
         'src/vendors/font-awesome/css/font-awesome.css',
