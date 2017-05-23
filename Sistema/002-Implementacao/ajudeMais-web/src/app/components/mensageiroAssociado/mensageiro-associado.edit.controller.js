@@ -14,7 +14,8 @@
 
         var vm = this;
         vm.mensageiroAss = {};
-        vm.image = {};
+        vm.image;
+        vm.mockImage = 'content/img/mock-user.png';
 
         angular.copy(mensageiroAss, vm.mensageiroAss);
 
