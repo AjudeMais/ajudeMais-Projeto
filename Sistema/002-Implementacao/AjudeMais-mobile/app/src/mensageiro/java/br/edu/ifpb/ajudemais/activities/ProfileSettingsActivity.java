@@ -43,12 +43,13 @@ import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
+import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
-public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem> {
+public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem>{
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -72,6 +73,10 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     private Imagem imagemTemp;
 
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +133,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
     }
 
+
+
     /**
      * Checa se o device pertence ao SDK versão 23 para exibir permissão
      */
@@ -167,6 +174,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     }
 
 
+    /**
+     * Dialog para seleção de camera ou galeria para selecionar foto do perfil.
+     */
     private void openDialog() {
         final CharSequence[] items = {getString(R.string.TakePhoto), getString(R.string.gallery), getString(R.string.cancelar)};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
@@ -267,12 +277,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             File imageFile = capturePhotoUtils.getTempFile(this);
             selectedImage = data.getData();
             photo = capturePhotoUtils.getImageResized(this, selectedImage);
-
-
         }
 
         if (photo != null) {
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
@@ -350,7 +357,6 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         this.imagemTemp = output;
     }
 
-
     /**
      *
      */
@@ -390,6 +396,10 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             return mensageiro;
         }
 
+        /**
+         *
+         * @param mensageiro
+         */
         @Override
         protected void onPostExecute(Mensageiro mensageiro) {
             if (mensageiro != null) {

@@ -121,4 +121,5 @@
     <string name="msgEmptyLocalidade">Localidade deve ser informada</string>
     <string name="msgCpfInvalid">Número de CPF inválido</string>
     <string name="mensageiroUpdated">Mensageiro atualizado com sucesso</string>
+    <string name="myaddress">Meus Endereços</string>
 </resources>

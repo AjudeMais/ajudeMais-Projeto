@@ -6,6 +6,11 @@
             android:id="@+id/nav_minhas_coletas"
             android:icon="@mipmap/ic_coletas"
             android:title="Minhas Coletas" />
+
+        <item
+            android:id="@+id/nav_my_addresses"
+            android:icon="@mipmap/ic_address"
+            android:title="Meus Endereços" />
     </group>
 
     <group android:id="@+id/grp2">
@@ -14,6 +19,8 @@
             android:id="@+id/nav_notificacoes"
             android:icon="@mipmap/ic_notificacao"
             android:title="Notificações" />
+
+
 
         <item
             android:id="@+id/nav_config_conta"

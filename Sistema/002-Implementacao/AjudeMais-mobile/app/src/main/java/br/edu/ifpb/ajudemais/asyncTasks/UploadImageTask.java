@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
@@ -82,12 +81,20 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
 
             if (androidUtil.isOnline()) {
                 imagem = imagemStorageRemoteService.uploadImage(array);
-                if (doador !=null) {
-                    doador.setFoto(imagem);
+                if (doador != null) {
+                    if (doador.getFoto() != null) {
+                        doador.getFoto().setNome(imagem.getNome());
+                    } else {
+                        doador.setFoto(imagem);
+                    }
                     doador = doadorRemoteService.updateDoador(doador);
 
-                }else if (mensageiro !=null){
-                    mensageiro.setFoto(imagem);
+                } else if (mensageiro != null) {
+                    if (mensageiro.getFoto() != null) {
+                        mensageiro.getFoto().setNome(imagem.getNome());
+                    } else {
+                        mensageiro.setFoto(imagem);
+                    }
                     mensageiro = mensageiroRemoteService.updateMensageiro(mensageiro);
                 }
 
@@ -108,8 +115,8 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
         progressDialog.dismissProgressDialog();
 
         if (message != null) {
-            Toast.makeText(context,message, Toast.LENGTH_LONG).show();
-        }else {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        } else {
             Toast.makeText(context, context.getString(R.string.updatedImage), Toast.LENGTH_LONG).show();
 
             delegate.processFinish(imagem);

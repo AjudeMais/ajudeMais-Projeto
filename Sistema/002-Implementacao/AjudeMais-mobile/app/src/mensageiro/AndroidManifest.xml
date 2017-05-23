@@ -36,6 +36,7 @@
         <activity android:name=".activities.EnderecoActivity" />
         <activity android:name=".activities.CreateEnderecoActivity" />
         <activity android:name=".activities.EmptyActivity" />
+        <activity android:name=".activities.MyEnderecosActivity"></activity>
     </application>
 
 </manifest>

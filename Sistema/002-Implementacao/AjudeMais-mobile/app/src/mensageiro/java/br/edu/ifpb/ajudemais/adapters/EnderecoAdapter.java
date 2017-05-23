@@ -2,11 +2,13 @@ package br.edu.ifpb.ajudemais.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
@@ -16,7 +18,7 @@ import br.edu.ifpb.ajudemais.domain.Endereco;
  * Created by amsv on 21/05/17.
  */
 
-public class EnderecoAdapter extends RecyclerView.Adapter<EnderecoAdapter.ViewHolder> {
+public class EnderecoAdapter extends  RecyclerView.Adapter<EnderecoAdapter.ViewHolder> {
 
     private List<Endereco> enderecos;
     private Context context;
@@ -27,9 +29,9 @@ public class EnderecoAdapter extends RecyclerView.Adapter<EnderecoAdapter.ViewHo
     }
 
     @Override
-    public EnderecoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco_mensageiro, null, false);
-        return new EnderecoAdapter.ViewHolder(view);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco_mensageiro, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -40,6 +42,9 @@ public class EnderecoAdapter extends RecyclerView.Adapter<EnderecoAdapter.ViewHo
 
     @Override
     public int getItemCount() {
+        if (enderecos == null) {
+            enderecos = new ArrayList<>();
+        }
         return enderecos.size();
     }
 
