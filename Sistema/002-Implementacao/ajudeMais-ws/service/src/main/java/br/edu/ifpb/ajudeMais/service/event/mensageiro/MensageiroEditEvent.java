@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudeMais.service.event.mensageiro;
 
 import org.springframework.util.StringUtils;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
 /**
@@ -30,14 +31,20 @@ public class MensageiroEditEvent {
 
 	/**
 	 * 
+	 */
+	private Imagem imagemAntiga;
+
+	/**
+	 * 
 	 * <p>
 	 * Construtor default
 	 * </p>
 	 *
 	 * @param mensageiro
 	 */
-	public MensageiroEditEvent(Mensageiro mensageiro) {
+	public MensageiroEditEvent(Mensageiro mensageiro, Imagem imagemAntiga) {
 		this.mensageiro = mensageiro;
+		this.imagemAntiga = imagemAntiga;
 	}
 
 	/**
@@ -56,6 +63,21 @@ public class MensageiroEditEvent {
 	}
 
 	/**
+	 * @return o atributo imagemAntiga
+	 */
+	public Imagem getImagemAntiga() {
+		return imagemAntiga;
+	}
+
+	/**
+	 * @param o
+	 *            parametro imagemAntiga é setado em imagemAntiga
+	 */
+	public void setImagemAntiga(Imagem imagemAntiga) {
+		this.imagemAntiga = imagemAntiga;
+	}
+
+	/**
 	 * 
 	 * <p>
 	 * Verifica se o mensageiro possui uma imagem.
@@ -64,7 +86,9 @@ public class MensageiroEditEvent {
 	 * @return
 	 */
 	public boolean isImage() {
-		if(mensageiro.getFoto() == null || mensageiro.getFoto().getId() != null) return false;
+		if (mensageiro.getFoto() == null) {
+			return false;
+		}
 		return !StringUtils.isEmpty(mensageiro.getFoto().getNome());
 	}
 
