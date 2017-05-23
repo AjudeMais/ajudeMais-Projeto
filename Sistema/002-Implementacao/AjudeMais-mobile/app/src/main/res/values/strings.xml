@@ -122,4 +122,10 @@
     <string name="msgCpfInvalid">Número de CPF inválido</string>
     <string name="mensageiroUpdated">Mensageiro atualizado com sucesso</string>
     <string name="myaddress">Meus Endereços</string>
+    <string name="btn_atualizar_conta">ATUALIZAR</string>
+    <string name="my_addresses">Meus Endereços</string>
+    <string name="minhas_coletas">Minhas Coletas</string>
+    <string name="my_notifications">Notificações</string>
+    <string name="account_settings">Configuraçẽs da conta</string>
+    <string name="logout">Sair</string>
 </resources>

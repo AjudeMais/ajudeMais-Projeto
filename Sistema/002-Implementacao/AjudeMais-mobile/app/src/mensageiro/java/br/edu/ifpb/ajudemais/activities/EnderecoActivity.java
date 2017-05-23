@@ -179,7 +179,8 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                     mensageiroEdit.getEnderecos().add(endereco);
                     new CreateEnderecoTask(mensageiroEdit, this).execute();
                 } else {
-                    mensageiroEdit.getEnderecos().add(indexEndereco, endereco);
+                    mensageiroEdit.getEnderecos().remove(indexEndereco);
+                    mensageiroEdit.getEnderecos().add(endereco);
                     new CreateEnderecoTask(mensageiroEdit, this).execute();
                 }
             }
