@@ -26,7 +26,6 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.ImagemRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
-import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.event.mensageiro.MensageiroEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
@@ -105,8 +104,10 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Override
 	@Transactional
 	public Mensageiro update(Mensageiro mensageiro) {
-		Imagem imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId());
-		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
+		String imagemAntiga = null;
+		if(mensageiro.getFoto().getId() != null){
+			imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId()).getNome();
+		}		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
 		publisher.publishEvent(new MensageiroEditEvent(mensageiroUpdated, imagemAntiga));
 
 		return mensageiroUpdated;

@@ -59,7 +59,6 @@ public class DoadorListener {
 			if (event.getImagemAntiga() != null) {
 				imagemStorage.remove(event.getImagemAntiga());
 			}
-
 		}
 	}
 }

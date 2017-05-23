@@ -115,6 +115,18 @@ public class ImagemStoreServiceTest {
 	/**
 	 * 
 	 * <p>
+	 * Teste para remoção de uma imagem.
+	 * </p>
+	 */
+	@Test
+	public void removeImageOk() {
+		mockImagemStorage.remove(file.getContentType());
+		verify(mockImagemStorage).remove(file.getOriginalFilename());
+	}
+
+	/**
+	 * 
+	 * <p>
 	 * Teste para getImage em diretório final.
 	 * </p>
 	 * 
@@ -126,7 +138,7 @@ public class ImagemStoreServiceTest {
 		when(mockImagemStorage.get(file.getOriginalFilename())).thenReturn(file.getBytes());
 		assertEquals(mockImagemStorage.get(file.getOriginalFilename()), file.getBytes());
 	}
-	
+
 	/**
 	 * 
 	 * <p>

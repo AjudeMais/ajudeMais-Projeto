@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudeMais.service.event.mensageiro;
 
 import org.springframework.util.StringUtils;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
 /**
@@ -32,7 +31,7 @@ public class MensageiroEditEvent {
 	/**
 	 * 
 	 */
-	private Imagem imagemAntiga;
+	private String imagemAntiga;
 
 	/**
 	 * 
@@ -42,7 +41,7 @@ public class MensageiroEditEvent {
 	 *
 	 * @param mensageiro
 	 */
-	public MensageiroEditEvent(Mensageiro mensageiro, Imagem imagemAntiga) {
+	public MensageiroEditEvent(Mensageiro mensageiro, String imagemAntiga) {
 		this.mensageiro = mensageiro;
 		this.imagemAntiga = imagemAntiga;
 	}
@@ -65,7 +64,7 @@ public class MensageiroEditEvent {
 	/**
 	 * @return o atributo imagemAntiga
 	 */
-	public Imagem getImagemAntiga() {
+	public String getImagemAntiga() {
 		return imagemAntiga;
 	}
 
@@ -73,7 +72,7 @@ public class MensageiroEditEvent {
 	 * @param o
 	 *            parametro imagemAntiga é setado em imagemAntiga
 	 */
-	public void setImagemAntiga(Imagem imagemAntiga) {
+	public void setImagemAntiga(String imagemAntiga) {
 		this.imagemAntiga = imagemAntiga;
 	}
 
