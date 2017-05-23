@@ -56,7 +56,9 @@ public class DoadorListener {
 		String foto = event.getDoador().getFoto().getNome();
 		if (!imagemStorage.exists(foto)) {
 			imagemStorage.save(foto);
-			imagemStorage.remove(event.getImagemAntiga().getNome());
+			if (event.getImagemAntiga() != null) {
+				imagemStorage.remove(event.getImagemAntiga());
+			}
 
 		}
 	}

@@ -16,7 +16,6 @@ package br.edu.ifpb.ajudeMais.service.event.doador;
 import org.springframework.util.StringUtils;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
-import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 
 /**
  * 
@@ -41,7 +40,7 @@ public class DoadorEditEvent {
 	/**
 	 * 
 	 */
-	private Imagem imagemAntiga;
+	private String imagemAntiga;
 
 	/**
 	 * 
@@ -51,7 +50,7 @@ public class DoadorEditEvent {
 	 *
 	 * @param doador
 	 */
-	public DoadorEditEvent(Doador doador, Imagem imagemAntiga) {
+	public DoadorEditEvent(Doador doador, String imagemAntiga) {
 		this.doador = doador;
 		this.imagemAntiga = imagemAntiga;
 	}
@@ -74,7 +73,7 @@ public class DoadorEditEvent {
 	/**
 	 * @return o atributo imagem
 	 */
-	public Imagem getImagemAntiga() {
+	public String getImagemAntiga() {
 		return imagemAntiga;
 	}
 
@@ -82,7 +81,7 @@ public class DoadorEditEvent {
 	 * @param o
 	 *            parametro imagem é setado em imagem
 	 */
-	public void setImagemAntiga(Imagem imagemAntiga) {
+	public void setImagemAntiga(String imagemAntiga) {
 		this.imagemAntiga = imagemAntiga;
 	}
 

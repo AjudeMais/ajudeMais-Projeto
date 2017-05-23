@@ -101,7 +101,7 @@ public class AndroidUtil {
 
     public void setMaskCep(EditText editText){
         final MaskedTextChangedListener listener = new MaskedTextChangedListener(
-                "[00000]-[00]",
+                "[00000]-[000]",
                 true,
                 editText,
                 null,

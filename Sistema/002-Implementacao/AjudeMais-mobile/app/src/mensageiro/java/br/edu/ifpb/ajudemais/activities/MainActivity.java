@@ -110,7 +110,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, CreateMensageiroAccountActivity.class);
+                intent.setClass(MainActivity.this, ProfileSettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
@@ -123,12 +123,18 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
      */
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.nav_config_conta:
+            case R.id.nav_my_addresses:
                 Intent intent = new Intent();
-                intent.setClass(this, ProfileSettingsActivity.class);
+                intent.setClass(MainActivity.this, MyEnderecosActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                finish();
                 startActivity(intent);
+
+            case R.id.nav_config_conta:
+                Intent intent1 = new Intent();
+                intent1.setClass(MainActivity.this, ProfileSettingsActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent1);
+
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:

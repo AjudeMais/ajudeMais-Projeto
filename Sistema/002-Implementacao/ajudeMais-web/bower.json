@@ -32,9 +32,15 @@
     "angular-input-masks": "2.5.0",
     "angular-br-filters": "0.7.0",
     "angular-viacep": "0.1.0",
-    "angular-bootstrap-switch": "^0.5.2"
+    "angular-bootstrap-switch": "^0.5.2",
+     "jquery": "1.9.1",
+     "jquery": ">=1.7"
+
   },
   "resolutions": {
-    "jquery": ">=1.7"
+     "jquery": "1.9.1",
+
+     "jquery": ">=1.7"
+
   }
 }

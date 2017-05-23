@@ -5,7 +5,12 @@
         <item
             android:id="@+id/nav_minhas_coletas"
             android:icon="@mipmap/ic_coletas"
-            android:title="Minhas Coletas" />
+            android:title="@string/minhas_coletas" />
+
+        <item
+            android:id="@+id/nav_my_addresses"
+            android:icon="@mipmap/ic_address"
+            android:title="@string/my_addresses" />
     </group>
 
     <group android:id="@+id/grp2">
@@ -13,17 +18,19 @@
         <item
             android:id="@+id/nav_notificacoes"
             android:icon="@mipmap/ic_notificacao"
-            android:title="Notificações" />
+            android:title="@string/my_notifications" />
+
+
 
         <item
             android:id="@+id/nav_config_conta"
             android:icon="@mipmap/ic_settings"
-            android:title="Configuraçẽs da conta" />
+            android:title="@string/account_settings" />
 
         <item
             android:id="@+id/nav_sair"
             android:icon="@mipmap/ic_sair"
-            android:title="Sair" />
+            android:title="@string/logout" />
 
     </group>
 

@@ -1,35 +1,37 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/card_view_main_"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
+    android:layout_marginTop="8dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
     card_view:cardCornerRadius="0.2dp"
     card_view:cardElevation="2dp"
-    card_view:cardMaxElevation="3dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true">
+    card_view:cardMaxElevation="3dp">
+
 
     <RelativeLayout
+        android:id="@+id/cardEndereco"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/cardEndereco">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/tv_logradouro_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:paddingTop="2dp"
-            android:paddingLeft="10dp"
-            android:textColor="@color/textSecond"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="18sp"
+            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            android:layout_marginTop="7dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="2dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/textSecond"
+            android:textSize="18sp"
+            card_view:ignore="RtlHardcoded,RtlSymmetry" />
 
 
         <TextView
@@ -40,7 +42,8 @@
             android:paddingBottom="8dp"
             android:paddingLeft="10dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            card_view:ignore="RtlHardcoded,RtlSymmetry" />
 
     </RelativeLayout>
 
