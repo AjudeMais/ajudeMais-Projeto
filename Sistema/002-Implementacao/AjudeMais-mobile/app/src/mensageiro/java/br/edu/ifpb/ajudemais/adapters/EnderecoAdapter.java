@@ -28,7 +28,7 @@ public class EnderecoAdapter extends RecyclerView.Adapter<EnderecoAdapter.ViewHo
 
     @Override
     public EnderecoAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco_mensageiro, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco_mensageiro, null, false);
         return new EnderecoAdapter.ViewHolder(view);
     }
 

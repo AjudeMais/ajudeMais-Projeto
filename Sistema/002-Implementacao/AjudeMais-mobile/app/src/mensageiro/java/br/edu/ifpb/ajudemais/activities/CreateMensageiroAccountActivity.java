@@ -154,7 +154,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         String cpf = edtCpf.getText().toString().trim();
         String confirmPassword = edtConfirmPassword.getText().toString().trim();
         String name = edtName.getText().toString().trim();
-        return ((!validateFieldsEmpty(name, userName, phone, email, cpf, confirmPassword, password) && (validateLengthFields(userName, phone, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
+        return ((!validateFieldsEmpty(name, userName, phone, email, cpf, confirmPassword, password) && (validateLengthFields(userName, phone, cpf, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
     }
 
     /**
@@ -166,7 +166,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         String phone = edtPhone.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String name = edtName.getText().toString().trim();
-        return ((!validateFieldsEmpty(name, null, phone, email, null, null, null) && (validateLengthFields(null, phone, null, null))) && (validateEmail()));
+        return ((!validateFieldsEmpty(name, null, phone, email, null, null, null) && (validateLengthFields(null, phone, null, null, null))) && (validateEmail()));
     }
 
     /**
@@ -192,7 +192,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
      * @param confirmPassword
      * @return boolean
      */
-    private boolean validateLengthFields(String userName, String phone, String password, String confirmPassword) {
+    private boolean validateLengthFields(String userName, String phone, String cpf, String password, String confirmPassword) {
 
         if (userName !=null && !(userName.length() > 3)) {
             edtUserName.requestFocus();
@@ -203,7 +203,14 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
             edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
 
-        } else if (password != null && !(password.length() > 5)) {
+        } else if (!(cpf.length() < 11)) {
+            edtCpf.requestFocus();
+            edtCpf.setError(resources.getString(R.string.msgCpfInvalid));
+            return false;
+
+        }
+
+        else if (password != null && !(password.length() > 5)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
             return false;
@@ -319,8 +326,8 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
                     List<String> grupos = new ArrayList<>();
                     grupos.add("ROLE_MENSAGEIRO");
                     Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
-                                                            edtPhone.getText().toString().trim(),
                                                             edtCpf.getText().toString().trim(),
+                                                            edtPhone.getText().toString().trim(),
                                             new Conta(edtUserName.getText().toString().trim(),
                                                     edtPassword.getText().toString().trim(), true,
                                                     edtEmail.getText().toString().trim(), grupos));
@@ -376,7 +383,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
                 if (mensageiroEdit == null) {
                     password = mensageiro.getConta().getSenha();
                     mensageiro = mensageiroRemoteService.saveMensageiro(mensageiro);
-                    Conta conta = authRemoteService.createAuthenticationToken(new Conta(mensageiro.getConta().getUsername(), password), Grupo.DOADOR);
+                    Conta conta = authRemoteService.createAuthenticationToken(new Conta(mensageiro.getConta().getUsername(), password), Grupo.MENSAGEIRO);
                     return conta;
 
                 } else {

@@ -59,7 +59,6 @@ public class UpdateMensageiroTask  extends AsyncTask<Void, Void, Mensageiro> {
     @Override
     protected Mensageiro doInBackground(Void... params) {
         try {
-
             if (androidUtil.isOnline()) {
                 mensageiro = mensageiroRemoteService.updateMensageiro(mensageiro);
             } else {
@@ -84,7 +83,7 @@ public class UpdateMensageiroTask  extends AsyncTask<Void, Void, Mensageiro> {
             Toast.makeText(context,message, Toast.LENGTH_LONG).show();
         }else {
             delegate.processFinish(mensageiro);
-            Toast.makeText(context, context.getString(R.string.updatedImage), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getString(R.string.mensageiroUpdated), Toast.LENGTH_LONG).show();
         }
     }
 }

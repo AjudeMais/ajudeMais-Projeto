@@ -101,17 +101,24 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hitEnderecos">Endereços</string>
     <string name="btn_cadastrar_endereco">Adicionar</string>
-    <string name="hitCep">CEP:</string>
-    <string name="htiLogradouro">Logradouro</string>
+    <string name="hitCep">CEP</string>
     <string name="hitNumero">Número</string>
     <string name="hitBairro">Bairro</string>
     <string name="hitLogradouro">Logradouro</string>
-    <string name="hitUf">Sigla do estado</string>
-    <string name="hitComplemento">Complemento</string>
+    <string name="hitUf">Estado</string>
+    <string name="hitLocalidade">Localidade</string>
 
     <string name="mgsCepEmpty">Informe um cep</string>
     <string name="mgsNumeroEmpty">Informe um numero</string>
     <string  name="mgsBairroEmpty">Informe um bairro</string>
     <string  name="mgsLogradouroEmpty">Informe um logradouro</string>
     <string  name="mgsUfEmpty">Informe a uf do estado</string>
+    <string name="hitComplemento">Complemento</string>
+    <string name="msgEmptyCep">CEP deve ser informado</string>
+    <string name="msgEmptyLogradouro">Logradouro deve ser informado</string>
+    <string name="msgEmptyNumero">Número deve ser informado</string>
+    <string name="msgEmptyBairro">Bairro deve ser informado</string>
+    <string name="msgEmptyLocalidade">Localidade deve ser informada</string>
+    <string name="msgCpfInvalid">Número de CPF inválido</string>
+    <string name="mensageiroUpdated">Mensageiro atualizado com sucesso</string>
 </resources>

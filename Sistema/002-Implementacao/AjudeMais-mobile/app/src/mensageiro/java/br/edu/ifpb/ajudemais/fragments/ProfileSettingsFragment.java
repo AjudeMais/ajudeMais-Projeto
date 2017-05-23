@@ -14,7 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.CreateEnderecoActivity;
+import br.edu.ifpb.ajudemais.activities.EnderecoActivity;
 import br.edu.ifpb.ajudemais.adapters.EnderecoAdapter;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
@@ -40,6 +40,7 @@ public class ProfileSettingsFragment extends Fragment implements RecyclerItemCli
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+
     }
 
     /**
@@ -51,15 +52,11 @@ public class ProfileSettingsFragment extends Fragment implements RecyclerItemCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_profile_settings, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
-
         setHasOptionsMenu(true);
-
         return view;
     }
 
@@ -83,13 +80,17 @@ public class ProfileSettingsFragment extends Fragment implements RecyclerItemCli
             tvNome.setText(mensageiro.getNome());
             tvEmail.setText(mensageiro.getConta().getEmail());
         }
-
-        if (mensageiro.getEnderecos().size() < 1) {
-            enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), getActivity());
-            recyclerView.setAdapter(enderecoAdapter);
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), this));
-        }
-
+        enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), getActivity());
+        recyclerView.setAdapter(enderecoAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), this));
+        btnCadEndereco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EnderecoActivity.class);
+                intent.putExtra("Mensageiro", mensageiro);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -108,7 +109,7 @@ public class ProfileSettingsFragment extends Fragment implements RecyclerItemCli
 
     @Override
     public void onItemClick(View childView, int position) {
-        Intent intent = new Intent(getContext(), CreateEnderecoActivity.class);
+        Intent intent = new Intent(getContext(), EnderecoActivity.class);
         intent.putExtra("Mensageiro", mensageiro);
         intent.putExtra("Index", position);
         startActivity(intent);
