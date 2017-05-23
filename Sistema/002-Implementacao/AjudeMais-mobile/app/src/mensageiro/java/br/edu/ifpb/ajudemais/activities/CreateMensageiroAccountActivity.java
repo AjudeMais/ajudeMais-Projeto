@@ -90,6 +90,8 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         if (mensageiroEdit != null) {
             mToolbar.setTitle("Editar Conta");
+        } else {
+            mToolbar.setTitle("Nova Conta");
         }
 
         setSupportActionBar(mToolbar);
@@ -166,7 +168,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         String phone = edtPhone.getText().toString().trim();
         String email = edtEmail.getText().toString().trim();
         String name = edtName.getText().toString().trim();
-        return ((!validateFieldsEmpty(name, null, phone, email, null, null, null) && (validateLengthFields(null, phone, null, null, null))) && (validateEmail()));
+        return (((validateFieldsEmpty(name, null, phone, email, null, null, null)) && (validatePhone(phone)) && (validateEmail())));
     }
 
     /**
@@ -179,6 +181,15 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         if (!androidUtil.isEmailValid(edtEmail.getText().toString().trim())) {
             edtEmail.requestFocus();
             edtEmail.setError(resources.getString(R.string.msgInvalideEmail));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePhone(String phone) {
+        if ((phone.length() != 15)) {
+            edtPhone.requestFocus();
+            edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
         }
         return true;
@@ -198,18 +209,17 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
             edtUserName.requestFocus();
             edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
             return false;
-        } else if (!(phone.length() > 14 && phone.length() < 16)) {
+        } else if ((phone.length() != 15)) {
             edtPhone.requestFocus();
             edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
 
-        } else if (!(cpf.length() < 11)) {
+        } else if (!(cpf.length() < 14)) {
             edtCpf.requestFocus();
             edtCpf.setError(resources.getString(R.string.msgCpfInvalid));
             return false;
 
         }
-
         else if (password != null && !(password.length() > 5)) {
             edtPassword.requestFocus();
             edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
@@ -239,7 +249,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
             ltedtCpf.setVisibility(View.GONE);
             ltedtConfirmPassword.setVisibility(View.GONE);
             ltedtPassword.setVisibility(View.GONE);
-            btnCreateAccount.setText("Editar");
+            btnCreateAccount.setText(R.string.btn_atualizar_conta);
         }
     }
 
@@ -319,21 +329,18 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
                 if (validateMensageiroEdit()) {
                     new CreateAccounTask(mensageiroEdit, this).execute();
                 }
-
             } else {
                 if (validateMensageiroCreate()) {
 
                     List<String> grupos = new ArrayList<>();
                     grupos.add("ROLE_MENSAGEIRO");
                     Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
-                                                            edtCpf.getText().toString().trim(),
-                                                            edtPhone.getText().toString().trim(),
-                                            new Conta(edtUserName.getText().toString().trim(),
-                                                    edtPassword.getText().toString().trim(), true,
-                                                    edtEmail.getText().toString().trim(), grupos));
+                            edtCpf.getText().toString().trim(),
+                            edtPhone.getText().toString().trim(),
+                            new Conta(edtUserName.getText().toString().trim(),
+                                    edtPassword.getText().toString().trim(), true,
+                                    edtEmail.getText().toString().trim(), grupos));
                     new CreateAccounTask(mensageiro, this).execute();
-
-
                 }
             }
         }
@@ -385,12 +392,10 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
                     mensageiro = mensageiroRemoteService.saveMensageiro(mensageiro);
                     Conta conta = authRemoteService.createAuthenticationToken(new Conta(mensageiro.getConta().getUsername(), password), Grupo.MENSAGEIRO);
                     return conta;
-
                 } else {
                     mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiroEdit);
+                    return mensageiroUpdated.getConta();
                 }
-                return null;
-
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
@@ -409,10 +414,10 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         @Override
         protected void onPostExecute(Conta conta) {
             dismissProgressDialog();
-            if (conta != null) {
+            if (conta != null && mensageiroUpdated == null) {
                 Intent intent = new Intent();
                 intent.setClass(CreateMensageiroAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("Conta", conta);
                 startActivity(intent);
                 finish();
@@ -421,6 +426,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
                 SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
                 Intent intent = new Intent(CreateMensageiroAccountActivity.this, ProfileSettingsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Mensageiro", mensageiroUpdated);
                 startActivity(intent);
                 finish();
                 Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();

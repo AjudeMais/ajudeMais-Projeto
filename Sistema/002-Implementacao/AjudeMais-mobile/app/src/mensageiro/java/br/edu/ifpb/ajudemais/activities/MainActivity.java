@@ -131,7 +131,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
 
             case R.id.nav_config_conta:
 
-
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
