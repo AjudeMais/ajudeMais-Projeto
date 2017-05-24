@@ -87,12 +87,10 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
                     if (doador.getFoto() != null) {
                         doador.getFoto().setNome(imagem.getNome());
                     } else {
-                        Log.e("SEM FOTO", doador.toString());
                         doador.setFoto(imagem);
                     }
                     doador = doadorRemoteService.updateDoador(doador);
                     imagem = doador.getFoto();
-                    Log.e("Com FOTO", doador.toString());
 
 
                 } else if (mensageiro != null) {

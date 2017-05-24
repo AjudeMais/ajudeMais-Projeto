@@ -75,7 +75,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     protected SharedPrefManager sharedPrefManager;
 
     protected GoogleApiClient mGoogleApiClient;
-    private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
+    protected static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
     protected LocationManager locationManager;
     protected Location mLastLocation;
@@ -206,7 +206,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     /**
      * Exibe dialog para ligar GPS no device.
      */
-    private void showSettingDialog() {
+    protected void showSettingDialog() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(30 * 1000);
