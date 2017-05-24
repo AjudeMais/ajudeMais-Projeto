@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +40,7 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
     private TextInputEditText edtUf;
     private TextInputEditText edtComplemento;
     private Button btnCadastrarEndereco;
+    private Endereco endereco;
 
 
     @Override
@@ -57,10 +59,13 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
      * Inicializa todos os componentes da activity
      */
     private void init() {
+
         mensageiroEdit = (Mensageiro) getIntent().getSerializableExtra("Mensageiro");
         indexEndereco = (Integer) getIntent().getExtras().get("Index");
+
         sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
+
         if (mensageiroEdit != null) {
             mToolbar.setTitle("Editar Endereço");
         } else {
@@ -94,11 +99,7 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(EnderecoActivity.this, LoginActivity.class);
-
-                if (mensageiroEdit != null) {
-                    intent = new Intent(EnderecoActivity.this, ProfileSettingsActivity.class);
-                }
+                Intent intent = new Intent(EnderecoActivity.this, MyEnderecosActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -156,33 +157,40 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-        Endereco endereco = null;
+
         if (v.getId() == R.id.btnCadastrarEndereco) {
-            if(validateEnderecoCreate()) {
-                if (TextUtils.isEmpty(edtComplemento.getText().toString().trim())) {
+            if (validateEnderecoCreate()) {
+
+                if (indexEndereco != null) {
+                    mensageiroEdit.getEnderecos().get(indexEndereco).setLogradouro(edtLogradouro.getText().toString().trim());
+                    mensageiroEdit.getEnderecos().get(indexEndereco).setBairro(edtBairro.getText().toString().trim());
+                    mensageiroEdit.getEnderecos().get(indexEndereco).setNumero(edtNumero.getText().toString().trim());
+                    mensageiroEdit.getEnderecos().get(indexEndereco).setLocalidade(edtLocalidade.getText().toString().trim());
+                    mensageiroEdit.getEnderecos().get(indexEndereco).setUf(edtUf.getText().toString().trim());
+
+                } else {
                     endereco = new Endereco(edtCep.getText().toString().trim(),
                             edtNumero.getText().toString().trim(),
                             edtBairro.getText().toString().trim(),
                             edtLocalidade.getText().toString().trim(),
                             edtLogradouro.getText().toString().trim(),
                             edtUf.getText().toString().trim());
-                } else {
-                    endereco = new Endereco(edtCep.getText().toString().trim(),
-                            edtNumero.getText().toString().trim(),
-                            edtBairro.getText().toString().trim(),
-                            edtLocalidade.getText().toString().trim(),
-                            edtLogradouro.getText().toString().trim(),
-                            edtUf.getText().toString().trim(),
-                            edtComplemento.getText().toString().trim());
-                }
-                if (indexEndereco == null) {
+
                     mensageiroEdit.getEnderecos().add(endereco);
-                    new CreateEnderecoTask(mensageiroEdit, this).execute();
-                } else {
-                    mensageiroEdit.getEnderecos().remove(indexEndereco);
-                    mensageiroEdit.getEnderecos().add(endereco);
-                    new CreateEnderecoTask(mensageiroEdit, this).execute();
                 }
+
+                if (TextUtils.isEmpty(edtComplemento.getText().toString().trim())) {
+                    if (indexEndereco != null) {
+                        mensageiroEdit.getEnderecos().get(indexEndereco).setComplemento(edtComplemento.getText().toString().trim());
+
+                    } else {
+                        endereco.setComplemento(edtComplemento.getText().toString().trim());
+                    }
+                }
+
+
+                new CreateEnderecoTask(mensageiroEdit, this).execute();
+
             }
         }
     }
@@ -194,6 +202,7 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
         private String password;
         private MensageiroRemoteService mensageiroRemoteService;
         private Mensageiro mensageiroUpdated;
+        private Toast toast;
 
         public CreateEnderecoTask(Mensageiro mensageiro, Context context) {
             this.mensageiro = mensageiro;
@@ -220,11 +229,20 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
             dismissProgressDialog();
             if (mensageiro != null && mensageiroUpdated != null) {
                 SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
-                Intent intent = new Intent(EnderecoActivity.this, ProfileSettingsActivity.class);
+                Intent intent = new Intent(EnderecoActivity.this, MyEnderecosActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
-                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
+                if (indexEndereco != null) {
+                    toast = Toast.makeText(getApplicationContext(), getString(R.string.updatedAddress), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.show();
+
+                } else {
+                    toast = Toast.makeText(getApplicationContext(), getString(R.string.createdAddress), Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast.show();
+                }
             } else {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }

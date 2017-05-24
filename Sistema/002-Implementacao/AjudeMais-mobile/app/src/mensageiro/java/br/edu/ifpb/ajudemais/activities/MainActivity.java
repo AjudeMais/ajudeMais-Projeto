@@ -130,10 +130,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
                 startActivity(intent);
 
             case R.id.nav_config_conta:
-                Intent intent1 = new Intent();
-                intent1.setClass(MainActivity.this, ProfileSettingsActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent1);
 
             case R.id.nav_notificacoes:
                 break;

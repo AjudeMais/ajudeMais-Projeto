@@ -108,13 +108,15 @@ public class DoadorServiceImpl implements DoadorService {
 	@Override
 	@Transactional
 	public Doador update(Doador doador) {
+		System.out.println(doador.getFoto());
 		String imagemAntiga = null;
 		if(doador.getFoto().getId() != null){
 			imagemAntiga = imagemRepository.findOne(doador.getFoto().getId()).getNome();
 		}
 		doador = doadorRepository.save(doador);
 		publisher.publishEvent(new DoadorEditEvent(doador, imagemAntiga));
-
+		System.out.println(imagemAntiga + "<ANTIGA>");
+		System.out.println(doador.getFoto().getNome() + "<NOVA>");
 		return doador;
 
 	}
