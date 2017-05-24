@@ -38,9 +38,10 @@ public class EnderecoAdapter extends  RecyclerView.Adapter<EnderecoAdapter.ViewH
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.logradouroName.setText(enderecos.get(position).getLogradouro());
         holder.ufName.setText(enderecos.get(position).getUf());
-        holder.numberName.setText(enderecos.get(position).getNumero());
-        holder.cityName.setText(enderecos.get(position).getLocalidade());
-        holder.bairroName.setText(enderecos.get(position).getBairro());
+        holder.numberName.setText(enderecos.get(position).getNumero()+",");
+        holder.cityName.setText(enderecos.get(position).getLocalidade()+",");
+        holder.bairroName.setText(enderecos.get(position).getBairro()+",");
+        holder.cepName.setText(enderecos.get(position).getCep()+",");
 
     }
 
@@ -59,6 +60,7 @@ public class EnderecoAdapter extends  RecyclerView.Adapter<EnderecoAdapter.ViewH
         TextView cityName;
         TextView bairroName;
         TextView numberName;
+        TextView cepName;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -67,6 +69,8 @@ public class EnderecoAdapter extends  RecyclerView.Adapter<EnderecoAdapter.ViewH
             cityName = (TextView) itemView.findViewById(R.id.tv_city);
             bairroName = (TextView) itemView.findViewById(R.id.tv_bairro);
             numberName = (TextView) itemView.findViewById(R.id.tv_number);
+            cepName = (TextView) itemView.findViewById(R.id.tv_cep_name);
+
 
         }
     }

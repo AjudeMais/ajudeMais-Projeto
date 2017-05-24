@@ -15,7 +15,6 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.maps.errors.ApiException;
 
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
@@ -188,26 +186,16 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 *            latitude e longitude daquele ponto especifico no mapa
 	 * 
 	 * @return lista de instituicoes
+	 * @throws AjudeMaisException
 	 * 
 	 */
 	@Override
-	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) {
+	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) throws AjudeMaisException {
 
 		Endereco endereco = null;
 
-		try {
-			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
-					latLng.getLongitude());
-		
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (ApiException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+				latLng.getLongitude());
 
 		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
 
@@ -217,8 +205,8 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	 * Lista instituições por ativas ou não.
 	 */
 	@Override
-	public List<InstituicaoCaridade> findByContaAtivo(boolean ativo){
-	
+	public List<InstituicaoCaridade> findByContaAtivo(boolean ativo) {
+
 		return instituicaoRespository.findByContaAtivo(ativo);
 	}
 

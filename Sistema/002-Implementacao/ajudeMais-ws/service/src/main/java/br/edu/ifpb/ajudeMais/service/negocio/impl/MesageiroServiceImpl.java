@@ -63,7 +63,7 @@ public class MesageiroServiceImpl implements MensageiroService {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	/**
 	 * 
 	 */
@@ -105,9 +105,10 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Transactional
 	public Mensageiro update(Mensageiro mensageiro) {
 		String imagemAntiga = null;
-		if(mensageiro.getFoto().getId() != null){
+		if (mensageiro.getFoto().getId() != null) {
 			imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId()).getNome();
-		}		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
+		}
+		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
 		publisher.publishEvent(new MensageiroEditEvent(mensageiroUpdated, imagemAntiga));
 
 		return mensageiroUpdated;
