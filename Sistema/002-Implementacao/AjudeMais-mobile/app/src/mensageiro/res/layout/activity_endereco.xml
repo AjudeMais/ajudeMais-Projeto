@@ -8,6 +8,7 @@
     android:background="@color/colorFont"
     tools:context=".activities.CreateMensageiroAccountActivity">
 
+
     <LinearLayout
         android:id="@+id/componenteActionBar"
         android:layout_width="match_parent"
@@ -94,7 +95,7 @@
                     android:backgroundTint="@color/colorPrimary"
                     android:fontFamily="sans-serif"
                     android:hint="@string/hitNumero"
-                    android:inputType="number"
+                    android:inputType="text"
                     android:textColor="@color/textSecond2"
                     android:textColorHint="@color/colorPrimary" />
             </android.support.design.widget.TextInputLayout>
