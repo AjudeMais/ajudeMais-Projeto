@@ -21,6 +21,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 
 /**
@@ -63,6 +65,6 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 *            a ser busacado
 	 * @return um optional contento o resultado da query.
 	 */
-	Optional<MensageiroAssociado> findByMensageiroId(Long id);
+	Optional<MensageiroAssociado> findByMensageiroAndInstituicaoCaridade(Mensageiro mensageiro, InstituicaoCaridade instituicao);
 
 }

@@ -153,4 +153,15 @@ public class MensageiroAssociado {
 		this.instituicaoCaridade = instituicaoCaridade;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MensageiroAssociado [id=" + id + ", data=" + data + ", mensageiro=" + mensageiro
+				+ ", instituicaoCaridade=" + instituicaoCaridade + ", status=" + status + "]";
+	}
+
 }

@@ -38,6 +38,8 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 
 /**
@@ -72,6 +74,21 @@ public class MensageiroAssociadoRepositoryTest {
 	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroRepository mensageiroRepository;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private InstituicaoCaridadeRepository instituicaoCaridadeRepository;
+
+	/**
+	 * 
+	 */
 	private Conta conta;
 
 	/**
@@ -85,7 +102,6 @@ public class MensageiroAssociadoRepositoryTest {
 
 		conta = new Conta();
 		conta.setId(1l);
-
 	}
 
 	/**
@@ -108,27 +124,35 @@ public class MensageiroAssociadoRepositoryTest {
 	/**
 	 * 
 	 * <p>
-	 * Exercita método de busca de mensgeiro associado por ID do mensgeiro.
+	 * Exercita método de busca de mensgeiro associado, filtrando por mensageiro
+	 * e instituição não associado.
 	 * </p>
 	 */
 	@Test
-	public void findByMensageiroIdTest() {
-		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository.findByMensageiroId(1l);
+	public void findByMensageiroAndInstituicaoNotFoundTest() {
+		Mensageiro mensageiro = mensageiroRepository.findOne(80l);
+		InstituicaoCaridade instituicao = instituicaoCaridadeRepository.findOne(80l);
+		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository
+				.findByMensageiroAndInstituicaoCaridade(mensageiro, instituicao);
 
-		assertTrue(mensageiroAssOp.isPresent());
+		assertFalse(mensageiroAssOp.isPresent());
 	}
-
+	
 	/**
 	 * 
 	 * <p>
-	 * Exercita método de busca de mensgeiro associado por ID do mensgeiro.
+	 * Exercita método de busca de mensgeiro associado, filtrando por mensageiro
+	 * e instituição.
 	 * </p>
 	 */
 	@Test
-	public void findByMensageiroIdNonexistTest() {
-		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository.findByMensageiroId(100l);
+	public void findByMensageiroAndInstituicaoTest() {
+		Mensageiro mensageiro = mensageiroRepository.findOne(1l);
+		InstituicaoCaridade instituicao = instituicaoCaridadeRepository.findOne(1l);
+		Optional<MensageiroAssociado> mensageiroAssOp = mensageiroAssociadoRepository
+				.findByMensageiroAndInstituicaoCaridade(mensageiro, instituicao);
 
-		assertFalse(mensageiroAssOp.isPresent());
+		assertTrue(mensageiroAssOp.isPresent());
 	}
 
 }
