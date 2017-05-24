@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -29,6 +30,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.event.mensageiro.MensageiroEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 
@@ -83,12 +85,18 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Override
 	@Transactional
 	public Mensageiro save(Mensageiro mensageiro) throws AjudeMaisException {
+		
+		Optional<Mensageiro> mensageiroOp = mensageiroRepository
+				.findOneByCpf(mensageiro.getCpf());
+		
+		if (mensageiroOp.isPresent()) {
+			throw new UniqueConstraintAlreadyException("CPF já esta sendo usado");
+		}
+		
 		Conta conta = contaService.save(mensageiro.getConta());
 		mensageiro.setConta(conta);
 
-		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
-
-		return mensageiroSaved;
+		return mensageiroRepository.save(mensageiro);
 	}
 
 	/**

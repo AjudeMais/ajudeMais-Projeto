@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
@@ -61,7 +62,7 @@ public interface MensageiroRepository extends JpaRepository<Mensageiro, Long> {
 	 * @return
 	 */
 	List<Mensageiro> findByContaEmailIgnoreCaseContaining(String email);
-	
+
 	/**
 	 * 
 	 * <p>
@@ -73,5 +74,16 @@ public interface MensageiroRepository extends JpaRepository<Mensageiro, Long> {
 	 * @return Mensageiro encontrado.
 	 */
 	Mensageiro findOneByContaUsername(String username);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca um mensageiro por CPF.
+	 * </p>
+	 * 
+	 * @param cpf
+	 * @return optional do resultado
+	 */
+	Optional<Mensageiro> findOneByCpf(String cpf);
 
 }

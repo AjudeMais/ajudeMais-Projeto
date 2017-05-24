@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -156,5 +157,17 @@ public class MensageiroRepositoryTest {
 		Mensageiro mensageiro = mensageiroRepository.findOneByContaUsername("joao");
 		assertNotNull(mensageiro);
 
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Teste para busca de um mensageiro pelo CPF.
+	 * </p>
+	 */
+	@Test
+	public void findOneByCpfTest() {
+		Optional<Mensageiro> mensageiroOp = mensageiroRepository.findOneByCpf("102.106.104-50");
+		assertTrue(mensageiroOp.isPresent());
 	}
 }
