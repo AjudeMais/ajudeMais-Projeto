@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
@@ -81,14 +82,18 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
 
             if (androidUtil.isOnline()) {
                 imagem = imagemStorageRemoteService.uploadImage(array);
+
                 if (doador != null) {
                     if (doador.getFoto() != null) {
                         doador.getFoto().setNome(imagem.getNome());
                     } else {
+                        Log.e("SEM FOTO", doador.toString());
                         doador.setFoto(imagem);
                     }
                     doador = doadorRemoteService.updateDoador(doador);
-                    imagem = mensageiro.getFoto();
+                    imagem = doador.getFoto();
+                    Log.e("Com FOTO", doador.toString());
+
 
                 } else if (mensageiro != null) {
                     if (mensageiro.getFoto() != null) {
@@ -100,7 +105,6 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
                     imagem = mensageiro.getFoto();
                 }
 
-            } else {
             }
         } catch (RestClientException e) {
             message = e.getMessage();
