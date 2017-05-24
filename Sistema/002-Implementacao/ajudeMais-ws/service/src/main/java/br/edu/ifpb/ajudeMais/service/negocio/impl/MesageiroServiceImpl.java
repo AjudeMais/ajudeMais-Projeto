@@ -99,11 +99,15 @@ public class MesageiroServiceImpl implements MensageiroService {
 	 *            mensageiro a ser atualizado no bd
 	 * 
 	 * @return mensageiro atualizado
+	 * @throws AjudeMaisException 
 	 * 
 	 */
 	@Override
 	@Transactional
-	public Mensageiro update(Mensageiro mensageiro) {
+	public Mensageiro update(Mensageiro mensageiro) throws AjudeMaisException {
+		Conta conta = contaService.update(mensageiro.getConta());
+		mensageiro.setConta(conta);
+		
 		String imagemAntiga = null;
 		if (mensageiro.getFoto().getId() != null) {
 			imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId()).getNome();
