@@ -15,6 +15,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -130,5 +131,30 @@ public class MensageiroRepositoryTest {
 	public void filtersMensageiroCloserNullParamsTest() {
 		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser(null, null, null, null);
 		assertFalse(mensageiros.size() > 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * filtra mensageiro por email
+	 * </p>
+	 */
+	@Test
+	public void findByContaEmailIgnoreCaseContainingTest() {
+		List<Mensageiro> mensageiros = mensageiroRepository.findByContaEmailIgnoreCaseContaining("jao");
+		assertTrue(mensageiros.size() > 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * filtra mensageiro por conta, filtrando por username.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroIdTest() {
+		Mensageiro mensageiro = mensageiroRepository.findOneByContaUsername("joao");
+		assertNotNull(mensageiro);
+
 	}
 }

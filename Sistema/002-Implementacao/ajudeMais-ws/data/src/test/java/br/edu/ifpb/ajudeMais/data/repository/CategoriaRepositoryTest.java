@@ -116,4 +116,28 @@ public class CategoriaRepositoryTest {
 		List<Categoria> instituicaoCaridades = categoriaRepository.findByInstituicaoCaridade(null);
 		assertFalse(instituicaoCaridades.size() > 0);
 	}
+
+	/**
+	 * 
+	 * <p>
+	 * Busca categoria por insituição filtrando por id e status.
+	 * </p>
+	 */
+	@Test
+	public void findByAtivoAndInstituicaoCaridadeIdTest() {
+		List<Categoria> instituicoes = categoriaRepository.findByAtivoAndInstituicaoCaridadeId(true, 1l);
+		assertTrue(instituicoes.size() > 0);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca categoria por insituição filtrando por id com status false.
+	 * </p>
+	 */
+	@Test
+	public void findByAtivoFalseAndInstituicaoCaridadeIdTest() {
+		List<Categoria> instituicoes = categoriaRepository.findByAtivoAndInstituicaoCaridadeId(false, 1l);
+		assertTrue(instituicoes.size() == 0);
+	}
 }

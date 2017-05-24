@@ -2,7 +2,8 @@ package br.edu.ifpb.ajudemais.service.test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -35,10 +36,13 @@ import br.edu.ifpb.ajudeMais.domain.entity.Imagem;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
+
 /**
- * Classe utilizada para realizar teste referente a services de {@link MensageiroService}
+ * Classe utilizada para realizar teste referente a services de
+ * {@link MensageiroService}
  * 
- * @author elson
+ * @author elson <br/>
+ *         <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @SpringBootTest(classes = AjudeMaisApplication.class)
@@ -46,21 +50,24 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 @RunWith(SpringRunner.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 public class MensageiroServiceTest {
-	
+
 	/**
 	 * 
 	 */
 	private Mensageiro mensageiro;
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private MensageiroService mensageiroService;
+
 	/**
 	 * 
 	 */
 	@Mock
 	private MensageiroService mockMensageiroService;
+
 	/**
 	 * metodo que prepara para as unidades de teste;
 	 */
@@ -69,8 +76,10 @@ public class MensageiroServiceTest {
 		mockMensageiroService = mock(MensageiroService.class);
 		getMensageiro();
 	}
+
 	/**
 	 * teste para salvar um mensageiro
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Test
@@ -79,28 +88,36 @@ public class MensageiroServiceTest {
 		verify(mockMensageiroService).save(mensageiro);
 
 	}
+
 	/**
 	 * teste para salvar um mensageiro com o nome null
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Test(expected = TransactionSystemException.class)
 	public void saveMensageiroWithNomeFNull() throws AjudeMaisException {
-		mensageiro.setNome(null);;
+		mensageiro.setNome(null);
+		;
 		mensageiroService.save(mensageiro);
 
 	}
+
 	/**
 	 * teste para salvar um mensageiro com o telefone null
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Test(expected = TransactionSystemException.class)
 	public void saveMensageiroWithTelefoneNull() throws AjudeMaisException {
-		mensageiro.setTelefone(null);;
+		mensageiro.setTelefone(null);
+		;
 		mensageiroService.save(mensageiro);
 
 	}
+
 	/**
 	 * teste para salvar um mensageiro com o CPF null
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Test(expected = TransactionSystemException.class)
@@ -109,8 +126,10 @@ public class MensageiroServiceTest {
 		mensageiroService.save(mensageiro);
 
 	}
+
 	/**
 	 * Testa a atualização de um mensageiro
+	 * 
 	 * @throws AjudeMaisException
 	 */
 	@Test
@@ -131,7 +150,7 @@ public class MensageiroServiceTest {
 		assertThat(this.mensageiro.getNome(), equalTo("mensageiro123"));
 
 	}
-	
+
 	/**
 	 * Teste para remoção de um mensageiro.
 	 */
@@ -140,15 +159,16 @@ public class MensageiroServiceTest {
 		mockMensageiroService.remover(mensageiro);
 		verify(mockMensageiroService).remover(mensageiro);
 	}
+
 	/**
 	 * testa a remoção de um mensageiro null
 	 */
 	@Test(expected = InvalidDataAccessApiUsageException.class)
 	public void removeMensageiroNull() {
 		mensageiroService.remover(null);
-		
+
 	}
-	
+
 	/**
 	 * Teste buscar todos os mensageiros.
 	 */
@@ -158,12 +178,41 @@ public class MensageiroServiceTest {
 		mensageiros.addAll(Arrays.asList(mensageiro, mensageiro));
 
 		when(mockMensageiroService.findAll()).thenReturn(mensageiros);
-		List<Mensageiro> mockedMensageiros= mockMensageiroService.findAll();
+		List<Mensageiro> mockedMensageiros = mockMensageiroService.findAll();
 
 		assertThat(mockedMensageiros, hasItems(mensageiro, mensageiro));
 	}
+
+	/**
+	 * Teste buscar mensageiros filtrando por parte/email.
+	 */
+	@Test
+	public void findMensageirosByEmail() {
+		List<Mensageiro> mensageiros = new ArrayList<>();
+		mensageiros.addAll(Arrays.asList(mensageiro, mensageiro));
+
+		when(mockMensageiroService.findByContaEmail("msg1")).thenReturn(mensageiros);
+		List<Mensageiro> mockedMensageiros = mockMensageiroService.findByContaEmail("msg1");
+
+		assertThat(mockedMensageiros, hasItems(mensageiro, mensageiro));
+	}
+
+	/**
+	 * Teste buscar mensageiro por conta, filtrando por username.
+	 */
+	@Test
+	public void findByContaUsername() {
+		Mensageiro mensageiro = getMensageiro();
+
+		when(mockMensageiroService.findByContaUsername(mensageiro.getConta().getUsername())).thenReturn(mensageiro);
+		Mensageiro mockedMensageiro = mockMensageiroService.findByContaUsername(mensageiro.getConta().getUsername());
+
+		assertEquals(mockedMensageiro, mensageiro);
+	}
+
 	/**
 	 * metodo para criar um mensageiro
+	 * 
 	 * @return
 	 */
 	private Mensageiro getMensageiro() {
@@ -172,8 +221,8 @@ public class MensageiroServiceTest {
 		mensageiro.setCpf("127.547.642-24");
 		mensageiro.setEnderecos(getEndereco());
 		mensageiro.setTelefone("83996885898");
-		
-		Imagem imagem = new Imagem();				
+
+		Imagem imagem = new Imagem();
 		mensageiro.setFoto(imagem);
 
 		Conta conta = new Conta();
@@ -186,8 +235,10 @@ public class MensageiroServiceTest {
 		return mensageiro;
 
 	}
+
 	/**
 	 * cria um endereço
+	 * 
 	 * @return
 	 */
 	private List<Endereco> getEndereco() {
