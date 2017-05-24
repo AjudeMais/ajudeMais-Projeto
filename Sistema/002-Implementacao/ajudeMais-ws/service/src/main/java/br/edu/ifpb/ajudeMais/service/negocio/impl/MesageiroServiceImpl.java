@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.ajudeMais.data.repository.ImagemRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
@@ -57,8 +58,17 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Autowired
 	private ContaService contaService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private ImagemRepository imagemRepository;
 
 	/**
 	 * 
@@ -73,12 +83,8 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Override
 	@Transactional
 	public Mensageiro save(Mensageiro mensageiro) throws AjudeMaisException {
-
-		
 		Conta conta = contaService.save(mensageiro.getConta());
 		mensageiro.setConta(conta);
-
-		publisher.publishEvent(new MensageiroEditEvent(mensageiro));
 
 		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
 
@@ -98,12 +104,14 @@ public class MesageiroServiceImpl implements MensageiroService {
 	@Override
 	@Transactional
 	public Mensageiro update(Mensageiro mensageiro) {
+		String imagemAntiga = null;
+		if (mensageiro.getFoto().getId() != null) {
+			imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId()).getNome();
+		}
+		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
+		publisher.publishEvent(new MensageiroEditEvent(mensageiroUpdated, imagemAntiga));
 
-		publisher.publishEvent(new MensageiroEditEvent(mensageiro));
-
-		Mensageiro mensageiroSaved = mensageiroRepository.save(mensageiro);
-
-		return mensageiroSaved;
+		return mensageiroUpdated;
 
 	}
 

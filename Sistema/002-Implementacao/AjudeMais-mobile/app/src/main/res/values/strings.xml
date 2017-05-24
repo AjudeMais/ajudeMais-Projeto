@@ -105,7 +105,7 @@
     <string name="hitNumero">Número</string>
     <string name="hitBairro">Bairro</string>
     <string name="hitLogradouro">Logradouro</string>
-    <string name="hitUf">Estado</string>
+    <string name="hitUf">UF</string>
     <string name="hitLocalidade">Localidade</string>
 
     <string name="mgsCepEmpty">Informe um cep</string>
@@ -122,10 +122,22 @@
     <string name="msgCpfInvalid">Número de CPF inválido</string>
     <string name="mensageiroUpdated">Mensageiro atualizado com sucesso</string>
     <string name="myaddress">Meus Endereços</string>
+    <string name="updatedAddress">"Endereço atualizado."</string>
+    <string name="createdAddress">Endereço criado.</string>
+    <string name="tv_edit">Editar</string>
+    <string name="tv_delete">Remover</string>
+    <string name="selectOption">Selecione uma opção</string>
+    <string name="deletedAddress">Endereço removido.</string>
     <string name="btn_atualizar_conta">ATUALIZAR</string>
     <string name="my_addresses">Meus Endereços</string>
     <string name="minhas_coletas">Minhas Coletas</string>
     <string name="my_notifications">Notificações</string>
     <string name="account_settings">Configuraçẽs da conta</string>
     <string name="logout">Sair</string>
+    <string name="selectOptinForNewAddress">Selecione Uma das formas para cadastrar um novo endereço</string>
+    <string name="tv_my_location">Usar minha localização</string>
+    <string name="tv_insert_manualy">Cadastrar Outro Endereço</string>
+    <string name="msgEmptyUf">A UF deve  ser informada</string>
+    <string name="msgFormatUfInvalide">A UF deve conter apenas dois caracteres ex. PB</string>
+    <string name="msgFormatCepInvalide">CEP inválido</string>
 </resources>

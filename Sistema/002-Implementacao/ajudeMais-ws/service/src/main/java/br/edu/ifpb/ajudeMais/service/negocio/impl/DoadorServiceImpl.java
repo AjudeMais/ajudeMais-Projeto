@@ -25,6 +25,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
+import br.edu.ifpb.ajudeMais.data.repository.ImagemRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.service.event.doador.DoadorEditEvent;
@@ -72,6 +73,12 @@ public class DoadorServiceImpl implements DoadorService {
 
 	/**
 	 * 
+	 */
+	@Autowired
+	private ImagemRepository imagemRepository;
+
+	/**
+	 * 
 	 * salva um doador no BD
 	 * 
 	 * @param doador
@@ -101,11 +108,12 @@ public class DoadorServiceImpl implements DoadorService {
 	@Override
 	@Transactional
 	public Doador update(Doador doador) {
-
-		publisher.publishEvent(new DoadorEditEvent(doador));
-
+		String imagemAntiga = null;
+		if(doador.getFoto().getId() != null){
+			imagemAntiga = imagemRepository.findOne(doador.getFoto().getId()).getNome();
+		}
 		doador = doadorRepository.save(doador);
-
+		publisher.publishEvent(new DoadorEditEvent(doador, imagemAntiga));
 		return doador;
 
 	}

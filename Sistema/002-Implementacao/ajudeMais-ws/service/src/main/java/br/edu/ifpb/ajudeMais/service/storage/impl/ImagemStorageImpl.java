@@ -97,7 +97,8 @@ public class ImagemStorageImpl implements ImagemStorage {
 
 	/**
 	 * Recupera foto de diretório temporário.
-	 * @throws ImageErrorException 
+	 * 
+	 * @throws ImageErrorException
 	 */
 	@Override
 	public byte[] getTmp(String nome) throws ImageErrorException {
@@ -105,7 +106,7 @@ public class ImagemStorageImpl implements ImagemStorage {
 			return Files.readAllBytes(this.localTmp.resolve(nome));
 		} catch (IOException e) {
 			throw new ImageErrorException("Ocorreu um erro ao tentar recuperar imagem temporaria.");
-		}	
+		}
 	}
 
 	/**
@@ -132,6 +133,41 @@ public class ImagemStorageImpl implements ImagemStorage {
 		} catch (IOException e) {
 			throw new ImageErrorException("Ocorreu um erro ao tentar recuperar imagem.");
 		}
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Verifica se uma determinada foto existe no sistema de arquivo
+	 * </p>
+	 * 
+	 * @param img
+	 * @return
+	 */
+	public boolean exists(String img) {
+		try {
+			byte[] image = this.get(img);
+			if (image.length > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (ImageErrorException e) {
+			return false;
+		}
+	}
+	
+	/**
+	 * Remove uma imagem do disco pelo nome.
+	 */
+	@Override
+	public void remove(String img) {
+		try {
+			Files.delete(this.local.resolve(img));
+		} catch (IOException e) {
+			throw new RuntimeException("Erro remover imagem", e);
+		}
+		
 	}
 
 	/**

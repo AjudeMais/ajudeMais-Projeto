@@ -354,7 +354,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
      */
     @Override
     public void processFinish(Imagem output) {
-        this.imagemTemp = output;
+
+        this.mensageiro.setFoto(output);
     }
 
     /**

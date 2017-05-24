@@ -7,44 +7,102 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:layout_marginTop="8dp"
-    app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true"
-    card_view:cardCornerRadius="0.2dp"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="1dp"
+    app:cardMaxElevation="3dp"
     card_view:cardElevation="2dp"
-    card_view:cardMaxElevation="3dp">
+    card_view:cardMaxElevation="3dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="false">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/cardEndereco"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tv_logradouro_name"
+        <ImageView
+            android:id="@+id/cardview_end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="7dp"
-            android:paddingLeft="10dp"
-            android:paddingTop="2dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/textSecond"
-            android:textSize="18sp"
-            card_view:ignore="RtlHardcoded,RtlSymmetry" />
+            android:src="@drawable/ic_location" />
 
-
-        <TextView
-            android:id="@+id/tv_uf_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/componentText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_logradouro_name"
-            android:paddingBottom="8dp"
-            android:paddingLeft="10dp"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="14sp"
-            card_view:ignore="RtlHardcoded,RtlSymmetry" />
+            android:orientation="vertical">
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/tv_logradouro_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/textSecond"
+                android:textSize="18sp"
+                card_view:ignore="RtlHardcoded,RtlSymmetry" />
+
+
+            <LinearLayout
+                android:id="@+id/componentText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_bairro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/textSecond"
+                    android:textSize="14sp"
+                    card_view:ignore="RtlHardcoded,RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_number"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/textSecond"
+                    android:textSize="14sp"
+                    card_view:ignore="RtlHardcoded,RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_cep_name"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp"
+                    card_view:ignore="RtlHardcoded,RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_city"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp"
+                    card_view:ignore="RtlHardcoded,RtlSymmetry" />
+
+                <TextView
+                    android:id="@+id/tv_uf_name"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="3dp"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp"
+                    card_view:ignore="RtlHardcoded,RtlSymmetry" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

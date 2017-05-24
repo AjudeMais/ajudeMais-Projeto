@@ -30,14 +30,20 @@ public class MensageiroEditEvent {
 
 	/**
 	 * 
+	 */
+	private String imagemAntiga;
+
+	/**
+	 * 
 	 * <p>
 	 * Construtor default
 	 * </p>
 	 *
 	 * @param mensageiro
 	 */
-	public MensageiroEditEvent(Mensageiro mensageiro) {
+	public MensageiroEditEvent(Mensageiro mensageiro, String imagemAntiga) {
 		this.mensageiro = mensageiro;
+		this.imagemAntiga = imagemAntiga;
 	}
 
 	/**
@@ -56,6 +62,21 @@ public class MensageiroEditEvent {
 	}
 
 	/**
+	 * @return o atributo imagemAntiga
+	 */
+	public String getImagemAntiga() {
+		return imagemAntiga;
+	}
+
+	/**
+	 * @param o
+	 *            parametro imagemAntiga é setado em imagemAntiga
+	 */
+	public void setImagemAntiga(String imagemAntiga) {
+		this.imagemAntiga = imagemAntiga;
+	}
+
+	/**
 	 * 
 	 * <p>
 	 * Verifica se o mensageiro possui uma imagem.
@@ -64,7 +85,9 @@ public class MensageiroEditEvent {
 	 * @return
 	 */
 	public boolean isImage() {
-		if(mensageiro.getFoto() == null || mensageiro.getFoto().getId() != null) return false;
+		if (mensageiro.getFoto() == null) {
+			return false;
+		}
 		return !StringUtils.isEmpty(mensageiro.getFoto().getNome());
 	}
 

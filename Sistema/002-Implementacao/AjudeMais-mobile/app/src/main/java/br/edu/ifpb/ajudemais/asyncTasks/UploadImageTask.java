@@ -88,6 +88,7 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
                         doador.setFoto(imagem);
                     }
                     doador = doadorRemoteService.updateDoador(doador);
+                    imagem = mensageiro.getFoto();
 
                 } else if (mensageiro != null) {
                     if (mensageiro.getFoto() != null) {
@@ -96,6 +97,7 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
                         mensageiro.setFoto(imagem);
                     }
                     mensageiro = mensageiroRemoteService.updateMensageiro(mensageiro);
+                    imagem = mensageiro.getFoto();
                 }
 
             } else {
@@ -118,7 +120,6 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(context, context.getString(R.string.updatedImage), Toast.LENGTH_LONG).show();
-
             delegate.processFinish(imagem);
         }
     }

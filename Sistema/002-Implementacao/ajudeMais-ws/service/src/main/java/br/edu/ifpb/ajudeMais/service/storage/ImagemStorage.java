@@ -43,7 +43,7 @@ public interface ImagemStorage {
 	 * 
 	 * @param nome
 	 * @return
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	public byte[] getTmp(String nome) throws AjudeMaisException;
 
@@ -65,8 +65,29 @@ public interface ImagemStorage {
 	 * 
 	 * @param img
 	 * @return
-	 * @throws ImageErrorException 
+	 * @throws ImageErrorException
 	 */
 	public byte[] get(String img) throws AjudeMaisException;
+
+	/**
+	 * 
+	 * <p>
+	 * Verifica se uma determinada imagem existe no sistema.
+	 * </p>
+	 * 
+	 * @param img
+	 * @return
+	 */
+	boolean exists(String img);
+
+	/**
+	 * 
+	 * <p>
+	 * Remove uma imagem do disco pelo nome.
+	 * </p>
+	 * 
+	 * @param img
+	 */
+	void remove(String img);
 
 }

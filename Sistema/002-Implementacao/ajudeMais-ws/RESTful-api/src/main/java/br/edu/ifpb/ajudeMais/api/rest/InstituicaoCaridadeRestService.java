@@ -156,11 +156,12 @@ public class InstituicaoCaridadeRestService {
 	 * @param localidade
 	 * @param uf
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoCoordinates")
 	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(
-			@RequestBody LatLng latLng) {
+			@RequestBody LatLng latLng) throws AjudeMaisException {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCloseForLatAndLng(latLng);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);

@@ -1,43 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/componenteActionBar"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <include
-            layout="@layout/navigation_action"
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/nav_action"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="?attr/actionBarSize"
+            android:clickable="true"
+            android:textAlignment="center"
+            app:layout_collapseMode="pin"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    </LinearLayout>
 
-    <RelativeLayout
-        android:id="@+id/containerViewSearchInst"
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="2dp"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <FrameLayout
+        android:id="@+id/containerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnNewAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_add"
+            app:layout_anchorGravity="bottom|right|end"
+            tools:ignore="RtlHardcoded" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_list"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:paddingTop="2dp"
-                android:scrollbars="vertical" />
+    </FrameLayout>
 
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-    </RelativeLayout>
 
     <include
         android:id="@+id/no_internet_fragment"
@@ -61,15 +75,4 @@
     </RelativeLayout>
 
 
-    <Button
-        android:id="@+id/btnEditAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:height="@dimen/LagHeigth"
-        android:backgroundTint="@color/colorPrimary"
-        android:text="@string/btnCreateNewAccount"
-        android:textColor="@color/colorFont"
-        android:textSize="@dimen/fontLogin" />
-
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

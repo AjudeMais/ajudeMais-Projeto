@@ -91,7 +91,7 @@ public class Mensageiro {
 	 * 
 	 */
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval=true)
 	@JoinColumn(name = "mensageiro_id")
 	private List<Endereco> enderecos;
 
