@@ -27,6 +27,7 @@ import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CPFValidator;
 
 /**
  * <p>
@@ -214,7 +215,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
             edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
 
-        } else if (!(cpf.length() < 14)) {
+        } else if ((cpf.length() < 14) || !CPFValidator.isValid(cpf)) {
             edtCpf.requestFocus();
             edtCpf.setError(resources.getString(R.string.msgCpfInvalid));
             return false;
