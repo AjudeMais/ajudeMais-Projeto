@@ -60,7 +60,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	@Override
 	public MensageiroAssociado save(MensageiroAssociado entity) throws AjudeMaisException {
 		Optional<MensageiroAssociado> mensageirosAssOp = mensageiroAssociadoRepository
-				.findByMensageiroId(entity.getMensageiro().getId());
+				.findByMensageiroAndInstituicaoCaridade(entity.getMensageiro(), entity.getInstituicaoCaridade());
 		if (mensageirosAssOp.isPresent()) {
 			throw new UniqueConstraintAlreadyException("Este mensageiro já esta associado a esta instituição.");
 		}
