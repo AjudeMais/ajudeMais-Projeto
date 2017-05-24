@@ -15,15 +15,13 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-
-import com.google.maps.errors.ApiException;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 
 /**
@@ -66,12 +64,9 @@ public interface InstituicaoCaridadeService extends Service<InstituicaoCaridade,
 	 * @param localidade
 	 * @param uf
 	 * @return
-	 * @throws IOException
-	 * @throws InterruptedException
-	 * @throws ApiException
-	 * @throws NumberFormatException
+	 * @throws AjudeMaisException 
 	 */
-	List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng);
+	List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) throws AjudeMaisException;
 
 	/**
 	 * Busca instituição por conta, filtrando por conta ativa.

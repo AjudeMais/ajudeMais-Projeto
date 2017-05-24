@@ -19,12 +19,16 @@ import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.EnderecoAdapter;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.FindByMyLocationActualTask;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
  * <p>
@@ -37,7 +41,7 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeRefreshLayout.OnRefreshListener, RecyclerItemClickListener.OnItemClickListener {
+public class MyEnderecosActivity extends AbstractActivity implements RecyclerItemClickListener.OnItemClickListener {
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
@@ -46,6 +50,7 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     private Integer position;
     private AndroidUtil androidUtil;
     private FloatingActionButton fab;
+    private FindByMyLocationActualTask findByMyLocationActualTask;
 
 
     /**
@@ -57,6 +62,8 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
         setContentView(R.layout.activity_my_enderecos);
 
         androidUtil = new AndroidUtil(this);
+        initGoogleAPIClient();
+
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mToolbar.setTitle(getString(R.string.myaddress));
@@ -69,22 +76,16 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
 
-        swipeRefreshLayout.setOnRefreshListener(this);
-
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
-        findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
 
         fab = (FloatingActionButton) findViewById(R.id.btnNewAddress);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
-                intent.putExtra("Mensageiro", mensageiro);
-                startActivity(intent);
+                openDialogNewAddress();
             }
         });
     }
@@ -95,9 +96,14 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     @Override
     protected void onStart() {
         super.onStart();
+        if (mGoogleApiClient != null) {
+            mGoogleApiClient.connect();
+        }
         new LoadingEnderecosTask().execute();
 
     }
+
+
 
     /**
      * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
@@ -105,7 +111,7 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     public void setVisibleNoConnection() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        //findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
@@ -116,7 +122,7 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     private void showListEnderecos() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
+        //findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
@@ -126,7 +132,7 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     private void showListEmpty() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
+        //findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
@@ -142,16 +148,6 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     }
 
 
-    @Override
-    public void onRefresh() {
-
-        if (androidUtil.isOnline()) {
-            new LoadingEnderecosTask().execute();
-        } else {
-            setVisibleNoConnection();
-        }
-        swipeRefreshLayout.setRefreshing(false);
-    }
 
     /**
      * Implementação para controlar operações na action bar
@@ -175,6 +171,46 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
     }
 
     /**
+     * Dialog para seleção da opção para adicionar um novo endereço pela localização do device ou informando manualmente.
+     */
+    private void openDialogNewAddress() {
+        final CharSequence[] items = {getString(R.string.tv_my_location), getString(R.string.tv_insert_manualy), getString(R.string.cancelar)};
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.selectOptinForNewAddress));
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+
+                if (items[item].equals(getString(R.string.tv_my_location))) {
+                    checkPermissions();
+                    if (mLastLocation == null) {
+                        mLastLocation = getLocation();
+                    }
+                    findByMyLocationActualTask = new FindByMyLocationActualTask(MyEnderecosActivity.this ,new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                    findByMyLocationActualTask.delegate = new AsyncResponse<Endereco>() {
+                        @Override
+                        public void processFinish(Endereco output) {
+                            Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
+                            intent.putExtra("Mensageiro", mensageiro);
+                            intent.putExtra("Endereco", output);
+                            startActivity(intent);
+                        }
+                    };
+                    findByMyLocationActualTask.execute();
+                } else if (items[item].equals(getString(R.string.tv_insert_manualy))) {
+                    Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
+                    intent.putExtra("Mensageiro", mensageiro);
+                    startActivity(intent);
+                } else if (items[item].equals(getString(R.string.cancelar))) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+    }
+
+
+    /**
      * Dialog para seleção da opção de editar ou remover endereço.
      */
     private void openDialogEditAddress() {
@@ -194,7 +230,7 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
                 } else if (items[item].equals(getString(R.string.tv_delete))) {
                     Endereco endereco = mensageiro.getEnderecos().get(position);
                     mensageiro.getEnderecos().remove(endereco);
-                    new DeleteEnderecoTask(mensageiro, getApplicationContext()).execute();
+                    new DeleteEnderecoTask(mensageiro, MyEnderecosActivity.this).execute();
 
                 } else if (items[item].equals(getString(R.string.cancelar))) {
                     dialog.dismiss();
@@ -203,7 +239,6 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
         });
         builder.show();
     }
-
 
     /**
      *
@@ -281,15 +316,21 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
         private MensageiroRemoteService mensageiroRemoteService;
         private Mensageiro mensageiroUpdated;
         private Toast toast;
+        private ProgressDialog progressDialog;
+        private Context context;
+
 
         public DeleteEnderecoTask(Mensageiro mensageiro, Context context) {
             this.mensageiro = mensageiro;
+            this.context = context;
             mensageiroRemoteService = new MensageiroRemoteService(context);
         }
 
         @Override
         protected void onPreExecute() {
-            showLoadingProgressDialog();
+            progressDialog = new ProgressDialog(context);
+            progressDialog.showProgressDialog();
+
         }
 
         @Override
@@ -299,15 +340,15 @@ public class MyEnderecosActivity extends AbstractAsyncActivity implements SwipeR
             } catch (RestClientException e) {
                 message = e.getMessage();
             }
-            return null;
+            return mensageiroUpdated;
         }
 
         @Override
         protected void onPostExecute(Mensageiro mensageiro) {
-            dismissProgressDialog();
+            progressDialog.dismissProgressDialog();
             if (mensageiroUpdated != null) {
 
-                EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), getApplicationContext());
+                EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiroUpdated.getEnderecos(), getApplicationContext());
                 recyclerView.setAdapter(enderecoAdapter);
 
                 toast = Toast.makeText(getApplicationContext(), getString(R.string.deletedAddress), Toast.LENGTH_LONG);
