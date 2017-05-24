@@ -134,7 +134,7 @@
     <string name="my_notifications">Notificações</string>
     <string name="account_settings">Configuraçẽs da conta</string>
     <string name="logout">Sair</string>
-    <string name="selectOptinForNewAddress">Selecione Uma das formas para cadastrar um novo endereço</string>
+    <string name="selectOptinForNewAddress">Selecione para cadastrar um novo endereço</string>
     <string name="tv_my_location">Usar minha localização</string>
     <string name="tv_insert_manualy">Cadastrar Outro Endereço</string>
     <string name="msgEmptyUf">A UF deve  ser informada</string>

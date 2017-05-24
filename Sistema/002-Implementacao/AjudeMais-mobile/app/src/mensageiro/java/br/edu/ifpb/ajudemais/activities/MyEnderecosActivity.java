@@ -3,8 +3,10 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,11 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import org.springframework.web.client.RestClientException;
 
@@ -104,14 +111,12 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
     }
 
 
-
     /**
      * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
      */
     public void setVisibleNoConnection() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        //findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
@@ -122,7 +127,6 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
     private void showListEnderecos() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        //findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
@@ -132,7 +136,6 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
     private void showListEmpty() {
         findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        //findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
@@ -146,7 +149,6 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
     public void onItemLongPress(View childView, int position) {
 
     }
-
 
 
     /**
@@ -183,20 +185,9 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
 
                 if (items[item].equals(getString(R.string.tv_my_location))) {
                     checkPermissions();
-                    if (mLastLocation == null) {
-                        mLastLocation = getLocation();
+                    if (mLastLocation != null) {
+                        runTaskLocation();
                     }
-                    findByMyLocationActualTask = new FindByMyLocationActualTask(MyEnderecosActivity.this ,new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-                    findByMyLocationActualTask.delegate = new AsyncResponse<Endereco>() {
-                        @Override
-                        public void processFinish(Endereco output) {
-                            Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
-                            intent.putExtra("Mensageiro", mensageiro);
-                            intent.putExtra("Endereco", output);
-                            startActivity(intent);
-                        }
-                    };
-                    findByMyLocationActualTask.execute();
                 } else if (items[item].equals(getString(R.string.tv_insert_manualy))) {
                     Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
                     intent.putExtra("Mensageiro", mensageiro);
@@ -209,6 +200,29 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
         builder.show();
     }
 
+    /**
+     * Seta propriedades e executa Task para get location
+     */
+    private void runTaskLocation() {
+        startLocationUpdates();
+        if (mLastLocation == null) {
+            mLastLocation = getLocation();
+        }
+
+        if (mLastLocation != null) {
+            findByMyLocationActualTask = new FindByMyLocationActualTask(MyEnderecosActivity.this, new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+            findByMyLocationActualTask.delegate = new AsyncResponse<Endereco>() {
+                @Override
+                public void processFinish(Endereco output) {
+                    Intent intent = new Intent(getApplicationContext(), EnderecoActivity.class);
+                    intent.putExtra("Mensageiro", mensageiro);
+                    intent.putExtra("Endereco", output);
+                    startActivity(intent);
+                }
+            };
+            findByMyLocationActualTask.execute();
+        }
+    }
 
     /**
      * Dialog para seleção da opção de editar ou remover endereço.
@@ -239,6 +253,54 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
         });
         builder.show();
     }
+
+
+    /**
+     * @param locationSettingsResult
+     */
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                onLocationChanged(getLocation());
+                runTaskLocation();
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                try {
+                    status.startResolutionForResult(MyEnderecosActivity.this, REQUEST_CHECK_SETTINGS);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                break;
+        }
+    }
+
+    /**
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+
+            if (resultCode == RESULT_OK) {
+                mLastLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(mGoogleApiClient);
+
+                runTaskLocation();
+
+            }
+        }
+    }
+
 
     /**
      *
@@ -355,7 +417,11 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
                 toast.setGravity(Gravity.BOTTOM, 0, 0);
                 toast.show();
 
-                showListEnderecos();
+                if (mensageiro.getEnderecos().size()>0) {
+                    showListEnderecos();
+                }else {
+                    showListEmpty();
+                }
 
 
             } else {

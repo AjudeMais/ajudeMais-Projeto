@@ -154,5 +154,31 @@ public class InstituicaoCaridadeRepositoryTest {
 
 		assertThat(instituicoes.isEmpty());
 	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste busca insituição pelo status.
+	 * </p>
+	 */
+	@Test
+	public void findByContaAtivoTest() {
+		List<InstituicaoCaridade> instituicoes = instituicaoRepository.findByContaAtivo(true);
+
+		assertThat(!instituicoes.isEmpty());
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste tenta buscar instituição com status false.
+	 * </p>
+	 */
+	@Test
+	public void findByContaAtivoFalseTest() {
+		List<InstituicaoCaridade> instituicoes = instituicaoRepository.findByContaAtivo(false);
+
+		assertThat(instituicoes.isEmpty());
+	}
 
 }

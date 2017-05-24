@@ -69,7 +69,6 @@ public class DoadorRestService {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<?> save(@Valid @RequestBody Doador doador) throws AjudeMaisException {
-
 		Doador doadorCriado = doadorService.save(doador);
 		return new ResponseEntity<>(doadorCriado, HttpStatus.CREATED);
 	}

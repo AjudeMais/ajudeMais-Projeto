@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class ProfileSettingsFragment extends Fragment {
         tvPhone = (TextView) getView().findViewById(R.id.tv_edit_celular);
 
         doador = (Doador) getArguments().getSerializable("doador");
+        Log.e("AJUDEMAIS2", doador.toString());
 
         if (doador != null) {
             tvPhone.setText(doador.getTelefone());

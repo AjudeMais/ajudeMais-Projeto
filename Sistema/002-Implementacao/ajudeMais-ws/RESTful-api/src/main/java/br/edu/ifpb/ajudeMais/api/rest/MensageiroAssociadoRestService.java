@@ -106,7 +106,7 @@ public class MensageiroAssociadoRestService {
 	 * 
 	 * <p>
 	 * PUT /associacao : Método disponibiliza recurso para atualizar associação
-	 * entre mensageiro e insituição logada. <br>
+	 * entre mensageiro e instituição logada. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 

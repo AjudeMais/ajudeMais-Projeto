@@ -55,7 +55,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
 	/**
-	 * 
+	 * Salva um mensageiro considerando restrições de email.
 	 */
 	@Override
 	public MensageiroAssociado save(MensageiroAssociado entity) throws AjudeMaisException {
@@ -69,7 +69,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	}
 
 	/**
-	 * 
+	 * Atualiza um mensageiro existente
 	 */
 	@Override
 	public MensageiroAssociado update(MensageiroAssociado entity) throws AjudeMaisException {
@@ -77,7 +77,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	}
 
 	/**
-	 * 
+	 * Busca todos os mensageiros.
 	 */
 	@Override
 	public List<MensageiroAssociado> findAll() {
@@ -85,7 +85,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	}
 
 	/**
-	 * 
+	 * Busca um mesageiro, filtrando por ID.
 	 */
 	@Override
 	public MensageiroAssociado findById(Long id) {
@@ -93,7 +93,8 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	}
 
 	/**
-	 * 
+	 * Remove um mensageiro associado. Não deve ser disponibilizado como
+	 * recurso.
 	 */
 	@Override
 	public void remover(MensageiroAssociado entity) {
@@ -101,7 +102,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	}
 
 	/**
-	 * 
+	 * Busca insituição mensageiro associado por uma conta. Conta da insituição.
 	 */
 	@Override
 	public List<MensageiroAssociado> findByInstituicaoConta(Conta conta) {

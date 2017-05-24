@@ -102,14 +102,17 @@ public class DoadorServiceImpl implements DoadorService {
 	 * 
 	 * 
 	 * atualiza um doador previamente cadastrado
+	 * @throws AjudeMaisException 
 	 * 
 	 * 
 	 */
 	@Override
 	@Transactional
-	public Doador update(Doador doador) {
+	public Doador update(Doador doador) throws AjudeMaisException {
+		Conta conta = contaService.update(doador.getConta());
+		doador.setConta(conta);
 		String imagemAntiga = null;
-		if(doador.getFoto().getId() != null){
+		if (doador.getFoto().getId() != null) {
 			imagemAntiga = imagemRepository.findOne(doador.getFoto().getId()).getNome();
 		}
 		doador = doadorRepository.save(doador);
