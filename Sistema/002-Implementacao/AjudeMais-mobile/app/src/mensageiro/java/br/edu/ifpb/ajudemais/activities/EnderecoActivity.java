@@ -160,7 +160,7 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
             edtCep.setError(resources.getString(R.string.msgEmptyCep));
             return true;
         } else if (TextUtils.isEmpty(logradouro)) {
-            edtLogradouro.requestFocus();
+            //edtLogradouro.requestFocus();
             edtLogradouro.setError(resources.getString(R.string.msgEmptyLogradouro));
             return true;
         } else if (TextUtils.isEmpty(numero)) {
