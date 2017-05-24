@@ -120,7 +120,7 @@ public class ImagemStoreServiceTest {
 	 */
 	@Test
 	public void removeImageOk() {
-		mockImagemStorage.remove(file.getContentType());
+		mockImagemStorage.remove(file.getOriginalFilename());
 		verify(mockImagemStorage).remove(file.getOriginalFilename());
 	}
 
