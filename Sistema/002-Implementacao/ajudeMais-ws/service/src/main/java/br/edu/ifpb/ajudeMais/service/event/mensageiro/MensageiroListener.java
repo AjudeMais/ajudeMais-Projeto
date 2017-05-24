@@ -44,8 +44,13 @@ public class MensageiroListener {
 	 */
 	@EventListener(condition = "#event.image")
 	public void mensageiroEdited(MensageiroEditEvent event) {
-
-		imagemStorage.save(event.getMensageiro().getFoto().getNome());
+		String foto = event.getMensageiro().getFoto().getNome();
+		if (!imagemStorage.exists(foto)) {
+			imagemStorage.save(foto);
+			if (event.getImagemAntiga() != null) {
+				imagemStorage.remove(event.getImagemAntiga());
+			}
+		}
 
 	}
 }

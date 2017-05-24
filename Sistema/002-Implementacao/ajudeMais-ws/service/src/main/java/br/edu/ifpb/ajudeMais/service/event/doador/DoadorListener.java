@@ -53,8 +53,12 @@ public class DoadorListener {
 	 */
 	@EventListener(condition = "#event.image")
 	public void doadorEdited(DoadorEditEvent event) {
-
-		imagemStorage.save(event.getDoador().getFoto().getNome());
-
+		String foto = event.getDoador().getFoto().getNome();
+		if (!imagemStorage.exists(foto)) {
+			imagemStorage.save(foto);
+			if (event.getImagemAntiga() != null) {
+				imagemStorage.remove(event.getImagemAntiga());
+			}
+		}
 	}
 }
