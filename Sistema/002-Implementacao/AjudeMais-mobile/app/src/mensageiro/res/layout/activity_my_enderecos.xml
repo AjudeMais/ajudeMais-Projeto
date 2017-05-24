@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@color/colorFont">
+    android:background="@color/colorFont"
+    android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -28,12 +28,12 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycle_view_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="2dp"
-        android:scrollbars="vertical"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    android:id="@+id/recycle_view_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="2dp"
+    android:scrollbars="vertical"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <FrameLayout
         android:id="@+id/containerView"
@@ -58,11 +58,20 @@
         android:id="@+id/no_internet_fragment"
         layout="@layout/fragment_no_internet" />
 
-    <include
+    <FrameLayout
         android:id="@+id/empty_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        layout="@layout/fragment_list_empty" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/component_empty_list"
+            layout="@layout/fragment_list_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp" />
+
+    </FrameLayout>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/loadingPanelMainSearchInst"

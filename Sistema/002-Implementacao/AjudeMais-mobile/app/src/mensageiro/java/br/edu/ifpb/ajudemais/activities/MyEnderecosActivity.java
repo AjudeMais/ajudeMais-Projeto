@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
@@ -280,6 +281,26 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
         }
     }
 
+    /**
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+
+            if (resultCode == RESULT_OK) {
+                mLastLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(mGoogleApiClient);
+
+                runTaskLocation();
+
+            }
+        }
+    }
+
 
     /**
      *
@@ -396,7 +417,11 @@ public class MyEnderecosActivity extends AbstractActivity implements RecyclerIte
                 toast.setGravity(Gravity.BOTTOM, 0, 0);
                 toast.show();
 
-                showListEnderecos();
+                if (mensageiro.getEnderecos().size()>0) {
+                    showListEnderecos();
+                }else {
+                    showListEmpty();
+                }
 
 
             } else {
