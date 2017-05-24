@@ -6,6 +6,7 @@ if [ $1 = "run" ]; then
 fi
 
 mvn clean install
+cd RESTful-api
 
 if [ $1 = "test" ]; then
    mvn spring-boot:run -Drun.profiles=test

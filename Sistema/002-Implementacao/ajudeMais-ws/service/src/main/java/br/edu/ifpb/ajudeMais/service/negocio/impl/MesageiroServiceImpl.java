@@ -109,7 +109,7 @@ public class MesageiroServiceImpl implements MensageiroService {
 		mensageiro.setConta(conta);
 		
 		String imagemAntiga = null;
-		if (mensageiro.getFoto().getId() != null) {
+		if (mensageiro.getFoto() != null && mensageiro.getFoto().getId() != null) {
 			imagemAntiga = imagemRepository.findOne(mensageiro.getFoto().getId()).getNome();
 		}
 		Mensageiro mensageiroUpdated = mensageiroRepository.save(mensageiro);
