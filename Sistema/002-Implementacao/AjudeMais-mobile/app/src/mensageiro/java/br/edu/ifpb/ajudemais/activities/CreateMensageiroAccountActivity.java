@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -214,7 +215,7 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
             edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
             return false;
 
-        } else if (!(cpf.length() < 14)) {
+        } else if ((cpf.length() < 14)) {
             edtCpf.requestFocus();
             edtCpf.setError(resources.getString(R.string.msgCpfInvalid));
             return false;
