@@ -140,4 +140,5 @@
     <string name="msgEmptyUf">A UF deve  ser informada</string>
     <string name="msgFormatUfInvalide">A UF deve conter apenas dois caracteres ex. PB</string>
     <string name="msgFormatCepInvalide">CEP inválido</string>
+    <string name="config">Configurações</string>
 </resources>
