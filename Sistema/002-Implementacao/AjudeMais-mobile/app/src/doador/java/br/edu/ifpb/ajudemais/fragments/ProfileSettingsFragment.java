@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.lang.reflect.Field;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Doador;
 
