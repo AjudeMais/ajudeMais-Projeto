@@ -18,11 +18,11 @@ public class MensageiroPage extends AbstractPage {
 	/**
 	 * 
 	 */
-	private static final String USERNAME_INSTIUTICAO = "17871668000107";
+	private static final String USERNAME_INSTIUTICAO = "76914318301";
 	/**
 	 * 
 	 */
-	private static final String PASSWORD_INSTIUTICAO = "ongx";
+	private static final String PASSWORD_INSTIUTICAO = "76914318301";
 
 	/**
 	 * 
@@ -31,15 +31,17 @@ public class MensageiroPage extends AbstractPage {
 	public MensageiroPage(WebDriver driver) {
 		super(driver);
 	}
-
 	/**
 	 * 
 	 */
 	public void visita() {
 		open(getUrlBase() + "/home/associacao");
+
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
+
 		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
 	}
+
 	/**
 	 * 
 	 * @return
@@ -103,7 +105,4 @@ public class MensageiroPage extends AbstractPage {
 		return value;
 	}
 
-	/**
-	 * Adiciona uma instituição de caridade caso ela não exista.
-	 */
 }

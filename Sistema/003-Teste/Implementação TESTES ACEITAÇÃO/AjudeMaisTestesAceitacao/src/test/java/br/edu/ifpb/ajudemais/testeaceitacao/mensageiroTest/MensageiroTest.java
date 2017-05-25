@@ -79,7 +79,7 @@ public class MensageiroTest {
 		AssociarMensageiroPage associar = mensageiroPage.novo();
 		String email = "mensageiroTESTE@gmail.com";
 		associar.associarMensageiro(email);
-
+		
 		boolean mensageiroAssociadoComSucesso = mensageiroPage.foiAssociadoMensageiroComSucesso(email);
 		assertTrue("O mensageiro deveria ter sido associado com sucesso", mensageiroAssociadoComSucesso);
 
