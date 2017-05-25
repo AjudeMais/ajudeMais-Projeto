@@ -83,6 +83,10 @@ am.autocomplete-width {
     margin-top: 15px;
 }
 
+.am-card-adrrs-empty {
+    margin-top: 15px;
+}
+
 .am-card-result-content {
     margin: 10px;
 }

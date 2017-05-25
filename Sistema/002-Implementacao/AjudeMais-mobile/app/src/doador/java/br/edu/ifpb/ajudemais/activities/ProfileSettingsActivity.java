@@ -218,7 +218,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openDialog();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
                 } else {
                     Toast.makeText(ProfileSettingsActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
                 }
@@ -351,6 +352,40 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         this.doador.setFoto(output);
     }
 
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("doador", doador);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedState)
+    {
+        doador = (Doador) savedState.getSerializable("doador");
+        setProprieties();
+    }
+
+
+    /**
+     * Set propriedades após executar task.
+     */
+    public void setProprieties(){
+        if (!isDestroyed()) {
+            collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
+            ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("doador", doador);
+            fragment.setArguments(bundle);
+
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.editprofile_fragment, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
+            nestedScrollView.setVisibility(View.VISIBLE);
+            fab.setEnabled(true);
+        }
+    }
+
+
 
     /**
      *
@@ -394,19 +429,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         @Override
         protected void onPostExecute(Doador doador) {
             if (doador != null) {
-
-                collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
-                ProfileSettingsFragment fragment = new ProfileSettingsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("doador", doador);
-                fragment.setArguments(bundle);
-
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.editprofile_fragment, fragment);
-                fragmentTransaction.commit();
-                nestedScrollView.setVisibility(View.VISIBLE);
-                fab.setEnabled(true);
-
+                setProprieties();
             }
         }
     }

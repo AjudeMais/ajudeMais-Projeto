@@ -64,7 +64,6 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		if (mensageirosAssOp.isPresent()) {
 			throw new UniqueConstraintAlreadyException("Este mensageiro já esta associado a esta instituição.");
 		}
-		;
 		return mensageiroAssociadoRepository.save(entity);
 	}
 

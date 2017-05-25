@@ -112,7 +112,7 @@ public class DoadorServiceImpl implements DoadorService {
 		Conta conta = contaService.update(doador.getConta());
 		doador.setConta(conta);
 		String imagemAntiga = null;
-		if (doador.getFoto().getId() != null) {
+		if (doador.getFoto() != null && doador.getFoto().getId() != null) {
 			imagemAntiga = imagemRepository.findOne(doador.getFoto().getId()).getNome();
 		}
 		doador = doadorRepository.save(doador);

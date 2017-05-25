@@ -77,7 +77,7 @@ public class MensageiroTest {
 		mensageiroPage.visita();
 
 		AssociarMensageiroPage associar = mensageiroPage.novo();
-		String email = "mensageiroTESTE@gmail.com";
+		String email = "mensageiroTeste@gmail.com";
 		associar.associarMensageiro(email);
 		
 		boolean mensageiroAssociadoComSucesso = mensageiroPage.foiAssociadoMensageiroComSucesso(email);
@@ -95,7 +95,7 @@ public class MensageiroTest {
 		String email = "mensageiroTESTE@gmail.com";
 		associar.associarMensageiro(email);
 
-		boolean mensageiroNaoAssociado = mensageiroPage.erroAssociarMensageiroIgual(email);
+		boolean mensageiroNaoAssociado = mensageiroPage.erroAssociarMensageiroIgual();
 		assertTrue("Deveria ter exibido mensagem de erro", mensageiroNaoAssociado);
 	}
 	/**
@@ -105,7 +105,7 @@ public class MensageiroTest {
 	public void editarMensageiroJaAssociado() {
 		mensageiroPage.visita();
 		
-		String email = "mensageiroTESTE@gmail.com";
+		String email = "mensageiroTeste@gmail.com";
 		EditarMensageiroPage editar = mensageiroPage.edit(email);		
 		editar.editarMensageiro();
 
@@ -119,7 +119,7 @@ public class MensageiroTest {
 	public void desisteDeEditarMensageiro(){
 		mensageiroPage.visita();
 		
-		String email = "mensageiroTESTE@gmail.com";
+		String email = "mensageiroTeste@gmail.com";
 		EditarMensageiroPage editar = mensageiroPage.edit(email);
 		editar.desistirDeEditarMensageiro();
 	}
@@ -130,7 +130,7 @@ public class MensageiroTest {
 	public void pesquisarMensageiroPorNome(){
 		mensageiroPage.visita();
 		
-		String nome = "mensageiroTESTE";
+		String nome = "Fulano Costa";
 		PesquisarMensageiroPage pmp = mensageiroPage.search(nome);
 		pmp.pesquisarMensageiro(nome);
 		
@@ -142,7 +142,7 @@ public class MensageiroTest {
 	public void pesquisarMensageiroPorEmail(){
 		mensageiroPage.visita();
 		
-		String email = "mensageiro123@gmail.com";
+		String email = "mensageiroTeste@gmail.com";
 		PesquisarMensageiroPage pmp = mensageiroPage.search(email);
 		pmp.pesquisarMensageiro(email);
 		

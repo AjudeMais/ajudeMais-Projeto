@@ -87,6 +87,7 @@ public class InstituicaoCaridade {
 	 */
 	@NotNull
 	@NotBlank(message = "CPF/CNPJ deve ser informando")
+	@Column(unique = true, nullable = false)
 	private String documento;
 
 	@NotNull

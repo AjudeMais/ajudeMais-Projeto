@@ -67,6 +67,7 @@ public class Mensageiro {
 	 */
 	@CPF
 	@NotNull(message = "O CPF deve ser informado")
+	@Column(unique = true)
 	private String cpf;
 
 	

@@ -35,13 +35,15 @@
                     <span class="username">
                         {{vm.mensageiroAss.mensageiro.nome}}
                         <a ng-click="vm.removeCurrentMensageiro()" ng-show="!vm.isEdited()"
+                           uib-tooltip="Remover Mensageiro"
+                           tooltip-placement="top"
                            class="pull-right btn-box-tool"><i class="fa fa-1x fa-times"></i></a>
                     </span>
 
                     <span class="description">{{vm.mensageiroAss.mensageiro.conta.username}} - {{vm.mensageiroAss.mensageiro.conta.email}}</span>
                     <span class="description">{{vm.mensageiroAss.mensageiro.telefone}}</span>
                 </div>
-                <table class="table" style="font-size: 13px;">
+                <table class="table" style="font-size: 13px;" ng-show="vm.mensageiroAss.mensageiro.enderecos.length">
                     <thead>
                     <tr>
                         <th width="40%">Logradouro</th>
@@ -61,6 +63,11 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="am-card-adrrs-empty">
+                    <div class="well am-card-adrrs-empty" ng-show="!vm.mensageiroAss.mensageiro.enderecos.length">
+                        <span>Mensageiro não possuí nenhum endereço.</span>
+                    </div>
+                </div>
             </div>
         </div>
 

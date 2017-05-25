@@ -192,7 +192,7 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	@Override
 	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) throws AjudeMaisException {
 
-		Endereco endereco = null;
+		Endereco endereco;
 
 		endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 				latLng.getLongitude());

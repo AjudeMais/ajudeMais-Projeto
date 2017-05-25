@@ -66,20 +66,22 @@ public class InstituicaoActivity extends AppCompatActivity {
 
                 checkPermissions();
 
-                if(Build.VERSION.SDK_INT < 23) {
+                if (Build.VERSION.SDK_INT < 23) {
                     callPhone();
                 }
             }
         });
 
-        InstituicaoDetailFragment fragment = new InstituicaoDetailFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.instituicao_detail_fragment, fragment);
-        fragmentTransaction.commit();
-
+        if (!isDestroyed()) {
+            InstituicaoDetailFragment fragment = new InstituicaoDetailFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.instituicao_detail_fragment, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commitAllowingStateLoss();
+        }
     }
 
-    private void callPhone(){
+    private void callPhone() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
         callIntent.setData(Uri.parse("tel:" + instituicao.getTelefone()));
         try {

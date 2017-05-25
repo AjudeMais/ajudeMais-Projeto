@@ -23,9 +23,9 @@
 
 
         <item
-            android:id="@+id/nav_config_conta"
+            android:id="@+id/nav_config"
             android:icon="@mipmap/ic_settings"
-            android:title="@string/account_settings" />
+            android:title="@string/config" />
 
         <item
             android:id="@+id/nav_sair"
