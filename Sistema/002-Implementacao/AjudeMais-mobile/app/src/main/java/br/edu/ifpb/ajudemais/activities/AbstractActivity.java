@@ -72,14 +72,12 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
     protected TextView tvUserName;
     protected TextView tvEmail;
     protected Conta conta = new Conta();
-    protected SharedPrefManager sharedPrefManager;
 
     protected GoogleApiClient mGoogleApiClient;
     protected static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
     private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
     protected LocationManager locationManager;
     protected Location mLastLocation;
-    protected LocationRequest locationRequest;
     protected int REQUEST_CHECK_SETTINGS = 100;
 
     private LocationRequest mLocationRequest;
@@ -248,7 +246,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
      */
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.nav_config_conta:
+            case R.id.nav_config:
                 break;
             case R.id.nav_notificacoes:
                 break;
