@@ -47,7 +47,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private RelativeLayout componentHeader;
 
 
-
     /**
      * @param savedInstanceState
      */
@@ -124,7 +123,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         } else {
             if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
 
-                if (isStoragePermissionGranted()){
+                if (isStoragePermissionGranted()) {
                     bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                     capturePhotoUtils.saveToInternalStorage(bitmap);
                 }
@@ -157,7 +156,7 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
 
-            case R.id.nav_config_conta:
+            case R.id.nav_config:
 
                 break;
 
@@ -166,17 +165,12 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             case R.id.nav_sair:
                 if (AccessToken.getCurrentAccessToken() != null) {
                     LoginManager.getInstance().logOut();
-                    goToLoginScreen();
-                    capturePhotoUtils.deleteImageProfile();
-
-                    break;
                 } else {
                     SharedPrefManager.getInstance(this).clearSharedPrefs();
-                    goToLoginScreen();
-                    capturePhotoUtils.deleteImageProfile();
-
-                    break;
                 }
+                goToLoginScreen();
+                capturePhotoUtils.deleteImageProfile();
+                break;
 
         }
     }
@@ -211,7 +205,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
             }
         }
     }
-
 
 
     /**

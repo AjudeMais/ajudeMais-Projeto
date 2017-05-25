@@ -43,13 +43,12 @@ import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
-import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
-public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem>{
+public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem> {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -74,7 +73,6 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
@@ -132,7 +130,6 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         btnChangePassword.setOnClickListener(this);
 
     }
-
 
 
     /**
@@ -228,7 +225,8 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             case MY_PERMISSIONS_REQUEST_CAMERA: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    openDialog();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
                 } else {
                     Toast.makeText(ProfileSettingsActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
                 }
@@ -347,77 +345,77 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         }
     }
 
-    /**
-     * Resultado da task Upload de Imagem.
-     *
-     * @param output
-     */
-    @Override
-    public void processFinish(Imagem output) {
+        /**
+         * Resultado da task Upload de Imagem.
+         *
+         * @param output
+         */
+        @Override
+        public void processFinish (Imagem output){
 
-        this.mensageiro.setFoto(output);
-    }
-
-    /**
-     *
-     */
-    private class ProfileLoading extends AsyncTask<Void, Void, Mensageiro> {
-
-        private MensageiroRemoteService mensageiroRemoteService;
-        private String message = null;
+            this.mensageiro.setFoto(output);
+        }
 
         /**
          *
          */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mensageiroRemoteService = new MensageiroRemoteService(getApplication());
-        }
+        private class ProfileLoading extends AsyncTask<Void, Void, Mensageiro> {
 
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Mensageiro doInBackground(Void... params) {
-            try {
+            private MensageiroRemoteService mensageiroRemoteService;
+            private String message = null;
 
-                if (androidUtil.isOnline()) {
-                    mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
+            /**
+             *
+             */
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mensageiroRemoteService = new MensageiroRemoteService(getApplication());
+            }
 
-                } else {
+            /**
+             * @param params
+             * @return
+             */
+            @Override
+            protected Mensageiro doInBackground(Void... params) {
+                try {
+
+                    if (androidUtil.isOnline()) {
+                        mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
+
+                    } else {
+                    }
+                } catch (RestClientException e) {
+                    message = e.getMessage();
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+                return mensageiro;
             }
-            return mensageiro;
-        }
 
-        /**
-         *
-         * @param mensageiro
-         */
-        @Override
-        protected void onPostExecute(Mensageiro mensageiro) {
-            if (mensageiro != null) {
+            /**
+             *
+             * @param mensageiro
+             */
+            @Override
+            protected void onPostExecute(Mensageiro mensageiro) {
+                if (mensageiro != null) {
 
-                collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
-                ProfileSettingsFragment fragment = new ProfileSettingsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Mensageiro", mensageiro);
-                fragment.setArguments(bundle);
+                    collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
+                    ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Mensageiro", mensageiro);
+                    fragment.setArguments(bundle);
 
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.editprofile_fragment, fragment);
-                fragmentTransaction.commit();
-                nestedScrollView.setVisibility(View.VISIBLE);
-                fab.setEnabled(true);
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(R.id.editprofile_fragment, fragment);
+                    fragmentTransaction.commit();
+                    nestedScrollView.setVisibility(View.VISIBLE);
+                    fab.setEnabled(true);
 
+                }
             }
         }
     }
-}

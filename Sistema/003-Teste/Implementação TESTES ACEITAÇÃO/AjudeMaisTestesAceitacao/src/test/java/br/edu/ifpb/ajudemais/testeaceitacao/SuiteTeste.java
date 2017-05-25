@@ -25,9 +25,9 @@ import br.edu.ifpb.ajudemais.testeaceitacao.mensageiroTest.MensageiroTest;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({ 
-	//LoginTest.class,
-	//CrudInstituicaoCaridadeTest.class,
-	//CategoriaTest.class,
+	LoginTest.class,
+	CrudInstituicaoCaridadeTest.class,
+	CategoriaTest.class,
 	MensageiroTest.class
 })
 public class SuiteTeste {

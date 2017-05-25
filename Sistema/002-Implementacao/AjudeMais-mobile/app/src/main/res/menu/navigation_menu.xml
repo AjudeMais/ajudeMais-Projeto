@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/nav_config_conta"
-        android:title="Configuraçẽs da conta"
+    <item android:id="@+id/nav_config"
+        android:title="@string/config"
         android:icon="@mipmap/ic_settings">
     </item>
 
