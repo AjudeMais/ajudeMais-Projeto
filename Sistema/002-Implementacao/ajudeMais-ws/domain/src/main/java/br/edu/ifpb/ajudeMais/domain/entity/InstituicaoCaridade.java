@@ -108,6 +108,13 @@ public class InstituicaoCaridade {
 	@OneToMany(cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade", fetch = FetchType.LAZY)
 	@Column(name = "itens_doaveis")
 	private List<Categoria> itensDoaveis;
+	
+	/**
+	 * 
+	 */
+	@JsonIgnoreProperties(value = "instituicaoCaridade")
+	@OneToMany(cascade = { CascadeType.ALL}, mappedBy = "instituicaoCaridade", fetch = FetchType.LAZY)
+	private List<Campanha> campanhas;
 
 	/**
 	 * @return o atributo id
@@ -227,6 +234,20 @@ public class InstituicaoCaridade {
 	 */
 	public void setItensDoaveis(List<Categoria> itensDoaveis) {
 		this.itensDoaveis = itensDoaveis;
+	}
+	
+	/**
+	 * @return the campanhas
+	 */
+	public List<Campanha> getCampanhas() {
+		return campanhas;
+	}
+
+	/**
+	 * @param campanhas the campanhas to set
+	 */
+	public void setCampanhas(List<Campanha> campanhas) {
+		this.campanhas = campanhas;
 	}
 
 	/*
