@@ -2,7 +2,7 @@
 
 exports.base = {
     port: 8000,
-    apiDev: 'http://localhost:8080',
+    apiDev: 'http://192.168.229.120:8080',
     apiProd: 'http://localhost:8080',
     constantTemplate: '(function () {\n' +
     '    angular.module(\'<%- moduleName %>\')\n' +
