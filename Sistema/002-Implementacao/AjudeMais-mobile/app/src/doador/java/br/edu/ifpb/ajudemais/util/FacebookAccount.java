@@ -22,7 +22,6 @@ import java.util.Collections;
 
 import br.edu.ifpb.ajudemais.activities.CreateAccountHelperActivity;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Grupo;
 
 /**
  * Created by amsv on 26/04/17.
@@ -40,18 +39,21 @@ public class FacebookAccount {
      *          Um objeto do tipo doador
      */
     public static void userFacebookData(LoginResult loginResult, final Activity activity) {
+        doador = new Doador();
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
+                            doador = new Doador();
                             doador.setNome(Profile.getCurrentProfile().getName());
                             doador.setFacebookID(Profile.getCurrentProfile().getId());
                             doador.setCampanhas(null);
                             doador.getConta().setEmail(object.optString("email"));
-                            doador.getConta().setUsername(object.optString("email"));
+                            doador.getConta().setUsername(Profile.getCurrentProfile().getId());
                             doador.getConta().setSenha(Profile.getCurrentProfile().getId());
-                            doador.getConta().setGrupos(Collections.singletonList(Grupo.DOADOR.toString()));
+                            doador.getConta().setGrupos(Collections.singletonList("ROLE_DOADOR"));
+							doador.getConta().setAtivo(true);
                             if (doador != null) {
                                 goToFacebookAccountHelperActivity(activity, doador);
                             }
@@ -65,6 +67,7 @@ public class FacebookAccount {
         request.setParameters(parameters);
         request.executeAsync();
     }
+
 
     /**
      * Pega a foto do perfil do usuário no facebook, após o mesmo ter se autenticado

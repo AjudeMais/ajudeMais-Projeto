@@ -30,6 +30,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+
 import org.springframework.web.client.RestClientException;
 
 import java.io.ByteArrayOutputStream;
@@ -126,6 +128,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
 
         btnChangePassword.setOnClickListener(this);
 
+        if (AccessToken.getCurrentAccessToken() != null) {
+            btnChangePassword.setVisibility(View.GONE);
+        }
     }
 
     /**

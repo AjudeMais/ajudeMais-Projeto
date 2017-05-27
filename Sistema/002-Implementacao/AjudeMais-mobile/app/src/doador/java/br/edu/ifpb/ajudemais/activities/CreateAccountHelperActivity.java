@@ -38,7 +38,6 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
     private Resources resources;
     private AndroidUtil androidUtil;
     private Doador doador;
-    private SharedPrefManager sharedPrefManager;
     private TextInputLayout ltEdtEmail;
 
     @Override
@@ -79,7 +78,6 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
 
     private void init() {
         doador = (Doador) getIntent().getSerializableExtra("Doador");
-        sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mToolbar.setTitle("Criar Conta");
 
@@ -155,7 +153,8 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
             try{
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
-                return authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                return conta;
             } catch (RestClientException e) {
                 message = e.getMessage();
                 e.printStackTrace();
