@@ -142,6 +142,11 @@ public class AndroidUtil {
             return false;
     }
 
+    public boolean isPhoneValid(String phone) {
+        return phone.matches(".((10)|([1-9][1-9]).)\\s9?[6-9][0-9]{3}-[0-9]{4}") ||
+                phone.matches(".((10)|([1-9][1-9]).)\\s[2-5][0-9]{3}-[0-9]{4}");
+    }
+
     /**
      * Transforma array de bytes em uma imagem bitmap.
      * @param imagem

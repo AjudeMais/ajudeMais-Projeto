@@ -46,6 +46,7 @@
         <activity
             android:name=".activities.ProfileSettingsActivity"
             android:label="@string/editAccount" />
+        <activity android:name=".activities.CreateAccountHelperActivity"></activity>
     </application>
 
 </manifest>
