@@ -35,7 +35,7 @@ import javassist.tools.web.BadHttpRequest;
  * </p>
  * 
  * <p>
- * Classe utilizada para exercitar testes para {@link CategoriaRest}.
+ * Classe utilizada para exercitar testes para {@link CategoriaRestService}.
  * </p>
  *
  * @author Elson</a>
@@ -137,7 +137,7 @@ public class CategoriaRestTest extends AbstractRestTest {
 	/**
 	 * 
 	 * <p>
-	 * Tenta criar uma categoria nula. deveria retonar Erro 415 Http.
+	 * Tenta criar uma categoria com o campo descrição nulo. deveria retonar Erro 422 Http.
 	 * </p>
 	 * 
 	 * @throws IOException
@@ -233,6 +233,8 @@ public class CategoriaRestTest extends AbstractRestTest {
 		mockMvc.perform(get("/categoria/100").header("Authorization", getAuth("instituicaoXPTO1", "myinst1")))
 				.andExpect(status().isOk());
 	}
+	
+	
 
 	/**
 	 * <p>
@@ -252,7 +254,7 @@ public class CategoriaRestTest extends AbstractRestTest {
 
 	/**
 	 * <p>
-	 * Cria categosria base para ser utilizada nos testes.
+	 * Cria categoria base para ser utilizada nos testes.
 	 * </p>
 	 * 
 	 */

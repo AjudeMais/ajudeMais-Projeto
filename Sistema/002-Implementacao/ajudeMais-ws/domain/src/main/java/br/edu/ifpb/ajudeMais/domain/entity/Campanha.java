@@ -19,8 +19,6 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import br.edu.ifpb.ajudeMais.domain.enumerations.TipoCobertura;
-
 @Entity
 public class Campanha {
 	/**
@@ -49,22 +47,15 @@ public class Campanha {
 	 * 
 	 */
 	@NotNull
-	@NotBlank(message = "A data deve ser informada")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date dataInicio;
 	
 	/**
 	 * 
 	 */
 	@NotNull
-	@NotBlank(message = "A data deve ser informada")
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	private Date dataFim;
-	
-	/**
-	 * 
-	 */
-	private TipoCobertura tipoCobertura;
 	/**
 	 * 
 	 */
@@ -147,19 +138,6 @@ public class Campanha {
 		this.dataFim = dataFim;
 	}
 
-	/**
-	 * @return the tipoCobertura
-	 */
-	public TipoCobertura getTipoCobertura() {
-		return tipoCobertura;
-	}
-
-	/**
-	 * @param tipoCobertura the tipoCobertura to set
-	 */
-	public void setTipoCobertura(TipoCobertura tipoCobertura) {
-		this.tipoCobertura = tipoCobertura;
-	}
 
 	/**
 	 * @return the doador
@@ -195,7 +173,7 @@ public class Campanha {
 	@Override
 	public String toString() {
 		return "Campanha [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", dataInicio=" + dataInicio
-				+ ", dataFim=" + dataFim + ", tipoCobertura=" + tipoCobertura + ", doadores=" + doadores
+				+ ", dataFim=" + dataFim + ", doadores=" + doadores
 				+ ", instituicaoCaridade=" + instituicaoCaridade + "]";
 	}
 	

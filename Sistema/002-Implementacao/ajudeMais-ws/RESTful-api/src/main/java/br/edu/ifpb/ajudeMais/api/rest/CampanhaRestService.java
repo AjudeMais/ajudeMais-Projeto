@@ -122,7 +122,7 @@ public class CampanhaRestService {
 	 */
 
 	@PreAuthorize("hasRole ('INSTITUICAO')")
-	@RequestMapping(method = RequestMethod.GET, value = "{/id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Campanha> findById(@PathVariable Long id) throws AjudeMaisException {
 		Campanha campanha = CampanhaService.findById(id);
 		return new ResponseEntity<>(campanha, HttpStatus.OK);
