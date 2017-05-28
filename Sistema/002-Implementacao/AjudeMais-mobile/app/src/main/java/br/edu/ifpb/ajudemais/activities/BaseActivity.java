@@ -1,8 +1,7 @@
-package br.edu.ifpb.ajudemais.refactoring;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.support.v7.app.AppCompatActivity;
 
-import br.edu.ifpb.ajudemais.activities.AbstractAsyncActivity;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 

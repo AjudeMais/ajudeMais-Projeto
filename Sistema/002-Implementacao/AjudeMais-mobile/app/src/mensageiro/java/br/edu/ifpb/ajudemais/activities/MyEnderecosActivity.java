@@ -48,7 +48,7 @@ import br.edu.ifpb.ajudemais.utils.ProgressDialog;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class MyEnderecosActivity extends AbstractActivity implements RecyclerItemClickListener.OnItemClickListener {
+public class MyEnderecosActivity extends LocationActivity implements RecyclerItemClickListener.OnItemClickListener {
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
