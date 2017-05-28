@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.accessibility.AccessibilityEventCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
@@ -59,7 +60,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     private ActionBarDrawerToggle mToggle;
     protected NavigationView mNavigationView;
     private Toolbar mToolbar;
-
     protected TextView tvUserName;
     protected TextView tvEmail;
     protected ImageView profilePhoto;
@@ -94,35 +94,26 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
 
 
     /**
-         * Set as informações do usuário logado no app
-         */
+     * Set as informações do usuário logado no app
+     */
     protected void setUpAccount() {
-
         conta = (Conta) getIntent().getSerializableExtra("Conta");
-
         if (conta == null) {
             conta = SharedPrefManager.getInstance(this).getUser();
         }
         if (conta != null) {
-            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername());
+            tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
+        if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
 
-        if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
-            bitmap = FacebookAccount.getProfilePictureUser();
-        } else {
-            if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
-
-                if (writeStoreDevicePermission.isStoragePermissionGranted()) {
-                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
-                    capturePhotoUtils.saveToInternalStorage(bitmap);
-                }
-
-            } else {
-                bitmap = capturePhotoUtils.loadImageFromStorage();
+            if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                capturePhotoUtils.saveToInternalStorage(bitmap);
             }
+        } else {
+            bitmap = capturePhotoUtils.loadImageFromStorage();
         }
-
         if (bitmap != null) {
             profilePhoto.setImageBitmap(bitmap);
         }
@@ -131,7 +122,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     }
 
 
-        /**
+    /**
      * Chama a activity edit profile ao clicar no header no menu drawer.
      */
     private void callActivityEditProfile() {

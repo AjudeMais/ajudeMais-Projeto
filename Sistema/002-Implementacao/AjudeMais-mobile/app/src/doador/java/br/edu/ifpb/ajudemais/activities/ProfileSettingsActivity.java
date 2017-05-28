@@ -60,14 +60,12 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
         setContentView(R.layout.activity_profile_settings);
 
         init();
-
         executeLoadingDoadorTask();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(ProfileSettingsActivity.this, CreateAccountActivity.class);
+                Intent intent = new Intent(ProfileSettingsActivity.this, CreateAccountActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Doador", doador);
                 startActivity(intent);
@@ -165,7 +163,9 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Bitmap bitMapfb = (Bitmap) getIntent().getExtras().get("ProfilePicFacebook");
                 Intent intent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
+                intent.putExtra("ProfilePicFacebook", bitMapfb);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
