@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.util;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
@@ -18,9 +20,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
 
-import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
-import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.activities.CreateAccountHelperActivity;
+import br.edu.ifpb.ajudemais.domain.Doador;
 
 /**
  * Created by amsv on 26/04/17.
@@ -28,34 +29,33 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 public class FacebookAccount {
 
-    private static String email = "";
-    private static String username = "";
-    private static Conta conta = new Conta();
     private static Bitmap picBitMap;
+    private static Doador doador = new Doador();
 
     /**
      * Método responsável por obter dados de acesso de um usuário do facebook.
      * Dados como: Nome, e-mail e username
      * @return
-     *          Um objeto do tipo conta
+     *          Um objeto do tipo doador
      */
-    public static Conta userFacebookData(LoginResult loginResult, final Context context) {
+    public static void userFacebookData(LoginResult loginResult, final Activity activity) {
+        doador = new Doador();
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
-                            if(object != null){
-                                email = object.optString("email");
-                                username = email;
-                                conta.setUsername(username);
-                                conta.setSenha(username);
-                                conta.setEmail(email);
-                                conta.setGrupos(Collections.singletonList(Grupo.DOADOR.toString()));
-                                SharedPrefManager.getInstance(context).storeUser(conta);
-                            }
-                            else {
-                                System.out.println("json vazio");
+                            doador = new Doador();
+                            doador.setNome(Profile.getCurrentProfile().getName());
+                            doador.setFacebookID(Profile.getCurrentProfile().getId());
+                            doador.setCampanhas(null);
+                            doador.getConta().setEmail(object.optString("email"));
+                            doador.getConta().setUsername(Profile.getCurrentProfile().getId());
+                            doador.getConta().setSenha(Profile.getCurrentProfile().getId());
+                            doador.getConta().setGrupos(Collections.singletonList("ROLE_DOADOR"));
+							doador.getConta().setAtivo(true);
+                            if (doador != null) {
+                                goToFacebookAccountHelperActivity(activity, doador);
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -66,8 +66,8 @@ public class FacebookAccount {
         parameters.putString("fields", "id,name,email");
         request.setParameters(parameters);
         request.executeAsync();
-        return conta;
     }
+
 
     /**
      * Pega a foto do perfil do usuário no facebook, após o mesmo ter se autenticado
@@ -108,5 +108,12 @@ public class FacebookAccount {
         ).executeAsync();
 
         return picBitMap;
+    }
+
+    private static void goToFacebookAccountHelperActivity(Activity activity, Doador doador) {
+        Intent intent = new Intent(activity, CreateAccountHelperActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Doador", doador);
+        activity.startActivity(intent);
     }
 }

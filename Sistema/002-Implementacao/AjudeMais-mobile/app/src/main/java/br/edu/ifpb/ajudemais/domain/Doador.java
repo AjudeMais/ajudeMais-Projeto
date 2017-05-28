@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -18,12 +19,15 @@ public class Doador implements Serializable {
     private String facebookID;
     private String tokenFCM;
     private Conta conta;
+    private List<Campanha> campanhas;
     private Imagem foto;
 
     /**
      *
      */
-    public Doador(){}
+    public Doador(){
+        conta = new Conta();
+    }
 
     /**
      *
@@ -163,6 +167,22 @@ public class Doador implements Serializable {
      */
     public void setTokenFCM(String tokenFCM) {
         this.tokenFCM = tokenFCM;
+    }
+
+    /**
+     *
+     * @return campanhas
+     */
+    public List<Campanha> getCampanhas() {
+        return campanhas;
+    }
+
+    /**
+     *
+     * @param campanhas
+     */
+    public void setCampanhas(List<Campanha> campanhas) {
+        this.campanhas = campanhas;
     }
 
     /**
