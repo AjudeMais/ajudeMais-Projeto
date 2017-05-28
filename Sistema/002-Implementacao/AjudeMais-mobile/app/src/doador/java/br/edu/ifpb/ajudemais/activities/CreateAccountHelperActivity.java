@@ -29,6 +29,18 @@ import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
+/**
+ * <p>
+ * <b>{@link CreateAccountHelperActivity}</b>
+ * </p>
+ * <p>
+ *     Activity para finalizar criação de conta utilizando o facebook
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/amslv">Ana Silva</a>
+ */
 public class CreateAccountHelperActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;

@@ -21,7 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -103,11 +102,10 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
         }
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               openDialog();
+                openDialog();
             }
         });
 
@@ -119,8 +117,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(ProfileSettingsActivity.this, CreateAccountActivity.class);
+                Intent intent = new Intent(ProfileSettingsActivity.this, CreateAccountActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Doador", doador);
                 startActivity(intent);
@@ -241,7 +238,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                Bitmap bitMapfb = (Bitmap) getIntent().getExtras().get("ProfilePicFacebook");
                 Intent intent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
+                intent.putExtra("ProfilePicFacebook", bitMapfb);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();

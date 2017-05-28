@@ -2,22 +2,15 @@ package br.edu.ifpb.ajudemais.util;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Collections;
 
 import br.edu.ifpb.ajudemais.activities.CreateAccountHelperActivity;
@@ -29,7 +22,6 @@ import br.edu.ifpb.ajudemais.domain.Doador;
 
 public class FacebookAccount {
 
-    private static Bitmap picBitMap;
     private static Doador doador = new Doador();
 
     /**
@@ -39,7 +31,6 @@ public class FacebookAccount {
      *          Um objeto do tipo doador
      */
     public static void userFacebookData(LoginResult loginResult, final Activity activity) {
-        doador = new Doador();
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -66,48 +57,6 @@ public class FacebookAccount {
         parameters.putString("fields", "id,name,email");
         request.setParameters(parameters);
         request.executeAsync();
-    }
-
-
-    /**
-     * Pega a foto do perfil do usuário no facebook, após o mesmo ter se autenticado
-     *
-     * @return
-     *      bitmap contendo a foto do perfil
-     */
-    public static Bitmap getProfilePictureUser() {
-        new GraphRequest(
-                AccessToken.getCurrentAccessToken(),
-                AccessToken.getCurrentAccessToken().getUserId()+"/picture?type=large",
-                null,
-                HttpMethod.GET,
-                new GraphRequest.Callback() {
-                    public void onCompleted(GraphResponse response) {
-                        if (response.getJSONObject().has("picture")) {
-                            JSONObject object = response.getJSONObject();
-                            try {
-                                String profilePicURL = object.getJSONObject("picture").getJSONObject("data").getString("url");
-
-                                URL imageURL = new URL(profilePicURL);
-
-                                HttpURLConnection connection = (HttpURLConnection) imageURL
-                                        .openConnection();
-                                connection.setDoInput(true);
-                                connection.connect();
-
-                                InputStream input = connection.getInputStream();
-                                picBitMap = BitmapFactory.decodeStream(input);
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-                }
-        ).executeAsync();
-
-        return picBitMap;
     }
 
     private static void goToFacebookAccountHelperActivity(Activity activity, Doador doador) {
