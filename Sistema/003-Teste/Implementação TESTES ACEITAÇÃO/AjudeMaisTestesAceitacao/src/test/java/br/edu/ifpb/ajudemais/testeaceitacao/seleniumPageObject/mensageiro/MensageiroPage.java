@@ -21,6 +21,13 @@ public class MensageiroPage extends AbstractPage {
 	/**
 	 * 
 	 */
+<<<<<<< HEAD
+	private static final String USERNAME_INSTIUTICAO = "76914318301";
+	/**
+	 * 
+	 */
+	private static final String PASSWORD_INSTIUTICAO = "76914318301";
+=======
 	private static final String USERNAME_INSTIUTICAO = "19685606293";
 	/**
 	 * 
@@ -29,6 +36,7 @@ public class MensageiroPage extends AbstractPage {
 
 	private InstituicaoCaridadePage instituicaoCaridadePage;
 	private LoginPage loginPage;
+>>>>>>> 1cac9c71bea1d2977c9f5cc7ddc4df3b56bda92b
 
 	/**
 	 * 
@@ -40,14 +48,19 @@ public class MensageiroPage extends AbstractPage {
 		instituicaoCaridadePage = new InstituicaoCaridadePage(driver);
 
 	}
-
 	/**
 	 * 
 	 */
 	public void visita() {
 		open(getUrlBase() + "/home/associacao");
+
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 
+<<<<<<< HEAD
+		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
+	}
+
+=======
 		try {
 			Thread.sleep(1000);
 
@@ -87,6 +100,7 @@ public class MensageiroPage extends AbstractPage {
 				"Centro", "casa");
 	}
 
+>>>>>>> 1cac9c71bea1d2977c9f5cc7ddc4df3b56bda92b
 	/**
 	 * 
 	 * @return
@@ -156,5 +170,8 @@ public class MensageiroPage extends AbstractPage {
 		return value;
 	}
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> 1cac9c71bea1d2977c9f5cc7ddc4df3b56bda92b
 }

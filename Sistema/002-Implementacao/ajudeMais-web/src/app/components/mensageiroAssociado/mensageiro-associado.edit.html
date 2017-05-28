@@ -2,7 +2,7 @@
     <button type="button" ng-click="vm.cancel()" class="close" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <h4 class="modal-title">Associar mensageiro</h4>
+    <h4 class="modal-title">Associação de Mensageiro</h4>
 </div>
 
 <form name="categoriaForm" ng-submit="categoriaForm.$valid && vm.save()" role="form" novalidate>
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <div class="col-sm-12" ng-show="vm.mensageiroAss.mensageiro != null">
+        <div class="col-sm-4" ng-show="vm.mensageiroAss.mensageiro != null">
             Status<br/>
             <input bs-switch name="ativo"
                    switch-on-text="Ativo" switch-off-text="Inativo" switch-size="small"

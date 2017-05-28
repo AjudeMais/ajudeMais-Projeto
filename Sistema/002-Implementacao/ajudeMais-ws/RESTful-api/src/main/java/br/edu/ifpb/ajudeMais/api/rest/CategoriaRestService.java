@@ -44,7 +44,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
  * </p>
  * 
  * <p>
- * Classe utilizada para
+ * Classe utilizada para criar os endpoints de categoria
  * </p>
  *
  * <pre>

@@ -65,7 +65,7 @@ public class Categoria {
 	 * 
 	 */
 	@NotNull
-	@NotBlank(message = "A descrição deve ser informade")
+	@NotBlank(message = "A descrição deve ser informada")
 	@Column(columnDefinition = "TEXT")
 	private String descricao;
 

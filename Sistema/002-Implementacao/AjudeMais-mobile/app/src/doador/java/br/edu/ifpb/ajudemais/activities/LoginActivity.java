@@ -3,7 +3,6 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,7 +31,6 @@ import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 
 /**
@@ -57,7 +55,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     private EditText edtPassword;
     private Resources resources;
     private CallbackManager callbackManager;
-    private Conta contaFacebook;
+    private Doador contaFacebook;
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -103,14 +101,13 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         callbackManager = CallbackManager.Factory.create();
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
         btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-
             /**
              *
              * @param loginResult
              */
             @Override
             public void onSuccess(LoginResult loginResult) {
-                goToMainActivity(loginResult, getApplicationContext());
+                FacebookAccount.userFacebookData(loginResult, LoginActivity.this);
             }
 
             /**
@@ -153,7 +150,6 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
      * @param context     Contexto da aplicação
      */
     private void goToMainActivity(LoginResult loginResult, Context context) {
-        contaFacebook = FacebookAccount.userFacebookData(loginResult, context);
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -301,7 +297,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         protected Conta doInBackground(Void... params) {
             try {
                 if (contaFacebook != null) {
-                    conta = contaFacebook;
+                    conta = contaFacebook.getConta();
                     return conta;
                 } else {
                     conta = new Conta(username, senha);
