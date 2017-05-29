@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -53,6 +55,9 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
     private FindByMyLocationActualTask findByMyLocationActualTask;
     private LoadingMensageiroTask loadingMensageiroTask;
     private UpdateMensageiroTask updateMensageiroTask;
+    private RelativeLayout componentNoInternet;
+    private FrameLayout componentListEmpty;
+    private RelativeLayout componentView;
 
     private Toast toast;
 
@@ -89,7 +94,11 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
 
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
+        componentListEmpty = (FrameLayout) findViewById(R.id.empty_list) ;
+        componentView = (RelativeLayout) findViewById(R.id.loadingPanelMainSearchInst);
+
+        componentNoInternet.setVisibility(View.GONE);
 
         recyclerView.setVisibility(View.VISIBLE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
@@ -178,9 +187,9 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
      * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
      */
     public void setVisibleNoConnection() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.GONE);
+        componentNoInternet.setVisibility(View.VISIBLE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.GONE);
     }
 
 
@@ -188,18 +197,18 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
      * Auxiliar para mostrar lista de endereços e esconder demais fragmentos.
      */
     private void showListEnderecos() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.GONE);
+        componentNoInternet.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.GONE);
     }
 
     /**
      * Auxiliar para mostrar fragmento para lista vazia.
      */
     private void showListEmpty() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+        componentNoInternet.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.VISIBLE);
     }
 
     @Override
