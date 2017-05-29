@@ -2,6 +2,8 @@ package br.edu.ifpb.ajudemais.asycnTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;

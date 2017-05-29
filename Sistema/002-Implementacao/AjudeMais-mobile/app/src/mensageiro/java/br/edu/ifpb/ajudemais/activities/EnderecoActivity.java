@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
@@ -31,7 +34,6 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
     private AndroidUtil androidUtil;
     private Mensageiro mensageiroEdit;
     private Integer indexEndereco;
-    private SharedPrefManager sharedPrefManager;
     private TextInputEditText edtCep;
     private TextInputEditText edtLogradouro;
     private TextInputEditText edtNumero;
@@ -41,6 +43,9 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
     private TextInputEditText edtComplemento;
     private Button btnCadastrarEndereco;
     private Endereco endereco;
+    private Toast toast;
+
+    private UpdateMensageiroTask updateMensageiroTask;
 
 
     @Override
@@ -88,7 +93,6 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
         edtUf = (TextInputEditText) findViewById(R.id.edtUf);
         btnCadastrarEndereco = (Button) findViewById(R.id.btnCadastrarEndereco);
 
-        sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setEndereco(endereco);
 
@@ -230,49 +234,23 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                         endereco.setComplemento(edtComplemento.getText().toString().trim());
                     }
                 }
-
-
-                new CreateEnderecoTask(mensageiroEdit, this).execute();
-
+                executeCreateEnderecoTask();
             }
         }
     }
 
-    private class CreateEnderecoTask extends AsyncTask<Void, Void, Conta> {
-
-        private String message;
-        private Mensageiro mensageiro;
-        private String password;
-        private MensageiroRemoteService mensageiroRemoteService;
-        private Mensageiro mensageiroUpdated;
-        private Toast toast;
-
-        public CreateEnderecoTask(Mensageiro mensageiro, Context context) {
-            this.mensageiro = mensageiro;
-            mensageiroRemoteService = new MensageiroRemoteService(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-        }
-
-        @Override
-        protected Conta doInBackground(Void... params) {
-            try {
-                mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiro);
-            } catch (RestClientException e) {
-                message = e.getMessage();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-            if (mensageiro != null && mensageiroUpdated != null) {
-                SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
+    /**
+     * Executa task para criar novo endreco.
+     */
+    private void executeCreateEnderecoTask(){
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiroEdit);
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                mensageiroEdit = output;
+                SharedPrefManager.getInstance(EnderecoActivity.this).storeUser(output.getConta());
                 Intent intent = new Intent(EnderecoActivity.this, MyEnderecosActivity.class);
+                intent.putExtra("Mensageiro", output);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -286,9 +264,9 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
-            } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
-        }
+        };
+
+        updateMensageiroTask.execute();
     }
 }
