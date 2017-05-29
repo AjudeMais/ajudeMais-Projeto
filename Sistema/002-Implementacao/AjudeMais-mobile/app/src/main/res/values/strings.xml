@@ -141,4 +141,5 @@
     <string name="msgFormatUfInvalide">A UF deve conter apenas dois caracteres ex. PB</string>
     <string name="msgFormatCepInvalide">CEP inválido</string>
     <string name="config">Configurações</string>
+    <string name="facebookProfile">Foto de Perfil do Facebook</string>
 </resources>

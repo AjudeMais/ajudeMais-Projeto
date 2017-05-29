@@ -104,14 +104,21 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
-        if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
-
+        if (getIntent().hasExtra("ProfilePic") && getIntent().getExtras().get("ProfilePic") != null) {
+            bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
             if (writeStoreDevicePermission.isStoragePermissionGranted()) {
-                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                 capturePhotoUtils.saveToInternalStorage(bitmap);
             }
-        } else {
-            bitmap = capturePhotoUtils.loadImageFromStorage();
+        }
+        else {
+            if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
+                if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                }
+            } else {
+                bitmap = capturePhotoUtils.loadImageFromStorage();
+            }
         }
         if (bitmap != null) {
             profilePhoto.setImageBitmap(bitmap);
