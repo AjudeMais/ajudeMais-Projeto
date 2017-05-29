@@ -1,20 +1,20 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.Status;
@@ -22,20 +22,17 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import org.springframework.web.client.RestClientException;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.EnderecoAdapter;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.FindByMyLocationActualTask;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
-import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
  * <p>
@@ -52,13 +49,17 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
 
     private Toolbar mToolbar;
     private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private Mensageiro mensageiro;
     private Integer position;
-    private AndroidUtil androidUtil;
     private FloatingActionButton fab;
     private FindByMyLocationActualTask findByMyLocationActualTask;
+    private LoadingMensageiroTask loadingMensageiroTask;
+    private UpdateMensageiroTask updateMensageiroTask;
+    private RelativeLayout componentNoInternet;
+    private FrameLayout componentListEmpty;
+    private RelativeLayout componentView;
 
+    private Toast toast;
 
     /**
      * @param savedInstanceState
@@ -68,9 +69,19 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_enderecos);
 
-        androidUtil = new AndroidUtil(this);
-        initGoogleAPIClient();
+        init();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialogNewAddress();
+            }
+        });
+    }
 
+    @Override
+    public void init() {
+        super.init();
+        initGoogleAPIClient();
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mToolbar.setTitle(getString(R.string.myaddress));
@@ -83,18 +94,17 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
 
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
+        componentListEmpty = (FrameLayout) findViewById(R.id.empty_list) ;
+        componentView = (RelativeLayout) findViewById(R.id.loadingPanelMainSearchInst);
+
+        componentNoInternet.setVisibility(View.GONE);
 
         recyclerView.setVisibility(View.VISIBLE);
         findViewById(R.id.empty_list).setVisibility(View.GONE);
 
         fab = (FloatingActionButton) findViewById(R.id.btnNewAddress);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialogNewAddress();
-            }
-        });
+
     }
 
     /**
@@ -106,7 +116,69 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
         if (mGoogleApiClient != null) {
             mGoogleApiClient.connect();
         }
-        new LoadingEnderecosTask().execute();
+
+        if (androidUtil.isOnline()) {
+            executeLoadingMensageiroTask();
+        } else {
+            setVisibleNoConnection();
+        }
+    }
+
+    private void executeLoadingMensageiroTask() {
+        this.loadingMensageiroTask = new LoadingMensageiroTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
+        this.loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                mensageiro = output;
+
+                if (mensageiro.getEnderecos().size() > 0) {
+                    recyclerView.setHasFixedSize(true);
+
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), getApplicationContext());
+                    recyclerView.setAdapter(enderecoAdapter);
+
+                    showListEnderecos();
+
+                } else {
+                    showListEmpty();
+
+                }
+            }
+        };
+
+        loadingMensageiroTask.execute();
+
+    }
+
+    /**
+     * Executa Task que atualiza o mensageiro e remove endereço
+     */
+    private void executeTaskRemoveEndereco(Mensageiro mensageiroUp) {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiroUp);
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                mensageiro = output;
+                EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), MyEnderecosActivity.this);
+                recyclerView.setAdapter(enderecoAdapter);
+
+                toast = Toast.makeText(getApplicationContext(), getString(R.string.deletedAddress), Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.BOTTOM, 0, 0);
+                toast.show();
+
+                if (mensageiro.getEnderecos().size() > 0) {
+                    showListEnderecos();
+                } else {
+                    showListEmpty();
+                }
+
+
+            }
+        };
+        updateMensageiroTask.execute();
 
     }
 
@@ -115,9 +187,9 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
      * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
      */
     public void setVisibleNoConnection() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.GONE);
+        componentNoInternet.setVisibility(View.VISIBLE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.GONE);
     }
 
 
@@ -125,18 +197,18 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
      * Auxiliar para mostrar lista de endereços e esconder demais fragmentos.
      */
     private void showListEnderecos() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.GONE);
+        componentNoInternet.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.GONE);
     }
 
     /**
      * Auxiliar para mostrar fragmento para lista vazia.
      */
     private void showListEmpty() {
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-        findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+        componentNoInternet.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+        componentListEmpty.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -244,7 +316,7 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
                 } else if (items[item].equals(getString(R.string.tv_delete))) {
                     Endereco endereco = mensageiro.getEnderecos().get(position);
                     mensageiro.getEnderecos().remove(endereco);
-                    new DeleteEnderecoTask(mensageiro, MyEnderecosActivity.this).execute();
+                    executeTaskRemoveEndereco(mensageiro);
 
                 } else if (items[item].equals(getString(R.string.cancelar))) {
                     dialog.dismiss();
@@ -297,137 +369,6 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
 
                 runTaskLocation();
 
-            }
-        }
-    }
-
-
-    /**
-     *
-     */
-    private class LoadingEnderecosTask extends AsyncTask<Void, Void, Mensageiro> {
-
-        private MensageiroRemoteService mensageiroRemoteService;
-        private String message = null;
-        private AndroidUtil androidUtil;
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            androidUtil = new AndroidUtil(getApplicationContext());
-            mensageiroRemoteService = new MensageiroRemoteService(getApplication());
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Mensageiro doInBackground(Void... params) {
-            try {
-
-                if (androidUtil.isOnline()) {
-                    mensageiro = mensageiroRemoteService.getMensageiro(SharedPrefManager.getInstance(getApplicationContext()).getUser().getUsername());
-
-                } else {
-                    setVisibleNoConnection();
-
-                }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mensageiro;
-        }
-
-
-        /**
-         * @param mensageiro
-         */
-        @Override
-        protected void onPostExecute(Mensageiro mensageiro) {
-            if (mensageiro != null) {
-                if (mensageiro.getEnderecos().size() > 0) {
-                    recyclerView.setHasFixedSize(true);
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), getApplicationContext());
-                    recyclerView.setAdapter(enderecoAdapter);
-
-                    showListEnderecos();
-
-                } else {
-                    showListEmpty();
-
-                }
-            }
-        }
-    }
-
-    private class DeleteEnderecoTask extends AsyncTask<Void, Void, Mensageiro> {
-
-        private String message;
-        private Mensageiro mensageiro;
-        private MensageiroRemoteService mensageiroRemoteService;
-        private Mensageiro mensageiroUpdated;
-        private Toast toast;
-        private ProgressDialog progressDialog;
-        private Context context;
-
-
-        public DeleteEnderecoTask(Mensageiro mensageiro, Context context) {
-            this.mensageiro = mensageiro;
-            this.context = context;
-            mensageiroRemoteService = new MensageiroRemoteService(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context);
-            progressDialog.showProgressDialog();
-
-        }
-
-        @Override
-        protected Mensageiro doInBackground(Void... params) {
-            try {
-                mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiro);
-            } catch (RestClientException e) {
-                message = e.getMessage();
-            }
-            return mensageiroUpdated;
-        }
-
-        @Override
-        protected void onPostExecute(Mensageiro mensageiro) {
-            progressDialog.dismissProgressDialog();
-            if (mensageiroUpdated != null) {
-
-                EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiroUpdated.getEnderecos(), getApplicationContext());
-                recyclerView.setAdapter(enderecoAdapter);
-
-                toast = Toast.makeText(getApplicationContext(), getString(R.string.deletedAddress), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
-
-                if (mensageiro.getEnderecos().size()>0) {
-                    showListEnderecos();
-                }else {
-                    showListEmpty();
-                }
-
-
-            } else {
-                toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
             }
         }
     }

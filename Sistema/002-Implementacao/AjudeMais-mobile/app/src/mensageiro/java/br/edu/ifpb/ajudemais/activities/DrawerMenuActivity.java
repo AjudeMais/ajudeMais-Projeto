@@ -14,14 +14,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
-import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.REQUEST_CODE_STORE_PERMISSION;
+import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
 
 
 /**
@@ -219,7 +218,7 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case REQUEST_CODE_STORE_PERMISSION: {
+            case MY_PERMISSIONS_REQUEST_STORE_PERMISSION: {
                 if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
                     bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                     capturePhotoUtils.saveToInternalStorage(bitmap);

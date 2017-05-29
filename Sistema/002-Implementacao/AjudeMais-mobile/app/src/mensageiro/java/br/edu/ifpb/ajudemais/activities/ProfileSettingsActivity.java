@@ -1,23 +1,17 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -30,47 +24,38 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import org.springframework.web.client.RestClientException;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
-import br.edu.ifpb.ajudemais.asyncTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
-import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
+import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
+import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.MY_PERMISSIONS_REQUEST_CAMERA;
+import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.REQUEST_CAMERA;
+import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.SELECT_FILE;
 
-public class ProfileSettingsActivity extends AbstractAsyncActivity implements View.OnClickListener, AsyncResponse<Imagem> {
+public class ProfileSettingsActivity extends BaseActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private FloatingActionButton fab;
-    private AndroidUtil androidUtil;
-    private SharedPrefManager sharedPrefManager;
-    private Mensageiro mensageiro;
+
     private Button btnChangePassword;
     private ImageView imageView;
-    private Context context;
     private NestedScrollView nestedScrollView;
-    private static final int PICK_IMAGE_ID = 104;
-    private static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
-    private static final int MY_PERMISSIONS_GRANTED_CAMERA = 12;
-    private static final int REQUEST_CAMERA = 1;
-    private static final int SELECT_FILE = 13;
-    private int PROFILE_PIC_COUNT = 0;
-    protected CapturePhotoUtils capturePhotoUtils;
-    private UploadImageTask uploadImageTask;
-    private UpdateMensageiroTask updateMensageiroTask;
-    private Imagem imagemTemp;
+    private Mensageiro mensageiro;
 
+    private UploadImageTask uploadImageTask;
+
+    private AccessCameraAndGalleryDevicePermission permissionSelectImagem;
+    private LoadingMensageiroTask loadingMensageiroTask;
 
     /**
      * @param savedInstanceState
@@ -79,14 +64,64 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
-        context = this;
 
-        capturePhotoUtils = new CapturePhotoUtils(this);
-        androidUtil = new AndroidUtil(this);
-        sharedPrefManager = new SharedPrefManager(this);
+        init();
+
+        executeLoadingMensageiroTask();
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(ProfileSettingsActivity.this, CreateMensageiroAccountActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Mensageiro", mensageiro);
+                startActivity(intent);
+            }
+        });
+
+        btnChangePassword.setOnClickListener(this);
+
+    }
+
+
+    /**
+     * Inicializa e executa a AsycnTask para carregar o mensageiro Logado
+     */
+    private void executeLoadingMensageiroTask() {
+
+        loadingMensageiroTask = new LoadingMensageiroTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
+
+        loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                mensageiro = output;
+                collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
+                ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Mensageiro", mensageiro);
+                fragment.setArguments(bundle);
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.editprofile_fragment, fragment);
+                fragmentTransaction.commit();
+                nestedScrollView.setVisibility(View.VISIBLE);
+                fab.setEnabled(true);
+            }
+        };
+
+        loadingMensageiroTask.execute();
+
+    }
+
+
+    @Override
+    public void init() {
+        initProperties();
+
+        permissionSelectImagem = new AccessCameraAndGalleryDevicePermission(this);
 
         btnChangePassword = (Button) findViewById(R.id.btnChangePassword);
-
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,108 +142,13 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDialog();
+                permissionSelectImagem.openDialogSelectImage();
             }
         });
 
         fab = (FloatingActionButton) findViewById(R.id.fabEditAccount);
         fab.setEnabled(false);
-        new ProfileLoading().execute();
 
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(ProfileSettingsActivity.this, CreateMensageiroAccountActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Mensageiro", mensageiro);
-                startActivity(intent);
-            }
-        });
-
-        btnChangePassword.setOnClickListener(this);
-
-    }
-
-
-    /**
-     * Checa se o device pertence ao SDK versão 23 para exibir permissão
-     */
-    private void checkPermissions() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CAMERA)
-                    != PackageManager.PERMISSION_GRANTED) {
-                requestPermission();
-
-            }
-        }
-    }
-
-    /**
-     * Requisita permissão para realizar um ligação no device.
-     */
-    private void requestPermission() {
-        int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-        if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{Manifest.permission.CAMERA},
-                    MY_PERMISSIONS_REQUEST_CAMERA);
-        } else {
-            customDialog();
-        }
-    }
-
-    /**
-     * @param
-     */
-    public void customDialog() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-        }
-    }
-
-
-    /**
-     * Dialog para seleção de camera ou galeria para selecionar foto do perfil.
-     */
-    private void openDialog() {
-        final CharSequence[] items = {getString(R.string.TakePhoto), getString(R.string.gallery), getString(R.string.cancelar)};
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.selectPhoto));
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-
-                if (items[item].equals(getString(R.string.TakePhoto))) {
-                    checkPermissions();
-                    PROFILE_PIC_COUNT = 1;
-                    int checkPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA);
-                    if (checkPermission == PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(
-                                ProfileSettingsActivity.this,
-                                new String[]{Manifest.permission.CAMERA},
-                                MY_PERMISSIONS_GRANTED_CAMERA);
-
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, REQUEST_CAMERA);
-                    }
-
-                } else if (items[item].equals(getString(R.string.gallery))) {
-                    PROFILE_PIC_COUNT = 1;
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
-                    startActivityForResult(photoPickerIntent, SELECT_FILE);
-
-                } else if (items[item].equals(getString(R.string.cancelar))) {
-                    PROFILE_PIC_COUNT = 0;
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
     }
 
     /**
@@ -249,7 +189,7 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
                 return true;
 
             case R.id.action_seletec_image:
-                openDialog();
+                permissionSelectImagem.openDialogSelectImage();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -282,14 +222,29 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
 
-            uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro);
-            uploadImageTask.delegate = this;
-            uploadImageTask.execute();
+            executeUploadImageTask(imageBytes);
 
             imageView.setImageBitmap(photo);
             capturePhotoUtils.saveToInternalStorage(photo);
 
         }
+    }
+
+    /**
+     * Inicializa e executa AsycnTask para fazer upload de image do perfil do mensageiro.
+     * @param imageBytes
+     */
+    private void executeUploadImageTask(byte [] imageBytes){
+        uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro);
+        uploadImageTask.delegate = new AsyncResponse<Imagem>() {
+            @Override
+            public void processFinish(Imagem output) {
+                mensageiro.setFoto(output);
+
+            }
+        };
+        uploadImageTask.execute();
+
     }
 
 
@@ -311,9 +266,9 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnChangePassword) {
-            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
+            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(this);
             View mView = layoutInflaterAndroid.inflate(R.layout.dialog_change_password, null);
-            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(context);
+            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(this);
             alertDialogBuilderUserInput.setView(mView);
 
             final TextInputEditText password = (TextInputEditText) mView.findViewById(R.id.edtPassword);
@@ -345,77 +300,5 @@ public class ProfileSettingsActivity extends AbstractAsyncActivity implements Vi
         }
     }
 
-        /**
-         * Resultado da task Upload de Imagem.
-         *
-         * @param output
-         */
-        @Override
-        public void processFinish (Imagem output){
 
-            this.mensageiro.setFoto(output);
-        }
-
-        /**
-         *
-         */
-        private class ProfileLoading extends AsyncTask<Void, Void, Mensageiro> {
-
-            private MensageiroRemoteService mensageiroRemoteService;
-            private String message = null;
-
-            /**
-             *
-             */
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                mensageiroRemoteService = new MensageiroRemoteService(getApplication());
-            }
-
-            /**
-             * @param params
-             * @return
-             */
-            @Override
-            protected Mensageiro doInBackground(Void... params) {
-                try {
-
-                    if (androidUtil.isOnline()) {
-                        mensageiro = mensageiroRemoteService.getMensageiro(sharedPrefManager.getUser().getUsername());
-
-                    } else {
-                    }
-                } catch (RestClientException e) {
-                    message = e.getMessage();
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                return mensageiro;
-            }
-
-            /**
-             *
-             * @param mensageiro
-             */
-            @Override
-            protected void onPostExecute(Mensageiro mensageiro) {
-                if (mensageiro != null) {
-
-                    collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
-                    ProfileSettingsFragment fragment = new ProfileSettingsFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("Mensageiro", mensageiro);
-                    fragment.setArguments(bundle);
-
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.add(R.id.editprofile_fragment, fragment);
-                    fragmentTransaction.commit();
-                    nestedScrollView.setVisibility(View.VISIBLE);
-                    fab.setEnabled(true);
-
-                }
-            }
-        }
-    }
+}

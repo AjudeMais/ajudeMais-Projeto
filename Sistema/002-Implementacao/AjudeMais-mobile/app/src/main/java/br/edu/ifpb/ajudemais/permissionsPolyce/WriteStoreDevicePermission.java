@@ -24,7 +24,7 @@ import android.support.v4.content.ContextCompat;
 public class WriteStoreDevicePermission {
 
     private Context context;
-    public static final int REQUEST_CODE_STORE_PERMISSION = 14;
+    public static final int MY_PERMISSIONS_REQUEST_STORE_PERMISSION = 14;
 
 
     public WriteStoreDevicePermission(Context context) {
@@ -47,11 +47,14 @@ public class WriteStoreDevicePermission {
                     // Show an expanation to the user *asynchronously* -- don't block
                     // this thread waiting for the user's response! After the user
                     // sees the explanation, try again to request the permission.
+                    ActivityCompat.requestPermissions(((Activity)context),
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            MY_PERMISSIONS_REQUEST_STORE_PERMISSION);
                     return  false;
                 } else {
                     ActivityCompat.requestPermissions(((Activity)context),
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            REQUEST_CODE_STORE_PERMISSION);
+                            MY_PERMISSIONS_REQUEST_STORE_PERMISSION);
                     return  false;
 
                 }

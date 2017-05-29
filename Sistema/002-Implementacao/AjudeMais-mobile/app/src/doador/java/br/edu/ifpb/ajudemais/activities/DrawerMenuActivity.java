@@ -38,7 +38,8 @@ import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
-import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.REQUEST_CODE_STORE_PERMISSION;
+import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
+
 
 /**
  * <p>
@@ -288,7 +289,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
                 }
                 break;
             }
-            case REQUEST_CODE_STORE_PERMISSION: {
+            case MY_PERMISSIONS_REQUEST_STORE_PERMISSION: {
                 if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
                     bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                     capturePhotoUtils.saveToInternalStorage(bitmap);

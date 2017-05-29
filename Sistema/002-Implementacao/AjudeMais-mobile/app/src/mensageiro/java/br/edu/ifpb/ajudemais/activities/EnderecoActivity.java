@@ -1,46 +1,73 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.springframework.web.client.RestClientException;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Order;
+
+import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
-import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
-public class EnderecoActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class EnderecoActivity extends AbstractAsyncActivity implements View.OnClickListener, Validator.ValidationListener {
 
     private Toolbar mToolbar;
     private Resources resources;
     private AndroidUtil androidUtil;
     private Mensageiro mensageiroEdit;
     private Integer indexEndereco;
-    private SharedPrefManager sharedPrefManager;
+
+
+    @Order(6)
+    @NotEmpty(messageResId = R.string.msgEmptyCep, sequence = 1)
     private TextInputEditText edtCep;
+
+    @Order(5)
+    @NotEmpty(messageResId = R.string.msgEmptyLogradouro, sequence = 1)
     private TextInputEditText edtLogradouro;
+
+    @Order(4)
+    @NotEmpty(messageResId = R.string.msgEmptyNumero, sequence = 1)
     private TextInputEditText edtNumero;
+
+    @Order(3)
+    @NotEmpty(messageResId = R.string.msgEmptyBairro, sequence = 1)
     private TextInputEditText edtBairro;
+
+    @Order(2)
+    @NotEmpty(messageResId = R.string.msgEmptyLocalidade, sequence = 1)
     private TextInputEditText edtLocalidade;
+
+    @Order(1)
+    @Length(max = 2, min = 2, messageResId = R.string.msgFormatUfInvalide, sequence = 3)
+    @NotEmpty(messageResId = R.string.msgEmptyUf, sequence = 1)
     private TextInputEditText edtUf;
+
     private TextInputEditText edtComplemento;
+
     private Button btnCadastrarEndereco;
     private Endereco endereco;
+    private Toast toast;
+    private Validator validator;
+    private UpdateMensageiroTask updateMensageiroTask;
 
 
     @Override
@@ -52,6 +79,10 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
         if (indexEndereco != null) {
             setEditEnderecoValues();
         }
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
         btnCadastrarEndereco.setOnClickListener(this);
     }
 
@@ -88,7 +119,6 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
         edtUf = (TextInputEditText) findViewById(R.id.edtUf);
         btnCadastrarEndereco = (Button) findViewById(R.id.btnCadastrarEndereco);
 
-        sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setEndereco(endereco);
 
@@ -142,137 +172,27 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
         }
     }
 
-    public boolean validateEnderecoCreate() {
-        String cep = edtCep.getText().toString().trim();
-        String logradouro = edtLogradouro.getText().toString().trim();
-        String numero = edtNumero.getText().toString().trim();
-        String bairro = edtBairro.getText().toString().trim();
-        String localidade = edtLocalidade.getText().toString().trim();
-        String uf = edtUf.getText().toString().trim();
-
-        return !validateEmptyFields(cep, logradouro, numero, bairro, localidade, uf) && !validateFieldsAddress();
-    }
-
-    private boolean validateEmptyFields(String cep, String logradouro, String numero,
-                                        String bairro, String localidade, String uf) {
-        if (TextUtils.isEmpty(cep)) {
-            edtCep.requestFocus();
-            edtCep.setError(resources.getString(R.string.msgEmptyCep));
-            return true;
-        } else if (TextUtils.isEmpty(logradouro)) {
-            //edtLogradouro.requestFocus();
-            edtLogradouro.setError(resources.getString(R.string.msgEmptyLogradouro));
-            return true;
-        } else if (TextUtils.isEmpty(numero)) {
-            edtNumero.requestFocus();
-            edtNumero.setError(resources.getString(R.string.msgEmptyNumero));
-            return true;
-        } else if (TextUtils.isEmpty(bairro)) {
-            edtBairro.requestFocus();
-            edtBairro.setError(resources.getString(R.string.msgEmptyBairro));
-            return true;
-        } else if (TextUtils.isEmpty(localidade)) {
-            edtLocalidade.requestFocus();
-            edtLocalidade.setError(resources.getString(R.string.msgEmptyLocalidade));
-            return true;
-
-        } else if (TextUtils.isEmpty(uf)) {
-            edtUf.requestFocus();
-            edtUf.setError(resources.getString(R.string.msgEmptyUf));
-            return true;
-        }
-        return false;
-    }
-
-    private boolean validateFieldsAddress(){
-        if (edtUf.getText().toString().trim().length() != 2){
-            edtUf.requestFocus();
-            edtUf.setError(resources.getString(R.string.msgFormatUfInvalide));
-            return true;
-
-        }else if (edtCep.getText().toString().length()<9){
-            edtCep.requestFocus();
-            edtCep.setError(resources.getString(R.string.msgFormatCepInvalide));
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public void onClick(View v) {
 
         if (v.getId() == R.id.btnCadastrarEndereco) {
-            if (validateEnderecoCreate()) {
+            validator.validate();
 
-                if (indexEndereco != null) {
-                    mensageiroEdit.getEnderecos().get(indexEndereco).setLogradouro(edtLogradouro.getText().toString().trim());
-                    mensageiroEdit.getEnderecos().get(indexEndereco).setBairro(edtBairro.getText().toString().trim());
-                    mensageiroEdit.getEnderecos().get(indexEndereco).setNumero(edtNumero.getText().toString().trim());
-                    mensageiroEdit.getEnderecos().get(indexEndereco).setLocalidade(edtLocalidade.getText().toString().trim());
-                    mensageiroEdit.getEnderecos().get(indexEndereco).setUf(edtUf.getText().toString().trim());
-
-                } else {
-                    endereco = new Endereco(edtCep.getText().toString().trim(),
-                            edtNumero.getText().toString().trim(),
-                            edtBairro.getText().toString().trim(),
-                            edtLocalidade.getText().toString().trim(),
-                            edtLogradouro.getText().toString().trim(),
-                            edtUf.getText().toString().trim());
-
-                    mensageiroEdit.getEnderecos().add(endereco);
-                }
-
-                if (edtComplemento.getText().toString().trim().length() > 0) {
-                    if (indexEndereco != null) {
-                        mensageiroEdit.getEnderecos().get(indexEndereco).setComplemento(edtComplemento.getText().toString().trim());
-
-                    } else {
-                        endereco.setComplemento(edtComplemento.getText().toString().trim());
-                    }
-                }
-
-
-                new CreateEnderecoTask(mensageiroEdit, this).execute();
-
-            }
         }
     }
 
-    private class CreateEnderecoTask extends AsyncTask<Void, Void, Conta> {
-
-        private String message;
-        private Mensageiro mensageiro;
-        private String password;
-        private MensageiroRemoteService mensageiroRemoteService;
-        private Mensageiro mensageiroUpdated;
-        private Toast toast;
-
-        public CreateEnderecoTask(Mensageiro mensageiro, Context context) {
-            this.mensageiro = mensageiro;
-            mensageiroRemoteService = new MensageiroRemoteService(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-        }
-
-        @Override
-        protected Conta doInBackground(Void... params) {
-            try {
-                mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiro);
-            } catch (RestClientException e) {
-                message = e.getMessage();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-            if (mensageiro != null && mensageiroUpdated != null) {
-                SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
+    /**
+     * Executa task para criar novo endreco.
+     */
+    private void executeCreateEnderecoTask() {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiroEdit);
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                mensageiroEdit = output;
+                SharedPrefManager.getInstance(EnderecoActivity.this).storeUser(output.getConta());
                 Intent intent = new Intent(EnderecoActivity.this, MyEnderecosActivity.class);
+                intent.putExtra("Mensageiro", output);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -286,9 +206,58 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                     toast.setGravity(Gravity.BOTTOM, 0, 0);
                     toast.show();
                 }
+            }
+        };
+
+        updateMensageiroTask.execute();
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+
+        if (indexEndereco != null) {
+            mensageiroEdit.getEnderecos().get(indexEndereco).setLogradouro(edtLogradouro.getText().toString().trim());
+            mensageiroEdit.getEnderecos().get(indexEndereco).setBairro(edtBairro.getText().toString().trim());
+            mensageiroEdit.getEnderecos().get(indexEndereco).setNumero(edtNumero.getText().toString().trim());
+            mensageiroEdit.getEnderecos().get(indexEndereco).setLocalidade(edtLocalidade.getText().toString().trim());
+            mensageiroEdit.getEnderecos().get(indexEndereco).setUf(edtUf.getText().toString().trim());
+
+        } else {
+            endereco = new Endereco(edtCep.getText().toString().trim(),
+                    edtNumero.getText().toString().trim(),
+                    edtBairro.getText().toString().trim(),
+                    edtLocalidade.getText().toString().trim(),
+                    edtLogradouro.getText().toString().trim(),
+                    edtUf.getText().toString().trim());
+
+            mensageiroEdit.getEnderecos().add(endereco);
+        }
+
+        if (edtComplemento.getText().toString().trim().length() > 0) {
+            if (indexEndereco != null) {
+                mensageiroEdit.getEnderecos().get(indexEndereco).setComplemento(edtComplemento.getText().toString().trim());
+
             } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                endereco.setComplemento(edtComplemento.getText().toString().trim());
+            }
+        }
+        executeCreateEnderecoTask();
+
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof TextInputEditText) {
+                ((TextInputEditText) view).setError(message);
+                view.requestFocus();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
         }
     }
+
 }
