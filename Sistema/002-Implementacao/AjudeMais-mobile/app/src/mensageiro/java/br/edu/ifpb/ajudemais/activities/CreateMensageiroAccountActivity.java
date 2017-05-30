@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -136,7 +135,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        btnCreateAccount = (Button) findViewById(R.id.btnEditAccount);
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         edtName = (TextInputEditText) findViewById(R.id.edtNome);
         edtUserName = (TextInputEditText) findViewById(R.id.edtUserName);
         edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
@@ -208,7 +207,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnEditAccount) {
+        if (v.getId() == R.id.btnCreateAccount) {
             validator.validate();
         }
     }
