@@ -25,11 +25,9 @@ import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
  */
 public class FacebookProfilePictureTask extends AsyncTask<Void, Void, Bitmap> {
 
-    private Context context;
     private CapturePhotoUtils capturePhotoUtils;
 
     public FacebookProfilePictureTask(Context context) {
-        this.context = context;
         this.capturePhotoUtils = new CapturePhotoUtils(context);
     }
 

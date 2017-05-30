@@ -31,6 +31,7 @@ public class FacebookAccount {
      *          Um objeto do tipo doador
      */
     public static void userFacebookData(LoginResult loginResult, final Activity activity) {
+        doador = new Doador();
         GraphRequest request = GraphRequest.newMeRequest(
                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override

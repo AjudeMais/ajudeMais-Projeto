@@ -163,9 +163,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Bitmap bitMapfb = (Bitmap) getIntent().getExtras().get("ProfilePicFacebook");
                 Intent intent = new Intent(ProfileSettingsActivity.this, MainActivity.class);
-                intent.putExtra("ProfilePicFacebook", bitMapfb);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
@@ -198,8 +196,6 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
             File imageFile = capturePhotoUtils.getTempFile(this);
             selectedImage = data.getData();
             photo = capturePhotoUtils.getImageResized(this, selectedImage);
-
-
         }
 
         if (photo != null) {
