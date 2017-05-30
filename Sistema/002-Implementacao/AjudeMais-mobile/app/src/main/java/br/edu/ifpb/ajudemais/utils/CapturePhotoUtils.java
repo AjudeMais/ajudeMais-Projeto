@@ -14,8 +14,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static br.edu.ifpb.ajudemais.utils.ImagePicker.minWidthQuality;
-
 
 /**
  * <p>
@@ -31,6 +29,8 @@ import static br.edu.ifpb.ajudemais.utils.ImagePicker.minWidthQuality;
 public class CapturePhotoUtils {
 
     private Context context;
+    private static final int DEFAULT_MIN_WIDTH_QUALITY = 400;
+    public static int minWidthQuality = DEFAULT_MIN_WIDTH_QUALITY;
 
     public CapturePhotoUtils(Context context){
         this.context = context;

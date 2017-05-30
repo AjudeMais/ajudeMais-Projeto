@@ -1,36 +1,33 @@
-package br.edu.ifpb.ajudemais.utils;
+package br.edu.ifpb.ajudemais.validator.rules;
+
+import com.mobsandgeeks.saripaar.AnnotationRule;
 
 import java.util.regex.Pattern;
 
+import br.edu.ifpb.ajudemais.validator.annotations.CPF;
+
 /**
  * <p>
- * <b>{@link CPFValidator}</b>
+ * <b>{@link CpfRule}</b>
  * </p>
  * <p>
- *     Classe responsável por validar o CPF informado pelo usuário
  * <p>
- *
+ * Regra utilizada para validar CPF Válido
  * </p>
  *
- * @author <a href="https://github.com/amslv">Ana Silva</a>
- *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-public class CPFValidator {
+public class CpfRule extends AnnotationRule<CPF, String> {
 
     private static Pattern PATTERN_GENERIC = Pattern.compile("[0-9]{3}\\.?[0-9]{3}\\.?[0-9]{3}\\-?[0-9]{2}");
     private static Pattern PATTERN_NUMBERS = Pattern.compile("(?=^((?!((([0]{11})|([1]{11})|([2]{11})|([3]{11})|([4]{11})|([5]{11})|([6]{11})|([7]{11})|([8]{11})|([9]{11})))).)*$)([0-9]{11})");
 
-    /**
-     * Verifica se o CPF passado por parametro é válido
-     *
-     * @param cpf
-     *      cpf informado
-     *
-     * @return
-     *     se o CPF é valido ou não
-     */
-    public static boolean isValid(String cpf) {
+    protected CpfRule(CPF cpf) {
+        super(cpf);
+    }
+
+    @Override
+    public boolean isValid(String cpf) {
         if (cpf != null && PATTERN_GENERIC.matcher(cpf).matches()) {
             cpf = cpf.replaceAll("-|\\.", "");
             if (cpf != null && PATTERN_NUMBERS.matcher(cpf).matches()) {

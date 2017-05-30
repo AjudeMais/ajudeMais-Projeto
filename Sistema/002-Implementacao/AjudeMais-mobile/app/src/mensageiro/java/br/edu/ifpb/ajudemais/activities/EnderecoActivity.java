@@ -35,7 +35,6 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
     private Mensageiro mensageiroEdit;
     private Integer indexEndereco;
 
-
     @Order(6)
     @NotEmpty(messageResId = R.string.msgEmptyCep, sequence = 1)
     private TextInputEditText edtCep;

@@ -1,67 +1,98 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import org.springframework.web.client.RestClientException;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Order;
+import com.mobsandgeeks.saripaar.annotation.Password;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.CreateMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
-import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.CPFValidator;
+import br.edu.ifpb.ajudemais.validator.annotations.CPF;
 
 /**
  * <p>
  * <b>{@link CreateMensageiroAccountActivity}</b>
  * </p>
  * <p>
- *     Activity para criar uma conta de mensageiro no sistema.
+ * Activity para criar uma conta de mensageiro no sistema.
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/amslv">Ana Silva</a>
- *
  */
-public class CreateMensageiroAccountActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class CreateMensageiroAccountActivity extends BaseActivity implements View.OnClickListener, Validator.ValidationListener {
 
 
     private Toolbar mToolbar;
     private Button btnCreateAccount;
-    private TextInputEditText edtName;
-    private TextInputEditText edtUserName;
-    private TextInputEditText edtPhone;
-    private TextInputEditText edtEmail;
-    private TextInputEditText edtCpf;
-    private TextInputEditText edtPassword;
-    private TextInputEditText edtConfirmPassword;
-    private Resources resources;
-    private AndroidUtil androidUtil;
+    private Validator validator;
     private Mensageiro mensageiroEdit;
-    private SharedPrefManager sharedPrefManager;
     private TextInputLayout ltedtConfirmPassword;
     private TextInputLayout ltedtPassword;
     private TextInputLayout ltedtCpf;
     private TextInputLayout ltedtUserName;
+    private CreateMensageiroTask createMensageiroTask;
+    private UpdateMensageiroTask updateMensageiroTask;
+
+
+    @Order(7)
+    @NotEmpty(messageResId = R.string.msgNameNotInformed, sequence = 1)
+    private TextInputEditText edtName;
+
+    @Order(6)
+    @Length(min = 4, messageResId = R.string.msgInvalideUserName)
+    @NotEmpty(messageResId = R.string.msgUserNameNotInformed, sequence = 1)
+    private TextInputEditText edtUserName;
+
+    @Order(5)
+    @Length(min = 15, max = 15, messageResId = R.string.msgPhoneNotCompleted, sequence = 2)
+    @NotEmpty(messageResId = R.string.msgPhoneNotInformed, sequence = 1)
+    private TextInputEditText edtPhone;
+
+    @Order(4)
+    @Email(messageResId = R.string.msgInvalideEmail, sequence = 3)
+    @NotEmpty(messageResId = R.string.msgEmailNotInformed, sequence = 1)
+    private TextInputEditText edtEmail;
+
+    @Order(3)
+    @CPF(messageResId = R.string.msgCpfInvalid, sequence = 2)
+    @NotEmpty(messageResId = R.string.msgCpfNotInformed, sequence = 1)
+    private TextInputEditText edtCpf;
+
+    @Order(2)
+    @Password(min = 6, messageResId = R.string.msgInvalidePassword, sequence = 2)
+    @NotEmpty(messageResId = R.string.msgInvalidePassword, sequence = 1)
+    private TextInputEditText edtPassword;
+
+    @Order(1)
+    @ConfirmPassword(messageResId = R.string.msgPasswordAndConfirmPasswordDoesNotMatch)
+    @Length(min = 6, messageResId = R.string.msgInvalidePassword)
+    @NotEmpty(messageResId = R.string.msgConfirmPasswordNotInformed, sequence = 1)
+    private TextInputEditText edtConfirmPassword;
+
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -72,8 +103,11 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mensageiro_account);
-        androidUtil = new AndroidUtil(this);
         init();
+
+        validator = new Validator(this);
+        Validator.registerAnnotation(CPF.class);
+        validator.setValidationListener(this);
 
         if (mensageiroEdit != null) {
             setEditValueInFields();
@@ -85,9 +119,11 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
-    private void init() {
+
+    @Override
+    public void init() {
+        initProperties();
         mensageiroEdit = (Mensageiro) getIntent().getSerializableExtra("Mensageiro");
-        sharedPrefManager = new SharedPrefManager(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         if (mensageiroEdit != null) {
             mToolbar.setTitle("Editar Conta");
@@ -98,9 +134,8 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        resources = getResources();
 
-        btnCreateAccount = (Button) findViewById(R.id.btnEditAccount);
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         edtName = (TextInputEditText) findViewById(R.id.edtNome);
         edtUserName = (TextInputEditText) findViewById(R.id.edtUserName);
         edtPhone = (TextInputEditText) findViewById(R.id.edtPhone);
@@ -145,96 +180,6 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
 
 
     /**
-     * Valida o cadastro de mensageiroEdit sem facebook,
-     *
-     * @return boolean
-     */
-    private boolean validateMensageiroCreate() {
-        String userName = edtUserName.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        String phone = edtPhone.getText().toString().trim();
-        String email = edtEmail.getText().toString().trim();
-        String cpf = edtCpf.getText().toString().trim();
-        String confirmPassword = edtConfirmPassword.getText().toString().trim();
-        String name = edtName.getText().toString().trim();
-        return ((!validateFieldsEmpty(name, userName, phone, email, cpf, confirmPassword, password) && (validateLengthFields(userName, phone, cpf, password, confirmPassword))) && (validateEmail() && validatePasswords(password, confirmPassword)));
-    }
-
-    /**
-     * Valida o cadastro de mensageiroEdit sem facebook,
-     *
-     * @return boolean
-     */
-    private boolean validateMensageiroEdit() {
-        String phone = edtPhone.getText().toString().trim();
-        String email = edtEmail.getText().toString().trim();
-        String name = edtName.getText().toString().trim();
-        return (((validateFieldsEmpty(name, null, phone, email, null, null, null)) && (validatePhone(phone)) && (validateEmail())));
-    }
-
-    /**
-     * Valida e-mail digita se o mesmo é válido
-     *
-     * @return
-     */
-    private boolean validateEmail() {
-
-        if (!androidUtil.isEmailValid(edtEmail.getText().toString().trim())) {
-            edtEmail.requestFocus();
-            edtEmail.setError(resources.getString(R.string.msgInvalideEmail));
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validatePhone(String phone) {
-        if ((phone.length() != 15)) {
-            edtPhone.requestFocus();
-            edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a password informada possui mais de 6 caracteres exigidos.
-     *
-     * @param userName
-     * @param password
-     * @param confirmPassword
-     * @return boolean
-     */
-    private boolean validateLengthFields(String userName, String phone, String cpf, String password, String confirmPassword) {
-
-        if (userName !=null && !(userName.length() > 3)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
-            return false;
-        } else if ((phone.length() != 15)) {
-            edtPhone.requestFocus();
-            edtPhone.setError(resources.getString(R.string.msgPhoneNotCompleted));
-            return false;
-
-        } else if ((cpf.length() < 14) || !CPFValidator.isValid(cpf)) {
-            edtCpf.requestFocus();
-            edtCpf.setError(resources.getString(R.string.msgCpfInvalid));
-            return false;
-
-        }
-        else if (password != null && !(password.length() > 5)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
-            return false;
-
-        } else if (confirmPassword != null && !(confirmPassword.length() > 5)) {
-            edtConfirmPassword.requestFocus();
-            edtConfirmPassword.setError(resources.getString(R.string.msgInvalidePassword));
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Set valores do Doador.
      */
     public void setEditValueInFields() {
@@ -254,69 +199,6 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
         }
     }
 
-    /**
-     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a password informada possui mais de 6 caracteres exigidos.
-     *
-     * @param confirmPassword
-     * @param password
-     * @return boolean
-     */
-    private boolean validatePasswords(String password, String confirmPassword) {
-
-        if (!password.equals(confirmPassword)) {
-            Toast.makeText(this, R.string.msgPasswordAndConfirmPasswordDoesNotMatch, Toast.LENGTH_LONG).show();
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Recebe os campos de cadastro de um novo mensageiroEdit e verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
-     *
-     * @param userName
-     * @param password
-     * @return boolean
-     */
-    private boolean validateFieldsEmpty(String name, String userName, String phone, String email, String cpf, String confirmPassword, String password) {
-        if (TextUtils.isEmpty(name)) {
-            edtName.requestFocus();
-            edtName.setError(resources.getString(R.string.msgNameNotInformed));
-            return true;
-
-        } else if (userName != null && TextUtils.isEmpty(userName)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
-            return true;
-
-        } else if (TextUtils.isEmpty(phone)) {
-            edtPhone.requestFocus();
-            edtPhone.setError(resources.getString(R.string.msgPhoneNotInformed));
-            return true;
-
-        } else if (TextUtils.isEmpty(email)) {
-            edtEmail.requestFocus();
-            edtEmail.setError(resources.getString(R.string.msgEmailNotInformed));
-            return true;
-
-        } else if (TextUtils.isEmpty(cpf)) {
-            edtCpf.requestFocus();
-            edtCpf.setError(resources.getString(R.string.msgCpfNotInformed));
-            return true;
-
-        } else if (password != null && TextUtils.isEmpty(password)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
-            return true;
-
-        } else if (confirmPassword != null && TextUtils.isEmpty(confirmPassword)) {
-            edtConfirmPassword.requestFocus();
-            edtConfirmPassword.setError(resources.getString(R.string.msgConfirmPasswordNotInformed));
-            return true;
-        }
-        return false;
-    }
-
 
     /**
      * Implementa as operação de clique.
@@ -325,118 +207,106 @@ public class CreateMensageiroAccountActivity extends AbstractAsyncActivity imple
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnEditAccount) {
-            if (mensageiroEdit != null) {
-                if (validateMensageiroEdit()) {
-                    new CreateAccounTask(mensageiroEdit, this).execute();
-                }
-            } else {
-                if (validateMensageiroCreate()) {
-
-                    List<String> grupos = new ArrayList<>();
-                    grupos.add("ROLE_MENSAGEIRO");
-                    Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
-                            edtCpf.getText().toString().trim(),
-                            edtPhone.getText().toString().trim(),
-                            new Conta(edtUserName.getText().toString().trim(),
-                                    edtPassword.getText().toString().trim(), true,
-                                    edtEmail.getText().toString().trim(), grupos));
-                    new CreateAccounTask(mensageiro, this).execute();
-                }
-            }
+        if (v.getId() == R.id.btnCreateAccount) {
+            validator.validate();
         }
+    }
+
+    /**
+     * Se o formulário foi validado este método é executado
+     */
+    @Override
+    public void onValidationSucceeded() {
+        if (mensageiroEdit != null) {
+
+            mensageiroEdit.getConta().setEmail(edtEmail.getText().toString().trim());
+            mensageiroEdit.setNome(edtName.getText().toString().trim());
+            mensageiroEdit.setTelefone(edtPhone.getText().toString().trim());
+
+            executeUpdateMensageiroTask(mensageiroEdit);
+        } else {
+            List<String> grupos = new ArrayList<>();
+            grupos.add("ROLE_MENSAGEIRO");
+            Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
+                    edtCpf.getText().toString().trim(),
+                    edtPhone.getText().toString().trim(),
+                    new Conta(edtUserName.getText().toString().trim(),
+                            edtPassword.getText().toString().trim(), true,
+                            edtEmail.getText().toString().trim(), grupos));
+
+            executeCreateMensageiroTask(mensageiro);
+        }
+
+    }
+
+    /**
+     * Executa task para criação de um novo mensageiro.
+     *
+     * @param mensageiro
+     */
+    private void executeCreateMensageiroTask(Mensageiro mensageiro) {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+
+        createMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                SharedPrefManager.getInstance(CreateMensageiroAccountActivity.this).storeUser(output.getConta());
+                Intent intent = new Intent();
+                intent.setClass(CreateMensageiroAccountActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Conta", output.getConta());
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        createMensageiroTask.execute();
+    }
+
+    /**
+     * Executa task para atualização  de um mensageiro.
+     *
+     * @param mensageiro
+     */
+    private void executeUpdateMensageiroTask(Mensageiro mensageiro) {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                SharedPrefManager.getInstance(CreateMensageiroAccountActivity.this).storeUser(output.getConta());
+                Intent intent = new Intent(CreateMensageiroAccountActivity.this, ProfileSettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Mensageiro", output);
+                startActivity(intent);
+                finish();
+                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        updateMensageiroTask.execute();
     }
 
 
     /**
+     * Se a validação falhar este método é executado
+     *
+     * @param errors
      */
-    private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
 
-        private String message;
-        private Mensageiro mensageiro;
-        private String password;
-        private MensageiroRemoteService mensageiroRemoteService;
-        private AuthRemoteService authRemoteService;
-        private Mensageiro mensageiroUpdated;
-
-        public CreateAccounTask(Mensageiro mensageiro, Context context) {
-            this.mensageiro = mensageiro;
-            mensageiroRemoteService = new MensageiroRemoteService(context);
-            authRemoteService = new AuthRemoteService(context);
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-            if (mensageiroEdit != null){
-                Conta conta = mensageiroEdit.getConta();
-                conta.setEmail(edtEmail.getText().toString().trim());
-                mensageiroEdit.setNome(edtName.getText().toString().trim());
-                mensageiroEdit.setTelefone(edtPhone.getText().toString().trim());
-                mensageiroEdit.setConta(conta);
-            }
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Conta doInBackground(Void... params) {
-
-            try {
-                if (mensageiroEdit == null) {
-                    password = mensageiro.getConta().getSenha();
-                    mensageiro = mensageiroRemoteService.saveMensageiro(mensageiro);
-                    Conta conta = authRemoteService.createAuthenticationToken(new Conta(mensageiro.getConta().getUsername(), password), Grupo.MENSAGEIRO);
-                    return conta;
-                } else {
-                    mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiroEdit);
-                    return mensageiroUpdated.getConta();
-                }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-
-        /**
-         * @param conta
-         */
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-            if (conta != null && mensageiroUpdated == null) {
-                Intent intent = new Intent();
-                intent.setClass(CreateMensageiroAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Conta", conta);
-                startActivity(intent);
-                finish();
-
-            } else if (mensageiro != null && mensageiroUpdated != null) {
-                SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
-                Intent intent = new Intent(CreateMensageiroAccountActivity.this, ProfileSettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Mensageiro", mensageiroUpdated);
-                startActivity(intent);
-                finish();
-                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
-
+            if (view instanceof TextInputEditText) {
+                ((TextInputEditText) view).setError(message);
+                view.requestFocus();
             } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
             }
-
         }
-
     }
+
+
 }
