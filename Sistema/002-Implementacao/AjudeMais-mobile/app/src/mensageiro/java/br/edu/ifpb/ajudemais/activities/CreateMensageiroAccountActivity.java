@@ -1,8 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -10,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -21,19 +20,16 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 import com.mobsandgeeks.saripaar.annotation.Password;
 
-import org.springframework.web.client.RestClientException;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.CreateMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
-import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 import br.edu.ifpb.ajudemais.validator.annotations.CPF;
 
 /**
@@ -59,6 +55,8 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
     private TextInputLayout ltedtPassword;
     private TextInputLayout ltedtCpf;
     private TextInputLayout ltedtUserName;
+    private CreateMensageiroTask createMensageiroTask;
+    private UpdateMensageiroTask updateMensageiroTask;
 
 
     @Order(7)
@@ -95,7 +93,6 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
     @Length(min = 6, messageResId = R.string.msgInvalidePassword)
     @NotEmpty(messageResId = R.string.msgConfirmPasswordNotInformed, sequence = 1)
     private TextInputEditText edtConfirmPassword;
-
 
 
     /**
@@ -222,8 +219,12 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
     @Override
     public void onValidationSucceeded() {
         if (mensageiroEdit != null) {
-            new CreateAccounTask(mensageiroEdit, this).execute();
 
+            mensageiroEdit.getConta().setEmail(edtEmail.getText().toString().trim());
+            mensageiroEdit.setNome(edtName.getText().toString().trim());
+            mensageiroEdit.setTelefone(edtPhone.getText().toString().trim());
+
+            executeUpdateMensageiroTask(mensageiroEdit);
         } else {
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_MENSAGEIRO");
@@ -233,13 +234,64 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
                     new Conta(edtUserName.getText().toString().trim(),
                             edtPassword.getText().toString().trim(), true,
                             edtEmail.getText().toString().trim(), grupos));
-            new CreateAccounTask(mensageiro, this).execute();
+
+            executeCreateMensageiroTask(mensageiro);
         }
 
     }
 
     /**
+     * Executa task para criação de um novo mensageiro.
+     *
+     * @param mensageiro
+     */
+    private void executeCreateMensageiroTask(Mensageiro mensageiro) {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+
+        createMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                SharedPrefManager.getInstance(CreateMensageiroAccountActivity.this).storeUser(output.getConta());
+                Intent intent = new Intent();
+                intent.setClass(CreateMensageiroAccountActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Conta", output.getConta());
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        createMensageiroTask.execute();
+    }
+
+    /**
+     * Executa task para atualização  de um mensageiro.
+     *
+     * @param mensageiro
+     */
+    private void executeUpdateMensageiroTask(Mensageiro mensageiro) {
+        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                SharedPrefManager.getInstance(CreateMensageiroAccountActivity.this).storeUser(output.getConta());
+                Intent intent = new Intent(CreateMensageiroAccountActivity.this, ProfileSettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("Mensageiro", output);
+                startActivity(intent);
+                finish();
+                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
+            }
+        };
+
+        updateMensageiroTask.execute();
+    }
+
+
+    /**
      * Se a validação falhar este método é executado
+     *
      * @param errors
      */
     @Override
@@ -258,97 +310,4 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
     }
 
 
-    /**
-     */
-    private class CreateAccounTask extends AsyncTask<Void, Void, Conta> {
-
-        private String message;
-        private Mensageiro mensageiro;
-        private String password;
-        private MensageiroRemoteService mensageiroRemoteService;
-        private AuthRemoteService authRemoteService;
-        private Mensageiro mensageiroUpdated;
-        private ProgressDialog progressDialog;
-
-        public CreateAccounTask(Mensageiro mensageiro, Context context) {
-            this.mensageiro = mensageiro;
-            mensageiroRemoteService = new MensageiroRemoteService(context);
-            authRemoteService = new AuthRemoteService(context);
-            progressDialog = new ProgressDialog(context);
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            progressDialog.showProgressDialog();
-            if (mensageiroEdit != null) {
-                Conta conta = mensageiroEdit.getConta();
-                conta.setEmail(edtEmail.getText().toString().trim());
-                mensageiroEdit.setNome(edtName.getText().toString().trim());
-                mensageiroEdit.setTelefone(edtPhone.getText().toString().trim());
-                mensageiroEdit.setConta(conta);
-            }
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Conta doInBackground(Void... params) {
-
-            try {
-                if (mensageiroEdit == null) {
-                    password = mensageiro.getConta().getSenha();
-                    mensageiro = mensageiroRemoteService.saveMensageiro(mensageiro);
-                    Conta conta = authRemoteService.createAuthenticationToken(new Conta(mensageiro.getConta().getUsername(), password), Grupo.MENSAGEIRO);
-                    return conta;
-                } else {
-                    mensageiroUpdated = mensageiroRemoteService.updateMensageiro(mensageiroEdit);
-                    return mensageiroUpdated.getConta();
-                }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-
-        /**
-         * @param conta
-         */
-        @Override
-        protected void onPostExecute(Conta conta) {
-            progressDialog.dismissProgressDialog();
-            if (conta != null && mensageiroUpdated == null) {
-                Intent intent = new Intent();
-                intent.setClass(CreateMensageiroAccountActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Conta", conta);
-                startActivity(intent);
-                finish();
-
-            } else if (mensageiro != null && mensageiroUpdated != null) {
-                SharedPrefManager.getInstance(getApplication()).storeUser(mensageiro.getConta());
-                Intent intent = new Intent(CreateMensageiroAccountActivity.this, ProfileSettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("Mensageiro", mensageiroUpdated);
-                startActivity(intent);
-                finish();
-                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
-
-            } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
 }
