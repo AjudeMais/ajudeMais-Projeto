@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -10,7 +11,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.accessibility.AccessibilityEventCompat;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,8 +25,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.Profile;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
@@ -32,11 +32,9 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
 
@@ -105,21 +103,19 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
-        if (getIntent().hasExtra("ProfilePic") && getIntent().getExtras().get("ProfilePic") != null) {
-            bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
+        if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
             if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+                bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                capturePhotoUtils.saveToInternalStorage(bitmap);
+            }
+        } if (getIntent().hasExtra("ProfilePic") && getIntent().getByteArrayExtra("ProfilePic") != null) {
+            if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+                bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
                 capturePhotoUtils.saveToInternalStorage(bitmap);
             }
         }
         else {
-            if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
-                if (writeStoreDevicePermission.isStoragePermissionGranted()) {
-                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
-                    capturePhotoUtils.saveToInternalStorage(bitmap);
-                }
-            } else {
-                bitmap = capturePhotoUtils.loadImageFromStorage();
-            }
+            bitmap = capturePhotoUtils.loadImageFromStorage();
         }
         if (bitmap != null) {
             profilePhoto.setImageBitmap(bitmap);
@@ -292,6 +288,11 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             case MY_PERMISSIONS_REQUEST_STORE_PERMISSION: {
                 if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
                     bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
+                    capturePhotoUtils.saveToInternalStorage(bitmap);
+                    profilePhoto.setImageBitmap(bitmap);
+                }
+                else if (getIntent().hasExtra("ProfilePic") && getIntent().getExtras().get("ProfilePic") != null) {
+                    bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
                     capturePhotoUtils.saveToInternalStorage(bitmap);
                     profilePhoto.setImageBitmap(bitmap);
                 }
