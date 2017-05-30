@@ -5,11 +5,9 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -26,6 +24,7 @@ import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 public class EnderecoActivity extends AbstractAsyncActivity implements View.OnClickListener, Validator.ValidationListener {
 
@@ -64,7 +63,6 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
 
     private Button btnCadastrarEndereco;
     private Endereco endereco;
-    private Toast toast;
     private Validator validator;
     private UpdateMensageiroTask updateMensageiroTask;
 
@@ -173,10 +171,8 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
 
     @Override
     public void onClick(View v) {
-
         if (v.getId() == R.id.btnCadastrarEndereco) {
             validator.validate();
-
         }
     }
 
@@ -196,14 +192,9 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                 startActivity(intent);
                 finish();
                 if (indexEndereco != null) {
-                    toast = Toast.makeText(getApplicationContext(), getString(R.string.updatedAddress), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.BOTTOM, 0, 0);
-                    toast.show();
-
+                    CustomToast.getInstance(EnderecoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.updatedAddress));
                 } else {
-                    toast = Toast.makeText(getApplicationContext(), getString(R.string.createdAddress), Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.BOTTOM, 0, 0);
-                    toast.show();
+                    CustomToast.getInstance(EnderecoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.createdAddress));
                 }
             }
         };
@@ -254,7 +245,7 @@ public class EnderecoActivity extends AbstractAsyncActivity implements View.OnCl
                 ((TextInputEditText) view).setError(message);
                 view.requestFocus();
             } else {
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                CustomToast.getInstance(EnderecoActivity.this).createSuperToastSimpleCustomSuperToast(message);
             }
         }
     }
