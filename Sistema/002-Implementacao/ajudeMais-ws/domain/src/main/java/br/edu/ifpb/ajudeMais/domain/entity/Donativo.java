@@ -91,12 +91,6 @@ public class Donativo implements Serializable {
 	private Categoria categoria;
 	
 	/**
-	 * 
-	 */
-	@OneToMany
-	private List<Entrega> tentativasEntrega;
-
-	/**
 	 * @return the id
 	 */
 	public Long getId() {
@@ -236,19 +230,6 @@ public class Donativo implements Serializable {
 		this.categoria = categoria;
 	}
 
-	/**
-	 * @return the tentativasEntrega
-	 */
-	public List<Entrega> getTentativasEntrega() {
-		return tentativasEntrega;
-	}
-
-	/**
-	 * @param tentativasEntrega the tentativasEntrega to set
-	 */
-	public void setTentativasEntrega(List<Entrega> tentativasEntrega) {
-		this.tentativasEntrega = tentativasEntrega;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -267,7 +248,6 @@ public class Donativo implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
 		result = prime * result + ((quantidade == null) ? 0 : quantidade.hashCode());
-		result = prime * result + ((tentativasEntrega == null) ? 0 : tentativasEntrega.hashCode());
 		return result;
 	}
 
@@ -332,11 +312,6 @@ public class Donativo implements Serializable {
 			if (other.quantidade != null)
 				return false;
 		} else if (!quantidade.equals(other.quantidade))
-			return false;
-		if (tentativasEntrega == null) {
-			if (other.tentativasEntrega != null)
-				return false;
-		} else if (!tentativasEntrega.equals(other.tentativasEntrega))
 			return false;
 		return true;
 	}
