@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -49,6 +50,9 @@ public class Entrega implements Serializable {
 	 */
 	@Temporal(TemporalType.DATE)
 	private Date dataEntrega;
+	
+	@ManyToOne
+	private Donatario donatario;
 
 	/**
 	 * @return the id
@@ -90,6 +94,20 @@ public class Entrega implements Serializable {
 	 */
 	public void setDataEntrega(Date dataEntrega) {
 		this.dataEntrega = dataEntrega;
+	}
+	
+	/**
+	 * @return the donatario
+	 */
+	public Donatario getDonatario() {
+		return donatario;
+	}
+
+	/**
+	 * @param donatario the donatario to set
+	 */
+	public void setDonatario(Donatario donatario) {
+		this.donatario = donatario;
 	}
 
 	/* (non-Javadoc)
