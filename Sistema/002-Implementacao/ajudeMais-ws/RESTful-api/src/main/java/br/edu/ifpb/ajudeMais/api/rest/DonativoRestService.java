@@ -82,6 +82,24 @@ public class DonativoRestService {
 	/**
 	 * 
 	 * <p>
+	 * GET /donativo/ : Método disponibiliza recurso obter donativos cadastrados.
+	 * ROLE: INSTITUICAO
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<Donativo>> findAll() {
+
+		List<Donativo> donativos = donativoService.findAll();
+
+		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
+	}
+	
+	/**
+	 * 
+	 * <p>
 	 * GET /donativo/id : Busca um donativo pelo deu ID. Caso donativo não exista um
 	 * NOT FOUND será lançado para o cliente. <br/>
 	 * ROLE: DOADOR
