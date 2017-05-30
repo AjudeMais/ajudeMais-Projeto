@@ -1,0 +1,188 @@
+<div class="row">
+    <div class="col-lg-12">
+        <form name="campanhaForm" ng-submit="campanhaForm.$valid && vm.save()" role="form" novalidate>
+
+            <div class="box box-primary">
+                <div class="box-header with-border box-topic">
+                    <h3 class="box-title">Informações gerais</h3>
+                </div>
+
+                <div class="row box-topic">
+                    <div class="col-lg-12">
+                        <div class="form-group"
+                             ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.nome.$invalid }">
+                            <label class="control-label" for="nome">Nome</label>
+                            <input name="nome" id="nome" ng-model="vm.instituicao.nome" type="text"
+                                   class="form-control" required/>
+
+                            <div ng-show="campanhaForm.$submitted && campanhaForm.nome.$invalid"
+                                 class="help-block">Nome deve ser informado
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group"
+                             ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.descricao.$invalid }">
+                            <label class="control-label" for="nome">Descrição</label>
+                            <textarea id="descricao" maxlength="220"
+                                      placeholder="Descreva uma breve introdução sobre a instituição" name="descricao"
+                                      ng-model="vm.instituicao.descricao" class="form-control" rows="3" id="comment"
+                                      required></textarea>
+                            <div ng-show="campanhaForm.$submitted && campanhaForm.descricao.$invalid"
+                                 class="help-block">A descrição deve ser informada
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-sm-6"
+                         ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.tDateInit.$invalid }">
+                        <label class="control-label" for="tDateInit">Início</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control"
+                                   uib-datepicker-popup="dd/MM/yyyy"
+                                   ng-model="vm.campanha.dataInicio"
+                                   date-before="vm.campanha.dataFim"
+                                   date-or-equals="true"
+                                   is-open="vm.dtpk1"
+                                   datepicker-options="dateOptions"
+                                   required
+                                   id="tDateInit"
+                                   name="tDateInit"
+                                   current-text="Hoje"
+                                   clear-text="Limpar"
+                                   close-text="Fechar"
+                                   ng-click="vm.openDtpk(1)"/>
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="vm.openDtpk(1)">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+					            </button>
+				            </span>
+                        </div>
+                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateInit.$invalid  && !campanhaForm.tDateInit.$error.dateBefore"
+                             class="help-block">Data de Início deve ser informada
+                        </div>
+                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateInit.$error.dateBefore"
+                             class="help-block">Data de Início deve ser menor que data término
+                        </div>
+                    </div>
+
+                    <div class="form-group col-sm-6"
+                         ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.tDateEnd.$invalid }">
+                        <label class="control-label" for="tDateEnd">Término</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control"
+                                   uib-datepicker-popup="dd/MM/yyyy"
+                                   ng-model="vm.campanha.dataFim"
+                                   date-after="vm.campanha.dataInicio"
+                                   date-or-equals="true"
+                                   is-open="vm.dtpk2"
+                                   datepicker-options="dateOptions"
+                                   required
+                                   id="tDateEnd"
+                                   name="tDateEnd"
+                                   current-text="Hoje"
+                                   clear-text="Limpar"
+                                   close-text="Fechar"
+                                   ng-click="vm.openDtpk(2)"/>
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-default"
+                                        ng-click="vm.openDtpk(2)">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+					            </button>
+				            </span>
+                        </div>
+                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateEnd.$invalid  && !campanhaForm.tDateEnd.$error.dateAfter"
+                             class="help-block">Data de término deve ser informada
+                        </div>
+                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateEnd.$error.dateAfter"
+                             class="help-block">Data de término deve ser maior que data de início
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box-header with-border box-topic">
+                    <h3 class="box-title">Itens Aceitos</h3>
+                </div>
+
+                <div class="row box-topic">
+                    <div class="col-sm-6">
+                        <div class="input-group col-sm-12">
+
+                            <input type="text" ng-model="vm.item" class="form-control"
+                                   placeholder="Nome do Item"
+                                   uib-typeahead="item as item.nome for item in vm.findByName($viewValue)"
+                                   typeahead-loading="loadingMens" typeahead-no-results="noResults"
+                                   typeahead-editable="false"
+                                   typeahead-on-select="vm.onSelect($model)"
+                                   typeahead-template-url="app/components/partials/item-card-search.html">
+
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" type="button">Adicionar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-1">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-circle btn-primary" ng-click="vm.addItem()"
+                                    uib-tooltip="Cadastro Rápido de Item Doável">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12" ng-show="vm.campanha.itens.length">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th width="8%">#</th>
+                                <th width="30%">Nome</th>
+                                <th width="40%">Descrição</th>
+                                <th width="10%">Ativo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="odd gradeX" ng-repeat="item in vm.campanha.itens">
+                                <td>
+                                    <button type="button" ng-click="vm.removeItem(item)"
+                                            tooltip-placement="top" uib-tooltip="Remover Item"
+                                            class="btn btn-xs btn-danger"
+                                            access-view="ROLE_INSTITUICAO">
+                                        <i class='fa fa-trash'></i>
+                                    </button>
+                                </td>
+                                <td>{{item.nome}}</td>
+                                <td>{{item.descricao}}</td>
+                                <td><span ng-class="{'label label-danger': !item.ativo,
+													'label label-success': item.ativo}">{{item.ativo? 'Sim': 'Não'}}</span>
+                                </td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" ng-show="!vm.campanha.itens.length">
+                        <div class="well">Nenhum item doável adicionado.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary" type="submit" value="{{vm.isEdited() ? 'Alterar':'Salvar' }}"/>
+                <button class="btn btn-default" type="button" ng-click="vm.cancelar()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

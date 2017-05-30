@@ -3,14 +3,13 @@ package br.edu.ifpb.ajudeMais.domain.entity;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -19,24 +18,37 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import br.edu.ifpb.ajudeMais.domain.enumerations.TipoCobertura;
-
+/**
+ * 
+ * <p>
+ * </p>
+ * 
+ * <p>
+ * Representação da entidade de negócio Campanha
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
+ */
 @Entity
 public class Campanha {
 	/**
 	 * 
 	 */
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)	
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull
 	@NotBlank(message = "O nome deve ser informado")
 	private String nome;
-	
+
 	/**
 	 * 
 	 */
@@ -44,7 +56,7 @@ public class Campanha {
 	@NotBlank(message = "A descrição deve ser informada")
 	@Column(columnDefinition = "TEXT")
 	private String descricao;
-	
+
 	/**
 	 * 
 	 */
@@ -52,7 +64,7 @@ public class Campanha {
 	@NotBlank(message = "A data deve ser informada")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataInicio;
-	
+
 	/**
 	 * 
 	 */
@@ -60,22 +72,18 @@ public class Campanha {
 	@NotBlank(message = "A data deve ser informada")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFim;
-	
-	/**
-	 * 
-	 */
-	private TipoCobertura tipoCobertura;
-	/**
-	 * 
-	 */
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "campanha_doador", joinColumns={@JoinColumn(name="campanha_id")})
-	private List<Doador> doadores;
+
 	/**
 	 * 
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	private InstituicaoCaridade instituicaoCaridade;
+
+	/**
+	 * 
+	 */
+	@ManyToMany(cascade = CascadeType.MERGE)
+	private List<Categoria> itensDoaveis;
 
 	/**
 	 * @return the id
@@ -85,7 +93,8 @@ public class Campanha {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -99,7 +108,8 @@ public class Campanha {
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -113,7 +123,8 @@ public class Campanha {
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param descricao
+	 *            the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
@@ -127,7 +138,8 @@ public class Campanha {
 	}
 
 	/**
-	 * @param dataInicio the dataInicio to set
+	 * @param dataInicio
+	 *            the dataInicio to set
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
@@ -141,38 +153,11 @@ public class Campanha {
 	}
 
 	/**
-	 * @param dataFim the dataFim to set
+	 * @param dataFim
+	 *            the dataFim to set
 	 */
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
-	}
-
-	/**
-	 * @return the tipoCobertura
-	 */
-	public TipoCobertura getTipoCobertura() {
-		return tipoCobertura;
-	}
-
-	/**
-	 * @param tipoCobertura the tipoCobertura to set
-	 */
-	public void setTipoCobertura(TipoCobertura tipoCobertura) {
-		this.tipoCobertura = tipoCobertura;
-	}
-
-	/**
-	 * @return the doador
-	 */
-	public List<Doador> getDoador() {
-		return doadores;
-	}
-
-	/**
-	 * @param doador the doador to set
-	 */
-	public void setDoador(List<Doador> doadores) {
-		this.doadores = doadores;
 	}
 
 	/**
@@ -183,21 +168,38 @@ public class Campanha {
 	}
 
 	/**
-	 * @param instituicaoCaridade the instituicaoCaridade to set
+	 * @param instituicaoCaridade
+	 *            the instituicaoCaridade to set
 	 */
 	public void setInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
 		this.instituicaoCaridade = instituicaoCaridade;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @return o atributo itensDoaveis
+	 */
+	public List<Categoria> getItensDoaveis() {
+		return itensDoaveis;
+	}
+
+	/**
+	 * @param o
+	 *            parametro itensDoaveis é setado em itensDoaveis
+	 */
+	public void setItensDoaveis(List<Categoria> itensDoaveis) {
+		this.itensDoaveis = itensDoaveis;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "Campanha [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", dataInicio=" + dataInicio
-				+ ", dataFim=" + dataFim + ", tipoCobertura=" + tipoCobertura + ", doadores=" + doadores
-				+ ", instituicaoCaridade=" + instituicaoCaridade + "]";
+				+ ", dataFim=" + dataFim + ", instituicaoCaridade=" + instituicaoCaridade + ", itensDoaveis="
+				+ itensDoaveis + "]";
 	}
-	
-	
+
 }
