@@ -23,10 +23,17 @@ import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	
 	/**
-	 * Busca e retorna uma lista contendo todos os usuários que tem aquele nome
+	 * Busca e retorna uma lista contendo todos os donativoss que tem aquele nome
 	 * @param nome
 	 * @return
 	 */
 	List<Donativo> findByNome(String nome);
+	
+	/**
+	 * Busca e retorna uma lista contendo todos os donativos relacionados àquele doador
+	 * @param nome
+	 * @return
+	 */
+	List<Donativo> findByDoadorNome(String nomeDoador);
 
 }

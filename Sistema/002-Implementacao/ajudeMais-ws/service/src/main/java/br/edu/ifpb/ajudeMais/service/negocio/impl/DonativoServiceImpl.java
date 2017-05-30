@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
-import br.edu.ifpb.ajudeMais.data.repository.ImagemRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
@@ -37,7 +36,7 @@ public class DonativoServiceImpl implements DonativoService {
 
 	@Override
 	public Donativo update(Donativo donativo) throws AjudeMaisException {
-		return null;
+		return donativoRepository.save(donativo);
 	}
 
 	@Override
@@ -58,6 +57,11 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public List<Donativo> findByNome(String nome) {
 		return donativoRepository.findByNome(nome);
+	}
+
+	@Override
+	public List<Donativo> findByDoadorNome(String nomeDoador) {
+		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
 
 }

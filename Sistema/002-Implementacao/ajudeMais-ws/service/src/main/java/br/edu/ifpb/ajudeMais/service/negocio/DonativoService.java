@@ -28,4 +28,6 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByNome(String nome);
+	
+	List<Donativo> findByDoadorNome(String nomeDoador);
 }
