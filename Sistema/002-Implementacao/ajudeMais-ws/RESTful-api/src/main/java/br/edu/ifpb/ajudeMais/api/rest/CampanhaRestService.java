@@ -71,7 +71,7 @@ public class CampanhaRestService {
 		if (instituicaoOp.isPresent()) {
 			campanha.setInstituicaoCaridade(instituicaoOp.get());
 		} 
-
+		System.out.println(campanha);
 		Campanha campanhaSalva = CampanhaService.save(campanha);
 		return new ResponseEntity<>(campanhaSalva, HttpStatus.CREATED);
 	}

@@ -143,4 +143,6 @@
     <string name="msgFormatCepInvalide">CEP inválido</string>
     <string name="config">Configurações</string>
     <string name="facebookProfile">Foto de Perfil do Facebook</string>
+    <string name="Informationupdated">Informações atualizadas.</string>
+    <string name="passwordLengthNotPermission">A nova senha informada deve contém no mínimo 6 caracteres</string>
 </resources>

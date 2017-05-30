@@ -27,7 +27,9 @@ import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 
 /**
  * 
- * <p>{@link CategoriaServiceImpl} </p>
+ * <p>
+ * {@link CategoriaServiceImpl}
+ * </p>
  * 
  * <p>
  * Classe utilizada para serviços de {@link Categoria}
@@ -40,14 +42,14 @@ import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
  *
  */
 @Service
-public class CategoriaServiceImpl implements CategoriaService{
+public class CategoriaServiceImpl implements CategoriaService {
 
 	/**
 	 * 
 	 */
 	@Autowired
 	private CategoriaRepository categoriaRepository;
-	
+
 	/**
 	 * salva uma categoria no BD
 	 * 
@@ -56,7 +58,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Override
 	@Transactional
 	public Categoria save(Categoria categoria) throws AjudeMaisException {
-		
+
 		return categoriaRepository.save(categoria);
 	}
 
@@ -69,9 +71,10 @@ public class CategoriaServiceImpl implements CategoriaService{
 	@Override
 	@Transactional
 	public Categoria update(Categoria categoria) throws AjudeMaisException {
-		
+
 		return categoriaRepository.save(categoria);
 	}
+
 	/**
 	 * 
 	 * busca e retorna todas as categorias salvas
@@ -79,9 +82,10 @@ public class CategoriaServiceImpl implements CategoriaService{
 	 */
 	@Override
 	public List<Categoria> findAll() {
-		
+
 		return categoriaRepository.findAll();
 	}
+
 	/**
 	 * 
 	 * busca uma categoria especifica pelo ID
@@ -91,6 +95,7 @@ public class CategoriaServiceImpl implements CategoriaService{
 	public Categoria findById(Long id) {
 		return categoriaRepository.findOne(id);
 	}
+
 	/**
 	 * 
 	 * remove uma categoria previamente cadastrada
@@ -104,8 +109,8 @@ public class CategoriaServiceImpl implements CategoriaService{
 
 	/**
 	 * 
-	 * busca e retorna as categorias cadastradas por uma
-	 * instituicao de caridade em especifico
+	 * busca e retorna as categorias cadastradas por uma instituicao de caridade
+	 * em especifico
 	 * 
 	 */
 	@Override
@@ -114,10 +119,19 @@ public class CategoriaServiceImpl implements CategoriaService{
 	}
 
 	/**
-	 * Buscar todas as categorias ativas ou inativas da instituição com ID passado.
+	 * Buscar todas as categorias ativas ou inativas da instituição com ID
+	 * passado.
 	 */
 	@Override
-	public List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo,Long id){
+	public List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo, Long id) {
 		return categoriaRepository.findByAtivoAndInstituicaoCaridadeId(ativo, id);
+	}
+
+	/**
+	 * Busca categorias de instituição, filtrando pelo nome da categoria.
+	 */
+	@Override
+	public List<Categoria> findByInstituicaoCaridadeAndNome(InstituicaoCaridade instituicaoCaridade, String nome) {
+		return categoriaRepository.findByInstituicaoCaridadeAndNomeIgnoreCaseContaining(instituicaoCaridade, nome);
 	}
 }

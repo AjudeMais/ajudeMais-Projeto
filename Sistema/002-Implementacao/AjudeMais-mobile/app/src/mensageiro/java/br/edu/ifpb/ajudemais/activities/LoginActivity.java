@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,6 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
-import static br.edu.ifpb.ajudemais.R.id.image;
 import static br.edu.ifpb.ajudemais.R.id.tvForgotPassword;
 
 
@@ -126,7 +124,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (androidUtil.isOnline()) {
             executeTasksLoginMensageiro();
         }else {
-            CustomToast.getInstance(this).createSimpleCustomToast(getString(R.string.no_internet_connection));
+            CustomToast.getInstance(this).createSimpleCustomSuperToastActivity(getString(R.string.no_internet_connection));
         }
     }
 
@@ -140,7 +138,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 ((EditText) view).setError(message);
                 view.requestFocus();
             } else {
-                CustomToast.getInstance(this).createSimpleCustomToast(message);
+                CustomToast.getInstance(this).createSimpleCustomSuperToastActivity(message);
             }
         }
     }

@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -29,6 +27,7 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.validator.annotations.CPF;
 
 /**
@@ -280,7 +279,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
                 intent.putExtra("Mensageiro", output);
                 startActivity(intent);
                 finish();
-                Toast.makeText(getApplicationContext(), "Informações atualizadas.", Toast.LENGTH_LONG).show();
+                CustomToast.getInstance(CreateMensageiroAccountActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.Informationupdated));
             }
         };
 
@@ -303,7 +302,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
                 ((TextInputEditText) view).setError(message);
                 view.requestFocus();
             } else {
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                CustomToast.getInstance(CreateMensageiroAccountActivity.this).createSuperToastSimpleCustomSuperToast(message);
             }
         }
     }

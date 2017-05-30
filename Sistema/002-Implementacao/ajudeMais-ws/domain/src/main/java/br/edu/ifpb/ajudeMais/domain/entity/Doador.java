@@ -13,7 +13,6 @@
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +20,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -78,12 +76,6 @@ public class Doador implements Serializable {
 	 */
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
-	
-	/**
-	 * 
-	 */
-	@ManyToMany(mappedBy = "doadores")
-	private List<Campanha> campanhas;
 
 	/**
 	 * @return the id
@@ -188,20 +180,6 @@ public class Doador implements Serializable {
 	 */
 	public void setFoto(Imagem foto) {
 		this.foto = foto;
-	}
-	
-	/**
-	 * @return the campanhas
-	 */
-	public List<Campanha> getCampanhas() {
-		return campanhas;
-	}
-
-	/**
-	 * @param campanhas the campanhas to set
-	 */
-	public void setCampanhas(List<Campanha> campanhas) {
-		this.campanhas = campanhas;
 	}
 
 	/*

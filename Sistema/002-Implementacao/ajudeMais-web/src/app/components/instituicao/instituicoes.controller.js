@@ -34,14 +34,14 @@
          *
          */
         vm.addInstituicao = function () {
-            $state.go("home.instituicaoEdit", {instituicaoEdit: null});
+            $state.go("home.instituicao.edit", {instituicaoEdit: null});
         };
 
         /**
          *
          */
         vm.editInstituicao = function (instituicao) {
-            $state.go("home.instituicaoEdit", {instituicaoEdit: instituicao});
+            $state.go("home.instituicao.edit", {instituicaoEdit: instituicao});
         };
 
         /**
@@ -49,7 +49,7 @@
          * @param instituicao
          */
         vm.openDetails = function(instituicao) {
-            $state.go("home.instituicaoDetail", {instituicaoDetail: JSON.stringify(instituicao)});
+            $state.go("home.instituicao.detail", {instituicaoDetail: JSON.stringify(instituicao)});
         }
     }
 
