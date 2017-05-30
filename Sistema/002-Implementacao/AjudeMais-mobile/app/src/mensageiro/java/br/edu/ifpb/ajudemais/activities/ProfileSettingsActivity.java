@@ -22,11 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
@@ -37,6 +34,8 @@ import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
+
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.MY_PERMISSIONS_REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.SELECT_FILE;
@@ -168,7 +167,8 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, REQUEST_CAMERA);
                 } else {
-                    Toast.makeText(ProfileSettingsActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
+                    CustomToast.getInstance(ProfileSettingsActivity.this).createSimpleCustomSuperToastActivity(getString(R.string.permissionDeniedAccessCamera));
+
                 }
             }
         }
@@ -282,8 +282,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
                             if (newPassword.getText().toString().trim().length() > 5) {
                                 new ChangePasswordTask(ProfileSettingsActivity.this, password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
                             } else {
-                                Toast.makeText(getApplication(), "A nova senha informada deve contém no mínimo 6 caracteres", Toast.LENGTH_LONG).show();
-
+                                CustomToast.getInstance(ProfileSettingsActivity.this).createSimpleCustomSuperToastActivity(getString(R.string.passwordLengthNotPermission));
                             }
                         }
                     })

@@ -66,11 +66,7 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
     protected Conta doInBackground(Void... params) {
         try {
 
-            if (androidUtil.isOnline()) {
-                contaRemoteService.changePassword(new ChangePasswordDTO(password, newPassword));
-            } else {
-            }
-
+            contaRemoteService.changePassword(new ChangePasswordDTO(password, newPassword));
 
         } catch (RestClientException e) {
             message = e.getMessage();

@@ -93,7 +93,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btnEditAccount"
+                android:id="@+id/btnCreateAccountAccount"
                 android:layout_width="match_parent"
                 android:layout_marginTop="3dp"
                 android:layout_height="wrap_content"

@@ -65,6 +65,7 @@
     <!--Detalhe intituição-->
     <string name="tv_inf_instituicao">Ajude Esta Instituição com:</string>
     <string name="no_internet">Sem conexão</string>
+    <string name="no_internet_connection">Sem conexão, verifique sua conexão com a internet e tente novamente.</string>
     <string name="action_search">pesquisar</string>
     <string name="search_hint">digite para buscar</string>
     <string name="empty_list">OPS</string>
@@ -142,4 +143,6 @@
     <string name="msgFormatCepInvalide">CEP inválido</string>
     <string name="config">Configurações</string>
     <string name="facebookProfile">Foto de Perfil do Facebook</string>
+    <string name="Informationupdated">Informações atualizadas.</string>
+    <string name="passwordLengthNotPermission">A nova senha informada deve contém no mínimo 6 caracteres</string>
 </resources>
