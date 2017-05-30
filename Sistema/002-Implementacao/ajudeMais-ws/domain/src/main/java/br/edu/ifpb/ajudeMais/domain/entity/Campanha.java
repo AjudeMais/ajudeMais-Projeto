@@ -35,6 +35,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 public class Campanha {
+
 	/**
 	 * 
 	 */
@@ -72,7 +73,6 @@ public class Campanha {
 	/**
 	 * 
 	 */
-	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFim;
 
@@ -198,6 +198,12 @@ public class Campanha {
 	 * @return o atributo status
 	 */
 	public boolean isStatus() {
+		Date currentDate = new Date();
+		if (dataFim != null) {
+			if (dataFim.before(currentDate)) {
+				return false;
+			}
+		}
 		return status;
 	}
 

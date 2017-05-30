@@ -49,6 +49,14 @@
          *
          * @param campanha
          */
+        vm.openDetails = function (campanha) {
+            $state.go("home.campanha.detail", {campanhaDetail: JSON.stringify(campanha)});
+        }
+
+        /**
+         *
+         * @param campanha
+         */
         vm.remove = function (campanha) {
             var modalInstance = $uibModal
                 .open({

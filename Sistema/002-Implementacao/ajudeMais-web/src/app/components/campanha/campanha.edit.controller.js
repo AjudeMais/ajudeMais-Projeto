@@ -16,14 +16,13 @@
 
         var vm = this;
         vm.campanha = {};
-        vm.dtpk1 = false;
-        vm.dtpk2 = false;
+        vm.dtpk = false;
         vm.item;
         vm.currentDate = new Date();
 
         if ($stateParams.campanhaEdit) {
-            console.log($stateParams.campanhaEdit);
             vm.campanha = $stateParams.campanhaEdit;
+            setDateStatus();
         } else {
             vm.campanha.itensDoaveis = [];
             vm.campanha.status = true;
@@ -33,7 +32,9 @@
          * Editar/Salvar uma campanha
          */
         vm.save = function () {
+            setDateStatus();
             if (!vm.isEdited()) {
+                vm.campanha.dataInicio = new Date();
                 campanhaService.save(vm.campanha).then(function (response) {
                     toastr.success('criada com sucesso', 'Campanha');
                     $state.go('home.campanha.list');
@@ -45,7 +46,7 @@
 
             } else {
                 campanhaService.update(vm.campanha).then(function (response) {
-                    toastr.success('atualiada com sucesso', 'Campanha');
+                    toastr.success('atualizada com sucesso', 'Campanha');
                     $state.go('home.campanha.list');
                 }, function (response) {
                     response.data.forEach(function (data) {
@@ -54,6 +55,12 @@
                 });
             }
         };
+
+        function setDateStatus() {
+            if (!vm.campanha.status) {
+                vm.campanha.dataFim = null;
+            }
+        }
 
         /**
          *
@@ -73,14 +80,8 @@
          *
          * @param datepicker
          */
-        vm.openDtpk = function (datepicker) {
-            if (datepicker == 1) {
-                vm.dtpk1 = true;
-            }
-
-            if (datepicker == 2) {
-                vm.dtpk2 = true;
-            }
+        vm.openDtpk = function () {
+            vm.dtpk = true;
         }
 
         /**
