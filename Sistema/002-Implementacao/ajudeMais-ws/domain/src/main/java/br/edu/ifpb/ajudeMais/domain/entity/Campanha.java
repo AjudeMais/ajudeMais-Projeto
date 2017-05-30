@@ -17,6 +17,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * 
@@ -30,7 +31,6 @@ import org.hibernate.validator.constraints.NotBlank;
  * <pre>
  * </pre
  *
- * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Entity
@@ -61,15 +61,18 @@ public class Campanha {
 	 * 
 	 */
 	@NotNull
-	@NotBlank(message = "A data deve ser informada")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataInicio;
 
 	/**
 	 * 
 	 */
+	private boolean status;
+
+	/**
+	 * 
+	 */
 	@NotNull
-	@NotBlank(message = "A data deve ser informada")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataFim;
 
@@ -82,94 +85,95 @@ public class Campanha {
 	/**
 	 * 
 	 */
-	@ManyToMany(cascade = CascadeType.MERGE)
+	@NotEmpty(message = "Item doável deve ser adicionado a campanha")
+	@ManyToMany(cascade = { CascadeType.MERGE })
 	private List<Categoria> itensDoaveis;
 
 	/**
-	 * @return the id
+	 * @return o atributo id
 	 */
 	public Long getId() {
 		return id;
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param o
+	 *            parametro id é setado em id
 	 */
 	public void setId(Long id) {
 		this.id = id;
 	}
 
 	/**
-	 * @return the nome
+	 * @return o atributo nome
 	 */
 	public String getNome() {
 		return nome;
 	}
 
 	/**
-	 * @param nome
-	 *            the nome to set
+	 * @param o
+	 *            parametro nome é setado em nome
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
 	/**
-	 * @return the descricao
+	 * @return o atributo descricao
 	 */
 	public String getDescricao() {
 		return descricao;
 	}
 
 	/**
-	 * @param descricao
-	 *            the descricao to set
+	 * @param o
+	 *            parametro descricao é setado em descricao
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
 
 	/**
-	 * @return the dataInicio
+	 * @return o atributo dataInicio
 	 */
 	public Date getDataInicio() {
 		return dataInicio;
 	}
 
 	/**
-	 * @param dataInicio
-	 *            the dataInicio to set
+	 * @param o
+	 *            parametro dataInicio é setado em dataInicio
 	 */
 	public void setDataInicio(Date dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 
 	/**
-	 * @return the dataFim
+	 * @return o atributo dataFim
 	 */
 	public Date getDataFim() {
 		return dataFim;
 	}
 
 	/**
-	 * @param dataFim
-	 *            the dataFim to set
+	 * @param o
+	 *            parametro dataFim é setado em dataFim
 	 */
 	public void setDataFim(Date dataFim) {
 		this.dataFim = dataFim;
 	}
 
 	/**
-	 * @return the instituicaoCaridade
+	 * @return o atributo instituicaoCaridade
 	 */
 	public InstituicaoCaridade getInstituicaoCaridade() {
 		return instituicaoCaridade;
 	}
 
 	/**
-	 * @param instituicaoCaridade
-	 *            the instituicaoCaridade to set
+	 * @param o
+	 *            parametro instituicaoCaridade é setado em instituicaoCaridade
 	 */
 	public void setInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
 		this.instituicaoCaridade = instituicaoCaridade;
@@ -188,6 +192,21 @@ public class Campanha {
 	 */
 	public void setItensDoaveis(List<Categoria> itensDoaveis) {
 		this.itensDoaveis = itensDoaveis;
+	}
+
+	/**
+	 * @return o atributo status
+	 */
+	public boolean isStatus() {
+		return status;
+	}
+
+	/**
+	 * @param o
+	 *            parametro status é setado em status
+	 */
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	/*

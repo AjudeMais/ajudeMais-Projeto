@@ -92,7 +92,7 @@
                     android:paddingBottom="@dimen/LagBtnFacebook"
                     android:paddingTop="@dimen/LagBtnFacebook"
                     android:textSize="@dimen/fontLogin"
-                    facebook:com_facebook_login_text="YourText" />
+                    android:text="@string/com_facebook_loginview_log_in_button" />
 
 
                 <TextView

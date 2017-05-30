@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.refactoring;
+package br.edu.ifpb.ajudemais.activities;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -13,9 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,7 +30,6 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.AbstractActivity;
 
 /**
  * <p>
@@ -47,21 +47,19 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
     protected GoogleApiClient mGoogleApiClient;
     protected Location mLastLocation;
 
-    private static final long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
-    private static final long FASTEST_INTERVAL = 2000; /* 2 sec */
+    protected static final long UPDATE_INTERVAL = 10 * 1000;  /* 10 secs */
+    protected static final long FASTEST_INTERVAL = 2000; /* 2 sec */
     protected static final int REQUEST_CHECK_SETTINGS = 100;
     protected static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
 
-    private static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
+    protected static final String BROADCAST_ACTION = "android.location.PROVIDERS_CHANGED";
     protected LocationManager locationManager;
-    private LocationRequest mLocationRequest;
+    protected LocationRequest mLocationRequest;
 
 
     @Override
     public void init() {
         initProperties();
-        initGoogleAPIClient();
-        checkPermissions();
     }
 
     /**
@@ -73,12 +71,39 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
     }
+    /**
+     * Recupera a localização do device
+     *
+     * @return
+     */
+    protected Location getLocation() {
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            if (mLastLocation == null) {
+                locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                Criteria criteria = new Criteria();
+                String provider = locationManager.getBestProvider(criteria, false);
+                mLastLocation = locationManager.getLastKnownLocation(provider);
+
+            } else {
+                Log.e("LOCATION", "lt:" + mLastLocation.getLatitude());
+
+            }
+        }
+
+        return mLastLocation;
+    }
+
 
 
     /**
      * Verifica se GPS está ativado, se não pede para ligar
      */
-    private BroadcastReceiver gpsLocationReceiver = new BroadcastReceiver() {
+    protected BroadcastReceiver gpsLocationReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -105,6 +130,7 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
      * Exibe dialog para ligar GPS no device.
      */
     protected void showTurnOnGpsDialog() {
+
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(30 * 1000);
@@ -125,7 +151,7 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
      */
     protected void checkPermissions() {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (ContextCompat.checkSelfPermission(LocationActivity.this,
+            if (ContextCompat.checkSelfPermission(this,
                     android.Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED)
                 requestLocationPermission();
@@ -153,21 +179,25 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
 
     }
 
+
     /**
      * Requisita permissão para acessar GPS do device.
      */
     private void requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(LocationActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
-            ActivityCompat.requestPermissions(LocationActivity.this,
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
                     ACCESS_FINE_LOCATION_INTENT_ID);
 
         } else {
-            ActivityCompat.requestPermissions(LocationActivity.this,
+            ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     ACCESS_FINE_LOCATION_INTENT_ID);
         }
     }
+
+
+
 
     /**
      * Modelo default inicial para onRequestPermissionsResult.
@@ -237,7 +267,6 @@ public class LocationActivity extends BaseActivity implements GoogleApiClient.Co
     /**
      * @param bundle
      */
-    @RequiresPermission(allOf = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 

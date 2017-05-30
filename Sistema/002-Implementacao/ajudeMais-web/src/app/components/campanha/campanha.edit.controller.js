@@ -19,11 +19,14 @@
         vm.dtpk1 = false;
         vm.dtpk2 = false;
         vm.item;
+        vm.currentDate = new Date();
 
         if ($stateParams.campanhaEdit) {
+            console.log($stateParams.campanhaEdit);
             vm.campanha = $stateParams.campanhaEdit;
-        }else {
-            vm.campanha.itens = [];
+        } else {
+            vm.campanha.itensDoaveis = [];
+            vm.campanha.status = true;
         }
 
         /**
@@ -33,10 +36,11 @@
             if (!vm.isEdited()) {
                 campanhaService.save(vm.campanha).then(function (response) {
                     toastr.success('criada com sucesso', 'Campanha');
-                    $state.go('home.instituicao.list');
+                    $state.go('home.campanha.list');
                 }, function (response) {
-                    var msgError = response.data.msg;
-                    toastr.warning(msgError);
+                    response.data.forEach(function (data) {
+                        toastr.warning(data);
+                    });
                 });
 
             } else {
@@ -44,8 +48,9 @@
                     toastr.success('atualiada com sucesso', 'Campanha');
                     $state.go('home.campanha.list');
                 }, function (response) {
-                    var msgError = response.data.msg;
-                    toastr.warning(msgError);
+                    response.data.forEach(function (data) {
+                        toastr.warning(data);
+                    });
                 });
             }
         };
@@ -92,18 +97,34 @@
          *
          * @param mensageiro
          */
-        vm.onSelect = function (item) {
-            vm.campanha.itens.push(item);
-            vm.item = null;
+        vm.setItem = function (item) {
+            var flag = false;
+            if (item == null) {
+                toastr.warning('Selecione um item');
+            } else {
+                var index = vm.campanha.itensDoaveis.indexOf(item);
+                console.log(index);
+                vm.campanha.itensDoaveis.forEach(function (i, index) {
+                    if (item.id == i.id) {
+                        flag = true;
+                    }
+                })
+                if (flag) {
+                    toastr.warning('Item Já adicionado');
+                } else {
+                    vm.campanha.itensDoaveis.push(item);
+                    vm.item = null;
+                }
+            }
         };
 
         /**
          *
          * @param item
          */
-        vm.removeItem = function(item) {
-            var index = vm.campanha.itens.indexOf(item);
-            vm.campanha.itens.splice(index, 1);
+        vm.removeItem = function (item) {
+            var index = vm.campanha.itensDoaveis.indexOf(item);
+            vm.campanha.itensDoaveis.splice(index, 1);
         };
 
         /**
@@ -131,8 +152,9 @@
             var modal = openModal({});
 
             modal.result.then(function (categoria) {
-                vm.itens.push(categoria);
+                vm.campanha.itensDoaveis.push(categoria);
             });
         }
     }
-})();
+})
+();

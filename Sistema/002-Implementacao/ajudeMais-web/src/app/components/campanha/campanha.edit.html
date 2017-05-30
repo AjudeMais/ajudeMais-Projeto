@@ -12,7 +12,7 @@
                         <div class="form-group"
                              ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.nome.$invalid }">
                             <label class="control-label" for="nome">Nome</label>
-                            <input name="nome" id="nome" ng-model="vm.instituicao.nome" type="text"
+                            <input name="nome" id="nome" ng-model="vm.campanha.nome" type="text"
                                    class="form-control" required/>
 
                             <div ng-show="campanhaForm.$submitted && campanhaForm.nome.$invalid"
@@ -27,9 +27,8 @@
                         <div class="form-group"
                              ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.descricao.$invalid }">
                             <label class="control-label" for="nome">Descrição</label>
-                            <textarea id="descricao" maxlength="220"
-                                      placeholder="Descreva uma breve introdução sobre a instituição" name="descricao"
-                                      ng-model="vm.instituicao.descricao" class="form-control" rows="3" id="comment"
+                            <textarea id="descricao" maxlength="220" name="descricao"
+                                      ng-model="vm.campanha.descricao" class="form-control" rows="3" id="comment"
                                       required></textarea>
                             <div ng-show="campanhaForm.$submitted && campanhaForm.descricao.$invalid"
                                  class="help-block">A descrição deve ser informada
@@ -39,14 +38,23 @@
                 </div>
 
                 <div class="row">
-                    <div class="form-group col-sm-6"
+
+                    <div class="form-group col-sm-2"
+                         ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.tDateEnd.$invalid }">
+                        <label class="control-label" for="status">Status</label> <br/>
+                        <input bs-switch name="ativo" ng-model="vm.campanha.status" id="status"
+                               switch-on-text="Ativa" switch-off-text="Inativa" switch-size="normal"
+                               switch-off-color="danger" type="checkbox" class="form-control"/>
+                    </div>
+
+                    <div class="form-group col-sm-4" ng-show="vm.campanha.status"
                          ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.tDateInit.$invalid }">
-                        <label class="control-label" for="tDateInit">Início</label>
+                        <label class="control-label" for="tDateInit">Término</label>
                         <div class="input-group">
                             <input type="text" class="form-control"
                                    uib-datepicker-popup="dd/MM/yyyy"
-                                   ng-model="vm.campanha.dataInicio"
-                                   date-before="vm.campanha.dataFim"
+                                   ng-model="vm.campanha.dataFim"
+                                   date-after="vm.currentDate"
                                    date-or-equals="true"
                                    is-open="vm.dtpk1"
                                    datepicker-options="dateOptions"
@@ -72,44 +80,10 @@
                              class="help-block">Data de Início deve ser menor que data término
                         </div>
                     </div>
-
-                    <div class="form-group col-sm-6"
-                         ng-class="{ 'has-error': campanhaForm.$submitted && campanhaForm.tDateEnd.$invalid }">
-                        <label class="control-label" for="tDateEnd">Término</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control"
-                                   uib-datepicker-popup="dd/MM/yyyy"
-                                   ng-model="vm.campanha.dataFim"
-                                   date-after="vm.campanha.dataInicio"
-                                   date-or-equals="true"
-                                   is-open="vm.dtpk2"
-                                   datepicker-options="dateOptions"
-                                   required
-                                   id="tDateEnd"
-                                   name="tDateEnd"
-                                   current-text="Hoje"
-                                   clear-text="Limpar"
-                                   close-text="Fechar"
-                                   ng-click="vm.openDtpk(2)"/>
-
-                            <span class="input-group-btn">
-                                <button type="button" class="btn btn-default"
-                                        ng-click="vm.openDtpk(2)">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-					            </button>
-				            </span>
-                        </div>
-                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateEnd.$invalid  && !campanhaForm.tDateEnd.$error.dateAfter"
-                             class="help-block">Data de término deve ser informada
-                        </div>
-                        <div ng-show="campanhaForm.$submitted && campanhaForm.tDateEnd.$error.dateAfter"
-                             class="help-block">Data de término deve ser maior que data de início
-                        </div>
-                    </div>
                 </div>
 
                 <div class="box-header with-border box-topic">
-                    <h3 class="box-title">Itens Aceitos</h3>
+                    <h3 class="box-title">Itens doáveis aceitos</h3>
                 </div>
 
                 <div class="row box-topic">
@@ -121,11 +95,10 @@
                                    uib-typeahead="item as item.nome for item in vm.findByName($viewValue)"
                                    typeahead-loading="loadingMens" typeahead-no-results="noResults"
                                    typeahead-editable="false"
-                                   typeahead-on-select="vm.onSelect($model)"
                                    typeahead-template-url="app/components/partials/item-card-search.html">
 
                             <div class="input-group-btn">
-                                <button class="btn btn-primary" type="button">Adicionar
+                                <button class="btn btn-primary" ng-click="vm.setItem(vm.item)" type="button">Adicionar
                                 </button>
                             </div>
                         </div>
@@ -142,7 +115,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12" ng-show="vm.campanha.itens.length">
+                    <div class="col-sm-12" ng-show="vm.campanha.itensDoaveis.length">
                         <table class="table">
                             <thead>
                             <tr>
@@ -153,7 +126,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="odd gradeX" ng-repeat="item in vm.campanha.itens">
+                            <tr class="odd gradeX" ng-repeat="item in vm.campanha.itensDoaveis">
                                 <td>
                                     <button type="button" ng-click="vm.removeItem(item)"
                                             tooltip-placement="top" uib-tooltip="Remover Item"
@@ -174,7 +147,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12" ng-show="!vm.campanha.itens.length">
+                    <div class="col-sm-12" ng-show="!vm.campanha.itensDoaveis.length">
                         <div class="well">Nenhum item doável adicionado.</div>
                     </div>
                 </div>

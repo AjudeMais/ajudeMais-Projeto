@@ -1,29 +1,22 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
+import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragmentMain;
-import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.util.FacebookAccount;
 
 
 /**
@@ -39,12 +32,14 @@ import br.edu.ifpb.ajudemais.util.FacebookAccount;
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends DrawerMenuActivity implements View.OnClickListener{
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
-    private RelativeLayout componentHeader;
+    private RelativeLayout componentLoading;
+    private FrameLayout componentView;
+    private RelativeLayout componentNoInternet;
 
 
     /**
@@ -54,158 +49,100 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         initGoogleAPIClient();
         checkPermissions();
 
         init();
 
-
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        findViewById(R.id.containerView).setVisibility(View.GONE);
-        findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         if (!androidUtil.isOnline()) {
-            findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
+            showVisibleComponentNoInternet();
         }
-
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
 
         setUpAccount();
         setUpToggle();
         setupNavDrawer();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        mFragmentManager = getSupportFragmentManager();
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
 
-                if (mLastLocation == null) {
-                    mLastLocation = getLocation();
-                }
-                if (mLastLocation != null) {
-                    SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
-                }
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, MainSearchActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
+        fab.setOnClickListener(this);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         new LoadingCampanhasDoacoesTask().execute();
     }
 
-
     /**
-     * Set as informações do usuário logado no app
+     * Modelo default inicial para onRequestPermissionsResult.
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
      */
-    protected void setUpAccount() {
-        View hView = mNavigationView.getHeaderView(0);
-        profilePhoto = (ImageView) hView.findViewById(R.id.photoProfile);
-        componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
-        tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
-        tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case ACCESS_FINE_LOCATION_INTENT_ID: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        conta = (Conta) getIntent().getSerializableExtra("Conta");
-
-        if (conta == null) {
-            conta = SharedPrefManager.getInstance(this).getUser();
-        }
-        if (conta != null) {
-            tvUserName.setText(Profile.getCurrentProfile() != null ? Profile.getCurrentProfile().getName() : conta.getUsername());
-            tvEmail.setText(conta.getEmail());
-        }
-
-        if (AccessToken.getCurrentAccessToken() != null && AccessToken.getCurrentAccessToken().getUserId() != null) {
-            bitmap = FacebookAccount.getProfilePictureUser();
-        } else {
-            if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
-
-                if (isStoragePermissionGranted()) {
-                    bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
-                    capturePhotoUtils.saveToInternalStorage(bitmap);
-                }
-
-            } else {
-                bitmap = capturePhotoUtils.loadImageFromStorage();
-            }
-        }
-
-        if (bitmap != null) {
-            profilePhoto.setImageBitmap(bitmap);
-        }
+                    if (mGoogleApiClient == null) {
+                        initGoogleAPIClient();
+                        showTurnOnGpsDialog();
+                    } else
+                        showTurnOnGpsDialog();
 
 
-        componentHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, ProfileSettingsActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-    }
-
-
-    /**
-     * @param menuItem
-     */
-    private void onNavDrawerItemSelected(MenuItem menuItem) {
-        switch (menuItem.getItemId()) {
-
-            case R.id.nav_config:
-
-                break;
-
-            case R.id.nav_notificacoes:
-                break;
-            case R.id.nav_sair:
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    LoginManager.getInstance().logOut();
                 } else {
-                    SharedPrefManager.getInstance(this).clearSharedPrefs();
+                    Toast.makeText(MainActivity.this, getString(R.string.permissionDenied), Toast.LENGTH_SHORT).show();
                 }
-                goToLoginScreen();
-                capturePhotoUtils.deleteImageProfile();
                 break;
-
+            }
         }
     }
 
-    private void goToLoginScreen() {
+    @Override
+    public void init() {
+        super.init();
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        componentLoading = (RelativeLayout) findViewById(R.id.loadingPanel);
+        componentLoading.setVisibility(View.VISIBLE);
+
+        componentView = (FrameLayout) findViewById(R.id.containerView);
+        componentView.setVisibility(View.GONE);
+
+        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
+        componentNoInternet.setVisibility(View.GONE);
+    }
+
+    private void showVisibleComponentNoInternet(){
+        componentNoInternet.setVisibility(View.VISIBLE);
+        componentLoading.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onClick(View v) {
+
+        if (mLastLocation == null) {
+            startLocationUpdates();
+            mLastLocation = getLocation();
+        }
+        if (mLastLocation != null) {
+            SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+        }
         Intent intent = new Intent();
-        intent.setClass(this, LoginActivity.class);
+        intent.setClass(MainActivity.this, MainSearchActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        finish();
+
     }
-
-    /**
-     * Set Configuração para Navegation Drawer
-     */
-    protected void setupNavDrawer() {
-        final ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            if (mNavigationView != null && mDrawerLayout != null) {
-
-                mNavigationView.setNavigationItemSelectedListener(
-                        new NavigationView.OnNavigationItemSelectedListener() {
-                            @Override
-                            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                                menuItem.setChecked(true);
-                                mDrawerLayout.closeDrawers();
-                                onNavDrawerItemSelected(menuItem);
-                                return true;
-                            }
-                        });
-            }
-        }
-    }
-
 
     /**
      *

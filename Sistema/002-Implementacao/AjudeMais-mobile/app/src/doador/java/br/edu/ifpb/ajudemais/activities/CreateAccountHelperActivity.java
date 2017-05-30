@@ -3,6 +3,8 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -13,10 +15,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
 import org.springframework.web.client.RestClientException;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +34,18 @@ import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
+/**
+ * <p>
+ * <b>{@link CreateAccountHelperActivity}</b>
+ * </p>
+ * <p>
+ *     Activity para finalizar criação de conta utilizando o facebook
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/amslv">Ana Silva</a>
+ */
 public class CreateAccountHelperActivity extends AbstractAsyncActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
@@ -134,6 +151,7 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
         private String message;
         private Doador doador;
         private String password;
+        private Bitmap bitmap;
         private DoadorRemoteService doadorRemoteService;
         private AuthRemoteService authRemoteService;
 
@@ -154,6 +172,13 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
                 Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
+                URL imageURL;
+                try {
+                    imageURL = new URL("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?type=large");
+                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return conta;
             } catch (RestClientException e) {
                 message = e.getMessage();
@@ -174,6 +199,7 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
                 intent.setClass(CreateAccountHelperActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.putExtra("Conta", conta);
+                intent.putExtra("ProfilePic", bitmap);
                 startActivity(intent);
                 finish();
             } else {

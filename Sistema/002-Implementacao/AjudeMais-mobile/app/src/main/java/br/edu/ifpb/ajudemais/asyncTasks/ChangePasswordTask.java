@@ -12,7 +12,9 @@ import br.edu.ifpb.ajudemais.activities.LoginActivity;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.ChangePasswordDTO;
 import br.edu.ifpb.ajudemais.remoteServices.ContaRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
@@ -35,12 +37,14 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
     private ProgressDialog progressDialog;
     private Context context;
     private AndroidUtil androidUtil;
+    private CapturePhotoUtils capturePhotoUtils;
 
     public ChangePasswordTask(Context context, String password, String newPassword) {
         this.password = password;
         this.newPassword = newPassword;
         this.context = context;
         androidUtil = new AndroidUtil(context);
+        this.capturePhotoUtils = new CapturePhotoUtils(context);
     }
 
     /**
@@ -88,8 +92,8 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
             context.startActivity(intent);
             ((Activity) context).finish();
             Toast.makeText(context, "Senha atualizada com sucesso, faça login novamente.", Toast.LENGTH_LONG).show();
-
-
+            SharedPrefManager.getInstance(context).clearSharedPrefs();
+            capturePhotoUtils.deleteImageProfile();
         }
     }
 }
