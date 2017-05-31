@@ -23,12 +23,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.facebook.AccessToken;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
@@ -37,11 +40,13 @@ import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
+
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.MY_PERMISSIONS_REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.SELECT_FILE;
 
-public class ProfileSettingsActivity extends BaseActivity implements View.OnClickListener, AsyncResponse<Imagem> {
+public class ProfileSettingsActivity extends BaseActivity implements View.OnClickListener {
 
     private Toolbar mToolbar;
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -53,6 +58,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     private UploadImageTask uploadImageTask;
     private AccessCameraAndGalleryDevicePermission permissionSelectImagem;
     private LoadingDoadorTask loadingDoadorTask;
+    private UpdateDoadorTask updateDoadorTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +88,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     /**
      * Executa a AsycnTask para carregar dodador logado.
      */
-    private void executeLoadingDoadorTask(){
+    private void executeLoadingDoadorTask() {
         loadingDoadorTask = new LoadingDoadorTask(this, SharedPrefManager.getInstance(ProfileSettingsActivity.this).getUser().getUsername());
         loadingDoadorTask.delegate = new AsyncResponse<Doador>() {
             @Override
@@ -204,14 +210,44 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
 
-            uploadImageTask = new UploadImageTask(this, imageBytes, doador, null);
-            uploadImageTask.delegate = this;
-            uploadImageTask.execute();
+            executeUpdateImageTask(imageBytes);
 
             imageView.setImageBitmap(photo);
             capturePhotoUtils.saveToInternalStorage(photo);
 
         }
+    }
+
+    /**
+     * Executa asycn task para atualizar imagem do doador
+     * @param imageBytes
+     */
+    private void executeUpdateImageTask(byte[] imageBytes) {
+        uploadImageTask = new UploadImageTask(this, imageBytes);
+        uploadImageTask.delegate = new AsyncResponse<Imagem>() {
+            @Override
+            public void processFinish(Imagem output) {
+
+                if (doador.getFoto() != null) {
+                    doador.getFoto().setNome(output.getNome());
+                } else {
+                    doador.setFoto(output);
+                }
+
+                updateDoadorTask = new UpdateDoadorTask(ProfileSettingsActivity.this, doador);
+                updateDoadorTask.delegate = new AsyncResponse<Doador>() {
+                    @Override
+                    public void processFinish(Doador output) {
+                        doador = output;
+                        CustomToast.getInstance(ProfileSettingsActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.imageUpdated));
+                    }
+                };
+                updateDoadorTask.execute();
+
+            }
+        };
+
+        uploadImageTask.execute();
     }
 
 
@@ -267,25 +303,13 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
         }
     }
 
-    /**
-     * Resultado da task Upload de Imagem.
-     *
-     * @param output
-     */
-    @Override
-    public void processFinish(Imagem output) {
 
-        this.doador.setFoto(output);
-    }
-
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("doador", doador);
     }
 
-    protected void onRestoreInstanceState(Bundle savedState)
-    {
+    protected void onRestoreInstanceState(Bundle savedState) {
         doador = (Doador) savedState.getSerializable("doador");
         setProprieties();
     }
@@ -294,7 +318,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     /**
      * Set propriedades após executar task.
      */
-    public void setProprieties(){
+    public void setProprieties() {
         if (!isDestroyed()) {
             collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
             ProfileSettingsFragment fragment = new ProfileSettingsFragment();
@@ -309,7 +333,6 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
             fab.setEnabled(true);
         }
     }
-
 
 
 }

@@ -3,6 +3,7 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,11 +15,14 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
 import java.util.Arrays;
+import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoginDoadorTask;
@@ -42,7 +46,7 @@ import br.edu.ifpb.ajudemais.utils.CustomToast;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class LoginActivity extends BaseActivity implements View.OnClickListener, FacebookCallback<LoginResult> {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, FacebookCallback<LoginResult>, Validator.ValidationListener {
 
     private Button btnCreateAccount;
     private Button btnOpenApp;
@@ -53,6 +57,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private LoginDoadorTask loginDoadorTask;
     private byte[] imagem;
     private GetImageTask getImageTask;
+    private Validator validator;
 
     @Order(2)
     @Length(min = 4, messageResId = R.string.msgInvalideUserName, sequence = 2)
@@ -85,42 +90,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         callbackManager = CallbackManager.Factory.create();
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
 
-
-        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            /**
-             *
-             * @param loginResult
-             */
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                FacebookAccount.userFacebookData(loginResult, LoginActivity.this);
-            }
-
-            /**
-             *
-             */
-            @Override
-            public void onCancel() {
-                goBackToLoginScreen();
-                Toast.makeText(getApplicationContext(), R.string.cancelOperation, Toast.LENGTH_LONG).show();
-            }
-
-            /**
-             *
-             * @param error
-             */
-            @Override
-            public void onError(FacebookException error) {
-                goBackToLoginScreen();
-                Toast.makeText(getApplicationContext(), R.string.errorOnLogin, Toast.LENGTH_LONG).show();
-            }
-        });
+        btnFacebook.registerCallback(callbackManager, this);
     }
 
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
         btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
@@ -167,7 +146,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onClick(View v) {
 
         if (v.getId() == R.id.btnOpen) {
-            executeTasksLoginDoador();
+            validator.validate();
         } else if (v.getId() == R.id.btnCreateAccount) {
             Intent intent = new Intent();
             intent.setClass(LoginActivity.this, CreateAccountActivity.class);
@@ -266,5 +245,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         goBackToLoginScreen();
         CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.errorOnLogin));
 
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        executeTasksLoginDoador();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+                view.requestFocus();
+            } else {
+                CustomToast.getInstance(LoginActivity.this).createSuperToastSimpleCustomSuperToast(message);
+            }
+        }
     }
 }

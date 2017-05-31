@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.asycnTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.springframework.web.client.RestClientException;
 

@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.CreateAccountActivity"
+            android:name=".activities.CreateAccountActivity" android:windowSoftInputMode="adjustPan"
             android:label="@string/newAccountActivity" />
 
         <meta-data

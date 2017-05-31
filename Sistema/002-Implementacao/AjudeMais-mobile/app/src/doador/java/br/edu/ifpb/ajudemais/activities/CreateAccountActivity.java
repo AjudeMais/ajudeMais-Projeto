@@ -236,6 +236,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+                CustomToast.getInstance(CreateAccountActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.updatedInformation));
             }
         };
         updateDoadorTask.execute();

@@ -26,6 +26,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
@@ -52,6 +53,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     private Mensageiro mensageiro;
 
     private UploadImageTask uploadImageTask;
+    private UpdateMensageiroTask updateMensageiroTask;
 
     private AccessCameraAndGalleryDevicePermission permissionSelectImagem;
     private LoadingMensageiroTask loadingMensageiroTask;
@@ -235,12 +237,25 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
      * @param imageBytes
      */
     private void executeUploadImageTask(byte [] imageBytes){
-        uploadImageTask = new UploadImageTask(this, imageBytes, null, mensageiro);
+        uploadImageTask = new UploadImageTask(this, imageBytes);
         uploadImageTask.delegate = new AsyncResponse<Imagem>() {
             @Override
             public void processFinish(Imagem output) {
-                mensageiro.setFoto(output);
+                if (mensageiro.getFoto() != null) {
+                    mensageiro.getFoto().setNome(output.getNome());
+                } else {
+                    mensageiro.setFoto(output);
+                }
+                updateMensageiroTask = new UpdateMensageiroTask(ProfileSettingsActivity.this, mensageiro);
+                updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+                    @Override
+                    public void processFinish(Mensageiro output) {
+                        mensageiro = output;
+                        CustomToast.getInstance(ProfileSettingsActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.imageUpdated));
+                    }
+                };
 
+                updateMensageiroTask.execute();
             }
         };
         uploadImageTask.execute();
