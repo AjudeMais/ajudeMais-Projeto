@@ -242,6 +242,11 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
+                Intent intent = new Intent();
+                intent.setClass(DrawerMenuActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
                 capturePhotoUtils.deleteImageProfile();
                 break;

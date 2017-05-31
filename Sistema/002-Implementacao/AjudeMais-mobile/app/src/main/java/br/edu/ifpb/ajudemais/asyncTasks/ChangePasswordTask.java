@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.LoginActivity;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.dto.ChangePasswordDTO;
@@ -15,6 +16,7 @@ import br.edu.ifpb.ajudemais.remoteServices.ContaRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
@@ -81,13 +83,13 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Conta> {
     protected void onPostExecute(Conta conta) {
         progressDialog.dismissProgressDialog();
         if (message != null) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
         } else {
             Intent intent = new Intent(context, LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
             ((Activity) context).finish();
-            Toast.makeText(context, "Senha atualizada com sucesso, faça login novamente.", Toast.LENGTH_LONG).show();
+            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(context.getString(R.string.passwordUpdated));
             SharedPrefManager.getInstance(context).clearSharedPrefs();
             capturePhotoUtils.deleteImageProfile();
         }

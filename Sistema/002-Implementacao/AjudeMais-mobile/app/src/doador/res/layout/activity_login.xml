@@ -52,7 +52,7 @@
                     android:layout_below="@+id/imglogin"
                     android:layout_marginTop="45dp"
                     android:backgroundTint="@color/colorPrimary"
-                    android:hint="@string/hitName"
+                    android:hint="@string/hitUserName"
                     android:inputType="textPersonName"
                     android:textColor="@color/colorPrimary"
                     android:textColorHint="@color/colorPrimary" />

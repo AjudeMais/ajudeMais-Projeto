@@ -29,5 +29,10 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 */
 	List<Donativo> findByNome(String nome);
 	
+	/**
+	 * Busca e retorna todos os donativos doados por um determinado doador
+	 * @param nomeDoador
+	 * @return
+	 */
 	List<Donativo> findByDoadorNome(String nomeDoador);
 }

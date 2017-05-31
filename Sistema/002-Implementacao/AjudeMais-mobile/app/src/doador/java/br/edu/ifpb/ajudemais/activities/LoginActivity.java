@@ -2,10 +2,8 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,25 +15,28 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
-import org.springframework.web.client.RestClientException;
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Order;
 
 import java.util.Arrays;
+import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.LoginDoadorTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Grupo;
-import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 
 /**
  * <p>
- * <b>LoginActivity</b>
+ * <b>{@link LoginActivity}</b>
  * </p>
  * <p>
  * Activity para controlar Login.
@@ -45,17 +46,29 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, FacebookCallback<LoginResult>, Validator.ValidationListener {
 
     private Button btnCreateAccount;
     private Button btnOpenApp;
     private LoginButton btnFacebook;
     private TextView tvRecoveryPassword;
-    private EditText edtUserName;
-    private EditText edtPassword;
-    private Resources resources;
     private CallbackManager callbackManager;
     private Doador contaFacebook;
+    private LoginDoadorTask loginDoadorTask;
+    private byte[] imagem;
+    private GetImageTask getImageTask;
+    private Validator validator;
+
+    @Order(2)
+    @Length(min = 4, messageResId = R.string.msgInvalideUserName, sequence = 2)
+    @NotEmpty(messageResId = R.string.msgUserNameNotInformed, sequence = 1)
+    private EditText edtUserName;
+
+    @Order(1)
+    @Length(min = 6, messageResId = R.string.msgInvalidePassword, sequence = 2)
+    @NotEmpty(messageResId = R.string.msgPasswordNotInformed, sequence = 1)
+    private EditText edtPassword;
+
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -70,66 +83,32 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
 
         init();
 
-        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, CreateAccountActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-
+        btnCreateAccount.setOnClickListener(this);
         btnOpenApp.setOnClickListener(this);
-
-        tvRecoveryPassword.setOnClickListener(new View.OnClickListener() {
-
-            /**
-             *
-             * @param v
-             */
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-            }
-        });
+        tvRecoveryPassword.setOnClickListener(this);
 
         callbackManager = CallbackManager.Factory.create();
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
-        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            /**
-             *
-             * @param loginResult
-             */
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                FacebookAccount.userFacebookData(loginResult, LoginActivity.this);
-            }
 
-            /**
-             *
-             */
-            @Override
-            public void onCancel() {
-                goBackToLoginScreen();
-                Toast.makeText(getApplicationContext(), R.string.cancelOperation, Toast.LENGTH_LONG).show();
-            }
-
-            /**
-             *
-             * @param error
-             */
-            @Override
-            public void onError(FacebookException error) {
-                goBackToLoginScreen();
-                Toast.makeText(getApplicationContext(), R.string.errorOnLogin, Toast.LENGTH_LONG).show();
-            }
-        });
+        btnFacebook.registerCallback(callbackManager, this);
     }
+
+    /**
+     * Inicializa todos os atributos e propriedades utilizadas na activity.
+     */
+    public void init() {
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
+        btnOpenApp = (Button) findViewById(R.id.btnOpen);
+        btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
+        tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
+        edtUserName = (EditText) findViewById(R.id.edtUserName);
+        edtPassword = (EditText) findViewById(R.id.edtPassword);
+
+    }
+
 
     /**
      * Método que retorna para a tela de login em casos de cancelamento de login via Facebook
@@ -156,73 +135,7 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
         startActivity(intent);
     }
 
-    /**
-     * Inicializa todos os atributos e propriedades utilizadas na activity.
-     */
-    public void init() {
-        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
-        btnOpenApp = (Button) findViewById(R.id.btnOpen);
-        btnFacebook = (LoginButton) findViewById(R.id.btnFacebook);
-        tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
-        edtUserName = (EditText) findViewById(R.id.edtUserName);
-        edtPassword = (EditText) findViewById(R.id.edtPassword);
-        resources = getResources();
 
-    }
-
-    /**
-     * Valida o se nome e senha do usuário estão corretos,
-     *
-     * @return boolean
-     */
-    private boolean validateLoginFields() {
-        String userName = edtUserName.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        return (!validateEmptyFields(userName, password) && ValidateFieldsLength(userName, password));
-    }
-
-    /**
-     * Recebe o nome do usuário e password verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
-     *
-     * @param userName
-     * @param password
-     * @return boolean
-     */
-    private boolean validateEmptyFields(String userName, String password) {
-
-        if (TextUtils.isEmpty(userName)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
-            return true;
-
-        } else if (TextUtils.isEmpty(password)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a password informada possui mais de 6 caracteres exigidos.
-     *
-     * @param userName
-     * @param password
-     * @return boolean
-     */
-    private boolean ValidateFieldsLength(String userName, String password) {
-
-        if (!(userName.length() > 3)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
-            return false;
-        } else if (!(password.length() > 5)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Método implementado da interface View.OnClickListener para criação de eventos de clicks.
@@ -233,117 +146,124 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     public void onClick(View v) {
 
         if (v.getId() == R.id.btnOpen) {
-            if (validateLoginFields()) {
-                new LoginTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
-            }
+            validator.validate();
+        } else if (v.getId() == R.id.btnCreateAccount) {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, CreateAccountActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+        }else if (v.getId() == R.id.tvForgotPassword){
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
-    /**
-     * @param result
-     */
-    private void showResult(String result) {
-        if (result != null) {
-            Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, "I got null, something happened!", Toast.LENGTH_LONG).show();
-        }
-    }
 
     /**
-     * Classe para carregar recursos da api REST.
+     * Executa Asycn para Login Task
      */
-    private class LoginTask extends AsyncTask<Void, Void, Conta> {
+    private void executeTasksLoginDoador() {
+        loginDoadorTask = new LoginDoadorTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim());
+        loginDoadorTask.delegate = new AsyncResponse<Doador>() {
+            @Override
+            public void processFinish(final Doador output) {
+                if (output.getFoto() != null){
+                    getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
+                    getImageTask.delegate = new AsyncResponse<byte[]>() {
+                        @Override
+                        public void processFinish(byte[] imaBytes) {
+                            imagem = imaBytes;
+                            redirectMainActivity(output.getConta());
+                        }
+                    };
+                    getImageTask.execute();
 
-        private String message = null;
-        private Conta conta;
-        private AuthRemoteService authRemoteService;
-        private String username;
-        private DoadorRemoteService doadorRemoteService;
-        private ImagemStorageRemoteService imagemStorageRemoteService;
-        private String senha;
-        private Context context;
-        private Doador doador;
-        private AndroidUtil androidUtil;
-        private byte[] photo;
-
-
-        public LoginTask(Context context, String username, String senha) {
-            this.context = context;
-            this.authRemoteService = new AuthRemoteService(context);
-            this.doadorRemoteService = new DoadorRemoteService(context);
-            this.imagemStorageRemoteService = new ImagemStorageRemoteService(context);
-            this.androidUtil = new AndroidUtil(context);
-            this.username = username;
-            this.senha = senha;
-
-
-        }
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected Conta doInBackground(Void... params) {
-            try {
-                if (contaFacebook != null) {
-                    conta = contaFacebook.getConta();
-                    return conta;
-                } else {
-                    conta = new Conta(username, senha);
-                    conta = authRemoteService.createAuthenticationToken(conta, Grupo.DOADOR);
-                    doador = doadorRemoteService.getDoador(username);
-                    if (doador.getFoto() != null) {
-                        photo = imagemStorageRemoteService.getImage(doador.getFoto().getNome());
-                    }
-
-                    return conta;
+                }else {
+                    redirectMainActivity(output.getConta());
                 }
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+        };
 
-            return null;
-        }
-
-        /**
-         * @param conta
-         */
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-
-            if (conta != null) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", conta);
-                intent.putExtra("ImageByteArray", photo);
-                startActivity(intent);
-                finish();
-            } else {
-                showResult(message);
-            }
-        }
-
+        loginDoadorTask.execute();
     }
 
+
+    /**
+     * Redireciona para main actiivity
+     * @param conta
+     */
+    private void redirectMainActivity(Conta conta){
+        Intent intent = new Intent();
+        intent.setClass(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Conta", conta);
+        intent.putExtra("ImageByteArray", imagem);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     *
+     * @param loginResult
+     */
+    @Override
+    public void onSuccess(LoginResult loginResult) {
+        FacebookAccount.userFacebookData(loginResult, LoginActivity.this);
+
+    }
+
+    /**
+     *
+     */
+    @Override
+    public void onCancel() {
+        goBackToLoginScreen();
+        CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.cancelOperation));
+    }
+
+    /**
+     *
+     * @param e
+     */
+    @Override
+    public void onError(FacebookException e) {
+        goBackToLoginScreen();
+        CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.errorOnLogin));
+
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        executeTasksLoginDoador();
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+                view.requestFocus();
+            } else {
+                CustomToast.getInstance(LoginActivity.this).createSuperToastSimpleCustomSuperToast(message);
+            }
+        }
     }
 }

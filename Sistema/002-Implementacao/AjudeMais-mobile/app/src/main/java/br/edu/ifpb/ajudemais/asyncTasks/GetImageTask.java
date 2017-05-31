@@ -63,6 +63,7 @@ public class GetImageTask extends AsyncTask<Void, Void, byte[]> {
             message = e.getMessage();
             e.printStackTrace();
         } catch (Exception e) {
+            message = e.getMessage();
             e.printStackTrace();
         }
         return null;

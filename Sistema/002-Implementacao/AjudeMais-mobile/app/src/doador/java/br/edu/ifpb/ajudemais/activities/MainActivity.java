@@ -21,10 +21,10 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
  * <p>
- * <b>MainActivity</b>
+ * <b>{@link MainActivity}</b>
  * </p>
  * <p>
- * Activity para controlar Login.
+ * Resposável pelas operações da tela inicial do app
  * <p>
  * <p>
  * </p>

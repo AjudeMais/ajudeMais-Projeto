@@ -1,5 +1,7 @@
 package br.edu.ifpb.ajudemais.handler;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpStatus;
@@ -57,6 +59,8 @@ public class MyResponseErrorHandler implements ResponseErrorHandler {
             ObjectMapper mapper = new ObjectMapper();
             result = mapper.readValue(body, MessageErrorDTO.class);
         }
+
+        Log.e("HADLER", response.getStatusCode().toString());
         throw new RestClientException(result.getMsg());
     }
 
