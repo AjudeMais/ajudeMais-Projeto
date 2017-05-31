@@ -19,7 +19,6 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
-import br.edu.ifpb.ajudemais.asyncTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;

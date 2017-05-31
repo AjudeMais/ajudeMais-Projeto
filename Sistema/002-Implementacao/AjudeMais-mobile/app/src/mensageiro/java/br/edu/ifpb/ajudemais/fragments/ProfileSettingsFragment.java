@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudemais.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.EnderecoActivity;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 
 

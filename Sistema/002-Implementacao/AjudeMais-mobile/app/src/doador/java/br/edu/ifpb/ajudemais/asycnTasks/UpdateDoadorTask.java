@@ -1,16 +1,15 @@
-package br.edu.ifpb.ajudemais.asyncTasks;
+package br.edu.ifpb.ajudemais.asycnTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
+import android.util.Log;
 
 import org.springframework.web.client.RestClientException;
 
-import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
-import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
@@ -19,22 +18,18 @@ import br.edu.ifpb.ajudemais.utils.ProgressDialog;
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ * Asycn Task para Atualizar um Doador
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
 public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
 
     /**
      *
      */
-    public AsyncResponse<Doador> delegate = null;
-
+    public AsyncResponse<Doador> delegate;
     private String message = null;
-    private AndroidUtil androidUtil;
     private ProgressDialog progressDialog;
     private DoadorRemoteService doadorRemoteService;
     private Context context;
@@ -47,7 +42,6 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
     @Override
     protected void onPreExecute() {
         progressDialog.showProgressDialog();
-        super.onPreExecute();
 
     }
 
@@ -69,32 +63,32 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
     @Override
     protected Doador doInBackground(Void... params) {
         try {
-
-            if (androidUtil.isOnline()) {
-                doador = doadorRemoteService.updateDoador(doador);
-            } else {
-            }
+            doador = doadorRemoteService.updateDoador(doador);
+            return  doador;
         } catch (RestClientException e) {
             message = e.getMessage();
             e.printStackTrace();
         } catch (Exception e) {
+            message = e.getMessage();
             e.printStackTrace();
         }
-        return doador;
+        return null;
     }
 
     /**
      *
-     * @param doador
+     * @param doadorUpdated
      */
     @Override
-    protected void onPostExecute(Doador doador) {
+    protected void onPostExecute(Doador doadorUpdated) {
         progressDialog.dismissProgressDialog();
+
+        if (doadorUpdated != null) {
+            delegate.processFinish(doadorUpdated);
+        }
+
         if (message != null) {
-            Toast.makeText(context,message, Toast.LENGTH_LONG).show();
-        }else {
-            delegate.processFinish(doador);
-            Toast.makeText(context, context.getString(R.string.updatedImage), Toast.LENGTH_LONG).show();
+            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
         }
     }
 }

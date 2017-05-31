@@ -105,7 +105,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         if (v.getId() == R.id.btnOpen) {
             validator.validate();
 
-        } else if (v.getId() == R.id.btnCreateAccount) {
+        } else if (v.getId() == R.id.btnCreateAccountAccount) {
             Intent intent = new Intent();
             intent.setClass(LoginActivity.this, CreateMensageiroAccountActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -120,7 +120,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onValidationSucceeded() {
-
         if (androidUtil.isOnline()) {
             executeTasksLoginMensageiro();
         }else {

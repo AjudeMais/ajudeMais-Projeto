@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
@@ -64,7 +63,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
+        mFragmentTransaction.replace(R.id.containerView, new MainTab01()).commit();
 
         fab.setOnClickListener(this);
     }
