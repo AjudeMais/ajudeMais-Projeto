@@ -9,22 +9,37 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
+import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
+
 /**
  * Classe utilizada para serviços de {@link Campanha}
+ * 
  * @author elson
  *
  */
 @Service
-public class CampanhaServiceImpl implements CampanhaService{
-	
+public class CampanhaServiceImpl implements CampanhaService {
+
+	/**
+	 * 
+	 */
 	@Autowired
 	private CampanhaRepository campanhaRepository;
-	
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private GoogleMapsServiceImpl googleMapsResponse;
+
 	/**
 	 * Salva uma campanha no BD
+	 * 
 	 * @param campanha
 	 * @return
 	 * @throws AjudeMaisException
@@ -34,9 +49,10 @@ public class CampanhaServiceImpl implements CampanhaService{
 	public Campanha save(Campanha donativo) throws AjudeMaisException {
 		return campanhaRepository.save(donativo);
 	}
-	
+
 	/**
 	 * Atualiza uma campanha previamente salva no BD
+	 * 
 	 * @param campanha
 	 * @return
 	 * @throws AjudeMaisException
@@ -44,7 +60,7 @@ public class CampanhaServiceImpl implements CampanhaService{
 	@Override
 	@Transactional
 	public Campanha update(Campanha donativo) throws AjudeMaisException {
-		
+
 		return campanhaRepository.save(donativo);
 	}
 
@@ -66,18 +82,31 @@ public class CampanhaServiceImpl implements CampanhaService{
 
 	/**
 	 * Remove uma campanha ja cadastrada no BD
+	 * 
 	 * @param campanha
 	 */
 	@Override
 	@Transactional
 	public void remover(Campanha donativo) {
 		campanhaRepository.delete(donativo);
-		
+
 	}
 
 	@Override
 	public List<Campanha> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
 		return campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+	}
+
+	/**
+	 * Filtra campanhas por localização de instituição
+	 */
+	@Override
+	public List<Campanha> filterByInstituicaoLocal(LatLng latLng) throws AjudeMaisException {
+
+		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+				latLng.getLongitude());
+
+		return campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(), endereco.getUf());
 	}
 
 }

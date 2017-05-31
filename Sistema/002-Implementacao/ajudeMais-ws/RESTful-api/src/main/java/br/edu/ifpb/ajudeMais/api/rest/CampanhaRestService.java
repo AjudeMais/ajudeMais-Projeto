@@ -22,13 +22,14 @@ import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
 
 /**
  * Classe utilizada para criar os endpoints de campanha
  * 
- * @author elson
+ * @author elson / Franck
  *
  */
 @RestController
@@ -141,7 +142,7 @@ public class CampanhaRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
-	@RequestMapping(method = RequestMethod.GET, value = "/instituicao")
+	@RequestMapping(method = RequestMethod.GET, value = "filter/instituicao")
 	public ResponseEntity<List<Campanha>> findByInstituicao() {
 
 		Conta conta = authService.getCurrentUser();
@@ -153,6 +154,27 @@ public class CampanhaRestService {
 		}
 
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
+	}
+
+	/**
+	 * <p>
+	 * GET /campanha/filter/local : Filtra campanha por localização da
+	 * instituição. <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/local")
+	public ResponseEntity<List<Campanha>> filterByInstituicaoLocal(@RequestBody LatLng latLng)
+			throws AjudeMaisException {
+		
+		List<Campanha> instituicoes = CampanhaService.filterByInstituicaoLocal(latLng);
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}
 
 	/**

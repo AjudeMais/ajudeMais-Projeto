@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
@@ -34,6 +36,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  *
  */
 @Entity
+@NamedQueries({
+	@NamedQuery(name = "Campanha.filterByInstituicaoLocal", query = "SELECT c FROM Campanha c WHERE "
+			+ "c.instituicaoCaridade.endereco.localidade like :localidade "
+			+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true"), })
 public class Campanha {
 
 	/**
@@ -74,6 +80,7 @@ public class Campanha {
 	 * 
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data_fim")
 	private Date dataFim;
 
 	/**
