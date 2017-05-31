@@ -20,7 +20,8 @@
             update: _update,
             getCategorias: _getCategorias,
             getCategoriasByInstituicao: _getCategoriasByInstituicao,
-            remove: _remove
+            remove: _remove,
+            findByName: _findByName
         };
         return service;
 
@@ -87,5 +88,14 @@
                 callback(response.data);
             })
         }
+
+        /**
+         *
+         * @param nome
+         * @private
+         */
+        function _findByName(name) {
+            return $http.get(Api + '/categoria/filter/nome', {params: {"nome": name}});
+        };
     };
 })();

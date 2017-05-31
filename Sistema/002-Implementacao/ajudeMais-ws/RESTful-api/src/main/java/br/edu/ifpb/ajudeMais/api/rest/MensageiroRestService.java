@@ -118,7 +118,7 @@ public class MensageiroRestService {
 	 * 
 	 * <p>
 	 * GET /mensageiro/filter/usermane : Busca um Mensageiro pela conta, filtrando pelo nome de
-	 * usuário. Caso mensageiro não exista um NOT FOUNT será lançado para o cliente.
+	 * usuário.
 	 * <br/>
 	 * ROLE: DOADOR
 	 * </p>

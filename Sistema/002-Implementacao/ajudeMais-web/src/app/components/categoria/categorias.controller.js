@@ -10,9 +10,9 @@
     angular.module('amApp')
         .controller('CategoriaController', CategoriaController);
 
-    CategoriaController.$inject = ['categoriaService', 'DTOptionsBuilder', '$uibModal', 'growl'];
+    CategoriaController.$inject = ['categoriaService', 'DTOptionsBuilder', '$uibModal', 'toastr'];
 
-    function CategoriaController(categoriaService, DTOptionsBuilder, $uibModal, growl) {
+    function CategoriaController(categoriaService, DTOptionsBuilder, $uibModal, toastr) {
 
         var vm = this;
         vm.categorias = [];
@@ -92,7 +92,7 @@
             modalInstance.result.then(function (result) {
                 if (result) {
                     categoriaService.remove(categoria.id, function () {
-                        growl.success("<b>Item</b> removido com sucesso");
+                        toastr.success("removido com sucesso", "Item");
                         var index = vm.categorias.indexOf(categoria);
                         vm.categorias.splice(index, 1);
                     });

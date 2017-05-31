@@ -10,9 +10,9 @@
     angular.module('amApp')
         .controller('MensageiroAssociadoController', MensageiroAssociadoController);
 
-    MensageiroAssociadoController.$inject = ['mensageiroAssociadoService', 'DTOptionsBuilder', '$uibModal', 'growl'];
+    MensageiroAssociadoController.$inject = ['mensageiroAssociadoService', 'DTOptionsBuilder', '$uibModal'];
 
-    function MensageiroAssociadoController(mensageiroAssociadoService, DTOptionsBuilder, $uibModal, growl) {
+    function MensageiroAssociadoController(mensageiroAssociadoService, DTOptionsBuilder, $uibModal) {
 
         var vm = this;
         vm.associados = [];

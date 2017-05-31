@@ -1,0 +1,63 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-primary">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button type="button" class="btn am-btn-new btn-primary" ng-click="vm.addCampanha()"
+                                tooltip-placement="top" uib-tooltip="cadastrar nova campanha de doação">
+                            <i class="fa fa-plus-circle"></i> <span class="hidden-xs hidden-sm">Nova Campanha</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="dataTable_wrapper">
+                            <table datatable="ng" dt-options="vm.dtOptions"
+                                   class="table table-striped table-bordered table-hover" id="dtCampanhas">
+                                <thead>
+                                <tr>
+                                    <th width="10%">Ações</th>
+                                    <th width="25%">Nome</th>
+                                    <th width="40%">Descrição</th>
+                                    <th width="15%">Término</th>
+                                    <th width="10%">Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="odd gradeX" ng-repeat="campanha in vm.campanhas">
+                                    <td>
+                                        <button type="button" ng-click="vm.openDetails(campanha)"
+                                                tooltip-placement="top" uib-tooltip="Visualizar campanha de doação"
+                                                class="btn btn-xs btn-primary" access-view="ROLE_INSTITUICAO">
+                                            <i class='fa fa-search'></i>
+                                        </button>
+                                        <button type="button" ng-click="vm.editCampanha(campanha)"
+                                                class="btn btn-xs btn-default"
+                                                tooltip-placement="top" uib-tooltip="Editar campanha de doação"
+                                                access-view="ROLE_INSTITUICAO">
+                                            <i class='fa fa-pencil'></i>
+                                        </button>
+                                    </td>
+                                    <td>{{campanha.nome}}</td>
+                                    <td>{{campanha.descricao}}</td>
+                                    <td>
+                                        <span ng-show="campanha.status">{{campanha.dataFim | date : "dd/MM/yyyy" }}</span>
+                                        <span ng-show="!campanha.status">Campanha Inativa</span>
+                                    </td>
+                                    <td>
+                                        <span ng-class="{'label label-danger': !campanha.status,
+													'label label-success': campanha.status}">{{campanha.status? 'Ativo': 'Inativo'}}</span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

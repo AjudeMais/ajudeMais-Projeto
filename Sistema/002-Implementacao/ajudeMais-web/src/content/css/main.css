@@ -54,6 +54,10 @@
     margin-bottom: 0px;
 }
 
+.am-btn-plus-fast {
+    padding-left: 0;
+}
+
 /*
  * Componentes: Bootstrap Switch
  * ----------------------------------------
@@ -1169,6 +1173,7 @@ div.dataTables_info {
     margin: 0;
     line-height: 1;
     font-weight: 500;
+
 }
 
 .box-header > .fa, .box-header > .glyphicon, .box-header > .ion {
@@ -1365,7 +1370,7 @@ div.dataTables_info {
  * -----------------
  */
 .btn {
-    border-radius: 3px;
+    border-radius: 2px;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: 1px solid transparent;
@@ -1426,11 +1431,12 @@ div.dataTables_info {
 
 .btn-primary {
     background-color: #12A7B5;
-    border-color: #10929e;
+    border-color: #12A7B5;
 }
 
 .btn-primary:hover, .btn-primary:active, .btn-primary.hover {
     background-color: #10929e;
+    border-color: #12A7B5;
 }
 
 .btn-primary.focus, .btn-primary:focus {
@@ -1441,38 +1447,42 @@ div.dataTables_info {
 
 .btn-success {
     background-color: #00a65a;
-    border-color: #008d4c;
+    border-color: #00a65a;
 }
 
 .btn-success:hover, .btn-success:active, .btn-success.hover {
     background-color: #008d4c;
+    border-color: #008d4c;
 }
 
 .btn-info {
     background-color: #00c0ef;
-    border-color: #00acd6;
+    border-color: #00c0ef;
 }
 
 .btn-info:hover, .btn-info:active, .btn-info.hover {
     background-color: #00acd6;
+    border-color: #00acd6;
 }
 
 .btn-danger {
     background-color: #dd4b39;
-    border-color: #d73925;
+    border-color: #dd4b39;
 }
 
 .btn-danger:hover, .btn-danger:active, .btn-danger.hover {
     background-color: #d73925;
+    border-color: #d73925;
 }
 
 .btn-warning {
     background-color: #f39c12;
-    border-color: #e08e0b;
+    border-color: #f39c12;
 }
 
 .btn-warning:hover, .btn-warning:active, .btn-warning.hover {
     background-color: #e08e0b;
+    border-color: #e08e0b;
 }
 
 .btn-outline {

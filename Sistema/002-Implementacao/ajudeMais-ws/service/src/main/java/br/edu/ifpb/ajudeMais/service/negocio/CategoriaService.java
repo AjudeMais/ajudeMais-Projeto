@@ -47,15 +47,27 @@ public interface CategoriaService extends Service<Categoria, Long> {
 	 * @return
 	 */
 	List<Categoria> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
-	
+
 	/**
 	 * <p>
-	 * Busca todas as categorias ativas ou inativas de uma instituição 
+	 * Busca todas as categorias ativas ou inativas de uma instituição
 	 * </p>
+	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo,Long id);
+	List<Categoria> findByAtivoAndInstituicaoCaridadeId(Boolean ativo, Long id);
 
+	/**
+	 * 
+	 * <p>
+	 * Busca categorias de uma instituição, filtrando pelo nome
+	 * </p>
+	 * 
+	 * @param instituicaoCaridade
+	 * @param nome
+	 * @return
+	 */
+	List<Categoria> findByInstituicaoCaridadeAndNome(InstituicaoCaridade instituicaoCaridade, String nome);
 
 }
