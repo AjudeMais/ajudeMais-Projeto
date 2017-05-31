@@ -285,8 +285,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
                             if (newPassword.getText().toString().trim().length() > 5) {
                                 new ChangePasswordTask(ProfileSettingsActivity.this, password.getText().toString().trim(), newPassword.getText().toString().trim()).execute();
                             } else {
-                                Toast.makeText(getApplication(), "A nova senha informada deve contém no mínimo 6 caracteres", Toast.LENGTH_LONG).show();
-
+                                CustomToast.getInstance(ProfileSettingsActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.passwordLengthNotPermission));
                             }
                         }
                     })
