@@ -10,6 +10,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,15 +45,21 @@ public class RequestResponseInterceptor implements ClientHttpRequestInterceptor 
      */
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
+
                                         ClientHttpRequestExecution execution) throws IOException {
 
-        interceptRequest(request, body);
+        try {
+            interceptRequest(request, body);
 
-        ClientHttpResponse clientHttpResponse = execution.execute(request, body);
+            ClientHttpResponse clientHttpResponse = execution.execute(request, body);
 
-        interceptResponse(clientHttpResponse);
+            interceptResponse(clientHttpResponse);
 
-        return clientHttpResponse;
+            return clientHttpResponse;
+        }catch (java.net.ConnectException e){
+            throw new RestClientException("Ocorreu um problema no servidor, tente novamente mais tarde.");
+        }
+
     }
 
     /**

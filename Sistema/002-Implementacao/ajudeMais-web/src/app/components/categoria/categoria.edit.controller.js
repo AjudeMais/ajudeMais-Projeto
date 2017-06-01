@@ -8,7 +8,7 @@
  */
 (function () {
     angular.module("amApp")
-        .controller("CategoriaEditController", function (categoriaService, growl, $uibModalInstance, categoria) {
+        .controller("CategoriaEditController", function (categoriaService, toastr, $uibModalInstance, categoria) {
 
             var vm = this;
             vm.categoria = {};
@@ -27,27 +27,27 @@
                 vm.loading = true;
                 if (!edited()) {
                     categoriaService.save(vm.categoria, function (response) {
-                        growl.success("<b>Item</b> criada com sucesso");
+                        toastr.success('salvo com sucesso', 'Item');
                         angular.copy(response, categoria);
                         vm.loading = false;
                         $uibModalInstance.close(categoria);
 
                     }, function (response) {
                         var msgError = response.data.msg;
-                        growl.warning(msgError);
+                        toastr.warning(msgError);
                         vm.loading = false;
                     });
 
                 } else {
                     categoriaService.update(vm.categoria, function (response) {
-                        growl.success("<b>Item</b> alterada com sucesso");
+                        toastr.success('alterado com sucesso', 'Item');
                         angular.copy(response, categoria);
                         vm.loading = false;
                         $uibModalInstance.close(categoria);
 
                     }, function (response) {
                         var msgError = response.data.msg;
-                        growl.warning(msgError);
+                        toastr.warning(msgError);
                         angular.copy(response, categoria);
                         vm.loading = false;
                         $uibModalInstance.close(categoria);

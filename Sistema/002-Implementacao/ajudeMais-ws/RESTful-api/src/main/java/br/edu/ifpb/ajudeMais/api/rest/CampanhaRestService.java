@@ -22,11 +22,14 @@ import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
+
 /**
- * Classe utilizada para criar os endpoints de campanha 
- * @author elson
+ * Classe utilizada para criar os endpoints de campanha
+ * 
+ * @author elson / Franck
  *
  */
 @RestController
@@ -37,7 +40,7 @@ public class CampanhaRestService {
 	 */
 	@Autowired
 	private CampanhaService CampanhaService;
-	
+
 	/**
 	 * 
 	 */
@@ -49,11 +52,11 @@ public class CampanhaRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
-	
-	
+
 	/**
 	 * <p>
-	 * POST /campanha : endpoint criado para cadastro de uma campanha no sistema. <br>
+	 * POST /campanha : endpoint criado para cadastro de uma campanha no
+	 * sistema. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -63,22 +66,23 @@ public class CampanhaRestService {
 	 */
 	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Campanha> save(@Valid @RequestBody Campanha campanha, HttpServletRequest request)throws AjudeMaisException {
+	public ResponseEntity<Campanha> save(@Valid @RequestBody Campanha campanha, HttpServletRequest request)
+			throws AjudeMaisException {
 
 		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
 		if (instituicaoOp.isPresent()) {
 			campanha.setInstituicaoCaridade(instituicaoOp.get());
-		} 
-
+		}
 		Campanha campanhaSalva = CampanhaService.save(campanha);
 		return new ResponseEntity<>(campanhaSalva, HttpStatus.CREATED);
 	}
 
 	/**
 	 * <p>
-	 * PUT /campanha : endpoint criado para atualização dos dados de uma campanha. <br>
+	 * PUT /campanha : endpoint criado para atualização dos dados de uma
+	 * campanha. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -93,6 +97,7 @@ public class CampanhaRestService {
 		Campanha campanhaAtualizada = CampanhaService.update(campanha);
 		return new ResponseEntity<>(campanhaAtualizada, HttpStatus.OK);
 	}
+
 	/**
 	 * <p>
 	 * GET /campanha : endpoint criado para recuperar todas as campanhas. <br>
@@ -109,7 +114,7 @@ public class CampanhaRestService {
 		List<Campanha> campanhas = CampanhaService.findAll();
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * <p>
 	 * GET /campanha : endpoint criado para recuperar uma campanha pelo id. <br>
@@ -127,7 +132,7 @@ public class CampanhaRestService {
 		Campanha campanha = CampanhaService.findById(id);
 		return new ResponseEntity<>(campanha, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * <p>
 	 * GET /campanha/instituicao : busca campanhas por insituição. <br>
@@ -137,7 +142,7 @@ public class CampanhaRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
-	@RequestMapping(method = RequestMethod.GET, value = "/instituicao")
+	@RequestMapping(method = RequestMethod.GET, value = "filter/instituicao")
 	public ResponseEntity<List<Campanha>> findByInstituicao() {
 
 		Conta conta = authService.getCurrentUser();
@@ -150,10 +155,32 @@ public class CampanhaRestService {
 
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * <p>
-	 * DELETE /campanha/id : exclui uma campanha pesquisada pelo identificador. <br>
+	 * GET /campanha/filter/local : Filtra campanha por localização da
+	 * instituição. <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/local")
+	public ResponseEntity<List<Campanha>> filterByInstituicaoLocal(@RequestBody LatLng latLng)
+			throws AjudeMaisException {
+		
+		List<Campanha> instituicoes = CampanhaService.filterByInstituicaoLocal(latLng);
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+	}
+
+	/**
+	 * <p>
+	 * DELETE /campanha/id : exclui uma campanha pesquisada pelo identificador.
+	 * <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -165,7 +192,6 @@ public class CampanhaRestService {
 	public ResponseEntity<Campanha> delete(@PathVariable Long id) {
 
 		Campanha campanhaEncontrada = CampanhaService.findById(id);
-
 		if (campanhaEncontrada == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

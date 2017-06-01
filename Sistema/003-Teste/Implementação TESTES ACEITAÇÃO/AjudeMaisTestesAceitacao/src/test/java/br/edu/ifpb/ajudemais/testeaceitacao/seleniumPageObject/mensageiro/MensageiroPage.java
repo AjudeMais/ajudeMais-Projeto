@@ -18,6 +18,7 @@ import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.login.LoginPage;
  *
  */
 public class MensageiroPage extends AbstractPage {
+	
 	/**
 	 * 
 	 */
@@ -26,10 +27,19 @@ public class MensageiroPage extends AbstractPage {
 	 * 
 	 */
 	private static final String PASSWORD_INSTIUTICAO = "76914318301";
+<<<<<<< HEAD
 
 	private InstituicaoCaridadePage instituicaoCaridadePage;
 	private LoginPage loginPage;
 
+=======
+	
+	/**
+	 * 
+	 */
+	private InstituicaoCaridadePage instituicaoCaridadePage;
+	private LoginPage loginPage;
+>>>>>>> 3c51c90eee39146e93c18e8565325071b6e226bd
 	/**
 	 * 
 	 * @param driver
@@ -49,8 +59,11 @@ public class MensageiroPage extends AbstractPage {
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 
 		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
+<<<<<<< HEAD
 	
 
+=======
+>>>>>>> 3c51c90eee39146e93c18e8565325071b6e226bd
 		try {
 			Thread.sleep(1000);
 
@@ -158,4 +171,8 @@ public class MensageiroPage extends AbstractPage {
 		boolean value = driver.getPageSource().contains(nome);
 		return value;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c51c90eee39146e93c18e8565325071b6e226bd
 }

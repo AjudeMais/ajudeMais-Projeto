@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
@@ -15,13 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 
 import org.springframework.web.client.RestClientException;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -172,13 +168,6 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
                 password = doador.getConta().getSenha();
                 doador = doadorRemoteService.saveDoador(doador);
                 Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
-                URL imageURL;
-                try {
-                    imageURL = new URL("https://graph.facebook.com/" + Profile.getCurrentProfile().getId() + "/picture?type=large");
-                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
                 return conta;
             } catch (RestClientException e) {
                 message = e.getMessage();

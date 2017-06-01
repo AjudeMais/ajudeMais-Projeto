@@ -103,7 +103,7 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 	 */
 	@Test
 	public void getCampanhasByInstituicaoOk() throws IOException, Exception {
-		mockMvc.perform(get("/campanha/instituicao").header("Authorization", getAuth("instituicaoTESTE", "123456")))
+		mockMvc.perform(get("/campanha/filter/instituicao").header("Authorization", getAuth("instituicaoTESTE", "123456")))
 				.andExpect(status().isOk());
 	}
 	

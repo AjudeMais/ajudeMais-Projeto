@@ -10,7 +10,7 @@
     angular.module("amApp")
         .controller("MensageiroAssociadoEditController", MensageiroAssociadoEditController);
 
-    function MensageiroAssociadoEditController(mensageiroAssociadoService, mensageiroService, imageService, growl, $uibModalInstance, mensageiroAss) {
+    function MensageiroAssociadoEditController(mensageiroAssociadoService, mensageiroService, imageService, toastr, $uibModalInstance, mensageiroAss) {
 
         var vm = this;
         vm.mensageiroAss = {};
@@ -69,24 +69,24 @@
                 vm.loading = true;
                 if (edited()) {
                     mensageiroAssociadoService.update(vm.mensageiroAss, function (response) {
-                        growl.success("<b>Mensageiro</b> atualizado com sucesso");
+                        toastr.success('atualizado com sucesso', 'Mensageiro');
                         angular.copy(response, mensageiroAss);
                         vm.loading = false;
                         $uibModalInstance.close(mensageiroAss);
                     }, function (response) {
                         var msgError = response.data.msg;
-                        growl.warning(msgError);
+                        toastr.warning(msgError);
                         vm.loading = false;
                     });
                 } else {
                     mensageiroAssociadoService.save(vm.mensageiroAss, function (response) {
-                        growl.success("<b>Mensageiro</b> associado com sucesso");
+                        toastr.success('associado com sucesso', 'Mensageiro');
                         angular.copy(response, mensageiroAss);
                         vm.loading = false;
                         $uibModalInstance.close(mensageiroAss);
                     }, function (response) {
                         var msgError = response.data.msg;
-                        growl.warning(msgError);
+                        toastr.warning(msgError);
                         vm.loading = false;
                     });
                 }

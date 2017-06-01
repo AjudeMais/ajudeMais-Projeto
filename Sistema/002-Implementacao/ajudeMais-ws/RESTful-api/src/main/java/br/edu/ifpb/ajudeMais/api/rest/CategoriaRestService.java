@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
@@ -74,10 +75,11 @@ public class CategoriaRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
-	
+
 	/**
 	 * <p>
-	 * POST /categoria : endpoint criado para cadastro de uma categoria no sistema. <br>
+	 * POST /categoria : endpoint criado para cadastro de uma categoria no
+	 * sistema. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -95,7 +97,7 @@ public class CategoriaRestService {
 
 		if (instituicaoOp.isPresent()) {
 			categoria.setInstituicaoCaridade(instituicaoOp.get());
-		} 
+		}
 
 		Categoria categoriaSalva = categoriaService.save(categoria);
 		return new ResponseEntity<>(categoriaSalva, HttpStatus.CREATED);
@@ -103,7 +105,8 @@ public class CategoriaRestService {
 
 	/**
 	 * <p>
-	 * PUT /categoria : endpoint criado para atualização dos dados de uma categoria. <br>
+	 * PUT /categoria : endpoint criado para atualização dos dados de uma
+	 * categoria. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -121,7 +124,8 @@ public class CategoriaRestService {
 
 	/**
 	 * <p>
-	 * GET /categoria : endpoint criado para recuperar todas as categorias cadastradas. <br>
+	 * GET /categoria : endpoint criado para recuperar todas as categorias
+	 * cadastradas. <br>
 	 * ROLE: ADMIN
 	 * </p>
 	 * 
@@ -135,6 +139,25 @@ public class CategoriaRestService {
 
 		return new ResponseEntity<>(categorias, HttpStatus.OK);
 
+	}
+
+	/**
+	 * GET /categoria/filter/nome : Endpoint para buscar uma categoria por
+	 * instituição por nome.
+	 * 
+	 * @return Mensageiro
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/nome")
+	public ResponseEntity<List<Categoria>> findByInstituicaoAndNome(@RequestParam("nome") String nome) {
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
+		List<Categoria> categorias = new ArrayList<>();
+
+		if (instituicaoOp.isPresent()) {
+			categorias = categoriaService.findByInstituicaoCaridadeAndNome(instituicaoOp.get(), nome);
+		}
+		return new ResponseEntity<>(categorias, HttpStatus.OK);
 	}
 
 	/**
@@ -181,7 +204,8 @@ public class CategoriaRestService {
 
 	/**
 	 * <p>
-	 * DELETE /categoria/id : exclui uma categoria pesquisada pelo identificador. <br>
+	 * DELETE /categoria/id : exclui uma categoria pesquisada pelo
+	 * identificador. <br>
 	 * ROLE: INSTITUICAO
 	 * </p>
 	 * 
@@ -200,10 +224,11 @@ public class CategoriaRestService {
 		categoriaService.remover(categoriaEncontrada);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
+
 	/**
 	 * <p>
-	 * DELETE /categoria/ativas/id : busca todas as categorias ativas da instituição com ID passado. <br>
+	 * GET /categoria/ativas/id : busca todas as categorias ativas da
+	 * instituição com ID passado. <br>
 	 * ROLE: INSTITUICAO, DOADOR
 	 * </p>
 	 * 
@@ -212,7 +237,7 @@ public class CategoriaRestService {
 	 */
 	@PreAuthorize("hasAnyRole ('INSTITUICAO','DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/ativas/{id}")
-	public ResponseEntity<List<Categoria>> listCategoriasAtivasToInstituicao(@PathVariable Long id) {
+	public ResponseEntity<List<Categoria>> findCategoriasAtivasToInstituicao(@PathVariable Long id) {
 
 		List<Categoria> categorias = categoriaService.findByAtivoAndInstituicaoCaridadeId(true, id);
 

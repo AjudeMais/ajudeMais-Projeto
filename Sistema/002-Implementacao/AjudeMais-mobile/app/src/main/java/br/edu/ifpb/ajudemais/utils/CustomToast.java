@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.github.johnpersano.supertoasts.library.Style;
 import com.github.johnpersano.supertoasts.library.SuperActivityToast;
+import com.github.johnpersano.supertoasts.library.SuperToast;
 import com.github.johnpersano.supertoasts.library.utils.PaletteUtils;
-import com.mobsandgeeks.saripaar.Validator;
 
 /**
  * <p>
@@ -49,7 +49,7 @@ public class CustomToast {
      * Cria Toast simples com somente TEXTO para ser exibindo na parte inferior da tela
      * @param message
      */
-    public void createSimpleCustomToast(String message) {
+    public void createSimpleCustomSuperToastActivity(String message) {
         SuperActivityToast.create(context, new Style())
                 .setText(message)
                 .setDuration(Style.DURATION_LONG)
@@ -57,4 +57,15 @@ public class CustomToast {
                 .setColor(PaletteUtils.getSolidColor(PaletteUtils.DARK_GREY))
                 .setAnimations(Style.ANIMATIONS_POP).show();
     }
+
+
+    /**
+     * Cria Toast simples com somente TEXTO para ser exibindo na parte inferior da tela Em activities diferentes
+     * @param message
+     */
+    public void createSuperToastSimpleCustomSuperToast(String message){
+        SuperToast.create(context, message, Style.DURATION_LONG).setColor(PaletteUtils.getSolidColor(PaletteUtils.DARK_GREY)).show();
+    }
+
+
 }

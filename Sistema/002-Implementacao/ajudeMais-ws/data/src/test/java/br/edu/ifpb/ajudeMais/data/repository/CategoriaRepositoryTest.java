@@ -128,7 +128,7 @@ public class CategoriaRepositoryTest {
 		List<Categoria> instituicoes = categoriaRepository.findByAtivoAndInstituicaoCaridadeId(true, 1l);
 		assertTrue(instituicoes.size() > 0);
 	}
-	
+
 	/**
 	 * 
 	 * <p>
@@ -139,5 +139,20 @@ public class CategoriaRepositoryTest {
 	public void findByAtivoFalseAndInstituicaoCaridadeIdTest() {
 		List<Categoria> instituicoes = categoriaRepository.findByAtivoAndInstituicaoCaridadeId(false, 1l);
 		assertTrue(instituicoes.size() == 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * teste para busca de categoria, filtrando pelo nome.
+	 * </p>
+	 */
+	@Test
+	public void findByInstituicaoCaridadeAndNomeIgnoreCaseContainingTest() {
+		instituicao.setId(1l);
+		List<Categoria> instituicoes = categoriaRepository
+				.findByInstituicaoCaridadeAndNomeIgnoreCaseContaining(instituicao, "brinq");
+
+		assertTrue(instituicoes.size() > 0);
 	}
 }

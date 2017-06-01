@@ -33,6 +33,7 @@ import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -165,9 +166,7 @@ public class MyEnderecosActivity extends LocationActivity implements RecyclerIte
                 EnderecoAdapter enderecoAdapter = new EnderecoAdapter(mensageiro.getEnderecos(), MyEnderecosActivity.this);
                 recyclerView.setAdapter(enderecoAdapter);
 
-                toast = Toast.makeText(getApplicationContext(), getString(R.string.deletedAddress), Toast.LENGTH_LONG);
-                toast.setGravity(Gravity.BOTTOM, 0, 0);
-                toast.show();
+                CustomToast.getInstance(MyEnderecosActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.deletedAddress));
 
                 if (mensageiro.getEnderecos().size() > 0) {
                     showListEnderecos();

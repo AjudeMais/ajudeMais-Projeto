@@ -1,20 +1,15 @@
 package br.edu.ifpb.ajudemais.asycnTasks;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
 import org.springframework.web.client.RestClientException;
 
-import br.edu.ifpb.ajudemais.activities.LoginActivity;
-import br.edu.ifpb.ajudemais.activities.MainActivity;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.MensageiroRemoteService;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
@@ -101,7 +96,7 @@ public class LoginMensageiroTask extends AsyncTask<Void, Void, Mensageiro> {
             delegate.processFinish(mensageiroLogado);
 
         } else {
-            CustomToast.getInstance(context).createSimpleCustomToast(message);
+            CustomToast.getInstance(context).createSimpleCustomSuperToastActivity(message);
         }
     }
 

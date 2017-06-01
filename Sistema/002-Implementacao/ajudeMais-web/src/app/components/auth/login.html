@@ -28,16 +28,19 @@
                                   Senha deve ser informada
                                 </div>
                             </div>
-                            <div class="checkbox icheck">
-                                <label>
-                                    <input icheck id="rememberme" name="remember-me" type="checkbox" ng-value="remember-me" ng-model="vm.remember"> Lembre-me
-                                </label>
-                            </div>
+                            <!--<div class="checkbox icheck">
+                                 <label>
+                                     <input icheck id="rememberme" name="remember-me" type="checkbox" ng-value="remember-me" ng-model="vm.remember"> Lembre-me
+                                 </label>
+                             </div>-->
+                            <br/>
                             <input id="btnLogin" type="submit" class="btn btn-lg btn-primary btn-block" value="Login"/>
                         </fieldset>
+
                     </form>
                 </div>
             </div>
+            <p class="caps-lock-alert text-right text-primary" ng-show='isCapsLockOn'><i class="fa fa-lock"></i> Tecla Caps lock esta ativada</p>
         </div>
     </div>
 </div>

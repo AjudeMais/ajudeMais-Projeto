@@ -37,7 +37,6 @@ public class FacebookAccount {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         try {
-                            doador = new Doador();
                             doador.setNome(Profile.getCurrentProfile().getName());
                             doador.setFacebookID(Profile.getCurrentProfile().getId());
                             doador.setCampanhas(null);
