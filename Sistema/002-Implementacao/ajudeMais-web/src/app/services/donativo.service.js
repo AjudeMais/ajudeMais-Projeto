@@ -9,11 +9,11 @@
 
 (function () {
     angular.module("amApp")
-        .factory("doacaoService", doacaoService);
+        .factory("donativoService", donativoService);
 
-    doacaoService.$inject = ['$http', 'Api'];
+    donativoService.$inject = ['$http', 'Api'];
 
-    function doacaoService($http, Api) {
+    function donativoService($http, Api) {
 
         var service = {
             getByInstituicao: _getByInstituicao
@@ -25,7 +25,7 @@
          * @private
          */
         function _getByInstituicao() {
-            return $http.get(Api + "/doacao/filter/instituicao");
+            return $http.get(Api + "/donativo/filter/instituicao");
         };
     }
 })();

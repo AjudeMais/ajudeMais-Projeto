@@ -3,12 +3,14 @@ package br.edu.ifpb.ajudeMais.domain.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -47,17 +49,19 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
+	@NotNull
 	private String nome;
 	
 	/**
 	 * 
 	 */
+	@NotNull
 	private String descricao;
 
 	/**
 	 * 
 	 */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<EstadoDoacao> estadosDaDoacao;
 	
 	/**
@@ -69,13 +73,15 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
+	@NotNull
 	@ManyToOne
 	private Doador doador;
 	
 	/**
 	 * 
 	 */
-	@ManyToOne
+	@NotNull
+	@ManyToOne(cascade ={CascadeType.MERGE, CascadeType.PERSIST})
 	private Endereco endereco;
 	
 	/**
@@ -87,7 +93,8 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@ManyToOne
+	@NotNull
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
 	private Categoria categoria;
 	
 	/**
@@ -228,91 +235,5 @@ public class Donativo implements Serializable {
 	 */
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
-	}
-
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((categoria == null) ? 0 : categoria.hashCode());
-		result = prime * result + ((descricao == null) ? 0 : descricao.hashCode());
-		result = prime * result + ((doador == null) ? 0 : doador.hashCode());
-		result = prime * result + ((endereco == null) ? 0 : endereco.hashCode());
-		result = prime * result + ((estadosDaDoacao == null) ? 0 : estadosDaDoacao.hashCode());
-		result = prime * result + ((fotosDonativo == null) ? 0 : fotosDonativo.hashCode());
-		result = prime * result + ((horariosDisponiveis == null) ? 0 : horariosDisponiveis.hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		result = prime * result + ((quantidade == null) ? 0 : quantidade.hashCode());
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Donativo other = (Donativo) obj;
-		if (categoria == null) {
-			if (other.categoria != null)
-				return false;
-		} else if (!categoria.equals(other.categoria))
-			return false;
-		if (descricao == null) {
-			if (other.descricao != null)
-				return false;
-		} else if (!descricao.equals(other.descricao))
-			return false;
-		if (doador == null) {
-			if (other.doador != null)
-				return false;
-		} else if (!doador.equals(other.doador))
-			return false;
-		if (endereco == null) {
-			if (other.endereco != null)
-				return false;
-		} else if (!endereco.equals(other.endereco))
-			return false;
-		if (estadosDaDoacao == null) {
-			if (other.estadosDaDoacao != null)
-				return false;
-		} else if (!estadosDaDoacao.equals(other.estadosDaDoacao))
-			return false;
-		if (fotosDonativo == null) {
-			if (other.fotosDonativo != null)
-				return false;
-		} else if (!fotosDonativo.equals(other.fotosDonativo))
-			return false;
-		if (horariosDisponiveis == null) {
-			if (other.horariosDisponiveis != null)
-				return false;
-		} else if (!horariosDisponiveis.equals(other.horariosDisponiveis))
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		if (quantidade == null) {
-			if (other.quantidade != null)
-				return false;
-		} else if (!quantidade.equals(other.quantidade))
-			return false;
-		return true;
 	}
 }

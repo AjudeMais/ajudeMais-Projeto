@@ -16,23 +16,23 @@
 
     function stateConfig($stateProvider) {
 
-        $stateProvider.state('home.doacao', {
-            url: "/doacao",
+        $stateProvider.state('home.donativo', {
+            url: "/donativo",
             template: '<ui-view />'
         })
-            .state('home.doacao.list', {
+            .state('home.donativo.list', {
                 url: "/list",
-                templateUrl: "app/components/doacao/doacoes.html",
-                controller: "DoacaoController",
+                templateUrl: "app/components/donativo/donativos.html",
+                controller: "DonativoController",
                 controllerAs: 'vm',
                 data: {
                     pageTitle: 'Doações'
                 }
             })
-            .state('home.doacao.detail', {
-                url: "/detail/:doacaoDetail",
-                templateUrl: "app/components/doacao/doacao.detail.html",
-                controller: "DoacaoDetailController",
+            .state('home.donativo.detail', {
+                url: "/detail/:donativoDetail",
+                templateUrl: "app/components/donativo/donativo.detail.html",
+                controller: "DonativoDetailController",
                 controllerAs: 'vm',
                 data: {
                     pageTitle: 'Detalhes de Doação'
