@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -63,6 +64,11 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
+	}
+
+	@Override
+	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
+		return donativoRepository.findByCategoriaInstituicaoCaridade(instituicao);
 	}
 
 }

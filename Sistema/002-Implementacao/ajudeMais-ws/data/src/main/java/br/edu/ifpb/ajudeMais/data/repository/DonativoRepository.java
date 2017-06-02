@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
@@ -14,21 +15,21 @@ import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
  * </p>
  *
  * <p>
- *	Interface de persistência de um {@link Donativo}
+ * Interface de persistência de um {@link Donativo}
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  *
  */
 public interface DonativoRepository extends JpaRepository<Donativo, Long> {
-	
+
 	/**
 	 * 
 	 * @param nome
 	 * @return
 	 */
 	List<Donativo> findByDoadorNome(String nome);
-	
+
 	/**
 	 * 
 	 * @param nome
@@ -36,5 +37,15 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	List<Donativo> findByNome(String nome);
 
-	
+	/**
+	 * 
+	 * <p>
+	 * Busca donativos por categoria filtrando por instituição.
+	 * </p>
+	 * 
+	 * @param instituicaoCaridade
+	 * @return
+	 */
+	List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+
 }
