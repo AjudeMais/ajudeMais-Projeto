@@ -36,42 +36,29 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-    <!--<include-->
-        <!--android:id="@+id/no_internet_fragment"-->
-        <!--layout="@layout/fragment_no_internet" />-->
+    <include
+        android:id="@+id/no_internet_fragment"
+        layout="@layout/fragment_no_internet" />
 
-    <!--<FrameLayout-->
-        <!--android:id="@+id/empty_list"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="50dp"-->
-        <!--android:orientation="vertical">-->
+    <FrameLayout
+        android:id="@+id/empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
 
-        <!--<include-->
-            <!--android:id="@+id/component_empty_list"-->
-            <!--layout="@layout/fragment_list_empty"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="300dp" />-->
+        <include
+            android:id="@+id/component_empty_list"
+            layout="@layout/fragment_list_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="300dp" />
 
-    <!--</FrameLayout>-->
-
-    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:id="@+id/loadingPanelMainSearchInst"-->
-        <!--style="@style/GenericProgressBackground">-->
-
-        <!--<ProgressBar-->
-            <!--android:id="@+id/progress_presentation"-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:indeterminateTintMode="src_atop"-->
-            <!--android:max="100" />-->
-    <!--</RelativeLayout>-->
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/containerView"
         android:layout_width="match_parent"
-        android:layout_height="496dp"
+        android:layout_height="506dp"
         android:orientation="vertical">
 
         <android.support.design.widget.FloatingActionButton

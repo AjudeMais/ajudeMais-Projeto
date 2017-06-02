@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,17 +31,17 @@ import br.edu.ifpb.ajudemais.validator.annotations.ValidDatePtBr;
 import br.edu.ifpb.ajudemais.validator.annotations.ValidHourPtBr;
 
 
-public class AddIntervalDataDoacaoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, Validator.ValidationListener, TimePickerDialog.OnTimeSetListener {
+public class AddIntervalDataDoacaoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, Validator.ValidationListener{
 
     private Calendar myCalendar;
     private Validator validator;
     private Button btnAddDisponibilidade;
     private DisponibilidadeHorario disponibilidadeHorario;
-    private TimePickerDialog mTimePickerDialog;
-    private int position = 0;
     private Toolbar mToolbar;
+    private Integer positionEdit;
     private Donativo donativo;
     private DatePickerDialog datePickerDialog;
+    private TimePickerDialog mTimePickerDialog;
 
     @Order(3)
     @ValidDatePtBr(messageResId = R.string.invalide_date, sequence = 2)
@@ -63,10 +64,13 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_interval_data_doacao);
+
+        if (getIntent().hasExtra("position"))
+            positionEdit = (Integer) getIntent().getSerializableExtra("position");
+
         init();
 
         setOperComponentsDateAndHourInFiels();
-
 
 
     }
@@ -92,7 +96,8 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    openTimePickerDialog("Selecione o Horário Inicial");
+                    openEndSetTimePicker(edtInitalHour, "Selecione o Horário Inicial");
+
                 } else {
                     if (mTimePickerDialog != null) {
                         mTimePickerDialog.dismiss();
@@ -105,7 +110,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    openTimePickerDialog("Selecione o Horário Para o fim da disponibilidade");
+                    openEndSetTimePicker(edtEndHour,"Selecione o Horário Para o fim da disponibilidade");
                 } else {
                     if (mTimePickerDialog != null) {
                         mTimePickerDialog.dismiss();
@@ -122,6 +127,9 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        if (positionEdit != null) {
+            mToolbar.setTitle("Editar agendamento");
+        }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -133,22 +141,37 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
 
         edtData = (TextInputEditText) findViewById(R.id.edtData);
         edtData.setOnClickListener(this);
-        //androidUtil.setMaskDate(edtData);
-
 
         edtInitalHour = (TextInputEditText) findViewById(R.id.edtInitialHour);
         edtInitalHour.setOnClickListener(this);
-        //androidUtil.setMaskHour(edtData);
 
         edtEndHour = (TextInputEditText) findViewById(R.id.edtEndHour);
         edtEndHour.setOnClickListener(this);
-        //androidUtil.setMaskHour(edtEndHour);
 
         validator = new Validator(this);
         Validator.registerAnnotation(ValidDatePtBr.class);
         Validator.registerAnnotation(ValidHourPtBr.class);
         validator.setValidationListener(this);
 
+        setValueInFieldEdit();
+    }
+
+
+    /**
+     * Seta os valores nos campos no caso de edição.
+     */
+    public void setValueInFieldEdit() {
+        if (positionEdit != null) {
+            edtData.setText(ConvertsDate.getInstance().convertDateToStringFormat
+                    (donativo.getHorariosDisponiveis().get(positionEdit).getHoraInicio()));
+
+            edtInitalHour.setText(ConvertsDate.getInstance().convertHourToString(
+                    donativo.getHorariosDisponiveis().get(positionEdit).getHoraInicio()));
+            edtEndHour.setText(ConvertsDate.getInstance().convertHourToString(
+                    donativo.getHorariosDisponiveis().get(positionEdit).getHoraFim()));
+
+            btnAddDisponibilidade.setText(getString(R.string.btn_edit));
+        }
     }
 
     /**
@@ -182,26 +205,14 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
             validator.validate();
 
         } else if (v.getId() == R.id.edtInitialHour) {
-            position = 1;
-            openTimePickerDialog("Selecione o Horário Inicial");
-
+            openEndSetTimePicker(edtInitalHour, "Selecione o Horário Inicial");
 
         } else if (v.getId() == R.id.edtEndHour) {
-            position = 2;
-            openTimePickerDialog("Selecione o Horário Para o fim da disponibilidade");
+            openEndSetTimePicker(edtEndHour,"Selecione o Horário Para o fim da disponibilidade");
+
         }
     }
 
-    /**
-     * Abre Time Picker dialog para Inserir horas.
-     */
-    private void openTimePickerDialog(String titleDialog) {
-        int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
-        int minute = myCalendar.get(Calendar.MINUTE);
-        mTimePickerDialog = new TimePickerDialog(AddIntervalDataDoacaoActivity.this, this, hour, minute, true);
-        mTimePickerDialog.setTitle(titleDialog);
-        mTimePickerDialog.show();
-    }
 
     /**
      * Valida se data informada é superior a atual considerando também a hora.
@@ -242,17 +253,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
                     edtEndHour.getText().toString().trim());
 
             if (initialDate.before(endDate)) {
-
-                disponibilidadeHorario = new DisponibilidadeHorario();
-                disponibilidadeHorario.setHoraInicio(initialDate);
-                disponibilidadeHorario.setHoraFim(endDate);
-
-                if (donativo.getHorariosDisponiveis() == null) {
-                    donativo.setHorariosDisponiveis(new ArrayList<DisponibilidadeHorario>());
-                }
-
-                donativo.getHorariosDisponiveis().add(disponibilidadeHorario);
-
+                addDisponibilidadeInDonativo(initialDate, endDate);
                 Intent intent = new Intent();
                 intent.setClass(AddIntervalDataDoacaoActivity.this, AgendamentoDoacaoActivity.class);
                 intent.putExtra("Donativo", donativo);
@@ -267,12 +268,33 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
         }
     }
 
+    /**
+     * Seta a disponibilidade em donativo.
+     */
+    private void addDisponibilidadeInDonativo(Date initialDate, Date endDate) {
+        disponibilidadeHorario = new DisponibilidadeHorario();
+        disponibilidadeHorario.setHoraInicio(initialDate);
+        disponibilidadeHorario.setHoraFim(endDate);
+
+        if (positionEdit == null) {
+            if (donativo.getHorariosDisponiveis() == null) {
+                donativo.setHorariosDisponiveis(new ArrayList<DisponibilidadeHorario>());
+
+            }
+            donativo.getHorariosDisponiveis().add(disponibilidadeHorario);
+
+        } else {
+            donativo.getHorariosDisponiveis().get(positionEdit).setHoraInicio(disponibilidadeHorario.getHoraInicio());
+            donativo.getHorariosDisponiveis().get(positionEdit).setHoraFim(disponibilidadeHorario.getHoraFim());
+        }
+
+    }
+
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
         for (ValidationError error : errors) {
             View view = error.getView();
             String message = error.getCollatedErrorMessage(this);
-
             if (view instanceof TextInputEditText) {
                 ((TextInputEditText) view).setError(message);
                 view.requestFocus();
@@ -282,15 +304,41 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
         }
     }
 
+    /**
+     *  Abri timepicker e seta value
+
+     * @param textInputEditText
+     */
+    private void openEndSetTimePicker(final TextInputEditText textInputEditText, String title) {
+        int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
+        int minute = myCalendar.get(Calendar.MINUTE);
+        mTimePickerDialog = new TimePickerDialog(AddIntervalDataDoacaoActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                String hour = String.format("%02d:%02d", selectedHour, selectedMinute);
+                textInputEditText.setText(hour);
+            }
+        }, hour, minute, true);
+        mTimePickerDialog.setTitle(title);
+        mTimePickerDialog.show();
+    }
+
+    /**
+     * Implementação para controlar operações na action bar
+     *
+     * @param item
+     * @return
+     */
     @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
-        String hour = String.format("%02d:%02d", hourOfDay, minute);
-        if (position == 1) {
-            edtInitalHour.setText(hour);
-
-        } else {
-            edtEndHour.setText(hour);
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
+
 }
