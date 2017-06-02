@@ -66,7 +66,7 @@ public class LoginPage extends AbstractPage{
 		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/form/fieldset/div[2]/div")).toString().contains(message);
 	}
 	
-	
+
 	/**
 	 * Verifica se mensagem passada foi exibida com login inválido.
 	 * @param message
