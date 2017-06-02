@@ -27,12 +27,14 @@ public class MensageiroPage extends AbstractPage {
 	 * 
 	 */
 	private static final String PASSWORD_INSTIUTICAO = "76914318301";
-	
+
+
 	/**
 	 * 
 	 */
 	private InstituicaoCaridadePage instituicaoCaridadePage;
 	private LoginPage loginPage;
+
 	/**
 	 * 
 	 * @param driver
@@ -159,5 +161,4 @@ public class MensageiroPage extends AbstractPage {
 		boolean value = driver.getPageSource().contains(nome);
 		return value;
 	}
-
 }
