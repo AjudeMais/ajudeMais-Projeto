@@ -16,6 +16,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_alignParentTop="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_campanha" />
+
         <TextView
             android:id="@+id/tv_instituicao_nome"
             android:layout_width="wrap_content"
@@ -23,10 +31,11 @@
             android:layout_marginTop="7dp"
             android:paddingTop="2dp"
             android:paddingLeft="10dp"
+            android:layout_below="@+id/thumbnail"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="@color/textSecond"
+            android:textColor="#222"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true" />
 

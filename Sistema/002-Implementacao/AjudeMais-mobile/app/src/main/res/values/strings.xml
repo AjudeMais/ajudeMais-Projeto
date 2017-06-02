@@ -149,6 +149,7 @@
     <string name="imageUpdated">Foto atualizada com sucesso.</string>
     <string name="updatedInformation">Suas informações foram atualizadas</string>
     <string name="passwordUpdated">Senha atualizada com sucesso, faça login novamente.</string>
+
     <string name="hitDescribe">Descrição</string>
     <string name="btnDoar">DOAR</string>
     <string name="images_do_item">Imagens do donativo</string>
@@ -163,4 +164,6 @@
     <string name="newDonor">Nova Doação</string>
     <string name="msgDescriptionNotInformed">Uma breve descrição do donativo deve ser informada</string>
     <string name="remove">Remover Image</string>
+
+    <string name="contact">Contato</string>
 </resources>

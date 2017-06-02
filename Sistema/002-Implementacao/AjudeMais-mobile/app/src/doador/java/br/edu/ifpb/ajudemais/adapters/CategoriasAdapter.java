@@ -34,7 +34,6 @@ public class CategoriasAdapter extends RecyclerView.Adapter<CategoriasAdapter.Vi
     public CategoriasAdapter(List<Categoria> categories, Context context){
         this.context = context;
         this.categories = categories;
-        Log.e("LISTA", categories.toString());
 
     }
 

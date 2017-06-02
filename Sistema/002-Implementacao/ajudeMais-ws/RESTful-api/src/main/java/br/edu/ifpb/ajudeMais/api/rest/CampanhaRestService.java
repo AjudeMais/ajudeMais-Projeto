@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
@@ -22,13 +23,14 @@ import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
 
 /**
  * Classe utilizada para criar os endpoints de campanha
  * 
- * @author elson
+ * @author elson / Franck
  *
  */
 @RestController
@@ -38,7 +40,7 @@ public class CampanhaRestService {
 	 * 
 	 */
 	@Autowired
-	private CampanhaService CampanhaService;
+	private CampanhaService campanhaService;
 
 	/**
 	 * 
@@ -74,7 +76,7 @@ public class CampanhaRestService {
 		if (instituicaoOp.isPresent()) {
 			campanha.setInstituicaoCaridade(instituicaoOp.get());
 		}
-		Campanha campanhaSalva = CampanhaService.save(campanha);
+		Campanha campanhaSalva = campanhaService.save(campanha);
 		return new ResponseEntity<>(campanhaSalva, HttpStatus.CREATED);
 	}
 
@@ -93,7 +95,7 @@ public class CampanhaRestService {
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Campanha> update(@Valid @RequestBody Campanha campanha) throws AjudeMaisException {
-		Campanha campanhaAtualizada = CampanhaService.update(campanha);
+		Campanha campanhaAtualizada = campanhaService.update(campanha);
 		return new ResponseEntity<>(campanhaAtualizada, HttpStatus.OK);
 	}
 
@@ -110,7 +112,7 @@ public class CampanhaRestService {
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Campanha>> findAll() throws AjudeMaisException {
-		List<Campanha> campanhas = CampanhaService.findAll();
+		List<Campanha> campanhas = campanhaService.findAll();
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
 	}
 
@@ -128,7 +130,7 @@ public class CampanhaRestService {
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<Campanha> findById(@PathVariable Long id) throws AjudeMaisException {
-		Campanha campanha = CampanhaService.findById(id);
+		Campanha campanha = campanhaService.findById(id);
 		return new ResponseEntity<>(campanha, HttpStatus.OK);
 	}
 
@@ -141,7 +143,7 @@ public class CampanhaRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
-	@RequestMapping(method = RequestMethod.GET, value = "/instituicao")
+	@RequestMapping(method = RequestMethod.GET, value = "filter/instituicao")
 	public ResponseEntity<List<Campanha>> findByInstituicao() {
 
 		Conta conta = authService.getCurrentUser();
@@ -149,10 +151,47 @@ public class CampanhaRestService {
 
 		List<Campanha> campanhas = new ArrayList<>();
 		if (instituicaoOp.isPresent()) {
-			campanhas = CampanhaService.findByInstituicaoCaridade(instituicaoOp.get());
+			campanhas = campanhaService.findByInstituicaoCaridade(instituicaoOp.get());
 		}
 
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
+	}
+
+	/**
+	 * <p>
+	 * GET /campanha/filter/local : Filtra campanha por localização da
+	 * instituição. <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.POST, value = "/filter/local")
+	public ResponseEntity<List<Campanha>> filterByInstituicaoLocal(@RequestBody LatLng latLng)
+			throws AjudeMaisException {
+
+		List<Campanha> instituicoes = campanhaService.filterByInstituicaoLocal(latLng);
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Busca campanhas por status
+	 * </p>
+	 * 
+	 * @param status
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/status")
+	public ResponseEntity<List<Campanha>> findByStatus(@RequestParam("status") Boolean status) {
+		List<Campanha> campanhas = campanhaService.findByStatus(status);
+		return new ResponseEntity<List<Campanha>>(campanhas, HttpStatus.OK);
 	}
 
 	/**
@@ -168,12 +207,11 @@ public class CampanhaRestService {
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<Campanha> delete(@PathVariable Long id) {
-
-		Campanha campanhaEncontrada = CampanhaService.findById(id);
+		Campanha campanhaEncontrada = campanhaService.findById(id);
 		if (campanhaEncontrada == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		CampanhaService.remover(campanhaEncontrada);
+		campanhaService.remover(campanhaEncontrada);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

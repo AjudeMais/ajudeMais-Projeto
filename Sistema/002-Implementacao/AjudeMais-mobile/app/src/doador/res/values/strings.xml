@@ -21,10 +21,17 @@
 
     <string name="cancelOperation">"Operação cancelada"</string>
     <string name="campanhas">CAMPANHAS</string>
-    <string name="lista_de_itens_do_veis">Lista de itens doáveis</string>
+    <string name="lista_de_itens_do_veis">Itens que podem ser doados</string>
     <string name="errorOnLogin">Falha ao tentar efetuar login</string>
+
+    <string name="visualizar">Visualizar</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="about">Informações Gerais</string>
+    <string name="instituicaoName">Instituição</string>
+    <string name="descricao">Descrição</string>
+    <string name="camapanhaTime">Término da campanha</string>
+    <string name="about_inst">Sobre</string>
 
 </resources>

@@ -54,6 +54,7 @@
         <activity android:name=".activities.AddEnderecoActivity" />
         <activity android:name=".activities.AgendamentoDoacaoActivity" />
         <activity android:name=".activities.AddIntervalDataDoacaoActivity"></activity>
+        <activity android:name=".activities.CampanhaActivity"></activity>
     </application>
 
 </manifest>

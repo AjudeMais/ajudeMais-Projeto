@@ -38,6 +38,7 @@ import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.InstituicaoRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -51,7 +52,6 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
-
  */
 public class MainSearchIntituituicoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
@@ -185,7 +185,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
 
     /**
-     *
      * @param menu
      * @param inflater
      */
@@ -214,7 +213,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
-     *
      * @param query
      * @return
      */
@@ -226,7 +224,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     /**
      * Auxiliar para mostrar fragmento para lista vazia.
      */
-    private void showListEmpty(){
+    private void showListEmpty() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
@@ -236,7 +234,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     /**
      * Auxiliar para mostrar lista de insituições e esconder demais fragmentos.
      */
-    private void showListInstituicoes(){
+    private void showListInstituicoes() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.VISIBLE);
@@ -244,7 +242,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     }
 
     /**
-     *
      * @param newText
      * @return
      */
@@ -265,6 +262,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
 
     /**
      * Filtra na lista de instituição pelo nome digitado
+     *
      * @param models
      * @param query
      * @return
@@ -363,9 +361,10 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
          */
         private void showResult(String result) {
             if (result != null) {
-                Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
+                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(result);
+
             } else {
-                Toast.makeText(getContext(), "Aconteceu algum erro no servidor!", Toast.LENGTH_LONG).show();
+                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast("Aconteceu algum erro no servidor!");
             }
         }
     }

@@ -45,7 +45,7 @@
          * @private
          */
         function _getCampanhasByInstituicao() {
-            return $http.get(Api + "/campanha");
+            return $http.get(Api + "/campanha/filter/instituicao");
         };
     }
 })();
