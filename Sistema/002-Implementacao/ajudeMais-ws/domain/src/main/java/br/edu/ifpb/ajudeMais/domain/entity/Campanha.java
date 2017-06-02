@@ -67,7 +67,6 @@ public class Campanha {
 	/**
 	 * 
 	 */
-	@NotNull
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dataInicio;
 

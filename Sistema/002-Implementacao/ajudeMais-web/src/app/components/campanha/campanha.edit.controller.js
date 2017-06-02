@@ -22,7 +22,6 @@
 
         if ($stateParams.campanhaEdit) {
             vm.campanha = $stateParams.campanhaEdit;
-            setDateStatus();
         } else {
             vm.campanha.itensDoaveis = [];
             vm.campanha.status = true;
@@ -32,9 +31,11 @@
          * Editar/Salvar uma campanha
          */
         vm.save = function () {
-            setDateStatus();
-            if (!vm.isEdited()) {
+            if(vm.campanha.status) {
                 vm.campanha.dataInicio = new Date();
+            }
+
+            if (!vm.isEdited()) {
                 campanhaService.save(vm.campanha).then(function (response) {
                     toastr.success('criada com sucesso', 'Campanha');
                     $state.go('home.campanha.list');
@@ -55,12 +56,6 @@
                 });
             }
         };
-
-        function setDateStatus() {
-            if (!vm.campanha.status) {
-                vm.campanha.dataFim = null;
-            }
-        }
 
         /**
          *
@@ -103,9 +98,7 @@
             if (item == null) {
                 toastr.warning('Selecione um item');
             } else {
-                var index = vm.campanha.itensDoaveis.indexOf(item);
-                console.log(index);
-                vm.campanha.itensDoaveis.forEach(function (i, index) {
+                vm.campanha.itensDoaveis.forEach(function (i) {
                     if (item.id == i.id) {
                         flag = true;
                     }

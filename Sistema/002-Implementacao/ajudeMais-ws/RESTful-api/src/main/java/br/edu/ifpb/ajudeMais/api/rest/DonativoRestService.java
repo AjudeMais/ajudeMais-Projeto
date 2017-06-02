@@ -1,6 +1,8 @@
 package br.edu.ifpb.ajudeMais.api.rest;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,8 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
 /**
@@ -36,6 +42,12 @@ public class DonativoRestService {
 	
 	@Autowired
 	private DonativoService donativoService;
+	
+	@Autowired
+	private AuthService authService;
+	
+	@Autowired
+	private InstituicaoCaridadeRepository instituicaoRepository;
 
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.POST)
@@ -48,7 +60,7 @@ public class DonativoRestService {
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {
 		Donativo donativoSalvo = donativoService.save(donativo);
-		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
+		return new ResponseEntity<>(donativoSalvo, HttpStatus.OK);
 	}
 	
 	/**
@@ -84,6 +96,24 @@ public class DonativoRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/nome")
 	public ResponseEntity<List<Donativo>> findByNome(@RequestParam("nome") String nome) {
 		List<Donativo> donativos = donativoService.findByNome(nome);
+		return new ResponseEntity<>(donativos, HttpStatus.OK);
+	}
+	
+	/**
+	 * GET /donativo/filter/instituicao : Busca donativos pela instituição.
+	 * 
+	 * @return donativos
+	 */
+	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/instituicao")
+	public ResponseEntity<List<Donativo>> findByInstituicao() {
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
+		
+		List<Donativo> donativos = new ArrayList<>();
+		if (instituicaoOp.isPresent()) {
+			donativos = donativoService.findByCategoriaInstituicaoCaridade(instituicaoOp.get());
+		}
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
 }
