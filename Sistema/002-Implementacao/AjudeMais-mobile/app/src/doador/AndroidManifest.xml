@@ -30,8 +30,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.CreateAccountActivity" android:windowSoftInputMode="adjustPan"
-            android:label="@string/newAccountActivity" />
+            android:name=".activities.CreateAccountActivity"
+            android:label="@string/newAccountActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -46,7 +47,8 @@
         <activity
             android:name=".activities.ProfileSettingsActivity"
             android:label="@string/editAccount" />
-        <activity android:name=".activities.CreateAccountHelperActivity"></activity>
+        <activity android:name=".activities.CreateAccountHelperActivity" />
+        <activity android:name=".activities.CampanhaActivity"></activity>
     </application>
 
 </manifest>

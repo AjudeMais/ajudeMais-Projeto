@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -105,8 +106,40 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 				latLng.getLongitude());
+		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(),
+				endereco.getUf());
 
-		return campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(), endereco.getUf());
+		return getByCurrentStatus(campanhas);
 	}
 
+	/**
+	 * Busca campanhas por status
+	 */
+	@Override
+	public List<Campanha> findByStatus(boolean status) {
+		return this.getByCurrentStatus(campanhaRepository.findByStatus(status));
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Filtra instituições pelo status atual, i.e., status em relação ao
+	 * termino.
+	 * </p>
+	 * 
+	 * @param campanhas
+	 * @return
+	 */
+	private List<Campanha> getByCurrentStatus(List<Campanha> campanhas) {
+		List<Campanha> camps = new ArrayList<>();
+		if (campanhas != null) {
+			campanhas.forEach(c -> {
+				if (c.isStatus()) {
+					camps.add(c);
+				}
+			});
+		}
+
+		return camps;
+	}
 }

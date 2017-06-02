@@ -16,8 +16,8 @@
             android:id="@+id/tv_nome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:text="@string/hitName"
+            android:fontFamily="sans-serif"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/fontSizeDetail" />
 

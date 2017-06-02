@@ -38,4 +38,15 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 */
 	List<Campanha> filterByInstituicaoLocal(@Param("localidade") String localidade, @Param("uf") String uf);
 
+	/**
+	 * 
+	 * <p>
+	 * Busca campanhas por estatus.
+	 * </p>
+	 * 
+	 * @param status
+	 * @return
+	 */
+	List<Campanha> findByStatus(boolean status);
+
 }

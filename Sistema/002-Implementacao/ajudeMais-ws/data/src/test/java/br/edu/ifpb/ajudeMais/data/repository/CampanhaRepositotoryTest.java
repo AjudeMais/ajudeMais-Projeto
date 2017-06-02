@@ -78,4 +78,28 @@ public class CampanhaRepositotoryTest {
 		assertThat(!campanhas.isEmpty());
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Teste para bsuca de campanhas por status. Para stattus = true;
+	 * </p>
+	 */
+	@Test
+	public void findByStatusTrueTest() {
+		List<Campanha> campanhas = campanhaRepository.findByStatus(true);
+		assertThat(!campanhas.isEmpty());
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste para bsuca de campanhas por status. Para stattus = false;
+	 * </p>
+	 */
+	@Test
+	public void findByStatusFalseTest() {
+		List<Campanha> campanhas = campanhaRepository.findByStatus(false);
+		assertThat(campanhas.isEmpty());
+	}
+
 }

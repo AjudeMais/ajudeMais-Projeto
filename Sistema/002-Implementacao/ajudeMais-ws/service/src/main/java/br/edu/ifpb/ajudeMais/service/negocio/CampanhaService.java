@@ -44,5 +44,15 @@ public interface CampanhaService extends Service<Campanha, Long> {
 	 * @throws AjudeMaisException 
 	 */
 	List<Campanha> filterByInstituicaoLocal(LatLng latLng) throws AjudeMaisException;
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca campanhas por stattus
+	 * </p>
+	 * @param status
+	 * @return
+	 */
+	List<Campanha> findByStatus(boolean status);
 
 }

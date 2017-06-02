@@ -11,7 +11,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <FrameLayout
-            android:id="@+id/instituicao_detail_fragment"
+            android:id="@+id/campanha_detail_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -43,12 +43,12 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fabInstituicaoTel"
+        android:id="@+id/fabCampanhaShare"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:clickable="true"
-        android:src="@drawable/ic_call"
+        android:src="@drawable/ic_share"
         app:layout_anchor="@+id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
 </android.support.design.widget.CoordinatorLayout>
