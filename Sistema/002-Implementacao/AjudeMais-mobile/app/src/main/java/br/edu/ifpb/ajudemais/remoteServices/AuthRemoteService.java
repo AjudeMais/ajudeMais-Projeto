@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
+import br.edu.ifpb.ajudemais.enumarations.Grupo;
 import br.edu.ifpb.ajudemais.domain.JwtToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 

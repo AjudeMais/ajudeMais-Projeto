@@ -149,4 +149,18 @@
     <string name="imageUpdated">Foto atualizada com sucesso.</string>
     <string name="updatedInformation">Suas informações foram atualizadas</string>
     <string name="passwordUpdated">Senha atualizada com sucesso, faça login novamente.</string>
+    <string name="hitDescribe">Descrição</string>
+    <string name="btnDoar">DOAR</string>
+    <string name="images_do_item">Imagens do donativo</string>
+    <string name="endereco_for_coleta">Endereço para Coleta</string>
+    <string name="btnMyLocation">Usar Minha Localização</string>
+    <string name="btnAddAddress">ADICIONAR ENDEREÇO</string>
+    <string name="end_hour">Hora fim</string>
+    <string name="initial_hour">Hora inicial</string>
+    <string name="hitDataColeta">Data para coleta</string>
+    <string name="btnAddDateColeta">AGENDAR COLETA</string>
+    <string name="btnkeep">CONTINUAR</string>
+    <string name="newDonor">Nova Doação</string>
+    <string name="msgDescriptionNotInformed">Uma breve descrição do donativo deve ser informada</string>
+    <string name="remove">Remover Image</string>
 </resources>

@@ -31,7 +31,7 @@ public class AccessCameraAndGalleryDevicePermission {
     private Context context;
     public static final int MY_PERMISSIONS_REQUEST_CAMERA = 11;
     public static final int MY_PERMISSIONS_GRANTED_CAMERA = 12;
-    private int PROFILE_PIC_COUNT = 0;
+    public int PROFILE_PIC_COUNT = 0;
     public static final int REQUEST_CAMERA = 1;
     public static final int SELECT_FILE = 13;
 
