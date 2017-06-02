@@ -17,9 +17,11 @@ import android.widget.Toast;
 import org.springframework.web.client.RestClientException;
 import java.util.List;
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.activities.DoacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.CategoriasAdapter;
 import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
+import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.remoteServices.CategoriaRemoteService;
 
 /**
@@ -34,7 +36,7 @@ import br.edu.ifpb.ajudemais.remoteServices.CategoriaRemoteService;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class InstituicaoDetailFragment extends Fragment {
+public class InstituicaoDetailFragment extends Fragment implements  RecyclerItemClickListener.OnItemClickListener{
 
     private RecyclerView recyclerView;
     private TextView descricaoInstituicao;
@@ -66,10 +68,8 @@ public class InstituicaoDetailFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
-        //recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-
 
         new LodingListCategoriasTask().execute();
 
@@ -153,6 +153,19 @@ public class InstituicaoDetailFragment extends Fragment {
         startActivity(emailIntent);
     }
 
+    @Override
+    public void onItemClick(View childView, int position) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), DoacaoActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onItemLongPress(View childView, int position) {
+
+    }
+
 
     /**
      *
@@ -201,6 +214,8 @@ public class InstituicaoDetailFragment extends Fragment {
             if (categorias != null) {
                 categoriasAdapter = new CategoriasAdapter(categorias, getActivity());
                 recyclerView.setAdapter(categoriasAdapter);
+                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), InstituicaoDetailFragment.this));
+
             } else {
                 showResult(message);
             }

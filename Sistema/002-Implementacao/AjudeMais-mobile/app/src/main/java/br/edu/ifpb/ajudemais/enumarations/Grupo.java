@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.domain;
+package br.edu.ifpb.ajudemais.enumarations;
 
 /**
  * <p>

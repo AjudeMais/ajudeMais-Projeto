@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ public class EnderecoAdapter extends  RecyclerView.Adapter<EnderecoAdapter.ViewH
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco_mensageiro, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_detail_endereco, parent, false);
         return new ViewHolder(view);
     }
 

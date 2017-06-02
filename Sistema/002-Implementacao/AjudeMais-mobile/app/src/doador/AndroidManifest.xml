@@ -48,6 +48,12 @@
             android:name=".activities.ProfileSettingsActivity"
             android:label="@string/editAccount" />
         <activity android:name=".activities.CreateAccountHelperActivity" />
+        <activity
+            android:name=".activities.DoacaoActivity"
+            android:label="@string/newDonor" />
+        <activity android:name=".activities.AddEnderecoActivity" />
+        <activity android:name=".activities.AgendamentoDoacaoActivity" />
+        <activity android:name=".activities.AddIntervalDataDoacaoActivity"></activity>
         <activity android:name=".activities.CampanhaActivity"></activity>
     </application>
 

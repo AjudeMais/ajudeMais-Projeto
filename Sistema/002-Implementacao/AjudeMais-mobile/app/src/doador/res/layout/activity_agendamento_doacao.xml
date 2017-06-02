@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.edu.ifpb.ajudemais.activities.AgendamentoDoacaoActivity">
+
+    <LinearLayout
+        android:id="@+id/componenteActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <include
+            layout="@layout/navigation_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/componenteActionBar"
+        android:background="@color/colorFont"
+        android:descendantFocusability="beforeDescendants"
+        android:fillViewport="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/componentesAddIntervalHorarios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/colorFont"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+
+                <TextView
+                    android:id="@+id/tvEnderecoColeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/imageComponent"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="5dp"
+                    android:clickable="true"
+                    android:text="@string/endereco_for_coleta"
+                    tools:ignore="UnknownIdInLayout" />
+
+                <Button
+                    android:id="@+id/btnAddAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnAddDateColeta"
+                    android:height="@dimen/LagHeigth"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="@string/btnAddAddress"
+                    android:textColor="@color/colorFont"
+                    android:textSize="@dimen/fontLogin" />
+
+                <Button
+                    android:id="@+id/btnAddDateColeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvEnderecoColeta"
+                    android:height="@dimen/LagHeigth"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="@string/btnAddDateColeta"
+                    android:textColor="@color/colorFont"
+                    android:textSize="@dimen/fontLogin" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/btnAddAddress">
+
+                    <include
+                        android:id="@+id/card_address"
+                        layout="@layout/row_detail_endereco"
+                        android:visibility="gone">
+
+                    </include>
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btnKeepAgendamento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="3dp"
+                android:height="@dimen/LagHeigth"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="@string/btnDoar"
+                android:textColor="@color/colorFont"
+                android:textSize="@dimen/fontLogin" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>
