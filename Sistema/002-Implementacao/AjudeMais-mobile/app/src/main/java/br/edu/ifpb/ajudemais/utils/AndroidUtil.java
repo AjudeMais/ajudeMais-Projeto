@@ -77,6 +77,52 @@ public class AndroidUtil {
     }
 
     /**
+     * Coloca no edit text uma máscara para Mask Data pt-br.
+     * @param editText
+     */
+    public void setMaskDate(EditText editText){
+        final MaskedTextChangedListener listener = new MaskedTextChangedListener(
+                "[00]/[00]/[0000]",
+                true,
+                editText,
+                null,
+                new MaskedTextChangedListener.ValueListener() {
+                    @Override
+                    public void onTextChanged(boolean maskFilled, @NonNull final String extractedValue) {
+                        Log.d(MainActivity.class.getSimpleName(), extractedValue);
+                        Log.d(MainActivity.class.getSimpleName(), String.valueOf(maskFilled));
+                    }
+                }
+        );
+
+        editText.addTextChangedListener(listener);
+        editText.setOnFocusChangeListener(listener);
+    }
+
+    /**
+     * Coloca no edit text uma máscara para Mask Horas pt-br.
+     * @param editText
+     */
+    public void setMaskHour(EditText editText){
+        final MaskedTextChangedListener listener = new MaskedTextChangedListener(
+                "[00]:[00]",
+                true,
+                editText,
+                null,
+                new MaskedTextChangedListener.ValueListener() {
+                    @Override
+                    public void onTextChanged(boolean maskFilled, @NonNull final String extractedValue) {
+                        Log.d(MainActivity.class.getSimpleName(), extractedValue);
+                        Log.d(MainActivity.class.getSimpleName(), String.valueOf(maskFilled));
+                    }
+                }
+        );
+
+        editText.addTextChangedListener(listener);
+        editText.setOnFocusChangeListener(listener);
+    }
+
+    /**
      * Coloca no edit text uma máscara para cpf.
      * @param editText
      */

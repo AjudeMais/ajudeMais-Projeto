@@ -211,4 +211,20 @@ public class Donativo implements Serializable{
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
+    @Override
+    public String toString() {
+        return "Donativo{" +
+                "id=" + id +
+                ", quantidade=" + quantidade +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", estadosDaDoacao=" + estadosDaDoacao +
+                ", horariosDisponiveis=" + horariosDisponiveis +
+                ", doador=" + doador +
+                ", endereco=" + endereco +
+                ", fotosDonativo=" + fotosDonativo +
+                ", categoria=" + categoria +
+                '}';
+    }
 }

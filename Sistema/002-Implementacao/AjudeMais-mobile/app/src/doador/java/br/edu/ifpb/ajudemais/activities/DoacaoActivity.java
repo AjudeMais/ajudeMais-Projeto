@@ -28,6 +28,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.FindByMyLocationActualTask;
+import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.dto.LatLng;
@@ -124,6 +125,11 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
             Endereco endereco = (Endereco) getIntent().getSerializableExtra("Endereco");
             donativo.setEndereco(endereco);
             setAtrAddressIntoCard(endereco);
+        }
+
+        if (getIntent().hasExtra("Categoria")){
+            Categoria categoria = (Categoria) getIntent().getSerializableExtra("Categoria");
+            donativo.setCategoria(categoria);
         }
     }
 
@@ -283,12 +289,13 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
      */
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable("Donativo", donativo);
         outState.putSerializable("images", donativeImages);
     }
 
     protected void onRestoreInstanceState(Bundle savedState) {
         donativeImages = (HashMap<String, Bitmap>) savedState.getSerializable("images");
-
+        donativo = (Donativo) savedState.getSerializable("Donativo");
         if (donativeImages != null) {
             if (donativeImages.get("img1") != null) {
                 img1.setImageBitmap(donativeImages.get("img1"));
@@ -350,6 +357,8 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
 
     @Override
     public void onValidationSucceeded() {
+        donativo.setNome(edtNome.getText().toString().trim());
+        donativo.setDescricao(edtDescription.getText().toString().trim());
         Intent intent = new Intent(DoacaoActivity.this, AgendamentoDoacaoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("Donativo", donativo);

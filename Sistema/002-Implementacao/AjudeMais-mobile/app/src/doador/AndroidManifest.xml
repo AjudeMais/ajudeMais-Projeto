@@ -60,9 +60,9 @@
             android:label="@string/newDonor" />
         <activity android:name=".activities.AddEnderecoActivity" />
 
-        <activity android:name=".activities.AgendamentoDoacaoActivity" />
+        <activity android:name=".activities.AgendamentoDoacaoActivity"  android:label="@string/Agedamento_para_Coleta" />
 
-        <activity android:name=".activities.AddIntervalDataDoacaoActivity"></activity>
+        <activity android:name=".activities.AddIntervalDataDoacaoActivity" android:label="@string/new_agedamento" ></activity>
 
         <activity android:name=".activities.CampanhaActivity"></activity>
     </application>

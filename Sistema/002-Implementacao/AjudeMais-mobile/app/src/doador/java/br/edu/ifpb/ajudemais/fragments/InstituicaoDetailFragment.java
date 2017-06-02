@@ -14,11 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import org.springframework.web.client.RestClientException;
+
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.DoacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.CategoriasAdapter;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingCategoriasTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
@@ -36,7 +41,7 @@ import br.edu.ifpb.ajudemais.remoteServices.CategoriaRemoteService;
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-public class InstituicaoDetailFragment extends Fragment implements  RecyclerItemClickListener.OnItemClickListener{
+public class InstituicaoDetailFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private TextView descricaoInstituicao;
@@ -48,6 +53,8 @@ public class InstituicaoDetailFragment extends Fragment implements  RecyclerItem
     private CategoriasAdapter categoriasAdapter;
     private TextView listInstituicoes;
     private View view;
+    private List<Categoria> categorias;
+    private LoadingCategoriasTask loadingCategoriasTask;
 
     /**
      * @param inflater
@@ -71,7 +78,7 @@ public class InstituicaoDetailFragment extends Fragment implements  RecyclerItem
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 
-        new LodingListCategoriasTask().execute();
+        executeLoadingCategoriasTask();
 
         return view;
     }
@@ -158,6 +165,7 @@ public class InstituicaoDetailFragment extends Fragment implements  RecyclerItem
         Intent intent = new Intent();
         intent.setClass(getActivity(), DoacaoActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Categoria", categorias.get(position));
         startActivity(intent);
     }
 
@@ -166,73 +174,24 @@ public class InstituicaoDetailFragment extends Fragment implements  RecyclerItem
 
     }
 
-
     /**
-     *
+     * Executa a asycn task para carregamento das categorias ativas da instituição.
      */
-    private class LodingListCategoriasTask extends AsyncTask<Void, Void, List<Categoria>> {
-
-        private CategoriaRemoteService categoriaRemoteService;
-        private List<Categoria> categorias;
-        private String message;
-
-        /**
-         *
-         */
-        @Override
-        protected void onPreExecute() {
-            categoriaRemoteService = new CategoriaRemoteService(getContext());
-        }
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected List<Categoria> doInBackground(Void... params) {
-            try {
-                categorias = categoriaRemoteService.listCategoriasAtivasToInstituicao(instituicaoCaridade.getId());
-                return categorias;
-
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return categorias;
-        }
-
-        /**
-         * @param categorias
-         */
-        @Override
-        protected void onPostExecute(List<Categoria> categorias) {
-           recyclerView.setVisibility(View.VISIBLE);
-            view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-
-            if (categorias != null) {
+    private void executeLoadingCategoriasTask() {
+        loadingCategoriasTask = new LoadingCategoriasTask(getContext(), instituicaoCaridade.getId());
+        loadingCategoriasTask.delegate = new AsyncResponse<List<Categoria>>() {
+            @Override
+            public void processFinish(List<Categoria> categoriasResult) {
+                categorias = categoriasResult;
+                recyclerView.setVisibility(View.VISIBLE);
+                view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
                 categoriasAdapter = new CategoriasAdapter(categorias, getActivity());
                 recyclerView.setAdapter(categoriasAdapter);
                 recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), InstituicaoDetailFragment.this));
-
-            } else {
-                showResult(message);
             }
+        };
 
-        }
-
-        /**
-         * Mostra mensagens retorna durante a operação da task
-         *
-         * @param result
-         */
-        private void showResult(String result) {
-            if (result != null) {
-                Toast.makeText(getContext(), result, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getContext(), "Aconteceu algum erro no servidor!", Toast.LENGTH_LONG).show();
-            }
-        }
+        loadingCategoriasTask.execute();
     }
+
 }

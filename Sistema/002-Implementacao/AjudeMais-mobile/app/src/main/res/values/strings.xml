@@ -160,10 +160,20 @@
     <string name="initial_hour">Hora inicial</string>
     <string name="hitDataColeta">Data para coleta</string>
     <string name="btnAddDateColeta">AGENDAR COLETA</string>
-    <string name="btnkeep">CONTINUAR</string>
+    <string name="btnkeep">PRÓXIMO</string>
     <string name="newDonor">Nova Doação</string>
     <string name="msgDescriptionNotInformed">Uma breve descrição do donativo deve ser informada</string>
     <string name="remove">Remover Image</string>
 
     <string name="contact">Contato</string>
+    <string name="exampleData">27/04/2017</string>
+    <string name="exampleHorarioColeta">disponibilidade das 14:00h às 16:00</string>
+    <string name="Agedamento_para_Coleta">Agendamento para Coleta</string>
+    <string name="data_not_informed">A data para coleta deve ser informada.</string>
+    <string name="initial_hour_not_informed">A hora de inicio do intervalo de disponibilidade para coleta deve ser informada</string>
+    <string name="end_hour_not_informed">A hora de fim do intervalo de disoponibilidade deve ser informado</string>
+    <string name="new_agedamento">Novo agedamento</string>
+    <string name="invalide_date">Data inválida</string>
+    <string name="invalide_hour">Hora inválida</string>
+    <string name="data_before_actual">Data é inferior a atual</string>
 </resources>
