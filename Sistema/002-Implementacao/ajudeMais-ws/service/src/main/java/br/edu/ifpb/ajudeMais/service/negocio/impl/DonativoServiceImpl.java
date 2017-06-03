@@ -2,6 +2,8 @@ package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,44 +33,70 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private DonativoRepository donativoRepository;
 	
+	/**
+	 * 
+	 */
+	@Transactional
 	@Override
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 		return donativoRepository.save(entity);
 	}
 
+	/**
+	 * 
+	 */
+	@Transactional
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
 		return null;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Donativo> findAll() {
 		return donativoRepository.findAll();
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public Donativo findById(Long id) {
 		return donativoRepository.findOne(id);
 	}
 
+	/**
+	 * 
+	 */
+	@Transactional
 	@Override
 	public void remover(Donativo entity) {
 		donativoRepository.delete(entity);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Donativo> findByNome(String nome) {
 		return donativoRepository.findByNome(nome);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
 		return donativoRepository.findByCategoriaInstituicaoCaridade(instituicao);
 	}
-
 }

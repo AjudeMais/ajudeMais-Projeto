@@ -132,7 +132,6 @@ public class CategoriaPage extends AbstractPage {
 	 */
 	public CreateCategoriaPage novo() {
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/div/div/div[1]/div/button")).click();
-
 		return new CreateCategoriaPage(driver);
 	}
 
@@ -172,5 +171,4 @@ public class CategoriaPage extends AbstractPage {
 		$(By.xpath(xpath)).click();
 		return new EditarCategoriaPage(driver);
 	}
-
 }

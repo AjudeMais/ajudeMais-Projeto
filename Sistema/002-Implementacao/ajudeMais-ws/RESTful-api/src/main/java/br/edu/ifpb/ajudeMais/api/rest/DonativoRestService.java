@@ -33,6 +33,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
  * Classe define serviços disponibilizados de um Donativo.
  * </p>
  * 
+ * @author Franck
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  *
  */
@@ -68,7 +69,7 @@ public class DonativoRestService {
 	 *
 	 * @return
 	 */
-	@PreAuthorize("hasRole('DOADOR, INSTITUICAO')")
+	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<Donativo>> findAll() {
 		List<Donativo> donativos = donativoService.findAll();
@@ -80,7 +81,7 @@ public class DonativoRestService {
 	 * 
 	 * @return donativos
 	 */
-	@PreAuthorize("hasRole('INSTITUICAO, DOADOR')")
+	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/doadorNome")
 	public ResponseEntity<List<Donativo>> findByDoadorNome(@RequestParam("doadorNome") String nome) {
 		List<Donativo> donativos = donativoService.findByDoadorNome(nome);
@@ -92,7 +93,7 @@ public class DonativoRestService {
 	 * 
 	 * @return donativos
 	 */
-	@PreAuthorize("hasRole('INSTITUICAO, DOADOR')")
+	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/nome")
 	public ResponseEntity<List<Donativo>> findByNome(@RequestParam("nome") String nome) {
 		List<Donativo> donativos = donativoService.findByNome(nome);
