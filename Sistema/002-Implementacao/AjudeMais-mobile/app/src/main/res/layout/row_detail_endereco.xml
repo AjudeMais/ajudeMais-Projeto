@@ -39,6 +39,7 @@
 
             <TextView
                 android:id="@+id/tv_logradouro_name"
+                android:text="Rua sete de setembro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -56,6 +57,7 @@
 
                 <TextView
                     android:id="@+id/tv_bairro"
+                    android:text="Centro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="3dp"
@@ -66,6 +68,7 @@
 
                 <TextView
                     android:id="@+id/tv_number"
+                    android:text="50"
                     android:layout_width="wrap_content"
                     android:paddingLeft="3dp"
                     android:layout_height="wrap_content"
@@ -77,6 +80,7 @@
                 <TextView
                     android:id="@+id/tv_cep_name"
                     android:layout_width="wrap_content"
+                    android:text="58500-000"
                     android:paddingLeft="3dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -86,6 +90,7 @@
                 <TextView
                     android:id="@+id/tv_city"
                     android:layout_width="wrap_content"
+                    android:text="Monteiro"
                     android:paddingLeft="3dp"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -94,6 +99,7 @@
 
                 <TextView
                     android:id="@+id/tv_uf_name"
+                    android:text="PB"
                     android:layout_width="wrap_content"
                     android:paddingLeft="3dp"
                     android:layout_height="wrap_content"

@@ -39,7 +39,7 @@
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/componentesLogin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@color/colorFont"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -119,7 +119,6 @@
                         android:layout_width="98dp"
                         android:src="@drawable/add"
                         android:adjustViewBounds="true"
-                        android:scaleType="fitXY"
                         android:contentDescription=""
                         tools:ignore="ContentDescription" />
 
@@ -156,6 +155,7 @@
                 <Button
                     android:id="@+id/btnAddAddress"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="6dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tvEnderecoColeta"
                     android:height="@dimen/LagHeigth"
@@ -172,7 +172,8 @@
                     <include
                         android:id="@+id/card_address"
                         layout="@layout/row_detail_endereco"
-                        android:visibility="gone">
+                        android:visibility="gone"
+                        >
 
                     </include>
                 </RelativeLayout>

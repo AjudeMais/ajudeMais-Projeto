@@ -7,13 +7,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
+
+import java.util.HashMap;
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -27,15 +32,18 @@ import br.edu.ifpb.ajudemais.utils.CustomToast;
  * <p>
  * <p>
  * </p>
+ *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a> and
  */
-public class AddEnderecoActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener{
+public class AddEnderecoActivity extends BaseActivity implements Validator.ValidationListener, View.OnClickListener {
 
     private Toolbar mToolbar;
 
     private Button btnCadastrarEndereco;
     private Validator validator;
     private Endereco endereco;
+    private Donativo donativo;
+    private HashMap<String, byte[]> donativeImages;
 
     private TextInputEditText edtComplemento;
 
@@ -77,7 +85,14 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         btnCadastrarEndereco.setOnClickListener(this);
 
         this.endereco = (Endereco) getIntent().getExtras().get("Endereco");
-        setEndereco(endereco);
+        this.donativo = (Donativo) getIntent().getExtras().get("Donativo");
+
+        if (donativo.getEndereco() != null){
+            setEndereco(donativo.getEndereco());
+            endereco = donativo.getEndereco();
+        }else {
+            setEndereco(endereco);
+        }
     }
 
     /**
@@ -85,11 +100,23 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
      */
     private void setEndereco(Endereco endereco) {
         if (endereco != null) {
-            edtCep.setText(endereco.getCep() != null ? endereco.getCep() : "");
+            if (endereco.getCep() != null){
+                edtCep.setText(endereco.getCep());
+                edtCep.setVisibility(View.GONE);
+            }
+            if (endereco.getUf() != null){
+                edtUf.setText(endereco.getUf());
+                edtUf.setVisibility(View.GONE);
+            }
+            if (endereco.getLocalidade() != null){
+                edtLocalidade.setText(endereco.getLocalidade());
+                edtLocalidade.setVisibility(View.GONE);
+            }
+            if (endereco.getBairro() != null){
+                edtBairro.setText(endereco.getBairro());
+                edtBairro.setVisibility(View.GONE);
+            }
             edtLogradouro.setText(endereco.getLogradouro() != null ? endereco.getLogradouro() : "");
-            edtLocalidade.setText(endereco.getLocalidade() != null ? endereco.getLocalidade() : "");
-            edtBairro.setText(endereco.getBairro() != null ? endereco.getBairro() : "");
-            edtUf.setText(endereco.getUf() != null ? endereco.getUf() : "");
 
         }
 
@@ -109,6 +136,7 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         edtUf = (TextInputEditText) findViewById(R.id.edtUf);
         btnCadastrarEndereco = (Button) findViewById(R.id.btnCadastrarEndereco);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        mToolbar.setTitle("Complete o endereço");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -150,6 +178,9 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         Intent intent = new Intent(AddEnderecoActivity.this, DoacaoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("Endereco", endereco);
+        intent.putExtra("Donativo", donativo);
+        intent.putExtra("Images", donativeImages);
+
         startActivity(intent);
         finish();
 
@@ -158,13 +189,13 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
     /**
      * Seta as informações do formulário no endereço
      */
-    private void addAddress(){
+    private void addAddress() {
         this.endereco.setLogradouro(edtLogradouro.getText().toString().trim());
         this.endereco.setNumero(edtNumero.getText().toString().trim());
         this.endereco.setBairro(edtBairro.getText().toString().trim());
         this.endereco.setUf(edtUf.getText().toString().trim());
         this.endereco.setLocalidade(edtLocalidade.getText().toString().trim());
-        this.endereco.setComplemento(edtComplemento.getText().toString().trim().length() > 0 ? edtComplemento.getText().toString().trim(): null);
+        this.endereco.setComplemento(edtComplemento.getText().toString().trim().length() > 0 ? edtComplemento.getText().toString().trim() : null);
         this.endereco.setCep(edtCep.getText().toString().trim());
     }
 

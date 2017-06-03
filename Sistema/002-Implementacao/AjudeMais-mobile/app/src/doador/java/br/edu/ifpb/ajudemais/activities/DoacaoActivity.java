@@ -22,6 +22,7 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
 
@@ -60,12 +61,12 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     private Button btnKeep;
     private CardView cardView;
     private ImageView img1, img2, img3;
-    private HashMap<String, Bitmap> donativeImages;
+    private HashMap<String, byte[]> donativeImages;
     private AccessCameraAndGalleryDevicePermission permissionSelectImagem;
     private String keyImg;
     private Toolbar mToolbar;
     private Validator validator;
-    TextView tvEndereco;
+    private TextView tvEndereco;
 
     @Order(2)
     @NotEmpty(messageResId = R.string.msgNameNotInformed)
@@ -102,14 +103,6 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         validator = new Validator(DoacaoActivity.this);
         validator.setValidationListener(this);
 
-        if (donativo == null) {
-            donativo = new Donativo();
-        }
-
-        if (donativeImages == null) {
-            donativeImages = new HashMap<>();
-        }
-
         img1 = (ImageView) findViewById(R.id.img1);
         img2 = (ImageView) findViewById(R.id.img2);
         img3 = (ImageView) findViewById(R.id.img3);
@@ -121,13 +114,28 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         btnAddAddress.setOnClickListener(this);
         btnKeep.setOnClickListener(this);
 
+
+        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+        donativeImages = (HashMap<String, byte[]>) getIntent().getSerializableExtra("Images");
+        if (donativo == null) {
+            donativo = new Donativo();
+        } else {
+            setValueDonativoInForm();
+        }
+
+        if (donativeImages == null) {
+            donativeImages = new HashMap<>();
+        } else if (donativeImages.size() > 0) {
+            loadingImages();
+        }
+
         if (getIntent().hasExtra("Endereco")) {
             Endereco endereco = (Endereco) getIntent().getSerializableExtra("Endereco");
             donativo.setEndereco(endereco);
             setAtrAddressIntoCard(endereco);
         }
 
-        if (getIntent().hasExtra("Categoria")){
+        if (getIntent().hasExtra("Categoria")) {
             Categoria categoria = (Categoria) getIntent().getSerializableExtra("Categoria");
             donativo.setCategoria(categoria);
         }
@@ -147,29 +155,30 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         ((TextView) cardView.findViewById(R.id.tv_cep_name)).setText(endereco.getCep());
         ((TextView) cardView.findViewById(R.id.tv_city)).setText(endereco.getLocalidade());
         ((TextView) cardView.findViewById(R.id.tv_uf_name)).setText(endereco.getUf());
+        cardView.setOnClickListener(this);
 
     }
 
     /**
-     * Dialog para seleção da opção para adicionar um novo endereço pela localização do device ou informando manualmente.
+     * Dialog para seleção da opção para Editar ou  remover endereço.
      */
-    private void openDialogNewAddress() {
-        final CharSequence[] items = {getString(R.string.tv_my_location), getString(R.string.tv_insert_manualy), getString(R.string.cancelar)};
+    private void openDialogEditOrRemoveddress() {
+        final CharSequence[] items = {getString(R.string.tv_edit), this.getString(R.string.removeAddress), getString(R.string.cancelar)};
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.selectOptinForNewAddress));
+        builder.setTitle(getString(R.string.selectOption));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
 
-                if (items[item].equals(getString(R.string.tv_my_location))) {
-                    checkPermissions();
-                    if (mLastLocation != null) {
-                        runTaskLocation();
-                    }
-                } else if (items[item].equals(getString(R.string.tv_insert_manualy))) {
+                if (items[item].equals(getString(R.string.tv_edit))) {
+                    setValueInDonativo();
                     Intent intent = new Intent(DoacaoActivity.this, AddEnderecoActivity.class);
-                    intent.putExtra("Endereco", new Endereco());
+                    intent.putExtra("Donativo", donativo);
                     startActivity(intent);
+                } else if (items[item].equals(getString(R.string.removeAddress))) {
+                    cardView.setVisibility(View.GONE);
+                    btnAddAddress.setVisibility(View.VISIBLE);
+                    donativo.setEndereco(null);
                 } else if (items[item].equals(getString(R.string.cancelar))) {
                     dialog.dismiss();
                 }
@@ -177,6 +186,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         });
         builder.show();
     }
+
 
     /**
      * Seta propriedades e executa Task para get location
@@ -192,9 +202,13 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
             findByMyLocationActualTask.delegate = new AsyncResponse<Endereco>() {
                 @Override
                 public void processFinish(Endereco output) {
+                    setValueInDonativo();
                     Intent intent = new Intent(DoacaoActivity.this, AddEnderecoActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Endereco", output);
+                    intent.putExtra("Donativo", donativo);
+                    intent.putExtra("Images", donativeImages);
+
                     startActivity(intent);
                 }
             };
@@ -205,7 +219,10 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnAddAddress) {
-            openDialogNewAddress();
+            checkPermissions();
+            if (mLastLocation != null) {
+                runTaskLocation();
+            }
         } else if (v.getId() == R.id.img1) {
             keyImg = "img1";
             if (donativeImages.get(keyImg) != null) {
@@ -226,6 +243,8 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                 permissionSelectImagem.openDialogSelectImage();
         } else if (v.getId() == R.id.btnKeepAgendamento) {
             validator.validate();
+        } else if (v.getId() == R.id.card_address) {
+            openDialogEditOrRemoveddress();
         }
     }
 
@@ -294,19 +313,26 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     }
 
     protected void onRestoreInstanceState(Bundle savedState) {
-        donativeImages = (HashMap<String, Bitmap>) savedState.getSerializable("images");
+        donativeImages = (HashMap<String, byte[]>) savedState.getSerializable("images");
         donativo = (Donativo) savedState.getSerializable("Donativo");
+        loadingImages();
+
+    }
+
+    /**
+     * Carrega imagens salvas;
+     */
+    private void loadingImages() {
         if (donativeImages != null) {
             if (donativeImages.get("img1") != null) {
-                img1.setImageBitmap(donativeImages.get("img1"));
+                img1.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img1")));
             } else if (donativeImages.get("img2") != null) {
-                img2.setImageBitmap(donativeImages.get("img2"));
+                img2.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img2")));
             } else {
-                img3.setImageBitmap(donativeImages.get("img3"));
+                img3.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img3")));
             }
         }
     }
-
 
     /**
      * @param requestCode
@@ -331,8 +357,37 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
 
             selectImageClicked().setImageBitmap(photo);
 
-            donativeImages.put(keyImg, photo);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            donativeImages.put(keyImg, imageBytes);
+        }
+    }
 
+    /**
+     * Set os valores do formulário no donativo.
+     */
+    public void setValueInDonativo() {
+        if (edtNome.getText().toString().trim().length() > 0) {
+            donativo.setNome(edtNome.getText().toString().trim());
+        }
+
+        if (edtDescription.getText().toString().trim().length() > 0) {
+            donativo.setDescricao(edtDescription.getText().toString().trim());
+        }
+    }
+
+
+    /**
+     * Set os valores de donativo no formulário.
+     */
+    public void setValueDonativoInForm() {
+        if (donativo.getNome() != null) {
+            edtNome.setText(donativo.getNome());
+        }
+
+        if (donativo.getDescricao() != null) {
+            edtDescription.setText(donativo.getDescricao());
         }
     }
 
@@ -357,8 +412,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
 
     @Override
     public void onValidationSucceeded() {
-        donativo.setNome(edtNome.getText().toString().trim());
-        donativo.setDescricao(edtDescription.getText().toString().trim());
+        setValueInDonativo();
         Intent intent = new Intent(DoacaoActivity.this, AgendamentoDoacaoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("Donativo", donativo);
