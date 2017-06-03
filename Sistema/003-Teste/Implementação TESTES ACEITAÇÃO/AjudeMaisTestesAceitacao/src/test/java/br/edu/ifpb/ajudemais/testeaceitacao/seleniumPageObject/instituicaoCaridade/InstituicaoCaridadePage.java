@@ -99,23 +99,29 @@ public class InstituicaoCaridadePage extends AbstractPage {
 
 		
 		//$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
-		$("#nome").setValue(nome);
-		$("#descricao").setValue(descricao);
-		
-		if (documento.trim().length() > 0) {
-			$("#documento").setValue(documento);
+		try {
+			$("#nome").setValue(nome);
+			$("#descricao").setValue(descricao);
+			
+			if (documento.trim().length() > 0) {
+				$("#documento").setValue(documento);
+			}
+			$("#telefone").setValue(telefone);
+			$("#email").setValue(email);
+			
+			$("#bairro").setValue(bairro);
+			$("#complemento").setValue(complemento);
+			$("#zipCode").setValue(cep);
+			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
+			Thread.sleep(1000l);
+			$("#logradouro").setValue(logradouro);
+			$("#numero").setValue(numeroEndereco);
+			//*[@id="content-wrapper"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button
+			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/input")).click();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		$("#telefone").setValue(telefone);
-		$("#email").setValue(email);
-
-		$("#bairro").setValue(bairro);
-		$("#complemento").setValue(complemento);
-		$("#zipCode").setValue(cep);
-		$("#logradouro").setValue(logradouro);
-		$("#numero").setValue(numeroEndereco);
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
-
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/input")).click();
 		
 	}
 
