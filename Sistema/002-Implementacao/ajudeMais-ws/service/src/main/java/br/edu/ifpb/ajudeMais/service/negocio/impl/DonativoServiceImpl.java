@@ -17,7 +17,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
  * 
  * 
  * <p>
- * <b> DonativoServiceImpl.java </b>
+ * <b> {@link DonativoServiceImpl} </b>
  * </p>
  *
  * <p>
