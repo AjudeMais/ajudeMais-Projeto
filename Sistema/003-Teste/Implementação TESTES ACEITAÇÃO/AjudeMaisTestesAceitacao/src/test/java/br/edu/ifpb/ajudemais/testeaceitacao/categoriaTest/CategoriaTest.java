@@ -152,10 +152,9 @@ public class CategoriaTest {
 			EditarCategoriaPage editarCategoriaPage = categoriaPage.edit("Informatica");
 			editarCategoriaPage.adicionarOuEditarCategoria("INFORMATICA EDITADO", "INFORMATICA EM GERAL EDITADO", true);
 
-			boolean foiEditadoComSucesso = categoriaPage.foiEditadoComSucessoCategoria("INFORMATICA EDITADO",
-					"INFORMATICA EM GERAL EDITADO");
-
-			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
+			boolean foiEditadoComSucesso = categoriaPage.foiEditadoComSucessoCategoria("INFORMATICA EDITADO");
+			Thread.sleep(700l);
+			assertTrue("Uma mensagem deveria ter sido mostrada",
 					foiCadastradoComSucesso && foiEditadoComSucesso);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -173,16 +172,12 @@ public class CategoriaTest {
 
 		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
 		criarCategoriaPage.adicionarOuEditarCategoria("Eletronicos ", "eletronicos em geral", true);
-		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Eletronicos");
 
-		EditarCategoriaPage editarCategoriaPage = categoriaPage.edit("Eletronicos");
 
 		try {
+			EditarCategoriaPage editarCategoriaPage = categoriaPage.edit("Eletronicos");
 			Thread.sleep(1000l);
 			editarCategoriaPage.desiteDeEditar();
-
-			Thread.sleep(1000l);
-			assertTrue("não era para editar a categoria", foiCadastradoComSucesso);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -201,16 +196,12 @@ public class CategoriaTest {
 
 		criarCategoria.adicionarOuEditarCategoria("Fraldas", "tipos de Fraldas", true);
 
-		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Fraldas");
-
 		RemoverCategoriaPage removerCategoriaPage = categoriaPage.remove("Fraldas");
 		try {
 			Thread.sleep(1000l);
 
 			removerCategoriaPage.desistirDaRemocao();
 
-			Thread.sleep(1000l);
-			assertTrue("não deveria ter removido a categoria", foiCadastradoComSucesso);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -235,12 +226,13 @@ public class CategoriaTest {
 			RemoverCategoriaPage removerCategoriaPage = categoriaPage.remove("Calçados");
 
 			removerCategoriaPage.remover();
-
+			Thread.sleep(1000l);
 			boolean categoriaRemovidaComSucesso = categoriaPage.categoriaRemovidaComSucesso("Calçados");
 
 		
-			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-					foiCadastradoComSucesso && categoriaRemovidaComSucesso);
+			assertTrue("deveria t sido cadastrada",	foiCadastradoComSucesso);
+
+			assertTrue("deveria t sido removida",	categoriaRemovidaComSucesso);
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
