@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context="br.edu.ifpb.ajudemais.activities.ConfirmDoacaoActivity">
 
     <LinearLayout
@@ -152,7 +151,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="2dp"
-                            android:text="2/3"
+                            android:text="0/3"
                             tools:ignore="HardcodedText,RtlHardcoded" />
 
                     </LinearLayout>

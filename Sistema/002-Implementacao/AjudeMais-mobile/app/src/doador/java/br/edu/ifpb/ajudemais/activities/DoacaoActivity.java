@@ -27,6 +27,9 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Digits;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.Min;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
@@ -85,13 +88,20 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     private GetTempImageTask getTempImageTask;
     private RemoveTmpImageTask removeTmpImageTask;
 
-    @Order(2)
+    @Order(3)
     @NotEmpty(messageResId = R.string.msgNameNotInformed)
     private TextInputEditText edtNome;
 
-    @Order(1)
+    @Order(2)
     @NotEmpty(messageResId = R.string.msgDescriptionNotInformed)
     private TextInputEditText edtDescription;
+
+    @Order(1)
+    @Digits(integer = 1, messageResId = R.string.msgNotNumber, sequence = 2)
+    @Min(value = 1, messageResId = R.string.msgNumberInvalid, sequence = 3)
+    @NotEmpty(messageResId = R.string.msgQuantidadeNotInformed, sequence = 1)
+    private TextInputEditText edtQuantidade;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +157,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         edtDescription = (TextInputEditText) findViewById(R.id.edtDescription);
         edtNome = (TextInputEditText) findViewById(R.id.edtNome);
         tvEndereco = (TextView) findViewById(R.id.tvEnderecoColeta);
+        edtQuantidade = (TextInputEditText) findViewById(R.id.edtQuantidade);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -335,6 +346,8 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         super.onSaveInstanceState(outState);
         outState.putString("edtNome", edtNome.getText().toString().trim());
         outState.putString("edtDescription", edtDescription.getText().toString().trim());
+        outState.putString("quantidade", edtQuantidade.getText().toString().trim());
+
         outState.putSerializable("Donativo", donativo);
         outState.putSerializable("images", donativeImages);
     }
@@ -344,8 +357,10 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         donativo = (Donativo) savedState.getSerializable("Donativo");
         String nome = savedState.getString("edtNome");
         String desciption = savedState.getString("edtDescription");
+        String quantidade = savedState.getString("quantidade");
         edtNome.setText(nome);
         edtDescription.setText(desciption);
+        edtQuantidade.setText(quantidade);
         loadingImages();
 
     }
@@ -521,6 +536,10 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         if (edtDescription.getText().toString().trim().length() > 0) {
             donativo.setDescricao(edtDescription.getText().toString().trim());
         }
+
+        if (edtQuantidade.getText().toString().trim().length()>0){
+            donativo.setQuantidade(Integer.parseInt(edtQuantidade.getText().toString().trim()));
+        }
     }
 
 
@@ -534,6 +553,10 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
 
         if (donativo.getDescricao() != null) {
             edtDescription.setText(donativo.getDescricao());
+        }
+
+        if (donativo.getQuantidade() != null){
+            edtQuantidade.setText(Integer.toString(donativo.getQuantidade()));
         }
     }
 
@@ -568,8 +591,11 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                 }
             }
         }
-
-        donativo.setFotosDonativo(imagens);
+        if (imagens.size()>0) {
+            donativo.setFotosDonativo(imagens);
+        }else {
+            donativo.setFotosDonativo(null);
+        }
     }
 
     @Override

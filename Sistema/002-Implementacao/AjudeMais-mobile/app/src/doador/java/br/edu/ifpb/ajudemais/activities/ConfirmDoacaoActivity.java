@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
@@ -119,6 +120,9 @@ public class ConfirmDoacaoActivity extends BaseActivity implements View.OnClickL
             @Override
             public void processFinish(Donativo output) {
                 CustomToast.getInstance(ConfirmDoacaoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.doacao_save));
+                Intent intent = new Intent(ConfirmDoacaoActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
         };
 

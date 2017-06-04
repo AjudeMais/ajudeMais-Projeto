@@ -5,11 +5,13 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -36,10 +38,19 @@ public class DonativoServiceImpl implements DonativoService {
 	/**
 	 * 
 	 */
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
+	/**
+	 * 
+	 */
 	@Transactional
 	@Override
 	public Donativo save(Donativo entity) throws AjudeMaisException {
-		return donativoRepository.save(entity);
+		Donativo donativoSaved = donativoRepository.save(entity);
+		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+
+		return donativoSaved;
 	}
 
 	/**

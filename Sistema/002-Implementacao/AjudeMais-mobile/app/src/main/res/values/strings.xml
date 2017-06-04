@@ -192,4 +192,8 @@
     <string name="endereco_adicionado">Novo endereço adicionado</string>
     <string name="doacao_save">Sua doação foi realizada com sucesso.</string>
     <string name="disponibilidade_not_informed">Você deve informar ao meno uma dispobilidade para a coleta</string>
+    <string name="hitQuantidade">Quantidade</string>
+    <string name="msgQuantidadeNotInformed">A quantidade de itens deve ser informada</string>
+    <string name="msgNumberInvalid">Quantidade inválida</string>
+    <string name="msgNotNumber">Número inválido</string>
 </resources>

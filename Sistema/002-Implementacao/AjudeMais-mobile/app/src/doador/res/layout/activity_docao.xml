@@ -91,12 +91,34 @@
 
                 </android.support.design.widget.TextInputLayout>
 
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/ltedtQuantidade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ltedtDescription"
+                    android:textColorHint="@color/colorPrimary"
+                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/edtQuantidade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:fontFamily="sans-serif"
+                        android:hint="@string/hitQuantidade"
+                        android:inputType="number"
+                        android:textColor="@color/textSecond2"
+                        android:textColorHint="@color/colorPrimary" />
+
+                </android.support.design.widget.TextInputLayout>
+
                 <TextView
                     android:id="@+id/tvImagens"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/ltedtDescription"
+                    android:layout_below="@+id/ltedtQuantidade"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="6dp"
                     android:clickable="true"
