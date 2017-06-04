@@ -92,7 +92,7 @@ public class Campanha {
 	 * 
 	 */
 	@NotEmpty(message = "Item doável deve ser adicionado a campanha")
-	@ManyToMany(cascade = { CascadeType.MERGE })
+	@ManyToMany(cascade = { CascadeType.ALL })
 	private List<Categoria> itensDoaveis;
 
 	/**

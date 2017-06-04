@@ -25,6 +25,7 @@ public class RemoverCategoriaPage extends CategoriaPage{
 	 */
 	public void remover(){
 		$(By.xpath("/html/body/div[1]/div/div/div[3]/button[1]")).click();
+		
 	}
 	
 	/**
