@@ -102,6 +102,14 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
+	
+	/**
+	 * Busca donativos de acordo com id do doador.
+	 */
+	@Override
+	public List<Donativo> findByDoadorId(Long idDoador) {
+		return donativoRepository.findByDoadorId(idDoador);
+	}
 
 	/**
 	 * 

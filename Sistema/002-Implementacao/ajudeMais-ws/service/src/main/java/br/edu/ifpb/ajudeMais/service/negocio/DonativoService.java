@@ -17,6 +17,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
+ * @author rafaelfeitosa
  *
  */
 public interface DonativoService extends Service<Donativo, Long> {
@@ -37,6 +38,15 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByDoadorNome(String nomeDoador);
+	
+	
+	/**
+	 * Busca e retorna todos os donativos doados por um determinado de acordo com id do Doador passado
+	 * 
+	 * @param idDoador
+	 * @return
+	 */
+	List<Donativo> findByDoadorId(Long idDoador);
 
 	/**
 	 * 
