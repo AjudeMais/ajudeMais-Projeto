@@ -105,16 +105,19 @@ am.autocomplete-width {
 .am-card-result-content {
     margin: 10px;
 }
+.am-image-donor-header {
+    margin-left: 20px;
+}
+.am-image-donor-grid{
+    margin-top: 10px;
+}
+
 
 .dropdown-menu > .active > a, .dropdown-menu > .active > a:focus, .dropdown-menu > .active > a:hover {
     color: #fff;
     text-decoration: none;
     background-color: #12A7B5;
     outline: 0;
-}
-
-am-status {
-
 }
 
 /*

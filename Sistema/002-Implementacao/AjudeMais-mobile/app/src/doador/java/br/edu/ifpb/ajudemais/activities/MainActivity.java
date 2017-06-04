@@ -132,7 +132,8 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
 
         if (mLastLocation == null) {
             startLocationUpdates();
-            mLastLocation = getLocation();
+
+            //mLastLocation = getLocation();
         }
         if (mLastLocation != null) {
             SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));

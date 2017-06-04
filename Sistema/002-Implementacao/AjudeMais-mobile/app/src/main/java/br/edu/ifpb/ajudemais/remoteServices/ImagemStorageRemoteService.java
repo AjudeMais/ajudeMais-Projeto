@@ -51,10 +51,34 @@ public class ImagemStorageRemoteService extends AbstractRemoteService {
 
     }
 
+    /**
+     * Recupera a image salva por meio do seu nome.
+     * @param name
+     * @return
+     */
     public byte [] getImage(String name){
         return restTemplate.getForObject(API + "/upload/imagem/{name}", byte[].class, name);
     }
 
+
+    /**
+     * Recupera a image salva em Temp. por meio do seu nome.
+     * @param name
+     * @return
+     */
+    public byte [] getTmpImage(String name){
+        return restTemplate.getForObject(API + "/upload/imagem/tmp/{name}", byte[].class, name);
+    }
+
+
+    /**
+     * Recupera a image salva em Temp. por meio do seu nome.
+     * @param name
+     * @return
+     */
+    public void removeTmpImage(String name){
+         restTemplate.delete(API + "/upload/imagem/tmp/{name}",  name);
+    }
 
 
     /**

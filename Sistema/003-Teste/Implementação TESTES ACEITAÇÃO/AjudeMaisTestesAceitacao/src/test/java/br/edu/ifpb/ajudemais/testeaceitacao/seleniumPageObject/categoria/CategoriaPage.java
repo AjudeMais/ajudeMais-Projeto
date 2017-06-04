@@ -56,12 +56,11 @@ public class CategoriaPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
-	public boolean foiEditadoComSucessoCategoria(String nome, String descricao) {
+	public boolean foiEditadoComSucessoCategoria(String nome) {
 		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody")).should(appears);
 		
 		boolean nomeCategoria = driver.getPageSource().contains(nome);
-		boolean descriçãoCategoria = driver.getPageSource().contains(descricao);
-		return nomeCategoria && descriçãoCategoria;
+		return nomeCategoria;
 	}
 
 
@@ -104,7 +103,7 @@ public class CategoriaPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
-			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
+			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[6]/a")).click();
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

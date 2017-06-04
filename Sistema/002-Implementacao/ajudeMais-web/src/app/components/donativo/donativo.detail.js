@@ -16,12 +16,19 @@
         var vm = this;
         vm.donativo = {};
         var donativoDetailparam = JSON.parse($stateParams.donativoDetail);
-        vm.image;
-        vm.mockImage = 'content/img/mock-user.png';
+        vm.images = [];
 
         if (donativoDetailparam) {
             vm.donativo = donativoDetailparam;
-            _getImage(vm.donativo.doador.foto);
+            console.log(vm.donativo);
+            getImages();
+        }
+
+        function getImages() {
+            vm.donativo.fotosDonativo.forEach(function (image) {
+                _getImage(image);
+            })
+
         }
 
         /**
@@ -31,7 +38,10 @@
         function _getImage(image) {
             if (image) {
                 imageService.getImage(image.nome).then(function (response) {
-                    vm.image = _arrayBufferToBase64(response.data);
+                    var imageContent = {};
+                    imageContent.contentType = image.contentType;
+                    imageContent.content = _arrayBufferToBase64(response.data);
+                    vm.images.push(imageContent);
                 })
             }
         };

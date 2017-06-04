@@ -4,7 +4,6 @@
             <div class="box-header">
                 <h2 class="box-title">Informações Gerais</h2>
             </div>
-
             <div class="row box-topic">
                 <div class="col-lg-6">
                     <div class="table-responsive am-no-border-table">
@@ -22,6 +21,10 @@
                                 <td>{{vm.donativo.quantidade}}</td>
                             </tr>
                             <tr>
+                                <th width="30%">Categoria</th>
+                                <td>{{vm.donativo.categoria.nome}}</td>
+                            </tr>
+                            <tr>
                                 <th>Status</th>
                                 <td>
                                     <span ng-class="{'label label-danger': !vm.campanha.status,
@@ -32,15 +35,90 @@
                     </div>
                 </div>
                 <div>
-                    <div class="col-sm-2">
-                        <div>
+                    <span class="am-image-donor-header"><b>Imagens do Item</b></span>
+                    <div class="am-image-donor-grid" ng-repeat="image in vm.images">
+                        <div class="col-sm-2">
                             <img class="img-responsive img-thumbnail"
-                                 data-ng-src="data:{{vm.donativo.doador.foto.contentType}};base64,{{vm.image}}">
+                                 data-ng-src="data:{{image.contentType}};base64,{{image.content}}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="box box-primary">
+            <div class="box-header">
+                <h2 class="box-title">Horários de coleta</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th width="50%">Início</th>
+                                <th width="50%">Fim</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="horario in vm.donativo.horariosDisponiveis">
+
+                                <td>{{horario.horaInicio | date: "dd/MM/yyyy mm:ss"}}</td>
+                                <td>{{horario.horaFim | date: "dd/MM/yyyy mm:ss"}}</td>
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <h2 class="box-title">Endereço de Coleta</h2>
+            </div>
+            <div>
+                <div class="row box-topic">
+                    <div class="col-lg-6">
+                        <div class="table-responsive am-no-border-table">
+                            <table class="table">
+                                <tr>
+                                    <th width="10%">Logradouro</th>
+                                    <td>{{vm.donativo.endereco.logradouro}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="10%">Número</th>
+                                    <td>{{vm.donativo.endereco.numero}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="10%">Bairro</th>
+                                    <td>{{vm.donativo.endereco.bairro}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="table-responsive am-no-border-table">
+                            <table class="table">
+                                <tr ng-show="!!vm.donativo.endereco.complemento">
+                                    <th width="10%">Completamento</th>
+                                    <td>{{vm.donativo.endereco.complemento}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="10%">Localidade</th>
+                                    <td>{{vm.donativo.endereco.localidade}}</td>
+                                </tr>
+                                <tr>
+                                    <th width="10%">UF</th>
+                                    <td>{{vm.donativo.endereco.uf}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="box box-primary">
             <div class="box-header">
                 <h2 class="box-title">Doador</h2>
@@ -71,7 +149,7 @@
         <div class="row form-group">
             <button class="btn btn-default" type="button" ng-click="vm.previus()">Voltar</button>
         </div>
-    </div>
 
+    </div>
 </div>
 </div>

@@ -253,13 +253,15 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
                     edtEndHour.getText().toString().trim());
 
             if (initialDate.before(endDate)) {
-                addDisponibilidadeInDonativo(initialDate, endDate);
+                String msg = addDisponibilidadeInDonativo(initialDate, endDate);
                 Intent intent = new Intent();
                 intent.setClass(AddIntervalDataDoacaoActivity.this, AgendamentoDoacaoActivity.class);
                 intent.putExtra("Donativo", donativo);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+                CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(msg);
+
             } else {
                 CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast("A hora inicial é superior a hora final do intervalo");
             }
@@ -271,7 +273,8 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
     /**
      * Seta a disponibilidade em donativo.
      */
-    private void addDisponibilidadeInDonativo(Date initialDate, Date endDate) {
+    private String addDisponibilidadeInDonativo(Date initialDate, Date endDate) {
+        String msgOperacao;
         disponibilidadeHorario = new DisponibilidadeHorario();
         disponibilidadeHorario.setHoraInicio(initialDate);
         disponibilidadeHorario.setHoraFim(endDate);
@@ -282,12 +285,15 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
 
             }
             donativo.getHorariosDisponiveis().add(disponibilidadeHorario);
+            msgOperacao =getString(R.string.create_dosponibilidade);
 
         } else {
             donativo.getHorariosDisponiveis().get(positionEdit).setHoraInicio(disponibilidadeHorario.getHoraInicio());
             donativo.getHorariosDisponiveis().get(positionEdit).setHoraFim(disponibilidadeHorario.getHoraFim());
+            msgOperacao = getString(R.string.updated_disponibilidade);
         }
 
+        return msgOperacao;
     }
 
     @Override
