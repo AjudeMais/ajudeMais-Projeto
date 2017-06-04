@@ -98,10 +98,6 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
 
         listInstituicoes = (TextView) getView().findViewById(R.id.tv_list_itens_doaveis);
 
-        if (instituicaoCaridade.getItensDoaveis().size() < 1) {
-            listInstituicoes.setVisibility(View.GONE);
-        }
-
         cardViewEmail = (CardView) getView().findViewById(R.id.card_view_intituicao_detail_email);
 
 

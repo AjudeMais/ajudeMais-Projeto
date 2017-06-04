@@ -58,6 +58,17 @@
     padding-left: 0;
 }
 
+.am-no-border-table > .table th, .table td {
+    border-top: none !important;
+}
+
+.am-user-block img{
+    width: 30px;
+    height: 30px;
+    float: left;
+}
+
+
 /*
  * Componentes: Bootstrap Switch
  * ----------------------------------------

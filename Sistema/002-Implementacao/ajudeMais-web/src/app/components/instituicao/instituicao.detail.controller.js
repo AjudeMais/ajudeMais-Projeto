@@ -11,8 +11,6 @@
 
         if (instituicaoDetailparam) {
             vm.instituicao = instituicaoDetailparam;
-            console.log(vm.instituicao);
-
         }
 
         /**
