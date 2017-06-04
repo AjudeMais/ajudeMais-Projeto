@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
 /**
@@ -85,7 +86,7 @@ public class TabFragmentMain extends Fragment {
         {
             switch (position){
                 case 0 : return new MainTab01();
-                case 1 : return new MainTab02();
+                case 1 : return new MyDoacoesFragment();
             }
             return null;
         }
@@ -109,9 +110,9 @@ public class TabFragmentMain extends Fragment {
 
             switch (position){
                 case 0 :
-                    return "Campanhas";
+                    return getString(R.string.campanhas_active);
                 case 1 :
-                    return "Minhas Doações";
+                    return getString(R.string.my_doacoes);
             }
             return null;
         }

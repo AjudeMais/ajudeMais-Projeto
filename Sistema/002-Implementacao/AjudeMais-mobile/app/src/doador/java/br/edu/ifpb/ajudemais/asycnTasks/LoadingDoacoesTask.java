@@ -3,12 +3,19 @@ package br.edu.ifpb.ajudemais.asycnTasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import org.springframework.web.client.RestClientException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.remoteServices.DonativoRemoteService;
-import br.edu.ifpb.ajudemais.utils.ProgressDialog;
+import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -23,20 +30,24 @@ import br.edu.ifpb.ajudemais.utils.ProgressDialog;
  */
 
 
-public class LoadingDoacoesTask extends AsyncTask<Void, Void, Donativo> {
+public class LoadingDoacoesTask extends AsyncTask<Void, Void, List<DoacaoAdapterDto>> {
 
-    public AsyncResponse<Donativo> delegate = null;
+    public AsyncResponse<List<DoacaoAdapterDto>> delegate = null;
     private String message = null;
-    private Doador doador;
-    private Donativo donativo;
     private Context context;
     private String username;
-    private ProgressDialog progressDialog;
     private DonativoRemoteService donativoRemoteService;
+    private DoadorRemoteService doadorRemoteService;
+    private ImagemStorageRemoteService imagemStorageRemoteService;
+    private List<DoacaoAdapterDto> doacaoAdapterDtos;
 
-    public LoadingDoacoesTask(Context context, String nameDoador){
+    public LoadingDoacoesTask(Context context, String nameDoador) {
         this.context = context;
-        
+        this.username = nameDoador;
+        this.donativoRemoteService = new DonativoRemoteService(context);
+        this.doadorRemoteService = new DoadorRemoteService(context);
+        this.imagemStorageRemoteService = new ImagemStorageRemoteService(context);
+        this.doacaoAdapterDtos = new ArrayList<>();
     }
 
     @Override
@@ -45,7 +56,42 @@ public class LoadingDoacoesTask extends AsyncTask<Void, Void, Donativo> {
     }
 
     @Override
-    protected Donativo doInBackground(Void... params) {
+    protected List<DoacaoAdapterDto> doInBackground(Void... params) {
+        try {
+
+            Doador doador = doadorRemoteService.getDoador(username);
+
+            List<Donativo> donativos = donativoRemoteService.findByDoadorId(doador.getId());
+
+            for (Donativo donativo : donativos) {
+                DoacaoAdapterDto doacaoAdapterDto = new DoacaoAdapterDto();
+                doacaoAdapterDto.setDonativo(donativo);
+
+                if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().size() > 0) {
+                    byte[] photo = imagemStorageRemoteService.getImage(donativo.getFotosDonativo().get(0).getNome());
+                    doacaoAdapterDto.setPhoto(photo);
+                }
+                doacaoAdapterDtos.add(doacaoAdapterDto);
+            }
+
+            return doacaoAdapterDtos;
+        } catch (RestClientException e) {
+            message = e.getMessage();
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;
+    }
+
+    @Override
+    protected void onPostExecute(List<DoacaoAdapterDto> donativos) {
+        if (donativos != null && donativos.size() > 0) {
+            delegate.processFinish(donativos);
+        }
+
+        if (message != null) {
+            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
+        }
     }
 }

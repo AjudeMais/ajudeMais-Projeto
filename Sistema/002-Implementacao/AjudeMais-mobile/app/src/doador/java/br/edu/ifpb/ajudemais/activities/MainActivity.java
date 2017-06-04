@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.TabFragmentMain;
+import br.edu.ifpb.ajudemais.fragments.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 

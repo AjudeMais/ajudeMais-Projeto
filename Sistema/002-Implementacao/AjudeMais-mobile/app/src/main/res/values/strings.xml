@@ -196,4 +196,6 @@
     <string name="msgQuantidadeNotInformed">A quantidade de itens deve ser informada</string>
     <string name="msgNumberInvalid">Quantidade inválida</string>
     <string name="msgNotNumber">Número inválido</string>
+    <string name="my_doacoes">Minhas Doações</string>
+    <string name="campanhas_active">Campanhas</string>
 </resources>

@@ -67,6 +67,7 @@ public class RealizarDoacaoTask extends AsyncTask<Void, Void, Donativo> {
             donativo.setEstadosDaDoacao(new ArrayList<EstadoDoacao>());
             EstadoDoacao estadoDoacao = new EstadoDoacao();
             estadoDoacao.setData(new Date());
+            estadoDoacao.setAtivo(true);
             estadoDoacao.setEstadoDoacao(Estado.DISPONIBILIZADO);
             donativo.getEstadosDaDoacao().add(estadoDoacao);
             donativo = donativoRemoteService.saveDoador(donativo);
