@@ -2,7 +2,10 @@ package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
 
-import br.edu.ifpb.ajudemais.domain.Doador;
+import org.springframework.http.ResponseEntity;
+
+import java.util.Arrays;
+import java.util.List;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 
 /**
@@ -39,6 +42,12 @@ public class DonativoRemoteService extends AbstractRemoteService {
     public Donativo saveDoador(Donativo donativo) {
         donativo = restTemplate.postForObject(API + "/donativo", donativo, Donativo.class);
         return donativo;
+    }
+
+    public List<Donativo> findByDoadorNome(String doadorName){
+        ResponseEntity<Donativo[]> responseEntity =  restTemplate.getForEntity(API + "/donativo/filter/doadorNome?doadorNome={doadorNome}", Donativo[].class, doadorName);
+
+        return Arrays.asList(responseEntity.getBody());
     }
 }
 
