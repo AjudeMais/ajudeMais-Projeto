@@ -18,6 +18,7 @@ import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 
 public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnClickListener, RecyclerItemClickListener.OnItemClickListener {
@@ -59,9 +60,10 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         btnKeep = (Button) findViewById(R.id.btnKeepDetalhes);
+        btnKeep.setOnClickListener(this);
         fbAddDisponibilidade = (FloatingActionButton) findViewById(R.id.fbAddDisponibilidade);
         fbAddDisponibilidade.setOnClickListener(this);
-        componentListEmpty = (FrameLayout) findViewById(R.id.empty_list) ;
+        componentListEmpty = (FrameLayout) findViewById(R.id.empty_list);
         componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
 
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_list);
@@ -84,6 +86,17 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("Donativo", donativo);
             startActivity(intent);
+        } else if (v.getId() == R.id.btnKeepDetalhes) {
+            if (donativo.getHorariosDisponiveis() != null && donativo.getHorariosDisponiveis().size() > 0) {
+                Intent intent = new Intent();
+                intent.setClass(AgendamentoDoacaoActivity.this, ConfirmDoacaoActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("Donativo", donativo);
+                startActivity(intent);
+            }else {
+                CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.disponibilidade_not_informed));
+            }
+
         }
     }
 
@@ -108,6 +121,7 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
     /**
      * @param outState
      */
+
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("Donativo", donativo);
@@ -147,11 +161,12 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
                 } else if (items[item].equals(getString(R.string.tv_delete))) {
                     DisponibilidadeHorario disponibilidadeHorario = donativo.getHorariosDisponiveis().get(position);
                     donativo.getHorariosDisponiveis().remove(disponibilidadeHorario);
-                    if (donativo.getHorariosDisponiveis().size()>0) {
+                    if (donativo.getHorariosDisponiveis().size() > 0) {
                         disponibilidadeHorarioAdapte = new DisponibilidadeHorarioAdapter(donativo.getHorariosDisponiveis(), AgendamentoDoacaoActivity.this);
                         recyclerView.setAdapter(disponibilidadeHorarioAdapte);
+                        CustomToast.getInstance(AgendamentoDoacaoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.disponibilidade_removida));
 
-                    }else {
+                    } else {
                         showListEmpty();
                     }
                 } else if (items[item].equals(getString(R.string.cancelar))) {

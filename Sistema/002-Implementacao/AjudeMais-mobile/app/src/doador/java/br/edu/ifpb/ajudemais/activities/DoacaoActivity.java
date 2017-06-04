@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -16,26 +19,37 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.FindByMyLocationActualTask;
+import br.edu.ifpb.ajudemais.asyncTasks.GetTempImageTask;
+import br.edu.ifpb.ajudemais.asyncTasks.RemoveTmpImageTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
+import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
+import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.MY_PERMISSIONS_REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.REQUEST_CAMERA;
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.SELECT_FILE;
 
@@ -67,6 +81,9 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     private Toolbar mToolbar;
     private Validator validator;
     private TextView tvEndereco;
+    private UploadImageTask uploadImageTask;
+    private GetTempImageTask getTempImageTask;
+    private RemoveTmpImageTask removeTmpImageTask;
 
     @Order(2)
     @NotEmpty(messageResId = R.string.msgNameNotInformed)
@@ -81,7 +98,42 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_docao);
         initGoogleAPIClient();
+
         init();
+
+        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+
+        if (donativo == null) {
+            donativo = new Donativo();
+        } else {
+            setValueDonativoInForm();
+        }
+
+        if (donativeImages == null) {
+            donativeImages = new HashMap<>();
+        }
+
+        if (getIntent().hasExtra("Endereco")) {
+            Endereco endereco = (Endereco) getIntent().getSerializableExtra("Endereco");
+            donativo.setEndereco(endereco);
+            setAtrAddressIntoCard(endereco);
+        }
+
+        if (getIntent().hasExtra("Categoria")) {
+            Categoria categoria = (Categoria) getIntent().getSerializableExtra("Categoria");
+            donativo.setCategoria(categoria);
+        }
+
+        if (donativo.getFotosDonativo() != null) {
+            if (donativo.getFotosDonativo() != null) {
+                for (int i = 0; donativo.getFotosDonativo().size() > i; i++) {
+                    if (donativo.getFotosDonativo().get(i).getNome() != null) {
+
+                        executeGetTempImageTask(donativo.getFotosDonativo().get(i).getNome(), i);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -114,31 +166,6 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         btnAddAddress.setOnClickListener(this);
         btnKeep.setOnClickListener(this);
 
-
-        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
-        donativeImages = (HashMap<String, byte[]>) getIntent().getSerializableExtra("Images");
-        if (donativo == null) {
-            donativo = new Donativo();
-        } else {
-            setValueDonativoInForm();
-        }
-
-        if (donativeImages == null) {
-            donativeImages = new HashMap<>();
-        } else if (donativeImages.size() > 0) {
-            loadingImages();
-        }
-
-        if (getIntent().hasExtra("Endereco")) {
-            Endereco endereco = (Endereco) getIntent().getSerializableExtra("Endereco");
-            donativo.setEndereco(endereco);
-            setAtrAddressIntoCard(endereco);
-        }
-
-        if (getIntent().hasExtra("Categoria")) {
-            Categoria categoria = (Categoria) getIntent().getSerializableExtra("Categoria");
-            donativo.setCategoria(categoria);
-        }
     }
 
     /**
@@ -179,6 +206,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                     cardView.setVisibility(View.GONE);
                     btnAddAddress.setVisibility(View.VISIBLE);
                     donativo.setEndereco(null);
+                    CustomToast.getInstance(DoacaoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.endereco_removed));
                 } else if (items[item].equals(getString(R.string.cancelar))) {
                     dialog.dismiss();
                 }
@@ -193,6 +221,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
      */
     private void runTaskLocation() {
         startLocationUpdates();
+
         if (mLastLocation == null) {
             mLastLocation = getLocation();
         }
@@ -207,8 +236,6 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Endereco", output);
                     intent.putExtra("Donativo", donativo);
-                    intent.putExtra("Images", donativeImages);
-
                     startActivity(intent);
                 }
             };
@@ -220,9 +247,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     public void onClick(View v) {
         if (v.getId() == R.id.btnAddAddress) {
             checkPermissions();
-            if (mLastLocation != null) {
-                runTaskLocation();
-            }
+
         } else if (v.getId() == R.id.img1) {
             keyImg = "img1";
             if (donativeImages.get(keyImg) != null) {
@@ -274,7 +299,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                 } else if (items[item].equals(getString(R.string.remove))) {
                     donativeImages.remove(keyImg);
                     selectImageClicked().setImageDrawable(getDrawable(R.drawable.add));
-
+                    CustomToast.getInstance(DoacaoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.removed_image));
                 } else if (items[item].equals(getString(R.string.cancelar))) {
                     PROFILE_PIC_COUNT = 0;
                     dialog.dismiss();
@@ -308,6 +333,8 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
      */
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString("edtNome", edtNome.getText().toString().trim());
+        outState.putString("edtDescription", edtDescription.getText().toString().trim());
         outState.putSerializable("Donativo", donativo);
         outState.putSerializable("images", donativeImages);
     }
@@ -315,6 +342,10 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     protected void onRestoreInstanceState(Bundle savedState) {
         donativeImages = (HashMap<String, byte[]>) savedState.getSerializable("images");
         donativo = (Donativo) savedState.getSerializable("Donativo");
+        String nome = savedState.getString("edtNome");
+        String desciption = savedState.getString("edtDescription");
+        edtNome.setText(nome);
+        edtDescription.setText(desciption);
         loadingImages();
 
     }
@@ -326,12 +357,45 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         if (donativeImages != null) {
             if (donativeImages.get("img1") != null) {
                 img1.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img1")));
-            } else if (donativeImages.get("img2") != null) {
+            }
+
+            if (donativeImages.get("img2") != null) {
                 img2.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img2")));
-            } else {
+            }
+
+            if (donativeImages.get("img3") != null) {
                 img3.setImageBitmap(androidUtil.convertBytesInBitmap(donativeImages.get("img3")));
             }
         }
+    }
+
+    /**
+     * Executa Asycn Task para recuperar imagens do donativo salvas em Temp.
+     *
+     * @param namePhoto
+     */
+    private void executeGetTempImageTask(String namePhoto, final int position) {
+        getTempImageTask = new GetTempImageTask(this, namePhoto);
+        getTempImageTask.delegate = new AsyncResponse<byte[]>() {
+            @Override
+            public void processFinish(byte[] output) {
+                Bitmap photo = androidUtil.convertBytesInBitmap(output);
+                ImageView imageView;
+                if (position == 0) {
+                    imageView = img1;
+                } else if (position == 1) {
+                    imageView = img2;
+
+                } else {
+                    imageView = img3;
+                }
+
+                imageView.setImageBitmap(photo);
+
+            }
+        };
+
+        getTempImageTask.execute();
     }
 
     /**
@@ -341,6 +405,18 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+
+            if (resultCode == RESULT_OK) {
+                mLastLocation = LocationServices.FusedLocationApi
+                        .getLastLocation(mGoogleApiClient);
+                runTaskLocation();
+            }
+
+
+        }
 
         Bitmap photo = null;
 
@@ -354,13 +430,83 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         }
 
         if (photo != null) {
-
-            selectImageClicked().setImageBitmap(photo);
-
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] imageBytes = baos.toByteArray();
+            executeUpdateImageTask(imageBytes);
             donativeImages.put(keyImg, imageBytes);
+            selectImageClicked().setImageBitmap(photo);
+        }
+
+
+    }
+
+
+    /**
+     * Executa asycn task para atualizar imagem do doador
+     *
+     * @param imageBytes
+     */
+    private void executeUpdateImageTask(byte[] imageBytes) {
+        uploadImageTask = new UploadImageTask(this, imageBytes);
+        uploadImageTask.delegate = new AsyncResponse<Imagem>() {
+            @Override
+            public void processFinish(Imagem output) {
+                addImageInListImages(output);
+            }
+        };
+
+        uploadImageTask.execute();
+    }
+
+    /**
+     * Inicializa lista de imagens de donativo para evitar null.
+     */
+    private void initListImage() {
+        donativo.setFotosDonativo(new ArrayList<Imagem>());
+        donativo.getFotosDonativo().add(0, new Imagem());
+        donativo.getFotosDonativo().add(1, new Imagem());
+        donativo.getFotosDonativo().add(2, new Imagem());
+
+    }
+
+    /**
+     * Add image na lista de imagens
+     */
+    private void addImageInListImages(Imagem output) {
+        if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().get(getPostionClickedImage()) != null) {
+            if (donativo.getFotosDonativo().get(getPostionClickedImage()).getNome() != null) {
+                removeTmpImageTask = new RemoveTmpImageTask(this, donativo.getFotosDonativo().get(getPostionClickedImage()).getNome());
+                removeTmpImageTask.execute();
+            }
+            setValuesInImage(output);
+        } else {
+            initListImage();
+            setValuesInImage(output);
+        }
+    }
+
+    private void setValuesInImage(Imagem output) {
+        donativo.getFotosDonativo().get(getPostionClickedImage()).setNome(output.getNome());
+        donativo.getFotosDonativo().get(getPostionClickedImage()).setId(output.getId());
+        donativo.getFotosDonativo().get(getPostionClickedImage()).setContentType(output.getContentType());
+
+    }
+
+
+    /**
+     * Recupera a posição da image que foi clicada.
+     *
+     * @return
+     */
+    private Integer getPostionClickedImage() {
+        if (keyImg.equals("img1")) {
+            return 0;
+        } else if (keyImg.equals("img2")) {
+            return 1;
+
+        } else {
+            return 2;
         }
     }
 
@@ -410,13 +556,34 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         return null;
     }
 
+    /**
+     * remove imagens que não existem da lista de imagens do donativo.
+     */
+    private void validateListImages() {
+        List<Imagem> imagens = new ArrayList<>();
+        if (donativo.getFotosDonativo() != null) {
+            for (Imagem imagem : donativo.getFotosDonativo()) {
+                if (imagem.getNome() != null) {
+                    imagens.add(imagem);
+                }
+            }
+        }
+
+        donativo.setFotosDonativo(imagens);
+    }
+
     @Override
     public void onValidationSucceeded() {
-        setValueInDonativo();
-        Intent intent = new Intent(DoacaoActivity.this, AgendamentoDoacaoActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putExtra("Donativo", donativo);
-        startActivity(intent);
+        if (donativo.getEndereco() != null) {
+            validateListImages();
+            setValueInDonativo();
+            Intent intent = new Intent(DoacaoActivity.this, AgendamentoDoacaoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("Donativo", donativo);
+            startActivity(intent);
+        } else {
+            CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.addres_not_informed));
+        }
     }
 
     @Override
@@ -433,4 +600,55 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
             }
         }
     }
+
+    /**
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+                } else {
+                    Toast.makeText(DoacaoActivity.this, getString(R.string.permissionDeniedAccessCamera), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    /**
+     * @param locationSettingsResult
+     */
+    @Override
+    public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
+        final Status status = locationSettingsResult.getStatus();
+        switch (status.getStatusCode()) {
+            case LocationSettingsStatusCodes.SUCCESS:
+                onLocationChanged(getLocation());
+                runTaskLocation();
+                break;
+
+            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                try {
+                    status.startResolutionForResult(DoacaoActivity.this, REQUEST_CHECK_SETTINGS);
+
+                } catch (IntentSender.SendIntentException e) {
+                    e.printStackTrace();
+                }
+                break;
+
+            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                break;
+        }
+    }
+
+
 }

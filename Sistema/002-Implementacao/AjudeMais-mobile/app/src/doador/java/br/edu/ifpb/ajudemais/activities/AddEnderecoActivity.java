@@ -13,8 +13,6 @@ import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
-
-import java.util.HashMap;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
@@ -43,7 +41,6 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
     private Validator validator;
     private Endereco endereco;
     private Donativo donativo;
-    private HashMap<String, byte[]> donativeImages;
 
     private TextInputEditText edtComplemento;
 
@@ -88,8 +85,8 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         this.donativo = (Donativo) getIntent().getExtras().get("Donativo");
 
         if (donativo.getEndereco() != null){
-            setEndereco(donativo.getEndereco());
             endereco = donativo.getEndereco();
+            setEndereco(donativo.getEndereco());
         }else {
             setEndereco(endereco);
         }
@@ -116,8 +113,10 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
                 edtBairro.setText(endereco.getBairro());
                 edtBairro.setVisibility(View.GONE);
             }
-            edtLogradouro.setText(endereco.getLogradouro() != null ? endereco.getLogradouro() : "");
 
+            edtLogradouro.setText(endereco.getLogradouro() != null ? endereco.getLogradouro() : "");
+            edtNumero.setText(endereco.getNumero() != null ? endereco.getNumero() : "");
+            edtNumero.setText(endereco.getComplemento() != null ? endereco.getNumero() : "");
         }
 
     }
@@ -179,10 +178,9 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("Endereco", endereco);
         intent.putExtra("Donativo", donativo);
-        intent.putExtra("Images", donativeImages);
-
         startActivity(intent);
         finish();
+        CustomToast.getInstance(AddEnderecoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.endereco_adicionado));
 
     }
 

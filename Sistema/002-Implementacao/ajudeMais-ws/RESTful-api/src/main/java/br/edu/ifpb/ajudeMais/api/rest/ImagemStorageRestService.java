@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudeMais.api.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,5 +95,22 @@ public class ImagemStorageRestService {
 	@GetMapping("/{name:.*}")
 	public byte[] getImage(@PathVariable String name) throws AjudeMaisException {
 		return imagemStorage.get(name);
+	}
+	
+	
+	/**
+	 * 
+	 * <p>
+	 * DELETE /upload/imagem/tmp/{name} : remove imagem em TEMP. 
+	 * Serve para remover imagens em Temp que não estão sendo utilizadas.
+	 * </p>
+	 * 
+	 * @param name
+	 * @return imagem em bytes
+	 * @throws AjudeMaisException 
+	 */
+	@DeleteMapping("/tmp/{name:.*}")
+	public void removeTmpImage(@PathVariable String name) throws AjudeMaisException {
+		imagemStorage.removeTmp(name);
 	}
 }

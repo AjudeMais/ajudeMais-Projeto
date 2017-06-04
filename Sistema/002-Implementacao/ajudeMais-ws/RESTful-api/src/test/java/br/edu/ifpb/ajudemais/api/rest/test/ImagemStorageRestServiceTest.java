@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.api.rest.test;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.fileUpload;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -59,7 +60,40 @@ public class ImagemStorageRestServiceTest extends AbstractRestTest {
 				.andExpect(status().isOk());
 
 	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Realiza teste para endpoint de remover imagem de Temp. Deveria retornar 400
+	 * </p>
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void removeImageTmpNotFoundTest() throws Exception {
+		final String token = extractToken(login("penny", "bigbang").andReturn());
+		mockMvc.perform(delete("/upload/imagem/x").header("Authorization", token)).andExpect(status().isBadRequest());
 
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Realiza teste para endpoint de remover imagem de Temp. Deveria retornar 400
+	 * </p>
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void removeImageTmpFoundTestOk() throws Exception {
+		MockMultipartFile file = new MockMultipartFile("file", "orig", null, "bar".getBytes());
+		final String token = extractToken(login("penny", "bigbang").andReturn());
+		mockMvc.perform(delete("/upload/imagem/"+file.getName()).header("Authorization", token)).andExpect(status().isBadRequest());
+
+
+	}
+
+	
 	/**
 	 * 
 	 * <p>

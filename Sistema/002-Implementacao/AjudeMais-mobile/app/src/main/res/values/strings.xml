@@ -152,7 +152,7 @@
 
     <string name="hitDescribe">Descrição</string>
     <string name="btnDoar">DOAR</string>
-    <string name="images_do_item">Imagens do donativo</string>
+    <string name="images_do_item">Adicione imagens do donativo</string>
     <string name="endereco_for_coleta">Endereço para Coleta</string>
     <string name="btnMyLocation">Usar Minha Localização</string>
     <string name="btnAddAddress">ADICIONAR ENDEREÇO</string>
@@ -180,4 +180,16 @@
     <string name="selcione_images_do_item">Selecione imagens do item</string>
     <string name="donativo_information">Informações do donativo</string>
     <string name="DisponibilidadesForColeta">Disponibilidade para coleta</string>
+    <string name="categoria">Categoria: </string>
+    <string name="disponibilidade_removida">Disponibilidade removida</string>
+    <string name="create_dosponibilidade">Dispobilidade adicionada.</string>
+    <string name="updated_disponibilidade">Disponibilidade atualizada</string>
+    <string name="icon_map">Icone que representa uma localização/endereço</string>
+    <string name="doacao_detail">Detalhes da doação</string>
+    <string name="addres_not_informed">O endereço para a coleta da doação deve ser informado.</string>
+    <string name="removed_image">A imagem foi removida.</string>
+    <string name="endereco_removed">Enderço removido.</string>
+    <string name="endereco_adicionado">Novo endereço adicionado</string>
+    <string name="doacao_save">Sua doação foi realizada com sucesso.</string>
+    <string name="disponibilidade_not_informed">Você deve informar ao meno uma dispobilidade para a coleta</string>
 </resources>

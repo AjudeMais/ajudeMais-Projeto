@@ -169,6 +169,20 @@ public class ImagemStorageImpl implements ImagemStorage {
 		}
 		
 	}
+	
+	/**
+	 * Remove uma imagem de Temp pelo nome.
+	 * @throws ImageErrorException 
+	 */
+	@Override
+	public void removeTmp(String img) throws ImageErrorException {
+		try {
+			Files.delete(this.localTmp.resolve(img));
+		} catch (IOException e) {
+			throw new ImageErrorException("Erro remover imagem");
+		}
+		
+	}
 
 	/**
 	 * Gera um ID aletório e concatena com nome;

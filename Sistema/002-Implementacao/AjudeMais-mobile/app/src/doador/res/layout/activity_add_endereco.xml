@@ -38,10 +38,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/componentesLogin"
                 android:layout_width="match_parent"
+                android:orientation="vertical"
                 android:layout_height="wrap_content"
                 android:background="@color/colorFont"
                 android:paddingTop="@dimen/appbar_padding_top"
@@ -72,7 +73,6 @@
                     android:id="@+id/ltEdtLogradouro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtCep"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -92,7 +92,6 @@
                     android:id="@+id/ltEdtNumero"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtLogradouro"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -112,7 +111,6 @@
                     android:id="@+id/ltEdtBairro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtNumero"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -132,7 +130,6 @@
                     android:id="@+id/ltEdtLocalidade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtBairro"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -152,7 +149,6 @@
                     android:id="@+id/ltEdtUf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtLocalidade"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
@@ -172,22 +168,22 @@
                     android:id="@+id/ltEditComplemento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ltEdtUf"
                     android:textColorHint="@color/colorPrimary"
                     app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/edtComplemento"
+                        android:hint="@string/hitComplemento"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/colorPrimary"
                         android:fontFamily="sans-serif"
-                        android:hint="@string/hitComplemento"
-                        android:inputType="text"
+                        android:inputType="textPostalAddress"
                         android:textColor="@color/textSecond2"
                         android:textColorHint="@color/colorPrimary" />
+                        />
                 </android.support.design.widget.TextInputLayout>
-            </RelativeLayout>
+            </LinearLayout>
 
 
 
