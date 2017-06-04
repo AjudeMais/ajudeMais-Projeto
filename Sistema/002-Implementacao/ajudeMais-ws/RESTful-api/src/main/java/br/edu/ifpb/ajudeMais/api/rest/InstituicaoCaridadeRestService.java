@@ -29,8 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.edu.ifpb.ajudeMais.data.repository.CategoriaRepository;
-import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
@@ -63,9 +61,6 @@ public class InstituicaoCaridadeRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoService;
-	
-	@Autowired
-	private CategoriaRepository categoriaRepository;
 
 	/**
 	 * <p>
@@ -102,9 +97,7 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade)
 			throws AjudeMaisException {
-		
-		List<Categoria> categorias = categoriaRepository.findByInstituicaoCaridade(instituicaoCaridade);
-		instituicaoCaridade.setItensDoaveis(categorias);
+
 		InstituicaoCaridade instituicao = instituicaoService.update(instituicaoCaridade);
 
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);
@@ -156,7 +149,7 @@ public class InstituicaoCaridadeRestService {
 	 * @param localidade
 	 * @param uf
 	 * @return
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoCoordinates")
@@ -169,6 +162,7 @@ public class InstituicaoCaridadeRestService {
 
 	/**
 	 * End point para buscar uma instituição de caridade pelo ID.
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -176,28 +170,26 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<InstituicaoCaridade> findById(@PathVariable Long id) {
 		InstituicaoCaridade instituicao = instituicaoService.findById(id);
-		
+
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);
-		
+
 	}
-	
+
 	/**
 	 * <p>
-	 * GET /instituicao/ativas
-	 * ROLE: ADMIN, DOADOR
+	 * GET /instituicao/ativas ROLE: ADMIN, DOADOR
 	 * </p>
 	 * 
 	 * @return {@link List} lista de instituições ativas
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN,DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/ativas")
-	public ResponseEntity<List<InstituicaoCaridade>>  findByContaAtivo() {
-		
+	public ResponseEntity<List<InstituicaoCaridade>> findByContaAtivo() {
+
 		List<InstituicaoCaridade> instituicoes = instituicaoService.findByContaAtivo(true);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 
 	}
-	
 
 }

@@ -19,26 +19,33 @@ import br.edu.ifpb.ajudeMais.api.rest.CampanhaRestService;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
 /**
  * Classe utilizada para executar testes para {@link CampanhaRestService}
+ * 
  * @author elson
  *
  */
-public class CampanhaRestServiceTest extends AbstractRestTest{
-	
+public class CampanhaRestServiceTest extends AbstractRestTest {
+
 	/**
 	 * 
 	 */
 	private Campanha campanha;
-	private Categoria categoria;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private ContaService contaService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private CategoriaService categoriaService;
 
 	/**
 	 * <p>
@@ -48,7 +55,7 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 	 */
 	@Override
 	protected void doInit() throws Exception {
-		
+
 		final Conta conta = new Conta();
 		conta.setUsername("instituicaoTESTE");
 		conta.setSenha("123456");
@@ -56,9 +63,17 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 		conta.setEmail("istituicaoteste@gmail.com");
 		conta.setAtivo(true);
 		contaService.save(conta);
+
+		Categoria categoria = new Categoria();
+		categoria.setNome("roupas");
+		categoria.setDescricao("agasalho");
+		categoria.setAtivo(true);
+		categoriaService.save(categoria);
 	}
+
 	/**
 	 * cria uma campanha, deve retornar um status http 201
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -69,8 +84,10 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 				.header("Authorization", getAuth("instituicaoTESTE", "123456")).content(toJson(campanha)))
 				.andExpect(status().isCreated());
 	}
+
 	/**
 	 * atualiza uma campanha, deve retornar um status http 200
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -82,8 +99,10 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 				.header("Authorization", getAuth("instituicaoTESTE", "123456")).content(toJson(campanha)))
 				.andExpect(status().isOk());
 	}
+
 	/**
 	 * Tenta criar uma campanha nula, deve retornar um status http 400
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -93,28 +112,34 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 				.header("Authorization", getAuth("instituicaoTESTE", "123456")).content(toJson(campanha)))
 				.andExpect(status().isBadRequest());
 	}
+
 	/**
 	 * tenta pegar as campanhas sem autorização, retorna status http 401
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
 	public void getCampanhasWithoutAuth() throws IOException, Exception {
 		mockMvc.perform(get("/campanha")).andExpect(status().isUnauthorized());
-		
+
 	}
+
 	/**
 	 * tenta atualizar campanha sem autorização, deve retornar status http 401
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
 	public void updateCampanhasWithoutAuth() throws IOException, Exception {
 		mockMvc.perform(get("/campanha")).andExpect(status().isUnauthorized());
-		
+
 	}
+
 	/**
 	 * pega todas as campanhas ja cadastradas retorna status http 200
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -123,19 +148,23 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 		mockMvc.perform(get("/campanha").header("Authorization", getAuth("instituicaoTESTE", "123456")))
 				.andExpect(status().isOk());
 	}
+
 	/**
 	 * tenta pegar as campanhas por instituiçao retorna status http 200
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
 	public void getCampanhasByInstituicaoOk() throws IOException, Exception {
-		mockMvc.perform(get("/campanha/filter/instituicao").header("Authorization", getAuth("instituicaoTESTE", "123456")))
+		mockMvc.perform(
+				get("/campanha/filter/instituicao").header("Authorization", getAuth("instituicaoTESTE", "123456")))
 				.andExpect(status().isOk());
 	}
-	
+
 	/**
 	 * Tenta buscar uma campanha pelo identificador sem está autenticado.
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -143,8 +172,11 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 	public void findCampanhaByIdNotAuth() throws IOException, Exception {
 		mockMvc.perform(get("/campanha/10")).andExpect(status().isUnauthorized());
 	}
+
 	/**
-	 * recupera uma campanha pelo seu identificador, deve retornar status http 200
+	 * recupera uma campanha pelo seu identificador, deve retornar status http
+	 * 200
+	 * 
 	 * @throws IOException
 	 * @throws Exception
 	 */
@@ -153,9 +185,9 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 		mockMvc.perform(get("/campanha/100").header("Authorization", getAuth("instituicaoTESTE", "123456")))
 				.andExpect(status().isOk());
 	}
-	
+
 	/**
-	 * @throws ParseException 
+	 * @throws ParseException
 	 * 
 	 * 
 	 */
@@ -163,16 +195,12 @@ public class CampanhaRestServiceTest extends AbstractRestTest{
 		campanha = new Campanha();
 		campanha.setNome("Natal sem fome");
 		campanha.setDescricao("campanha para arrecadar alimentos para os moradores de rua");
-		
-		categoria =  new Categoria();
-		categoria.setNome("roupas");
-		categoria.setDescricao("agasalho");
-		categoria.setAtivo(true);
-		
+
+		Categoria categoria = categoriaService.findAll().get(0);
+
 		List<Categoria> categorias = new ArrayList<>();
 		categorias.add(categoria);
 		campanha.setItensDoaveis(categorias);
-		
-		
+
 	}
 }

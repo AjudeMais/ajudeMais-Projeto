@@ -25,6 +25,7 @@
          */
         vm.getDonativos = function () {
             donativoService.getByInstituicao().then(function (response) {
+                console.log(response.data, "<>");
                 vm.donativos = response.data;
             });
         }
@@ -35,7 +36,7 @@
          *
          * @param campanha
          */
-        vm.openDetails = function (doonativo) {
+        vm.openDetails = function (donativo) {
             $state.go("home.donativo.detail", {donativoDetail: JSON.stringify(donativo)});
         }
     }
