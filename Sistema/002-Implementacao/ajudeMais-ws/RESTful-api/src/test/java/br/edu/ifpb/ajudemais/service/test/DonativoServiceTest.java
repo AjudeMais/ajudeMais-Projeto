@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -231,6 +232,22 @@ public class DonativoServiceTest {
 		assertNotNull(mockedDonativos);
 	}
 	
+	/**
+	 * 
+	 */
+	@Test
+	public void findByNomeOk() {
+		Donativo donativo = getDonativo();
+		
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+		
+		when(mockDonativoService.findByNome("Roupas")).thenReturn(donativos);
+		List<Donativo> mockDonativos = mockDonativoService.findByNome("Roupas");
+		
+		assertTrue(mockDonativos.size() > 0);
+	}
+	
 
 	/**
 	 * Cria um donativo qualquer para ser utilizado durante os testes
@@ -265,6 +282,5 @@ public class DonativoServiceTest {
 		donativo.setDoador(doador);
 		
 		return donativo;
-		
 	}
 }
