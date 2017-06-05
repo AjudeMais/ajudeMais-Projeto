@@ -36,7 +36,7 @@ public class CriarInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	 */
 	public boolean houveUmErrorCampoInformadoJaExiste(String mensagem){
 		
-		return $(By.xpath("//*[@id='toast-container']/div/div/div/div[2]")).getText().equals(mensagem);
+		return $(By.xpath("//*[@id='toast-container']/div/div/div")).getText().equals(mensagem);
 	}
 
 	

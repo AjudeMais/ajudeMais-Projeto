@@ -1,10 +1,13 @@
 package br.edu.ifpb.ajudemais.testeaceitacao.doacaoTest;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
+import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,6 +15,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.codeborne.selenide.WebDriverRunner;
+
+import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.doacao.DoacaoPage;
 
 /**
  * 
@@ -27,13 +32,14 @@ import com.codeborne.selenide.WebDriverRunner;
  * <pre>
  * </pre
  *
- * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AcompanhamentoDoacaoTest {
 
 	private WebDriver driver;
+
+	private DoacaoPage doacaoPage;
 
 	@Before
 	public void setUp() throws Exception {
@@ -49,7 +55,7 @@ public class AcompanhamentoDoacaoTest {
 
 		driver.manage().window().maximize();
 		System.setProperty("selenide.browser", "Chrome");
-		//instituicaoCaridadePage = new InstituicaoCaridadePage(driver);
+		doacaoPage = new DoacaoPage(driver);
 
 		WebDriverRunner.setWebDriver(driver);
 
@@ -62,6 +68,25 @@ public class AcompanhamentoDoacaoTest {
 	@After
 	public void tearDown() throws Exception {
 		driver.close();
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void visita() {
+		doacaoPage.visita();
+		assertTrue(doacaoPage.visualizaPaginaPesquisa());
+	}
+
+	/**
+	 * 
+	 */
+	@Test
+	public void visualizaDetalhes() {
+		doacaoPage.visita();
+
+		assertTrue("Deveria ter mostrado os detalhes", doacaoPage.detail().validatePage());
 	}
 
 }

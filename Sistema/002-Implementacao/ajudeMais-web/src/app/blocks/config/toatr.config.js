@@ -7,7 +7,7 @@
     angular.module('amApp')
         .config(function (toastrConfig) {
             angular.extend(toastrConfig, {
-                timeOut: 2000,
+                timeOut: 3000,
                 progressBar: false
             });
         });
