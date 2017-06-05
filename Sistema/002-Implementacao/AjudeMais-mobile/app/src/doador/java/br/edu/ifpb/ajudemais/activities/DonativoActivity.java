@@ -1,13 +1,14 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
-
+import android.widget.ProgressBar;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
@@ -34,6 +35,7 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
     private Toolbar mToolbar;
     private GetImageTask getImageTask;
     private ImageView imageHeader;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,9 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+        progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
+        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
+                android.graphics.PorterDuff.Mode.MULTIPLY);
 
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -83,11 +88,14 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
      */
     private void executeLoadingPhotoTask(final String imageName) {
         getImageTask = new GetImageTask(this, imageName);
+        getImageTask.setProgressAtivo(false);
         getImageTask.delegate = new AsyncResponse<byte[]>() {
             @Override
             public void processFinish(byte[] output) {
                 Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
+                imageHeader.setVisibility(View.VISIBLE);
                 imageHeader.setImageBitmap(bitmap);
+                progressBar.setVisibility(View.GONE);
             }
         };
 

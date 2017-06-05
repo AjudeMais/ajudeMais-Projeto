@@ -36,7 +36,7 @@ public class DonativoServiceImpl implements DonativoService {
 	private DonativoRepository donativoRepository;
 	
 	/**
-	 * 
+	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -59,7 +59,9 @@ public class DonativoServiceImpl implements DonativoService {
 	@Transactional
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
-		return null;
+		Donativo donativoUpdated = donativoRepository.save(entity);
+		return donativoUpdated;
+
 	}
 
 	/**

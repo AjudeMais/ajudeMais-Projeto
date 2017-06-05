@@ -113,7 +113,6 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                 } else {
                     donativos = output;
                     showListCampanhas();
-
                     donativosAdapter = new DonativosAdapter(donativos, getActivity());
                     recyclerView.setAdapter(donativosAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));

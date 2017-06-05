@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/screen_border"
+                    android:background="@drawable/screen_border_disponibilizado"
                     android:paddingLeft="9dp"
                     android:paddingRight="9dp"
                     android:text="Disponibilizado"

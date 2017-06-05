@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 
 import org.springframework.web.client.RestClientException;
 
-import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.ImagemStorageRemoteService;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
@@ -27,10 +26,11 @@ public class GetImageTask extends AsyncTask<Void, Void, byte[]> {
     private ImagemStorageRemoteService imagemStorageRemoteService;
     private String message;
     private Context context;
+    private boolean progressAtivo = true;
     public AsyncResponse<byte[]> delegate = null;
 
 
-    public GetImageTask(Context context, String imageName){
+    public GetImageTask(Context context, String imageName) {
         this.context = context;
         this.imageName = imageName;
         this.progressDialog = new ProgressDialog(context);
@@ -42,7 +42,9 @@ public class GetImageTask extends AsyncTask<Void, Void, byte[]> {
      */
     @Override
     protected void onPreExecute() {
-        progressDialog.showProgressDialog();
+        if (progressAtivo) {
+            progressDialog.showProgressDialog();
+        }
         super.onPreExecute();
     }
 
@@ -56,9 +58,9 @@ public class GetImageTask extends AsyncTask<Void, Void, byte[]> {
     @Override
     protected byte[] doInBackground(Void... params) {
         try {
-            byte [] photo = imagemStorageRemoteService.getImage(imageName);
+            byte[] photo = imagemStorageRemoteService.getImage(imageName);
 
-            return  photo;
+            return photo;
         } catch (RestClientException e) {
             message = e.getMessage();
             e.printStackTrace();
@@ -70,14 +72,25 @@ public class GetImageTask extends AsyncTask<Void, Void, byte[]> {
     }
 
     /**
-     *
      * @param bytes
      */
     @Override
     protected void onPostExecute(byte[] bytes) {
-        if (bytes != null){
+
+        if (progressAtivo) {
+            progressDialog.dismissProgressDialog();
+        }
+        if (bytes != null) {
             delegate.processFinish(bytes);
         }
         super.onPostExecute(bytes);
+    }
+
+    /**
+     * Para dar opção de executar progress dialog ou não.
+     * @param progressAtivo
+     */
+    public void setProgressAtivo(boolean progressAtivo) {
+        this.progressAtivo = progressAtivo;
     }
 }

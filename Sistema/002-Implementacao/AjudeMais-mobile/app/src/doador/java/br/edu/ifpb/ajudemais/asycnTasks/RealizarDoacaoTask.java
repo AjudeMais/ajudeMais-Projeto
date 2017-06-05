@@ -70,7 +70,7 @@ public class RealizarDoacaoTask extends AsyncTask<Void, Void, Donativo> {
             estadoDoacao.setAtivo(true);
             estadoDoacao.setEstadoDoacao(Estado.DISPONIBILIZADO);
             donativo.getEstadosDaDoacao().add(estadoDoacao);
-            donativo = donativoRemoteService.saveDoador(donativo);
+            donativo = donativoRemoteService.saveDonativo(donativo);
 
             return  donativo;
         } catch (RestClientException e) {

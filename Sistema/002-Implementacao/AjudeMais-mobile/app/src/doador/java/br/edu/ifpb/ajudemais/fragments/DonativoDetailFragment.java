@@ -10,13 +10,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateEstadoDonativoTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
+import br.edu.ifpb.ajudemais.enumarations.Estado;
 
 /**
  * <p>
@@ -27,10 +31,11 @@ import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
  * <p>
  * <p>
  * </p>
+ *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-public class DonativoDetailFragment extends Fragment {
+public class DonativoDetailFragment extends Fragment implements View.OnClickListener{
 
     private View view;
     private Donativo donativo;
@@ -42,6 +47,10 @@ public class DonativoDetailFragment extends Fragment {
     private SeekBar seekBarImages;
     private TextView stateDoacao;
     private TextView descriptionStateDoacao;
+    private EstadoDoacao estadoDoacao;
+    private UpdateEstadoDonativoTask updateEstadoDonativoTask;
+
+    private Button btnCancelDoacao;
 
 
     private RecyclerView recyclerView;
@@ -71,40 +80,54 @@ public class DonativoDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
         categoriaName = (TextView) getView().findViewById(R.id.tv_categoria);
-        descriptionStateDoacao  = (TextView) getView().findViewById(R.id.tv_state);
+        descriptionStateDoacao = (TextView) getView().findViewById(R.id.tv_state);
         stateDoacao = (TextView) getView().findViewById(R.id.tv_donative_estado_lb);
         seekBarImages = (SeekBar) getView().findViewById(R.id.seekBar);
         quantImages = (TextView) getView().findViewById(R.id.tv_quant_images);
+        btnCancelDoacao = (Button) getView().findViewById(R.id.btnCancelaDoacao);
+        btnCancelDoacao.setOnClickListener(this);
 
-        seekBarImages.setProgress(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size(): 0);
-        quantImages.setText(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size()+"/3":"0/3");
+        seekBarImages.setProgress(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size() : 0);
+        quantImages.setText(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size() + "/3" : "0/3");
 
         descricaoDonativo.setText(donativo.getDescricao());
-        nomeInstituicao.setText(getString(R.string.doado_to)+" "+donativo.getCategoria().getInstituicaoCaridade().getNome());
-        categoriaName.setText("Categoria :"+donativo.getCategoria().getNome());
-
-        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()){
-            if (estado.getAtivo() != null && estado.getAtivo()){
-               //MElhorar para quando for outros estados;
-                stateDoacao.setText(estado.getEstadoDoacao().name());
-            }
-        }
-
+        nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
+        categoriaName.setText("Categoria: " + donativo.getCategoria().getNome());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
 
-        disponibilidadeHorarioAdapter = new DisponibilidadeHorarioAdapter(donativo.getHorariosDisponiveis(),getContext());
+        disponibilidadeHorarioAdapter = new DisponibilidadeHorarioAdapter(donativo.getHorariosDisponiveis(), getContext());
         recyclerView.setAdapter(disponibilidadeHorarioAdapter);
 
         setAtrAddressIntoCard(donativo.getEndereco());
+        validateAndSetStateDoacao();
 
     }
 
+    /**
+     * Valida o estado da doação e seta o estado na label.
+     */
+    private void validateAndSetStateDoacao(){
+        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
+            if (estado.getAtivo() != null && estado.getAtivo()) {
+                if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO)){
+                    btnCancelDoacao.setVisibility(View.GONE);
+                }
+                if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
+                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
+                }
+                stateDoacao.setText(estado.getEstadoDoacao().name());
+                this.estadoDoacao = estado;
+            }
+        }
+
+    }
 
 
     /**
@@ -120,5 +143,22 @@ public class DonativoDetailFragment extends Fragment {
         ((TextView) cardView.findViewById(R.id.tv_uf_name)).setText(endereco.getUf());
     }
 
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.btnCancelaDoacao){
+            for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
+                if (estado.getAtivo() != null && estado.getAtivo()) {
+                    if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)){
+                        btnCancelDoacao.setVisibility(View.GONE);
+                    }
+                    if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
+                        stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
+                    }
+                    stateDoacao.setText(estado.getEstadoDoacao().name());
+                    this.estadoDoacao = estado;
+                }
+            }
+        }
+    }
 }
 

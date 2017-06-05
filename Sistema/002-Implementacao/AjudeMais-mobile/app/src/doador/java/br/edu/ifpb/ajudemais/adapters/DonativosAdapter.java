@@ -10,12 +10,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
+import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 /**
  * <p>
@@ -28,13 +29,13 @@ import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.ViewHolder>{
+public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.ViewHolder> {
 
     private List<DoacaoAdapterDto> donativos;
     private Context context;
     private AndroidUtil androidUtil;
 
-    public DonativosAdapter(List<DoacaoAdapterDto> donativos, Context context){
+    public DonativosAdapter(List<DoacaoAdapterDto> donativos, Context context) {
         this.context = context;
         this.donativos = donativos;
         this.androidUtil = new AndroidUtil(context);
@@ -42,7 +43,6 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     }
 
     /**
-     *
      * @param parent
      * @param viewType
      * @return
@@ -54,7 +54,6 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     }
 
     /**
-     *
      * @param holder
      * @param position
      */
@@ -67,21 +66,24 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
             holder.imageView.setImageBitmap(androidUtil.convertBytesInBitmap(donativos.get(position).getPhoto()));
         }
 
-        for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()){
-            if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()){
+        for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()) {
+            if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()) {
+                if (estadoDoacao.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
+                    holder.estadoDoacao.setBackground(context.getDrawable(R.drawable.screen_border_cancelado));
+                }
+
                 holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name());
             }
         }
     }
 
     /**
-     *
      * @return
      */
     @Override
     public int getItemCount() {
 
-        if(donativos == null){
+        if (donativos == null) {
             donativos = new ArrayList<>();
         }
         return donativos.size();

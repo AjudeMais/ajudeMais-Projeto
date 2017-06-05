@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <FrameLayout
-            android:id="@+id/donativo_detail_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -39,7 +28,19 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="center"
-                app:layout_collapseMode="parallax" />
+                android:visibility="gone"
+                app:layout_collapseMode="parallax"
+                android:contentDescription="@string/lb_imag_donativo"
+                tools:ignore="ContentDescription" />
+
+            <ProgressBar
+                android:id="@+id/progress_presentation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_gravity="center"
+                android:indeterminateTintMode="src_atop"
+                android:max="100" />
 
 
             <android.support.v7.widget.Toolbar
@@ -60,4 +61,16 @@
         android:src="@drawable/ic_share"
         app:layout_anchor="@+id/appbar"
         app:layout_anchorGravity="bottom|right|end" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <FrameLayout
+            android:id="@+id/donativo_detail_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

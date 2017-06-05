@@ -204,4 +204,5 @@
     <string name="no_coletada">Aguadando mensageiro aceitar coletar</string>
     <string name="imagens_lb">Imagens: </string>
     <string name="doado_to">Doado para instituição:</string>
+    <string name="lb_imag_donativo">Imagem do donativo</string>
 </resources>
