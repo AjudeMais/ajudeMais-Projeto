@@ -17,11 +17,17 @@
         vm.donativo = {};
         var donativoDetailparam = JSON.parse($stateParams.donativoDetail);
         vm.images = [];
+        vm.estado;
 
         if (donativoDetailparam) {
             vm.donativo = donativoDetailparam;
-            console.log(vm.donativo);
             getImages();
+            vm.donativo.estadosDaDoacao.forEach(function (estado) {
+                if (estado.ativo) {
+                    vm.estado = estado;
+                }
+            });
+
         }
 
         function getImages() {
@@ -70,4 +76,5 @@
             return window.btoa(binary);
         }
     }
+
 })();
