@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragmentMain;
+import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.dto.LatLng;
+import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 
@@ -40,6 +42,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     private RelativeLayout componentLoading;
     private FrameLayout componentView;
     private RelativeLayout componentNoInternet;
+    private WriteStoreDevicePermission writeStoreDevicePermission;
 
 
     /**
@@ -65,6 +68,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
+        writeStoreDevicePermission = new WriteStoreDevicePermission(getApplicationContext());
 
         fab.setOnClickListener(this);
     }
@@ -75,6 +79,9 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         super.onStart();
 
         new LoadingCampanhasDoacoesTask().execute();
+        if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+            new FacebookProfilePictureTask(getApplicationContext()).execute();
+        }
     }
 
     /**
