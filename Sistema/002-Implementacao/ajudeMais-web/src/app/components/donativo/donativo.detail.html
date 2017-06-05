@@ -25,10 +25,9 @@
                                 <td>{{vm.donativo.categoria.nome}}</td>
                             </tr>
                             <tr>
-                                <th>Status</th>
+                                <th>Estado</th>
                                 <td>
-                                    <span ng-class="{'label label-danger': !vm.campanha.status,
-													'label label-success': vm.campanha.status}">{{vm.campanha.status? 'Ativo': 'Inativo'}}</span>
+                                    <span class="{{vm.estado.estadoDoacao | status}}">{{vm.estado.estadoDoacao}}</span>
                                 </td>
                             </tr>
                         </table>
@@ -62,8 +61,8 @@
                             <tbody>
                             <tr ng-repeat="horario in vm.donativo.horariosDisponiveis">
 
-                                <td>{{horario.horaInicio | date: "dd/MM/yyyy mm:ss"}}</td>
-                                <td>{{horario.horaFim | date: "dd/MM/yyyy mm:ss"}}</td>
+                                <td>{{horario.horaInicio | date: "dd/MM/yyyy HH:mm"}}</td>
+                                <td>{{horario.horaFim | date: "dd/MM/yyyy HH:mm"}}</td>
 
                             </tr>
                             </tbody>

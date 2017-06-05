@@ -109,11 +109,11 @@ public class InstituicaoCaridadePage extends AbstractPage {
 			$("#telefone").setValue(telefone);
 			$("#email").setValue(email);
 			
-			$("#bairro").setValue(bairro);
-			$("#complemento").setValue(complemento);
 			$("#zipCode").setValue(cep);
 			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
-			Thread.sleep(1000l);
+			Thread.sleep(7000l);
+			$("#bairro").setValue(bairro);
+			$("#complemento").setValue(complemento);
 			$("#logradouro").setValue(logradouro);
 			$("#numero").setValue(numeroEndereco);
 			//*[@id="content-wrapper"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button

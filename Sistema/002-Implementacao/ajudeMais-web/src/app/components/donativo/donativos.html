@@ -30,8 +30,7 @@
                                 <td>{{donativo.quantidade}}</td>
                                 <td>{{donativo.doador.nome}}</td>
                                 <td>
-                                        <span ng-class="{'label label-danger': !donativo.status,
-													'label label-success': donativo.status}">{{donativo.status? 'Ativo': 'Inativo'}}</span>
+                                    <span class="{{vm.getEtadosDonativo(donativo.estadosDaDoacao) | status}}">{{vm.getEtadosDonativo(donativo.estadosDaDoacao)}}</span>
                                 </td>
                             </tr>
                             </tbody>
