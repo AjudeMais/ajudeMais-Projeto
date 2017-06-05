@@ -22,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
 
@@ -361,10 +360,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
          */
         private void showResult(String result) {
             if (result != null) {
-                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(result);
-
+                if (getContext() != null) {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(result);
+                }
             } else {
-                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast("Aconteceu algum erro no servidor!");
+                if (getContext() != null) {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast("Aconteceu algum erro no servidor!");
+                }
             }
         }
     }
