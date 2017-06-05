@@ -178,7 +178,7 @@
     <string name="invalide_hour">Hora inválida</string>
     <string name="data_before_actual">Data é inferior a atual</string>
     <string name="selcione_images_do_item">Selecione imagens do item</string>
-    <string name="donativo_information">Informações do donativo</string>
+    <string name="donativo_information">Informações da Doação</string>
     <string name="DisponibilidadesForColeta">Disponibilidade para coleta</string>
     <string name="categoria">Categoria: </string>
     <string name="disponibilidade_removida">Disponibilidade removida</string>
@@ -198,4 +198,10 @@
     <string name="msgNotNumber">Número inválido</string>
     <string name="my_doacoes">Minhas Doações</string>
     <string name="campanhas_active">Campanhas</string>
+    <string name="btnCancelDoacao">CANCELAR DOAÇÃO</string>
+    <string name="donativo_estado_coleta">Estado da Doação</string>
+    <string name="state_doacao_name">Estado da doação: </string>
+    <string name="no_coletada">Aguadando mensageiro aceitar coletar</string>
+    <string name="imagens_lb">Imagens: </string>
+    <string name="doado_to">Doado para instituição:</string>
 </resources>
