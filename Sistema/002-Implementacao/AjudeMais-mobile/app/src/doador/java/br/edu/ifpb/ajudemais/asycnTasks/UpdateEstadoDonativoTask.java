@@ -28,7 +28,7 @@ public class UpdateEstadoDonativoTask extends AsyncTask<Void, Void, Donativo> {
     private DonativoRemoteService donativoRemoteService;
     private Donativo donativo;
     private Context context;
-    private AsyncResponse<Donativo> delegate;
+    public AsyncResponse<Donativo> delegate;
 
     public UpdateEstadoDonativoTask(Context context, Donativo donativo) {
         this.context = context;

@@ -205,4 +205,8 @@
     <string name="imagens_lb">Imagens: </string>
     <string name="doado_to">Doado para instituição:</string>
     <string name="lb_imag_donativo">Imagem do donativo</string>
+    <string name="cancel_doacao">Você deseja realmente cancelar esta doação?</string>
+    <string name="dialog_message">Ao cancelar uma doação, não será mais possível alterá-la</string>
+    <string name="operacao_cancela">Operação cancelada.</string>
+    <string name="doacao_cancelada">Doação cancelada.</string>
 </resources>

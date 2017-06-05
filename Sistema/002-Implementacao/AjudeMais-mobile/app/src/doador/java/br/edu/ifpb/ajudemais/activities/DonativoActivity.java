@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -75,6 +76,9 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
 
         if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().size() > 0) {
             executeLoadingPhotoTask(donativo.getFotosDonativo().get(0).getNome());
+        }else {
+            progressBar.setVisibility(View.GONE);
+            imageHeader.setVisibility(View.VISIBLE);
         }
 
         fab = (FloatingActionButton) findViewById(R.id.fabCampanhaShare);
@@ -100,5 +104,23 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         };
 
         getImageTask.execute();
+    }
+
+    /**
+     * Implementação para controlar operações na action bar
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

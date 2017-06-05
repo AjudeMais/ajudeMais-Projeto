@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,8 +69,13 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
         for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()) {
             if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()) {
-                if (estadoDoacao.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
-                    holder.estadoDoacao.setBackground(context.getDrawable(R.drawable.screen_border_cancelado));
+                if (estadoDoacao.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
+                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_cancelado);
+                    holder.estadoDoacao.setTextColor(Color.WHITE);
+
+                }else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())){
+                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_disponibilizado);
+                    holder.estadoDoacao.setTextColor(Color.parseColor("#665e5e"));
                 }
 
                 holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name());

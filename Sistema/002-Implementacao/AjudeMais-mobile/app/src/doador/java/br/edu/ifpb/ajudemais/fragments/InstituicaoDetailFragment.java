@@ -109,8 +109,6 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
     @Override
     public void onStart() {
         super.onStart();
-
-
         descricaoInstituicao.setText(instituicaoCaridade.getDescricao());
         emailInstituicao.setText(instituicaoCaridade.getConta().getEmail());
         logradouroInstituicao.setText(instituicaoCaridade.getEndereco().getLogradouro() + ", " +
