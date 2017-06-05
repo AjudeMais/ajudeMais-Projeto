@@ -90,4 +90,14 @@ public interface ImagemStorage {
 	 */
 	void remove(String img);
 
+	/**
+	 * <p>
+	 * Remove uma imagem de TEMP
+	 * </p>
+	 * 
+	 * @param img
+	 * @throws ImageErrorException 
+	 */
+	void removeTmp(String img) throws ImageErrorException;
+
 }

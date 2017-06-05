@@ -10,6 +10,8 @@
                             <tr>
                                 <th width="8%">Ações</th>
                                 <th width="25%">Donativo</th>
+                                <th width="25%">Categotia</th>
+                                <th width="8%">Qtd</th>
                                 <th width="25%">Doador</th>
                                 <th width="15%">Estado</th>
                             </tr>
@@ -24,10 +26,11 @@
                                     </button>
                                 </td>
                                 <td>{{donativo.nome}}</td>
+                                <td>{{donativo.categoria.nome}}</td>
+                                <td>{{donativo.quantidade}}</td>
                                 <td>{{donativo.doador.nome}}</td>
                                 <td>
-                                        <span ng-class="{'label label-danger': !donativo.status,
-													'label label-success': donativo.status}">{{donativo.status? 'Ativo': 'Inativo'}}</span>
+                                    <span class="{{vm.getEtadosDonativo(donativo.estadosDaDoacao) | status}}">{{vm.getEtadosDonativo(donativo.estadosDaDoacao)}}</span>
                                 </td>
                             </tr>
                             </tbody>

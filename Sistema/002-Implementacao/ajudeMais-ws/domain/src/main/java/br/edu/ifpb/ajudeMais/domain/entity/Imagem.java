@@ -12,6 +12,8 @@
  */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,7 +32,12 @@ import javax.persistence.Id;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 @Entity
-public class Imagem {
+public class Imagem implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 

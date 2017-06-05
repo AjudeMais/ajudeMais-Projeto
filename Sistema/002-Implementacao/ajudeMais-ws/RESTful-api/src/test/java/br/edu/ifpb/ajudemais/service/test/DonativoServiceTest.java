@@ -3,6 +3,7 @@ package br.edu.ifpb.ajudemais.service.test;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -29,6 +30,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.TransactionSystemException;
 
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
+import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
@@ -147,7 +149,7 @@ public class DonativoServiceTest {
 	}
 	
 	/**
-	 * Testa a atualização de uma campanha.
+	 * Testa a atualização de um Donativo.
 	 * @throws AjudeMaisException
 	 */
 	@Test
@@ -196,6 +198,39 @@ public class DonativoServiceTest {
 		assertEquals(mockedDonativo, donativo);
 	}
 	
+	
+	/**
+	 *  Teste para encontrar donativos com base no Id de doador
+	 */
+	@Test
+	public void findByDoadorId() {
+		
+		Donativo donativo = getDoadorWithDonativo();
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+
+		when(mockDonativoService.findByDoadorId(donativo.getDoador().getId())).thenReturn(donativos);
+		List<Donativo> mockedDonativos = mockDonativoService.findByDoadorId(donativo.getDoador().getId());
+
+		assertEquals(mockedDonativos, donativos);
+	}
+	
+	/**
+	 *  Teste de falha para encontrar donativos com base no Id de doador
+	 */
+	@Test
+	public void findByDoadorIdWithIdDoadorNotValid() {
+		
+		Donativo donativo = getDoadorWithDonativo();
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+
+		when(mockDonativoService.findByDoadorId(donativo.getDoador().getId())).thenReturn(donativos);
+		List<Donativo> mockedDonativos = mockDonativoService.findByDoadorId(2l);
+
+		assertNotNull(mockedDonativos);
+	}
+	
 
 	/**
 	 * Cria um donativo qualquer para ser utilizado durante os testes
@@ -208,6 +243,26 @@ public class DonativoServiceTest {
 		donativo.setNome("Roupas");
 		donativo.setDescricao("Algumas roupas velhas, porém, em bom estado");
 		donativo.setQuantidade(10);
+		
+		return donativo;
+		
+	}
+	
+	/**
+	 * Cria um doador com donativos qualquer para ser utilizado durante os testes
+	 * @return
+	 * 		mock de donativo
+	 */
+	private Donativo getDoadorWithDonativo() {
+		Doador doador = new Doador();
+		doador.setNome("fulano");
+		doador.setId(1l);
+		
+		donativo.setNome("Roupas");
+		donativo.setDescricao("Algumas roupas velhas, porém, em bom estado");
+		donativo.setQuantidade(10);
+		
+		donativo.setDoador(doador);
 		
 		return donativo;
 		

@@ -35,6 +35,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
 import br.edu.ifpb.ajudeMais.service.storage.ImagemStorage;
 import br.edu.ifpb.ajudeMais.service.storage.impl.ImagemStorageImpl;
 
@@ -124,6 +125,20 @@ public class ImagemStoreServiceTest {
 		verify(mockImagemStorage).remove(file.getOriginalFilename());
 	}
 
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste para remoção de uma imagem em Temp.
+	 * </p>
+	 * @throws ImageErrorException 
+	 */
+	@Test
+	public void removeImageTmpOk() throws ImageErrorException {
+		mockImagemStorage.removeTmp(file.getOriginalFilename());
+		verify(mockImagemStorage).removeTmp(file.getOriginalFilename());
+	}	
+	
 	/**
 	 * 
 	 * <p>

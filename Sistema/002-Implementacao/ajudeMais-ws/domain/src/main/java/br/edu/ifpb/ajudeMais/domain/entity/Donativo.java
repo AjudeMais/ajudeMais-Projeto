@@ -67,7 +67,7 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<DisponibilidadeHorario> horariosDisponiveis;
 	
 	/**
@@ -87,7 +87,7 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Imagem> fotosDonativo;
 	
 	/**

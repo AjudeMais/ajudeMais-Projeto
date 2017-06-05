@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.fragments;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.fragments.MainSearchCampanhasFragment;
 import br.edu.ifpb.ajudemais.fragments.MainSearchIntituituicoesFragment;
 

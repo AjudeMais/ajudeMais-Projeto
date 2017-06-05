@@ -64,7 +64,10 @@
         <activity
             android:name=".activities.SelectFotoDoacaoActivity"
             android:label="@string/selcione_images_do_item" />
-        <activity android:name=".activities.ConfirmDoacaoActivity"></activity>
+        <activity
+            android:name=".activities.ConfirmDoacaoActivity"
+            android:label="@string/doacao_detail" />
+        <activity android:name=".activities.DonativoActivity"></activity>
     </application>
 
 </manifest>

@@ -13,4 +13,7 @@
     <color name="lineSeparator">#d4d3d3</color>
 
 
+    <color name="colorStateDisponibilizado">#fbff00</color>
+    <color name="colorStateCancelaodo">#E37B7E</color>
+
 </resources>

@@ -42,6 +42,11 @@ public class EstadoDoacao implements Serializable{
     /**
      *
      */
+    private Boolean ativo;
+
+    /**
+     *
+     */
     private Estado estadoDoacao;
 
     /**
@@ -92,5 +97,29 @@ public class EstadoDoacao implements Serializable{
      */
     public void setEstadoDoacao(Estado estadoDoacao) {
         this.estadoDoacao = estadoDoacao;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    /**
+     *
+     * @param ativo
+     */
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
     }
 }

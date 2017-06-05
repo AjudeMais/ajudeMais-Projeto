@@ -29,6 +29,16 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByDoadorNome(String nome);
+	
+	
+	/**
+	 * Busca os donativos do doador com o id informado.
+	 * 
+	 * @param nome
+	 * @return
+	 */
+	List<Donativo> findByDoadorId(Long id);
+	
 
 	/**
 	 * 

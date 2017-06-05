@@ -11,26 +11,20 @@
  */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * 
@@ -101,14 +95,6 @@ public class InstituicaoCaridade {
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
 
-	/**
-	 * 
-	 */
-	@JsonIgnoreProperties(value = "instituicaoCaridade")
-	@OneToMany(cascade = { CascadeType.MERGE }, mappedBy = "instituicaoCaridade", fetch = FetchType.LAZY)
-	@Column(name = "itens_doaveis")
-	private List<Categoria> itensDoaveis;
-	
 	/**
 	 * @return o atributo id
 	 */
@@ -212,21 +198,6 @@ public class InstituicaoCaridade {
 	 */
 	public void setConta(Conta conta) {
 		this.conta = conta;
-	}
-
-	/**
-	 * @return o atributo itensDoaveis
-	 */
-	public List<Categoria> getItensDoaveis() {
-		return itensDoaveis;
-	}
-
-	/**
-	 * @param o
-	 *            parametro itensDoaveis é setado em itensDoaveis
-	 */
-	public void setItensDoaveis(List<Categoria> itensDoaveis) {
-		this.itensDoaveis = itensDoaveis;
 	}
 
 	/*

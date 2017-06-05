@@ -5,11 +5,13 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -34,12 +36,21 @@ public class DonativoServiceImpl implements DonativoService {
 	private DonativoRepository donativoRepository;
 	
 	/**
+	 *           
+	 */
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
+	/**
 	 * 
 	 */
 	@Transactional
 	@Override
 	public Donativo save(Donativo entity) throws AjudeMaisException {
-		return donativoRepository.save(entity);
+		Donativo donativoSaved = donativoRepository.save(entity);
+		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+
+		return donativoSaved;
 	}
 
 	/**
@@ -48,7 +59,9 @@ public class DonativoServiceImpl implements DonativoService {
 	@Transactional
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
-		return null;
+		Donativo donativoUpdated = donativoRepository.save(entity);
+		return donativoUpdated;
+
 	}
 
 	/**
@@ -90,6 +103,14 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
+	}
+	
+	/**
+	 * Busca donativos de acordo com id do doador.
+	 */
+	@Override
+	public List<Donativo> findByDoadorId(Long idDoador) {
+		return donativoRepository.findByDoadorId(idDoador);
 	}
 
 	/**

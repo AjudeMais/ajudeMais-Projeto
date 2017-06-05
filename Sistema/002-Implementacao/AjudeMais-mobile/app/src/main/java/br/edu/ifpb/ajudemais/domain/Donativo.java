@@ -144,8 +144,7 @@ public class Donativo implements Serializable{
 
     /**
      * @return the horariosDisponiveis
-     */
-    public List<DisponibilidadeHorario> getHorariosDisponiveis() {
+     */    public List<DisponibilidadeHorario> getHorariosDisponiveis() {
         return horariosDisponiveis;
     }
 

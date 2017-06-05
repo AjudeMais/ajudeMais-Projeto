@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -60,7 +61,7 @@ public class DonativoRestService {
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {
-		Donativo donativoSalvo = donativoService.save(donativo);
+		Donativo donativoSalvo = donativoService.update(donativo);
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.OK);
 	}
 	
@@ -85,6 +86,18 @@ public class DonativoRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/doadorNome")
 	public ResponseEntity<List<Donativo>> findByDoadorNome(@RequestParam("doadorNome") String nome) {
 		List<Donativo> donativos = donativoService.findByDoadorNome(nome);
+		return new ResponseEntity<>(donativos, HttpStatus.OK);
+	}
+	
+	/**
+	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos doados por doador
+	 * 
+	 * @return donativos
+	 */
+	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/{id}")
+	public ResponseEntity<List<Donativo>> findByDoadorId(@PathVariable Long id) {
+		List<Donativo> donativos = donativoService.findByDoadorId(id);
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
 	

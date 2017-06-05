@@ -14,8 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.TabFragmentMain;
 import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
+import br.edu.ifpb.ajudemais.fragments.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
@@ -139,7 +139,8 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
 
         if (mLastLocation == null) {
             startLocationUpdates();
-            mLastLocation = getLocation();
+
+            //mLastLocation = getLocation();
         }
         if (mLastLocation != null) {
             SharedPrefManager.getInstance(getApplicationContext()).storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));

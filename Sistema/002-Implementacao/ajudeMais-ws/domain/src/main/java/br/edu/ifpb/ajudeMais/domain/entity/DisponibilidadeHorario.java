@@ -42,13 +42,13 @@ public class DisponibilidadeHorario implements Serializable {
 	/**
 	 * 
 	 */
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date horaInicio;
 	
 	/**
 	 * 
 	 */
-	@Temporal(TemporalType.TIME)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date horaFim;
 
 	/**

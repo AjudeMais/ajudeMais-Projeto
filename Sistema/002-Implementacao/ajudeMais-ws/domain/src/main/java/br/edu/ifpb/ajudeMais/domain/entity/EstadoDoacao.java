@@ -52,6 +52,9 @@ public class EstadoDoacao implements Serializable {
 	 */
 	private Boolean notificado;
 	
+	
+	private Boolean ativo;
+	
 	/**
 	 * 
 	 */
@@ -107,6 +110,28 @@ public class EstadoDoacao implements Serializable {
 		this.estadoDoacao = estadoDoacao;
 	}
 	
+	
+	/**
+	 * @return the ativo
+	 */
+	public Boolean getAtivo() {
+		return ativo;
+	}
+	/**
+	 * @param ativo the ativo to set
+	 */
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+	
+	/**
+	 * @return the serialversionuid
+	 */
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -114,6 +139,7 @@ public class EstadoDoacao implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((ativo == null) ? 0 : ativo.hashCode());
 		result = prime * result + ((data == null) ? 0 : data.hashCode());
 		result = prime * result + ((estadoDoacao == null) ? 0 : estadoDoacao.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -132,6 +158,11 @@ public class EstadoDoacao implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		EstadoDoacao other = (EstadoDoacao) obj;
+		if (ativo == null) {
+			if (other.ativo != null)
+				return false;
+		} else if (!ativo.equals(other.ativo))
+			return false;
 		if (data == null) {
 			if (other.data != null)
 				return false;
@@ -151,4 +182,6 @@ public class EstadoDoacao implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
 }
