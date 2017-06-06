@@ -24,19 +24,22 @@
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imagem_donativo"
-            android:layout_width="66dp"
-            android:layout_height="match_parent"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="3dp"
             android:contentDescription="@string/profileDescription"
             android:src="@drawable/img_no_image"
             app:civ_border_color="@color/colorPrimaryDark" />
 
         <LinearLayout
             android:id="@+id/componentText"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="6dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            card_view:ignore="RtlHardcoded">
 
             <TextView
                 android:id="@+id/tv_donative_name"
@@ -95,14 +98,14 @@
                     android:id="@+id/tv_donative_estado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="6dp"
                     android:paddingLeft="9dp"
                     android:paddingRight="9dp"
                     android:text="Disponibilizado"
                     android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/textSecond"
-                    android:textSize="12sp"
+                    android:textSize="@dimen/fontDefaultSubText4"
                     android:textStyle="bold"
                     card_view:ignore="HardcodedText,InefficientWeight,RtlHardcoded,RtlSymmetry" />
             </LinearLayout>

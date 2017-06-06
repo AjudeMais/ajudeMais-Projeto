@@ -17,6 +17,8 @@
     <dimen name="fontDefaultMain">18sp</dimen>
     <dimen name="fontDefaultSubText">16sp</dimen>
     <dimen name="fontDefaultSubText2">14sp</dimen>
+    <dimen name="fontDefaultSubText3">12sp</dimen>
+    <dimen name="fontDefaultSubText4">10sp</dimen>
 
 
 </resources>

@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -129,7 +130,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private void showListEmpty() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.GONE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
