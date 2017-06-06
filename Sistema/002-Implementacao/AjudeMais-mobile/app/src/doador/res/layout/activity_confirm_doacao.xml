@@ -46,7 +46,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/donativo_information"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="NotSibling,RtlHardcoded" />
 
@@ -76,7 +76,7 @@
                         android:text="Camisa Masculina"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
 
@@ -87,7 +87,7 @@
                         android:layout_marginLeft="5dp"
                         android:text="12 peças masculinas para doar"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/fontDefaultSubText2"
                         tools:ignore="HardcodedText,RtlHardcoded" />
                 </LinearLayout>
 
@@ -120,7 +120,7 @@
                         android:text="Categoria: Roupas"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
                     <LinearLayout
@@ -173,7 +173,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/endereco_for_coleta"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
@@ -217,7 +217,8 @@
                             android:layout_weight="1"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="18sp" />
+                            android:textSize="@dimen/fontDefaultMain"
+                            />
 
 
                         <LinearLayout
@@ -234,7 +235,8 @@
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textColor="@color/textSecond"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2"
+                                />
 
                             <TextView
                                 android:id="@+id/tv_number"
@@ -244,7 +246,7 @@
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textColor="@color/textSecond"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_cep_name"
@@ -253,7 +255,7 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_city"
@@ -262,7 +264,8 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2"
+                                />
 
                             <TextView
                                 android:id="@+id/tv_uf_name"
@@ -271,7 +274,7 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -292,7 +295,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/DisponibilidadesForColeta"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 

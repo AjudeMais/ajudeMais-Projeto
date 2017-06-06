@@ -14,8 +14,9 @@
     <dimen name="LagHeigth2">40dp</dimen>
     <dimen name="LagBtnFacebook">13dp</dimen>
     <dimen name="LagBtnFbRigthAndLeft">3dp</dimen>
-    <dimen name="fontSizeDetail">22sp</dimen>
-    <dimen name="fontSizeValueDetail">18sp</dimen>
+    <dimen name="fontDefaultMain">18sp</dimen>
+    <dimen name="fontDefaultSubText">16sp</dimen>
+    <dimen name="fontDefaultSubText2">14sp</dimen>
 
 
 </resources>

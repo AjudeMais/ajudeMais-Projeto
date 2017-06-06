@@ -19,7 +19,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/hitName"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/fontSizeDetail" />
+            android:textSize="@dimen/fontDefaultMain" />
 
         <TextView
             android:id="@+id/tv_edit_nome"
@@ -28,7 +28,7 @@
             android:layout_below="@+id/tv_nome"
             android:fontFamily="sans-serif"
             android:text="@string/hitName"
-            android:textSize="@dimen/fontSizeValueDetail" />
+            android:textSize="@dimen/fontDefaultSubText" />
 
 
         <TextView
@@ -40,7 +40,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/hitEmail"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/fontSizeDetail" />
+            android:textSize="@dimen/fontDefaultMain" />
 
         <TextView
             android:id="@+id/tv_edit_email"
@@ -49,7 +49,7 @@
             android:layout_below="@+id/tv_email"
             android:fontFamily="sans-serif"
             android:text="@string/hitEmail"
-            android:textSize="@dimen/fontSizeValueDetail" />
+            android:textSize="@dimen/fontDefaultSubText" />
 
         <TextView
             android:id="@+id/tv_celular"
@@ -60,7 +60,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/hitPhone"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/fontSizeDetail" />
+            android:textSize="@dimen/fontDefaultMain" />
 
         <TextView
             android:id="@+id/tv_edit_celular"
@@ -69,7 +69,7 @@
             android:layout_below="@+id/tv_celular"
             android:fontFamily="sans-serif"
             android:text="@string/hitPhone"
-            android:textSize="@dimen/fontSizeValueDetail" />
+            android:textSize="@dimen/fontDefaultSubText" />
 
         <TextView
             android:id="@+id/tv_cpf"
@@ -80,7 +80,7 @@
             android:fontFamily="sans-serif"
             android:text="@string/hitCpf"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/fontSizeDetail" />
+            android:textSize="@dimen/fontDefaultMain" />
 
         <TextView
             android:id="@+id/tv_edit_cpf"
@@ -89,7 +89,7 @@
             android:layout_below="@+id/tv_cpf"
             android:fontFamily="sans-serif"
             android:text="@string/hitPhone"
-            android:textSize="@dimen/fontSizeValueDetail" />
+            android:textSize="@dimen/fontDefaultSubText" />
 
 
     </RelativeLayout>

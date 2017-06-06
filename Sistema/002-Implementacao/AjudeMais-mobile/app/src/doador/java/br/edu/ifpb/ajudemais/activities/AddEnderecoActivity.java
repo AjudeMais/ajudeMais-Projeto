@@ -44,10 +44,6 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
 
     private TextInputEditText edtComplemento;
 
-    @Order(6)
-    @NotEmpty(messageResId = R.string.msgEmptyCep, sequence = 1)
-    private TextInputEditText edtCep;
-
     @Order(5)
     @NotEmpty(messageResId = R.string.msgEmptyLogradouro, sequence = 1)
     private TextInputEditText edtLogradouro;
@@ -59,15 +55,6 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
     @Order(3)
     @NotEmpty(messageResId = R.string.msgEmptyBairro, sequence = 1)
     private TextInputEditText edtBairro;
-
-    @Order(2)
-    @NotEmpty(messageResId = R.string.msgEmptyLocalidade, sequence = 1)
-    private TextInputEditText edtLocalidade;
-
-    @Order(1)
-    @Length(max = 2, min = 2, messageResId = R.string.msgFormatUfInvalide, sequence = 3)
-    @NotEmpty(messageResId = R.string.msgEmptyUf, sequence = 1)
-    private TextInputEditText edtUf;
 
 
     @Override
@@ -97,18 +84,6 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
      */
     private void setEndereco(Endereco endereco) {
         if (endereco != null) {
-            if (endereco.getCep() != null){
-                edtCep.setText(endereco.getCep());
-                edtCep.setVisibility(View.GONE);
-            }
-            if (endereco.getUf() != null){
-                edtUf.setText(endereco.getUf());
-                edtUf.setVisibility(View.GONE);
-            }
-            if (endereco.getLocalidade() != null){
-                edtLocalidade.setText(endereco.getLocalidade());
-                edtLocalidade.setVisibility(View.GONE);
-            }
             if (endereco.getBairro() != null){
                 edtBairro.setText(endereco.getBairro());
                 edtBairro.setVisibility(View.GONE);
@@ -126,21 +101,16 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
      */
     public void init() {
         initProperties();
-        edtCep = (TextInputEditText) findViewById(R.id.edtCep);
         edtLogradouro = (TextInputEditText) findViewById(R.id.edtLogradouro);
         edtNumero = (TextInputEditText) findViewById(R.id.edtNumero);
         edtBairro = (TextInputEditText) findViewById(R.id.edtBairro);
-        edtLocalidade = (TextInputEditText) findViewById(R.id.edtLocalidade);
         edtComplemento = (TextInputEditText) findViewById(R.id.edtComplemento);
-        edtUf = (TextInputEditText) findViewById(R.id.edtUf);
         btnCadastrarEndereco = (Button) findViewById(R.id.btnCadastrarEndereco);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         mToolbar.setTitle("Complete o endereço");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        androidUtil.setMaskCep(edtCep);
     }
 
     /**
@@ -191,10 +161,8 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         this.endereco.setLogradouro(edtLogradouro.getText().toString().trim());
         this.endereco.setNumero(edtNumero.getText().toString().trim());
         this.endereco.setBairro(edtBairro.getText().toString().trim());
-        this.endereco.setUf(edtUf.getText().toString().trim());
-        this.endereco.setLocalidade(edtLocalidade.getText().toString().trim());
         this.endereco.setComplemento(edtComplemento.getText().toString().trim().length() > 0 ? edtComplemento.getText().toString().trim() : null);
-        this.endereco.setCep(edtCep.getText().toString().trim());
+
     }
 
 
