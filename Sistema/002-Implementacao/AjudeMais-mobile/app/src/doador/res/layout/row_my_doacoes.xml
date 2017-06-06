@@ -21,15 +21,14 @@
         android:orientation="horizontal"
         android:padding="7dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/imagem_donativo"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:contentDescription=""
+            android:layout_width="66dp"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/profileDescription"
             android:src="@drawable/img_no_image"
-            card_view:ignore="ContentDescription,ObsoleteLayoutParam" />
+            app:civ_border_color="@color/colorPrimaryDark" />
 
         <LinearLayout
             android:id="@+id/componentText"
@@ -97,7 +96,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/screen_border_disponibilizado"
                     android:paddingLeft="9dp"
                     android:paddingRight="9dp"
                     android:text="Disponibilizado"
