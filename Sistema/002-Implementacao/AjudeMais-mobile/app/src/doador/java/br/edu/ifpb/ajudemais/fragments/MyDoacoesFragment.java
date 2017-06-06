@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -53,7 +52,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private LoadingDoacoesTask loadingDoacoesTask;
     private AndroidUtil androidUtil;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private SearchView searchView;
 
     /**
      * @param savedInstanceState
@@ -117,6 +116,8 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                     donativosAdapter = new DonativosAdapter(donativos, getActivity());
                     recyclerView.setAdapter(donativosAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));
+                    searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+
                 }
             }
         };
@@ -179,11 +180,13 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private List<DoacaoAdapterDto> filter(List<DoacaoAdapterDto> models, String query) {
         query = query.toLowerCase();
         final List<DoacaoAdapterDto> filteredModelList = new ArrayList<>();
-        for (DoacaoAdapterDto model : models) {
-            final String text = model.getDonativo().getNome().toLowerCase();
+        if (models != null) {
+            for (DoacaoAdapterDto model : models) {
+                final String text = model.getDonativo().getNome().toLowerCase();
 
-            if (text.contains(query)) {
-                filteredModelList.add(model);
+                if (text.contains(query)) {
+                    filteredModelList.add(model);
+                }
             }
         }
         return filteredModelList;
@@ -201,6 +204,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
 
         }
         return true;
+
     }
 
     /**
@@ -209,18 +213,19 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.search_view, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-        searchView.setOnQueryTextListener(this);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
 
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        donativosAdapter.setFilter(donativos);
+                        if (donativos != null) {
+                            donativosAdapter.setFilter(donativos);
+                        }
                         return true;
                     }
 
@@ -229,6 +234,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                         return true;
                     }
                 });
+
     }
 
 

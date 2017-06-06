@@ -62,6 +62,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     private Location mLastLocation;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
+    private SearchView searchView;
 
     /**
      *
@@ -135,9 +136,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
      * @return
      */
     private Location getUpdateLocation() {
-        LocationManager locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = null;
 
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+        if (Context.LOCATION_SERVICE != null) {
+             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+        }
+
+        if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 mLastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
@@ -192,15 +197,14 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         inflater.inflate(R.menu.search_view, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-        searchView.setOnQueryTextListener(this);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
 
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        instituicoesAdapter.setFilter(instituicoes);
+                            instituicoesAdapter.setFilter(instituicoes);
+
                         return true;
                     }
 
@@ -269,11 +273,13 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
     private List<InstituicaoCaridade> filter(List<InstituicaoCaridade> models, String query) {
         query = query.toLowerCase();
         final List<InstituicaoCaridade> filteredModelList = new ArrayList<>();
-        for (InstituicaoCaridade model : models) {
-            final String text = model.getNome().toLowerCase();
+        if (models != null) {
+            for (InstituicaoCaridade model : models) {
+                final String text = model.getNome().toLowerCase();
 
-            if (text.contains(query)) {
-                filteredModelList.add(model);
+                if (text.contains(query)) {
+                    filteredModelList.add(model);
+                }
             }
         }
         return filteredModelList;
@@ -349,6 +355,8 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                     instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
                     recyclerView.setAdapter(instituicoesAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    searchView.setOnQueryTextListener(MainSearchIntituituicoesFragment.this);
+
                 }
             } else {
                 showResult(message);
