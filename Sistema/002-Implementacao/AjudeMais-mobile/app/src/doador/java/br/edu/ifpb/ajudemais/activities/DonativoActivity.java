@@ -3,9 +3,11 @@ package br.edu.ifpb.ajudemais.activities;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -75,10 +77,38 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
 
         if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().size() > 0) {
             executeLoadingPhotoTask(donativo.getFotosDonativo().get(0).getNome());
+        }else {
+            progressBar.setVisibility(View.GONE);
+            imageHeader.setVisibility(View.VISIBLE);
         }
 
         fab = (FloatingActionButton) findViewById(R.id.fabCampanhaShare);
         fab.setOnClickListener(this);
+
+        setActionCollapsingTootlbar();
+    }
+
+    private void setActionCollapsingTootlbar(){
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+                    imageHeader.setVisibility(View.GONE);
+                } else if(isShow) {
+                    imageHeader.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
     }
 
     /**
@@ -100,5 +130,23 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         };
 
         getImageTask.execute();
+    }
+
+    /**
+     * Implementação para controlar operações na action bar
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

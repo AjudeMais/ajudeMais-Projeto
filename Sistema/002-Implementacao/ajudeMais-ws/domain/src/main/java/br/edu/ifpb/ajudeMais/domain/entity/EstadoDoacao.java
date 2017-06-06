@@ -5,9 +5,12 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -28,6 +31,7 @@ import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
  *
  */
 @Entity
+@Table(name = "estado_doacao")
 public class EstadoDoacao implements Serializable {
 	
 	/**
@@ -59,6 +63,7 @@ public class EstadoDoacao implements Serializable {
 	 * 
 	 */
 	@Column(name="estado_atual", nullable=false)
+	@Enumerated(EnumType.STRING) 
 	private Estado estadoDoacao;
 	
 	/**

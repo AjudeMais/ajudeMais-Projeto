@@ -22,6 +22,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
@@ -68,10 +69,23 @@ public class CampanhaRepositotoryTest {
 
 	/**
 	 * 
+	 */
+	@Test
+	public void findByInstituicaoTest() {
+		InstituicaoCaridade instituicaoCaridade = new InstituicaoCaridade();
+		instituicaoCaridade.setId(1l);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+
+		assertThat(!campanhas.isEmpty());
+	}
+
+	/**
+	 * 
 	 * <p>
 	 * Teste para verificação de filtro por localização de instituição.
 	 * </p>
 	 */
+	@Test
 	public void filterByInstituicaoLocalTest() {
 		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal("Ouro Velho", "PB");
 
@@ -89,7 +103,7 @@ public class CampanhaRepositotoryTest {
 		List<Campanha> campanhas = campanhaRepository.findByStatus(true);
 		assertThat(!campanhas.isEmpty());
 	}
-	
+
 	/**
 	 * 
 	 * <p>

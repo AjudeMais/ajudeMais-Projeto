@@ -1,9 +1,11 @@
 package br.edu.ifpb.ajudemais.fragments;
 
-
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +15,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
+import java.util.Date;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateEstadoDonativoTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -35,11 +39,10 @@ import br.edu.ifpb.ajudemais.enumarations.Estado;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-public class DonativoDetailFragment extends Fragment implements View.OnClickListener{
+public class DonativoDetailFragment extends Fragment implements View.OnClickListener {
 
     private View view;
     private Donativo donativo;
-
     private TextView descricaoDonativo;
     private TextView nomeInstituicao;
     private TextView categoriaName;
@@ -49,10 +52,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private TextView descriptionStateDoacao;
     private EstadoDoacao estadoDoacao;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
-
     private Button btnCancelDoacao;
-
-
     private RecyclerView recyclerView;
     private DisponibilidadeHorarioAdapter disponibilidadeHorarioAdapter;
 
@@ -79,7 +79,6 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
@@ -113,14 +112,21 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     /**
      * Valida o estado da doação e seta o estado na label.
      */
-    private void validateAndSetStateDoacao(){
+    private void validateAndSetStateDoacao() {
         for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
             if (estado.getAtivo() != null && estado.getAtivo()) {
-                if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO)){
-                    btnCancelDoacao.setVisibility(View.GONE);
-                }
-                if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
+
+                if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
                     stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
+                    stateDoacao.setTextColor(Color.WHITE);
+
+                }else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())){
+                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_disponibilizado));
+                    stateDoacao.setTextColor(Color.parseColor("#665e5e"));
+                }
+
+                if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
+                    btnCancelDoacao.setVisibility(View.GONE);
                 }
                 stateDoacao.setText(estado.getEstadoDoacao().name());
                 this.estadoDoacao = estado;
@@ -145,20 +151,63 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btnCancelaDoacao){
-            for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-                if (estado.getAtivo() != null && estado.getAtivo()) {
-                    if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)){
-                        btnCancelDoacao.setVisibility(View.GONE);
-                    }
-                    if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO)) {
-                        stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
-                    }
-                    stateDoacao.setText(estado.getEstadoDoacao().name());
-                    this.estadoDoacao = estado;
-                }
-            }
+        if (v.getId() == R.id.btnCancelaDoacao) {
+           showConfirmDialog();
         }
+    }
+
+    /**
+     * Executa Asycn task para atualizar o estado do donativo;
+     */
+    private void executeUpdateEstadoDoacaoTask(final Donativo donativo) {
+        updateEstadoDonativoTask = new UpdateEstadoDonativoTask(getContext(), donativo);
+        updateEstadoDonativoTask.delegate = new AsyncResponse<Donativo>() {
+            @Override
+            public void processFinish(Donativo output) {
+                validateAndSetStateDoacao();
+                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.doacao_cancelada));
+            }
+        };
+        updateEstadoDonativoTask.execute();
+    }
+
+    private void showConfirmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle(getString(R.string.cancel_doacao));
+        builder.setMessage(getString(R.string.dialog_message));
+        String positiveText = getString(R.string.yes);
+        builder.setPositiveButton(positiveText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
+                            if (estado.getAtivo() != null && estado.getAtivo()) {
+                                if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO)) {
+                                    estado.setAtivo(false);
+                                }
+
+                            }
+                        }
+                        EstadoDoacao estadoDoacao = new EstadoDoacao();
+                        estadoDoacao.setData(new Date());
+                        estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+                        estadoDoacao.setAtivo(true);
+                        donativo.getEstadosDaDoacao().add(estadoDoacao);
+                        executeUpdateEstadoDoacaoTask(donativo);
+                    }
+                });
+
+        String negativeText = getString(R.string.no);
+        builder.setNegativeButton(negativeText,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.operacao_cancela));
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
 
