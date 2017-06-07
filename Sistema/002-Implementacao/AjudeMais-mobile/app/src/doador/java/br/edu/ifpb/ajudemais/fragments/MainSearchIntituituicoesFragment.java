@@ -139,7 +139,7 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         LocationManager locationManager = null;
 
         if (Context.LOCATION_SERVICE != null) {
-             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         }
 
         if (locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -203,7 +203,10 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                            instituicoesAdapter.setFilter(instituicoes);
+                        if (instituicoes != null) {
+                            searchView.setOnQueryTextListener(MainSearchIntituituicoesFragment.this);
+                        }
+                        instituicoesAdapter.setFilter(instituicoes);
 
                         return true;
                     }
@@ -355,8 +358,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
                     instituicoesAdapter = new InstituicoesAdapter(instituicoes, getActivity());
                     recyclerView.setAdapter(instituicoesAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
-                    searchView.setOnQueryTextListener(MainSearchIntituituicoesFragment.this);
-
+                    if (searchView != null) {
+                        searchView.setOnQueryTextListener(MainSearchIntituituicoesFragment.this);
+                    }
                 }
             } else {
                 showResult(message);

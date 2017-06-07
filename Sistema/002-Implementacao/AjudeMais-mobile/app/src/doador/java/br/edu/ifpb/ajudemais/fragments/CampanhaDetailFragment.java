@@ -48,8 +48,6 @@ public class CampanhaDetailFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_campanha_detail, container, false);
 
-        Intent intentCampanha = getActivity().getIntent();
-        campanha = (Campanha) intentCampanha.getSerializableExtra("campanha");
         setHasOptionsMenu(true);
         return view;
     }
@@ -62,6 +60,8 @@ public class CampanhaDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Intent intentCampanha = getActivity().getIntent();
+        campanha = (Campanha) intentCampanha.getSerializableExtra("campanha");
 
         descricaoCampanha = (TextView) getView().findViewById(R.id.tv_campanha_detail_descricao);
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_campanha_detail_inst_name);

@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -88,6 +89,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
 
+        Log.e("AJUDEMAIS","EXECutou");
         return view;
     }
 
@@ -116,8 +118,9 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                     donativosAdapter = new DonativosAdapter(donativos, getActivity());
                     recyclerView.setAdapter(donativosAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));
-                    searchView.setOnQueryTextListener(MyDoacoesFragment.this);
-
+                    if (searchView != null) {
+                        searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+                    }
                 }
             }
         };
@@ -199,6 +202,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         if (filteredModelList.size() < 1) {
             showListEmpty();
         } else {
+
             showListDoacoes();
             donativosAdapter.setFilter(filteredModelList);
 
@@ -219,13 +223,14 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         final MenuItem item = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(item);
 
+        if (donativos != null) {
+            searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+        }
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        if (donativos != null) {
-                            donativosAdapter.setFilter(donativos);
-                        }
+                        donativosAdapter.setFilter(donativos);
                         return true;
                     }
 
