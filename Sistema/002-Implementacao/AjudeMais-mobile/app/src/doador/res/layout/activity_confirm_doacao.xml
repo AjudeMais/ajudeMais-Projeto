@@ -299,12 +299,20 @@
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_list"
+            <Button
+                android:id="@+id/btn_lista_disponibilidade"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tvInformationAgenda"
-                android:scrollbars="vertical" />
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/textSecond"
+                android:background="@color/btnTransparente"
+                android:text="@string/visualizarDisponibilizades"
+                android:textSize="@dimen/fontDefaultMain" />
+
 
             <Button
                 android:id="@+id/btnDoar"

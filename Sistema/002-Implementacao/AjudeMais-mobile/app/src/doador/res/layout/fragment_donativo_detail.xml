@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginTop="3dp"
-    android:background="@color/colorFont"
-    android:layout_height="match_parent">
+    android:background="@color/colorFont">
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1"
@@ -84,18 +84,6 @@
 
             </android.support.v7.widget.CardView>
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardPhotoAndCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardDetalhesDonativo"
-                android:layout_marginLeft="6dp"
-                android:layout_marginRight="6dp"
-                android:layout_marginTop="12dp">
-
-            </android.support.v7.widget.CardView>
-
-
             <TextView
                 android:id="@+id/tvInformationEstado"
                 android:layout_width="match_parent"
@@ -168,7 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_below="@+id/cardPhotoAndCategoria"
+                android:layout_below="@+id/cardDetalhesDonativo"
                 android:layout_marginLeft="5dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/endereco_for_coleta"
@@ -217,7 +205,7 @@
                             android:layout_weight="1"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="@dimen/fontDefaultMain"/>
+                            android:textSize="@dimen/fontDefaultMain" />
 
 
                         <LinearLayout
@@ -296,19 +284,27 @@
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_list"
+
+            <Button
+                android:id="@+id/btn_lista_disponibilidade"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tvInformationAgenda"
-                android:scrollbars="vertical" />
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/textSecond"
+                android:background="@color/btnTransparente"
+                android:text="@string/visualizarDisponibilizades"
+                android:textSize="@dimen/fontDefaultMain" />
 
             <Button
                 android:id="@+id/btnCancelaDoacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_lista_disponibilidade"
                 android:layout_marginTop="12dp"
-                android:layout_below="@+id/recycle_view_list"
                 android:height="@dimen/LagHeigth"
                 android:backgroundTint="@color/colorAccent"
                 android:text="@string/btnCancelDoacao"

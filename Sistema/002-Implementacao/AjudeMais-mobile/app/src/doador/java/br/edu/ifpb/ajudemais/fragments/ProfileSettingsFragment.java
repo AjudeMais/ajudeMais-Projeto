@@ -54,7 +54,6 @@ public class ProfileSettingsFragment extends Fragment {
         tvPhone = (TextView) getView().findViewById(R.id.tv_edit_celular);
 
         doador = (Doador) getArguments().getSerializable("doador");
-        Log.e("AJUDEMAIS2", doador.toString());
 
         if (doador != null) {
             tvPhone.setText(doador.getTelefone());
