@@ -1,8 +1,10 @@
 package br.edu.ifpb.ajudemais.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
@@ -83,6 +85,31 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
 
         fab = (FloatingActionButton) findViewById(R.id.fabCampanhaShare);
         fab.setOnClickListener(this);
+
+        setActionCollapsingTootlbar();
+    }
+
+    private void setActionCollapsingTootlbar(){
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    isShow = true;
+                    imageHeader.setVisibility(View.GONE);
+                } else if(isShow) {
+                    imageHeader.setVisibility(View.VISIBLE);
+                    isShow = false;
+                }
+            }
+        });
     }
 
     /**
@@ -116,7 +143,11 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                Intent intent = new Intent();
+                intent.setClass(DonativoActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
                 return true;
 
             default:

@@ -201,7 +201,7 @@
     <string name="btnCancelDoacao">CANCELAR DOAÇÃO</string>
     <string name="donativo_estado_coleta">Estado da Doação</string>
     <string name="state_doacao_name">Estado da doação: </string>
-    <string name="no_coletada">Aguadando mensageiro aceitar coletar</string>
+    <string name="no_coletada">Aguadando um mensageiro aceitar coletar doação</string>
     <string name="imagens_lb">Imagens: </string>
     <string name="doado_to">Doado para instituição:</string>
     <string name="lb_imag_donativo">Imagem do donativo</string>
@@ -209,4 +209,10 @@
     <string name="dialog_message">Ao cancelar uma doação, não será mais possível alterá-la</string>
     <string name="operacao_cancela">Operação cancelada.</string>
     <string name="doacao_cancelada">Doação cancelada.</string>
+    <string name="nenhumItemCadastrado">Nenhum item disponível</string>
+    <string name="tv_doacao_cancelada_txt">A doação foi cancelada.</string>
+    <string name="disponibilizado">Disponibilizado</string>
+    <string name="add_disponibilidade">ADICINE UMA DISPONIBILIDADE</string>
+    <string name="not_disponibilidade">É necessario informar uma disponibilidade para a coleta</string>
+
 </resources>

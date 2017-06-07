@@ -50,6 +50,8 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
     private AndroidUtil androidUtil;
     private MainSearchCampanhaFragmentTask mainSearchCampanhaFragmentTask;
     private RecyclerItemClickListener.OnItemClickListener clickListener;
+    private SearchView searchView;
+
 
     public MainSearchCampanhasFragment() {
 
@@ -168,15 +170,14 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
         inflater.inflate(R.menu.search_view, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-        searchView.setOnQueryTextListener(this);
-
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        campanhasAdapter.setFilter(campanhas);
+                        if (campanhasAdapter != null) {
+                            campanhasAdapter.setFilter(campanhas);
+                        }
                         return true;
                     }
 
@@ -199,10 +200,10 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
                 } else {
                     campanhas = output;
                     showListCampanhas();
-
                     campanhasAdapter = new CampanhasAdapter(campanhas, getActivity());
                     recyclerView.setAdapter(campanhasAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    searchView.setOnQueryTextListener(MainSearchCampanhasFragment.this);
                 }
             }
         };
@@ -220,11 +221,13 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
     private List<Campanha> filter(List<Campanha> models, String query) {
         query = query.toLowerCase();
         final List<Campanha> filteredModelList = new ArrayList<>();
-        for (Campanha model : models) {
-            final String text = model.getNome().toLowerCase();
+        if (models != null) {
+            for (Campanha model : models) {
+                final String text = model.getNome().toLowerCase();
 
-            if (text.contains(query)) {
-                filteredModelList.add(model);
+                if (text.contains(query)) {
+                    filteredModelList.add(model);
+                }
             }
         }
         return filteredModelList;

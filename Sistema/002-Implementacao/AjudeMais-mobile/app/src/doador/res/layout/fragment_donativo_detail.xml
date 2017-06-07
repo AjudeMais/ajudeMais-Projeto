@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_marginTop="3dp"
     android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -29,7 +30,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/donativo_information"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="NotSibling,RtlHardcoded" />
 
@@ -59,7 +60,7 @@
                         android:text="12 peças masculinas para doar"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
 
@@ -72,7 +73,7 @@
                         android:text="Ajude Mais"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultSubText2"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
 
@@ -107,7 +108,7 @@
                         android:text="Categoria: Roupas"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
                     <LinearLayout
@@ -119,7 +120,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:text="@string/imagens_lb" />
+                            android:text="@string/imagens_lb"
+                            tools:ignore="RtlHardcoded" />
 
                         <SeekBar
                             android:id="@+id/seekBar"
@@ -161,7 +163,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/donativo_estado_coleta"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="NotSibling,RtlHardcoded" />
 
@@ -190,7 +192,7 @@
                         android:text="@string/no_coletada"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
                     <LinearLayout
@@ -208,7 +210,7 @@
                             android:text="@string/state_doacao_name"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="18sp"
+                            android:textSize="@dimen/fontDefaultMain"
                             tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
                         <TextView
@@ -223,9 +225,8 @@
                             android:textAlignment="center"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="@dimen/fontDefaultSubText4"                            android:textStyle="bold"
+                            tools:ignore="HardcodedText,RtlHardcoded" />
 
                     </LinearLayout>
 
@@ -246,7 +247,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/endereco_for_coleta"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
@@ -290,7 +291,7 @@
                             android:layout_weight="1"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="18sp" />
+                            android:textSize="@dimen/fontDefaultMain"/>
 
 
                         <LinearLayout
@@ -307,7 +308,7 @@
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textColor="@color/textSecond"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_number"
@@ -317,7 +318,7 @@
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:textColor="@color/textSecond"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_cep_name"
@@ -326,7 +327,7 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_city"
@@ -335,7 +336,7 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
 
                             <TextView
                                 android:id="@+id/tv_uf_name"
@@ -344,7 +345,7 @@
                                 android:paddingLeft="3dp"
                                 android:paddingRight="3dp"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/fontDefaultSubText2" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -365,7 +366,7 @@
                 android:fontFamily="sans-serif"
                 android:text="@string/DisponibilidadesForColeta"
                 android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/fontSizeDetail"
+                android:textSize="@dimen/fontDefaultMain"
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 

@@ -2,7 +2,6 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.fragments.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
+import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 
@@ -40,6 +41,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     private RelativeLayout componentLoading;
     private FrameLayout componentView;
     private RelativeLayout componentNoInternet;
+    private WriteStoreDevicePermission writeStoreDevicePermission;
 
 
     /**
@@ -65,6 +67,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragmentMain()).commit();
+        writeStoreDevicePermission = new WriteStoreDevicePermission(getApplicationContext());
 
         fab.setOnClickListener(this);
     }
@@ -73,8 +76,6 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     @Override
     protected void onStart() {
         super.onStart();
-
-        new LoadingCampanhasDoacoesTask().execute();
     }
 
     /**
@@ -115,8 +116,6 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         componentLoading.setVisibility(View.VISIBLE);
 
         componentView = (FrameLayout) findViewById(R.id.containerView);
-        componentView.setVisibility(View.GONE);
-
         componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
         componentNoInternet.setVisibility(View.GONE);
     }
@@ -145,27 +144,4 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
 
     }
 
-    /**
-     *
-     */
-    private class LoadingCampanhasDoacoesTask extends AsyncTask<Void, Void, String> {
-
-        /**
-         * @param params
-         * @return
-         */
-        @Override
-        protected String doInBackground(Void... params) {
-            return null;
-        }
-
-        /**
-         * @param message
-         */
-        @Override
-        protected void onPostExecute(String message) {
-            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-            findViewById(R.id.containerView).setVisibility(View.VISIBLE);
-        }
-    }
 }

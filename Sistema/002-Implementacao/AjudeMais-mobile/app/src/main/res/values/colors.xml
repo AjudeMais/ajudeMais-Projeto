@@ -11,6 +11,7 @@
     <color name="textSecond">#665e5e</color>
     <color name="textSecond2">#acacac</color>
     <color name="lineSeparator">#d4d3d3</color>
+    <color name="btnTransparente">#ececec</color>
 
 
     <color name="colorStateDisponibilizado">#fbff00</color>

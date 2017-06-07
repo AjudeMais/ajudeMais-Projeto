@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,7 +53,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private LoadingDoacoesTask loadingDoacoesTask;
     private AndroidUtil androidUtil;
     private SwipeRefreshLayout swipeRefreshLayout;
-
+    private SearchView searchView;
 
     /**
      * @param savedInstanceState
@@ -85,9 +86,10 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         swipeRefreshLayout.setOnRefreshListener(this);
 
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
 
+        Log.e("AJUDEMAIS","EXECutou");
         return view;
     }
 
@@ -112,10 +114,13 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                     showListEmpty();
                 } else {
                     donativos = output;
-                    showListCampanhas();
+                    showListDoacoes();
                     donativosAdapter = new DonativosAdapter(donativos, getActivity());
                     recyclerView.setAdapter(donativosAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));
+                    if (searchView != null) {
+                        searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+                    }
                 }
             }
         };
@@ -129,7 +134,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private void showListEmpty() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.GONE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
     }
 
@@ -146,10 +151,10 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     /**
      * Auxiliar para mostrar lista de campanhas e esconder demais fragmentos.
      */
-    private void showListCampanhas() {
+    private void showListDoacoes() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.GONE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.VISIBLE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
@@ -178,11 +183,13 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private List<DoacaoAdapterDto> filter(List<DoacaoAdapterDto> models, String query) {
         query = query.toLowerCase();
         final List<DoacaoAdapterDto> filteredModelList = new ArrayList<>();
-        for (DoacaoAdapterDto model : models) {
-            final String text = model.getDonativo().getNome().toLowerCase();
+        if (models != null) {
+            for (DoacaoAdapterDto model : models) {
+                final String text = model.getDonativo().getNome().toLowerCase();
 
-            if (text.contains(query)) {
-                filteredModelList.add(model);
+                if (text.contains(query)) {
+                    filteredModelList.add(model);
+                }
             }
         }
         return filteredModelList;
@@ -195,11 +202,13 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         if (filteredModelList.size() < 1) {
             showListEmpty();
         } else {
-            showListCampanhas();
+
+            showListDoacoes();
             donativosAdapter.setFilter(filteredModelList);
 
         }
         return true;
+
     }
 
     /**
@@ -208,13 +217,15 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
         inflater.inflate(R.menu.search_view, menu);
 
         final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
 
-        searchView.setOnQueryTextListener(this);
-
+        if (donativos != null) {
+            searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+        }
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
@@ -228,6 +239,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                         return true;
                     }
                 });
+
     }
 
 
