@@ -22,13 +22,11 @@ import br.edu.ifpb.ajudemais.domain.Doador;
 
 public class FacebookAccount {
 
-    private static Doador doador = new Doador();
+    private static Doador doador;
 
     /**
      * Método responsável por obter dados de acesso de um usuário do facebook.
      * Dados como: Nome, e-mail e username
-     * @return
-     *          Um objeto do tipo doador
      */
     public static void userFacebookData(LoginResult loginResult, final Activity activity) {
         doador = new Doador();
