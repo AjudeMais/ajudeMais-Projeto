@@ -214,5 +214,6 @@
     <string name="disponibilizado">Disponibilizado</string>
     <string name="add_disponibilidade">ADICINE UMA DISPONIBILIDADE</string>
     <string name="not_disponibilidade">É necessario informar uma disponibilidade para a coleta</string>
+    <string name="image_logo_desc">Logo  marca do Ajude Mais</string>
 
 </resources>

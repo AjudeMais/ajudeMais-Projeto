@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_marginTop="3dp"
+    android:background="@color/colorFont"
     android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,6 +17,7 @@
         android:focusableInTouchMode="true">
 
         <RelativeLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -91,63 +93,6 @@
                 android:layout_marginRight="6dp"
                 android:layout_marginTop="12dp">
 
-                <LinearLayout
-                    android:id="@+id/componentPhotoAndCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="7dp"
-                    android:layout_marginTop="9dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tv_categoria"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_weight="1"
-                        android:text="Categoria: Roupas"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:textColor="@color/textSecond"
-                        android:textSize="@dimen/fontDefaultMain"
-                        tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="@string/imagens_lb"
-                            tools:ignore="RtlHardcoded" />
-
-                        <SeekBar
-                            android:id="@+id/seekBar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="100"
-                            android:clickable="false"
-                            android:enabled="false"
-                            android:max="3"
-                            android:progress="0"
-                            tools:ignore="InefficientWeight" />
-
-                        <TextView
-                            android:id="@+id/tv_quant_images"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="2dp"
-                            android:text="0/3"
-                            tools:ignore="HardcodedText,RtlHardcoded" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-
             </android.support.v7.widget.CardView>
 
 
@@ -178,57 +123,39 @@
 
                 <LinearLayout
                     android:id="@+id/acompanhamento"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tv_state"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_name_state"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:text="@string/no_coletada"
+                        android:text="@string/state_doacao_name"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
                         android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tv_donative_estado_lb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_name_state"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_weight="1"
-                            android:text="@string/state_doacao_name"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/textSecond"
-                            android:textSize="@dimen/fontDefaultMain"
-                            tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
-
-                        <TextView
-                            android:id="@+id/tv_donative_estado_lb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:background="@drawable/screen_border_disponibilizado"
-                            android:paddingLeft="9dp"
-                            android:paddingRight="9dp"
-                            android:text="Disponibilizado"
-                            android:textAlignment="center"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:textColor="@color/textSecond"
-                            android:textSize="@dimen/fontDefaultSubText4"                            android:textStyle="bold"
-                            tools:ignore="HardcodedText,RtlHardcoded" />
-
-                    </LinearLayout>
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/screen_border_disponibilizado"
+                        android:paddingLeft="9dp"
+                        android:paddingRight="9dp"
+                        android:text="Disponibilizado"
+                        android:textAlignment="center"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        android:textColor="@color/textSecond"
+                        android:textSize="@dimen/fontDefaultSubText4"
+                        android:textStyle="bold"
+                        tools:ignore="HardcodedText,RtlHardcoded" />
 
                 </LinearLayout>
 
@@ -243,7 +170,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_below="@+id/cardPhotoAndCategoria"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="7dp"
                 android:fontFamily="sans-serif"
                 android:text="@string/endereco_for_coleta"
                 android:textColor="@color/colorPrimary"

@@ -47,11 +47,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private Donativo donativo;
     private TextView descricaoDonativo;
     private TextView nomeInstituicao;
-    private TextView categoriaName;
-    private TextView quantImages;
-    private SeekBar seekBarImages;
     private TextView stateDoacao;
-    private TextView descriptionStateDoacao;
     private EstadoDoacao estadoDoacao;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
     private Button btnCancelDoacao;
@@ -84,20 +80,11 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
-        categoriaName = (TextView) getView().findViewById(R.id.tv_categoria);
-        descriptionStateDoacao = (TextView) getView().findViewById(R.id.tv_state);
         stateDoacao = (TextView) getView().findViewById(R.id.tv_donative_estado_lb);
-        seekBarImages = (SeekBar) getView().findViewById(R.id.seekBar);
-        quantImages = (TextView) getView().findViewById(R.id.tv_quant_images);
         btnCancelDoacao = (Button) getView().findViewById(R.id.btnCancelaDoacao);
         btnCancelDoacao.setOnClickListener(this);
-
-        seekBarImages.setProgress(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size() : 0);
-        quantImages.setText(donativo.getFotosDonativo() != null ? donativo.getFotosDonativo().size() + "/3" : "0/3");
-
         descricaoDonativo.setText(donativo.getDescricao());
         nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
-        categoriaName.setText("Categoria: " + donativo.getCategoria().getNome());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
@@ -121,7 +108,6 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                 if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
                     stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
                     stateDoacao.setTextColor(Color.WHITE);
-                    descriptionStateDoacao.setText(getString(R.string.tv_doacao_cancelada_txt));
 
                 } else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_disponibilizado));
