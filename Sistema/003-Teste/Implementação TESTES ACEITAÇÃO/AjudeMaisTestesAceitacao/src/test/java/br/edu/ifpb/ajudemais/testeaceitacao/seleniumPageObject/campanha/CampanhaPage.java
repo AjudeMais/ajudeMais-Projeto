@@ -9,8 +9,6 @@ import org.openqa.selenium.WebDriver;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.AbstractPage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.CategoriaPage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.categoria.CreateCategoriaPage;
-import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.CriarInstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.instituicaoCaridade.InstituicaoCaridadePage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.login.LoginPage;
 
@@ -80,19 +78,7 @@ public class CampanhaPage extends AbstractPage{
 
 		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
 		
-	}
-
-	/**
-	 * Adiciona uma instituição de caridade caso ela não exista.
-	 */
-	private void addInstituicao() {
-		instituicaoCaridadePage.visita();
-
-		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
-
-		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P TESTE", "CRIADA EM CATEGORIA PAGE",
-				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Rua Teste", "123",
-				"Centro", "casa");
+		
 	}
 	
 	/**
