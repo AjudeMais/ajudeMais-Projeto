@@ -4,6 +4,7 @@ package br.edu.ifpb.ajudemais.testeaceitacao;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import br.edu.ifpb.ajudemais.testeaceitacao.campanhaTest.CampanhaTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.categoriaTest.CategoriaTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.instituicaoCaridadeTest.CrudInstituicaoCaridadeTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.loginTest.LoginTest;
@@ -28,7 +29,8 @@ import br.edu.ifpb.ajudemais.testeaceitacao.mensageiroTest.MensageiroTest;
 	LoginTest.class,
 	CrudInstituicaoCaridadeTest.class,
 	CategoriaTest.class,
-	MensageiroTest.class
+	MensageiroTest.class,
+	CampanhaTest.class
 })
 public class SuiteTeste {
 
