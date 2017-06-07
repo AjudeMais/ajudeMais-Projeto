@@ -22,6 +22,10 @@
 
         if ($stateParams.campanhaEdit) {
             vm.campanha = $stateParams.campanhaEdit;
+            if (!vm.campanha.status) {
+                vm.campanha.dataInicio = undefined;
+                vm.campanha.dataFim = undefined;
+            }
         } else {
             vm.campanha.itensDoaveis = [];
             vm.campanha.status = true;
@@ -31,10 +35,9 @@
          * Editar/Salvar uma campanha
          */
         vm.save = function () {
-            if(vm.campanha.status) {
+            if (vm.campanha.status) {
                 vm.campanha.dataInicio = new Date();
             }
-
             if (!vm.isEdited()) {
                 campanhaService.save(vm.campanha).then(function (response) {
                     toastr.success('criada com sucesso', 'Campanha');

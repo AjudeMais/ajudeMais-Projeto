@@ -55,6 +55,7 @@
                                    ng-model="vm.campanha.dataFim"
                                    date-after="vm.currentDate"
                                    date-or-equals="true"
+                                   date-disabled="!vm.campanha.status"
                                    is-open="vm.dtpk"
                                    ng-disabled="!vm.campanha.status"
                                    datepicker-options="dateOptions"
