@@ -212,4 +212,7 @@
     <string name="nenhumItemCadastrado">Nenhum item disponível</string>
     <string name="tv_doacao_cancelada_txt">A doação foi cancelada.</string>
     <string name="disponibilizado">Disponibilizado</string>
+    <string name="add_disponibilidade">ADICINE UMA DISPONIBILIDADE</string>
+    <string name="not_disponibilidade">É necessario informar uma disponibilidade para a coleta</string>
+
 </resources>

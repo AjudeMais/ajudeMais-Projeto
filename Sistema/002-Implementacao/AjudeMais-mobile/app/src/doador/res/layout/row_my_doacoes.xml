@@ -27,7 +27,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="3dp"
             android:contentDescription="@string/profileDescription"
-            android:src="@drawable/img_no_image"
+            android:src="@drawable/no_image"
             app:civ_border_color="@color/colorPrimaryDark" />
 
         <LinearLayout
