@@ -76,7 +76,6 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     @Override
     protected void onStart() {
         super.onStart();
-        new LoadingCampanhasDoacoesTask().execute();
     }
 
     /**

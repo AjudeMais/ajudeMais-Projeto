@@ -96,7 +96,6 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     private TextInputEditText edtDescription;
 
     @Order(1)
-    @Digits(integer = 1, messageResId = R.string.msgNotNumber, sequence = 2)
     @Min(value = 1, messageResId = R.string.msgNumberInvalid, sequence = 3)
     @NotEmpty(messageResId = R.string.msgQuantidadeNotInformed, sequence = 1)
     private TextInputEditText edtQuantidade;
