@@ -9,6 +9,7 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.remoteServices.DonativoRemoteService;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
+import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 
 /**
@@ -29,16 +30,20 @@ public class UpdateEstadoDonativoTask extends AsyncTask<Void, Void, Donativo> {
     private Donativo donativo;
     private Context context;
     public AsyncResponse<Donativo> delegate;
+    private ProgressDialog progressDialog;
 
     public UpdateEstadoDonativoTask(Context context, Donativo donativo) {
         this.context = context;
+        this.progressDialog = new ProgressDialog(context);
         this.donativoRemoteService = new DonativoRemoteService(context);
         this.donativo = donativo;
     }
 
     @Override
     protected void onPreExecute() {
+
         super.onPreExecute();
+        progressDialog.showProgressDialog();
     }
 
 
@@ -59,6 +64,7 @@ public class UpdateEstadoDonativoTask extends AsyncTask<Void, Void, Donativo> {
 
     @Override
     protected void onPostExecute(Donativo donativo) {
+        progressDialog.dismissProgressDialog();
         if (donativo != null){
             delegate.processFinish(donativo);
         }

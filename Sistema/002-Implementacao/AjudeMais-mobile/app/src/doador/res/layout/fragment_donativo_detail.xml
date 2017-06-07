@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_marginTop="3dp"
     android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -224,7 +225,7 @@
                             android:textAlignment="center"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:textColor="@color/textSecond"
-                            android:textSize="@dimen/fontDefaultSubText2"                            android:textStyle="bold"
+                            android:textSize="@dimen/fontDefaultSubText4"                            android:textStyle="bold"
                             tools:ignore="HardcodedText,RtlHardcoded" />
 
                     </LinearLayout>

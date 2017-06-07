@@ -3,7 +3,6 @@ package br.edu.ifpb.ajudemais.fragments;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
@@ -13,9 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 
@@ -27,7 +23,6 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
-import br.edu.ifpb.ajudemais.remoteServices.CategoriaRemoteService;
 
 /**
  * <p>
@@ -55,6 +50,7 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
     private View view;
     private List<Categoria> categorias;
     private LoadingCategoriasTask loadingCategoriasTask;
+    private CardView cardView;
 
     /**
      * @param inflater
@@ -76,7 +72,8 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
         RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
+        listInstituicoes = (TextView) view.findViewById(R.id.tv_list_itens_doaveis);
+        cardView = (CardView) view.findViewById(R.id.card_no_itens);
 
         executeLoadingCategoriasTask();
 
@@ -95,8 +92,6 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
         emailInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_email);
         logradouroInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_logradouro);
         localidadeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_detail_localidade);
-
-        listInstituicoes = (TextView) getView().findViewById(R.id.tv_list_itens_doaveis);
 
         cardViewEmail = (CardView) getView().findViewById(R.id.card_view_intituicao_detail_email);
 
@@ -177,11 +172,15 @@ public class InstituicaoDetailFragment extends Fragment implements RecyclerItemC
             @Override
             public void processFinish(List<Categoria> categoriasResult) {
                 categorias = categoriasResult;
-                recyclerView.setVisibility(View.VISIBLE);
                 view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
-                categoriasAdapter = new CategoriasAdapter(categorias, getActivity());
-                recyclerView.setAdapter(categoriasAdapter);
-                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), InstituicaoDetailFragment.this));
+                if (categoriasResult.size() > 0) {
+                    categoriasAdapter = new CategoriasAdapter(categorias, getActivity());
+                    recyclerView.setAdapter(categoriasAdapter);
+                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), InstituicaoDetailFragment.this));
+                    recyclerView.setVisibility(View.VISIBLE);
+                }else {
+                    cardView.setVisibility(View.VISIBLE);
+                }
             }
         };
 

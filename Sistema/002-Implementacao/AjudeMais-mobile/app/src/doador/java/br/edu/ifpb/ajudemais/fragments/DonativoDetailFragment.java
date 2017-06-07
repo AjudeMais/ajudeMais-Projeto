@@ -15,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
 import java.util.Date;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateEstadoDonativoTask;
@@ -119,8 +121,9 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                 if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
                     stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
                     stateDoacao.setTextColor(Color.WHITE);
+                    descriptionStateDoacao.setText(getString(R.string.tv_doacao_cancelada_txt));
 
-                }else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())){
+                } else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_disponibilizado));
                     stateDoacao.setTextColor(Color.parseColor("#665e5e"));
                 }
@@ -152,7 +155,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnCancelaDoacao) {
-           showConfirmDialog();
+            showConfirmDialog();
         }
     }
 
@@ -180,10 +183,10 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-                            if (estado.getAtivo() != null && estado.getAtivo()) {
-                                if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO)) {
-                                    estado.setAtivo(false);
+                        for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
+                            if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
+                                if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
+                                    donativo.getEstadosDaDoacao().get(i).setAtivo(false);
                                 }
 
                             }

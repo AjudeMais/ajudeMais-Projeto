@@ -62,7 +62,9 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     public void onBindViewHolder(DonativosAdapter.ViewHolder holder, int position) {
 
         holder.donativeName.setText(donativos.get(position).getDonativo().getNome());
+
         holder.instituicaoName.setText(donativos.get(position).getDonativo().getCategoria().getInstituicaoCaridade().getNome());
+
         if (donativos.get(position).getPhoto() != null) {
             holder.imageView.setImageBitmap(androidUtil.convertBytesInBitmap(donativos.get(position).getPhoto()));
         }
@@ -73,7 +75,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
                     holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_cancelado);
                     holder.estadoDoacao.setTextColor(Color.WHITE);
 
-                }else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())){
+                } else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_disponibilizado);
                     holder.estadoDoacao.setTextColor(Color.parseColor("#665e5e"));
                 }

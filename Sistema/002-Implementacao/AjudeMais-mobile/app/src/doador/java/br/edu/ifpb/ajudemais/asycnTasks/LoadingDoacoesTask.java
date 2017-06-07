@@ -86,7 +86,7 @@ public class LoadingDoacoesTask extends AsyncTask<Void, Void, List<DoacaoAdapter
 
     @Override
     protected void onPostExecute(List<DoacaoAdapterDto> donativos) {
-        if (donativos != null && donativos.size() > 0) {
+        if (donativos != null) {
             delegate.processFinish(donativos);
         }
 
