@@ -71,7 +71,6 @@ public class InstituicaoCaridadePage extends AbstractPage {
 	 */
 	public EditatInstituicaoCaridadePage edit(String userName) {
 		String xpath = String.format("//*[@id=\"dtInstituicoes\"]/tbody/tr[td/text()=\"%s\"]/td/button[2]", userName);
-				
 		$(By.xpath(xpath)).click();
 		return new EditatInstituicaoCaridadePage(driver);
 	}
@@ -98,7 +97,6 @@ public class InstituicaoCaridadePage extends AbstractPage {
 			String logradouro, String numeroEndereco, String bairro, String complemento) {
 
 		
-		//$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
 		try {
 			$("#nome").setValue(nome);
 			$("#descricao").setValue(descricao);
@@ -111,12 +109,12 @@ public class InstituicaoCaridadePage extends AbstractPage {
 			
 			$("#zipCode").setValue(cep);
 			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
-			Thread.sleep(4000l);
+			Thread.sleep(1000l);
 			$("#bairro").setValue(bairro);
 			$("#complemento").setValue(complemento);
 			$("#logradouro").setValue(logradouro);
 			$("#numero").setValue(numeroEndereco);
-			//*[@id="content-wrapper"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button
+			Thread.sleep(1000l);
 			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/input")).click();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
