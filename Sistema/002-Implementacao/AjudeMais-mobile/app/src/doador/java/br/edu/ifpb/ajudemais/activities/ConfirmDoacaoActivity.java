@@ -34,8 +34,6 @@ public class ConfirmDoacaoActivity extends BaseActivity implements View.OnClickL
     private CardView cardView;
     private RecyclerView recyclerView;
     private Toolbar mToolbar;
-    private SeekBar seekBar;
-    private TextView tvQuantImg;
     private RealizarDoacaoTask realizarDoacaoTask;
     private Button btnDispo;
 
@@ -56,8 +54,6 @@ public class ConfirmDoacaoActivity extends BaseActivity implements View.OnClickL
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        seekBar = (SeekBar) findViewById(R.id.seekBar);
-        tvQuantImg = (TextView) findViewById(R.id.tv_quant_images);
         btnDoar = (Button) findViewById(R.id.btnDoar);
         btnDoar.setOnClickListener(this);
 
@@ -82,10 +78,7 @@ public class ConfirmDoacaoActivity extends BaseActivity implements View.OnClickL
         tvNomeDonativo.setText(donativo.getNome());
         tvDescriptionDonativo.setText(donativo.getDescricao());
         tvCategoria.setText(getString(R.string.categoria)+donativo.getCategoria().getNome());
-        if (donativo.getFotosDonativo() != null){
-            seekBar.setProgress(donativo.getFotosDonativo().size());
-            tvQuantImg.setText(donativo.getFotosDonativo().size()+"/3");
-        }
+
     }
 
     /**
