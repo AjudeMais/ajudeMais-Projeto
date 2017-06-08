@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -51,8 +50,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private EstadoDoacao estadoDoacao;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
     private Button btnCancelDoacao;
-    private RecyclerView recyclerView;
-    private DisponibilidadeHorarioAdapter disponibilidadeHorarioAdapter;
+    private Button btnListDisp;
 
     /**
      *
@@ -63,21 +61,21 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         view = inflater.inflate(R.layout.fragment_donativo_detail, container, false);
 
-        Intent intentCampanha = getActivity().getIntent();
-        donativo = (Donativo) intentCampanha.getSerializableExtra("Donativo");
+        Intent intentDonativo = getActivity().getIntent();
+        donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
         setHasOptionsMenu(true);
         return view;
     }
 
 
     /**
+     *
      * @param view
      * @param savedInstanceState
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
         stateDoacao = (TextView) getView().findViewById(R.id.tv_donative_estado_lb);
@@ -86,13 +84,8 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         descricaoDonativo.setText(donativo.getDescricao());
         nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list);
-        RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(layout);
-
-        disponibilidadeHorarioAdapter = new DisponibilidadeHorarioAdapter(donativo.getHorariosDisponiveis(), getContext());
-        recyclerView.setAdapter(disponibilidadeHorarioAdapter);
-
+        btnListDisp = (Button) view.findViewById(R.id.btn_lista_disponibilidade);
+        btnListDisp.setOnClickListener(this);
         setAtrAddressIntoCard(donativo.getEndereco());
         validateAndSetStateDoacao();
 
@@ -142,6 +135,8 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         if (v.getId() == R.id.btnCancelaDoacao) {
             showConfirmDialog();
+        } else if (v.getId() == R.id.btn_lista_disponibilidade) {
+            showDialogListDisponibilidade();
         }
     }
 
@@ -160,6 +155,9 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         updateEstadoDonativoTask.execute();
     }
 
+    /**
+     * Confirme dialog para cancelar uma doação.
+     */
     private void showConfirmDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.cancel_doacao));
@@ -197,6 +195,34 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Dialog para mostrar a lista de disponibilidade para coletar doação
+     */
+    private void showDialogListDisponibilidade() {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getContext());
+        View mView = layoutInflaterAndroid.inflate(R.layout.dialog_list_disponibilidades, null);
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
+        alertDialogBuilderUserInput.setView(mView);
+
+        final RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.recycle_view_list_dispo);
+        RecyclerView.LayoutManager layout = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(layout);
+        DisponibilidadeHorarioAdapter disponibilidadeHorarioAdapter = new DisponibilidadeHorarioAdapter(donativo.getHorariosDisponiveis(), getContext());
+        recyclerView.setAdapter(disponibilidadeHorarioAdapter);
+
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setNegativeButton(R.string.close,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 }
 

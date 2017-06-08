@@ -123,39 +123,7 @@
                         android:textSize="@dimen/fontDefaultMain"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:text="Imagens"
-                            tools:ignore="HardcodedText,RtlHardcoded" />
-
-                        <SeekBar
-                            android:id="@+id/seekBar"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="100"
-                            android:clickable="false"
-                            android:enabled="false"
-                            android:max="3"
-                            android:progress="0"
-                            tools:ignore="InefficientWeight" />
-
-                        <TextView
-                            android:id="@+id/tv_quant_images"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="2dp"
-                            android:text="0/3"
-                            tools:ignore="HardcodedText,RtlHardcoded" />
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -299,12 +267,20 @@
                 android:textStyle="bold"
                 tools:ignore="RtlHardcoded" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle_view_list"
+            <Button
+                android:id="@+id/btn_lista_disponibilidade"
                 android:layout_width="match_parent"
-                android:layout_height="115dp"
+                android:layout_height="wrap_content"
                 android:layout_below="@+id/tvInformationAgenda"
-                android:scrollbars="vertical" />
+                android:layout_marginBottom="7dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/textSecond"
+                android:background="@color/btnTransparente"
+                android:text="@string/visualizarDisponibilizades"
+                android:textSize="@dimen/fontDefaultMain" />
+
 
             <Button
                 android:id="@+id/btnDoar"

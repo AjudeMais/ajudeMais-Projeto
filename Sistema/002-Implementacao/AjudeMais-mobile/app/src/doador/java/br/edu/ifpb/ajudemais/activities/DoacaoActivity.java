@@ -91,8 +91,6 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     @NotEmpty(messageResId = R.string.msgNameNotInformed)
     private TextInputEditText edtNome;
 
-    @Order(2)
-    @NotEmpty(messageResId = R.string.msgDescriptionNotInformed)
     private TextInputEditText edtDescription;
 
     @Order(1)

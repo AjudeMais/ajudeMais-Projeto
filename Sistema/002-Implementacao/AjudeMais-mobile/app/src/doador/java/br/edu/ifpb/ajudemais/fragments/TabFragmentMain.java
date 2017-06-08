@@ -85,7 +85,7 @@ public class TabFragmentMain extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new MainTab01();
+                case 0 : return new MainSearchCampanhasFragment();
                 case 1 : return new MyDoacoesFragment();
             }
             return null;

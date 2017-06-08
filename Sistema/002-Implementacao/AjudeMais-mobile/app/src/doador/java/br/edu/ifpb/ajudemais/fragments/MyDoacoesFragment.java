@@ -88,8 +88,6 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.VISIBLE);
         view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
-
-        Log.e("AJUDEMAIS","EXECutou");
         return view;
     }
 
@@ -202,10 +200,8 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         if (filteredModelList.size() < 1) {
             showListEmpty();
         } else {
-
             showListDoacoes();
             donativosAdapter.setFilter(filteredModelList);
-
         }
         return true;
 
@@ -255,4 +251,6 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     public void onItemLongPress(View childView, int position) {
 
     }
+
+
 }
