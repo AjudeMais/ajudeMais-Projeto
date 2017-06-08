@@ -69,7 +69,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> findAll() {
-		return donativoRepository.findAllByOrderByDataAsc();
+		return donativoRepository.findAllByOrderByDataDesc();
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> findByDoadorId(Long idDoador) {
-		return donativoRepository.findByDoadorIdOrderByDataAsc(idDoador);
+		return donativoRepository.findByDoadorIdOrderByDataDesc(idDoador);
 	}
 
 	/**
@@ -118,6 +118,6 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
-		return donativoRepository.findByCategoriaInstituicaoCaridade(instituicao);
+		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
 }

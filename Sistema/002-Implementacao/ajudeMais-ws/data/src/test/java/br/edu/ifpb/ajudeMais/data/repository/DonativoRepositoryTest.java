@@ -67,7 +67,7 @@ public class DonativoRepositoryTest {
 	 */
 	@Test
 	public void findByDoadorIdTest() {
-		List<Donativo> donativos = donativoRepository.findByDoadorIdOrderByDataAsc(1l);
+		List<Donativo> donativos = donativoRepository.findByDoadorIdOrderByDataDesc(1l);
 		assertThat(!donativos.isEmpty());
 	}
 	
@@ -87,7 +87,7 @@ public class DonativoRepositoryTest {
 	public void findByCategoriaInstituicaoCaridadeTest() {
 		InstituicaoCaridade instituicaoCaridade = new InstituicaoCaridade();
 		instituicaoCaridade.setId(1l);
-		List<Donativo> donativos = donativoRepository.findByCategoriaInstituicaoCaridade(instituicaoCaridade);
+		List<Donativo> donativos = donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicaoCaridade);
 		assertThat(!donativos.isEmpty());
 	}
 	
@@ -96,7 +96,7 @@ public class DonativoRepositoryTest {
 	 */
 	@Test
 	public void findAllByOrderByDataAscTest() {
-		List<Donativo> donativos = donativoRepository.findAllByOrderByDataAsc();
+		List<Donativo> donativos = donativoRepository.findAllByOrderByDataDesc();
 		assertThat(donativos.get(0).getId() == 2l);
 	}
 

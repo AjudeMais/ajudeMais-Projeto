@@ -61,7 +61,6 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@NotNull
 	private String descricao;
 
 	/**
@@ -274,6 +273,17 @@ public class Donativo implements Serializable {
 	 */
 	public void setData(Date data) {
 		this.data = data;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Donativo [id=" + id + ", quantidade=" + quantidade + ", nome=" + nome + ", descricao=" + descricao
+				+ ", categoria=" + categoria + ", data=" + data + "]";
 	}
 
 }

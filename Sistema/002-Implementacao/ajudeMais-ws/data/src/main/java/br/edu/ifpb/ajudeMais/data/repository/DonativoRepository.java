@@ -36,7 +36,7 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @param nome
 	 * @return
 	 */
-	List<Donativo> findByDoadorIdOrderByDataAsc(Long id);
+	List<Donativo> findByDoadorIdOrderByDataDesc(Long id);
 
 	/**
 	 * 
@@ -54,7 +54,7 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @param instituicaoCaridade
 	 * @return
 	 */
-	List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+	List<Donativo> findByCategoriaInstituicaoCaridadeOrderByDataDesc(InstituicaoCaridade instituicaoCaridade);
 
 	/**
 	 * <p>
@@ -63,6 +63,6 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * 
 	 * @return
 	 */
-	List<Donativo> findAllByOrderByDataAsc();
+	List<Donativo> findAllByOrderByDataDesc();
 
 }
