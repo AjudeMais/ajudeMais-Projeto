@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>br.edu.ifpb.ajudeMais</groupId>
 		<artifactId>AjudeMais</artifactId>
-		<version>0.5-SNAPSHOT</version>
+		<version>0.7-IT03</version>
 	</parent>
 	<artifactId>AjudeMais-RESTful-api</artifactId>
 	<name>RESTful-api</name>

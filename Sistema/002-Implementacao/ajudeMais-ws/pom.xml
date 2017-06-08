@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.edu.ifpb.ajudeMais</groupId>
 	<artifactId>AjudeMais</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.7-IT03</version>
 	<packaging>pom</packaging>
 
 	<developers>
