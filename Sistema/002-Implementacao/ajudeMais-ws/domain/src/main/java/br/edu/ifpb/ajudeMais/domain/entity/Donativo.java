@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,7 +12,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 
@@ -21,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * </p>
  *
  * <p>
- *	Classe que representa um donativo no sistema
+ * Classe que representa um donativo no sistema
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
@@ -34,25 +39,25 @@ public class Donativo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 3822250537408431358L;
-	
+
 	/**
 	 * 
 	 */
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	/**
 	 * 
 	 */
 	private Integer quantidade;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull
 	private String nome;
-	
+
 	/**
 	 * 
 	 */
@@ -65,40 +70,47 @@ public class Donativo implements Serializable {
 	@OneToMany(cascade = CascadeType.ALL)
 	@Column(name = "estados_doacao")
 	private List<EstadoDoacao> estadosDaDoacao;
-	
+
 	/**
 	 * 
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<DisponibilidadeHorario> horariosDisponiveis;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull
 	@ManyToOne
 	private Doador doador;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull
-	@ManyToOne(cascade ={CascadeType.MERGE, CascadeType.PERSIST})
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
 	private Endereco endereco;
-	
+
 	/**
 	 * 
 	 */
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Imagem> fotosDonativo;
-	
+
 	/**
 	 * 
 	 */
 	@NotNull
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private Categoria categoria;
-	
+
+	/**
+	 * 
+	 */
+	@JsonIgnore
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date data = new Date();
+
 	/**
 	 * @return the id
 	 */
@@ -107,7 +119,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -121,7 +134,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param quantidade the quantidade to set
+	 * @param quantidade
+	 *            the quantidade to set
 	 */
 	public void setQuantidade(Integer quantidade) {
 		this.quantidade = quantidade;
@@ -135,7 +149,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param nome the nome to set
+	 * @param nome
+	 *            the nome to set
 	 */
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -149,7 +164,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param descricao the descricao to set
+	 * @param descricao
+	 *            the descricao to set
 	 */
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
@@ -163,7 +179,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param estadosDaDoacao the estadosDaDoacao to set
+	 * @param estadosDaDoacao
+	 *            the estadosDaDoacao to set
 	 */
 	public void setEstadosDaDoacao(List<EstadoDoacao> estadosDaDoacao) {
 		this.estadosDaDoacao = estadosDaDoacao;
@@ -177,7 +194,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param horariosDisponiveis the horariosDisponiveis to set
+	 * @param horariosDisponiveis
+	 *            the horariosDisponiveis to set
 	 */
 	public void setHorariosDisponiveis(List<DisponibilidadeHorario> horariosDisponiveis) {
 		this.horariosDisponiveis = horariosDisponiveis;
@@ -191,7 +209,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param doador the doador to set
+	 * @param doador
+	 *            the doador to set
 	 */
 	public void setDoador(Doador doador) {
 		this.doador = doador;
@@ -205,7 +224,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param endereco the endereco to set
+	 * @param endereco
+	 *            the endereco to set
 	 */
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
@@ -219,7 +239,8 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param fotosDonativo the fotosDonativo to set
+	 * @param fotosDonativo
+	 *            the fotosDonativo to set
 	 */
 	public void setFotosDonativo(List<Imagem> fotosDonativo) {
 		this.fotosDonativo = fotosDonativo;
@@ -233,9 +254,26 @@ public class Donativo implements Serializable {
 	}
 
 	/**
-	 * @param categoria the categoria to set
+	 * @param categoria
+	 *            the categoria to set
 	 */
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+
+	/**
+	 * @return o atributo data
+	 */
+	public Date getData() {
+		return data;
+	}
+
+	/**
+	 * @param o
+	 *            parametro data é setado em data
+	 */
+	public void setData(Date data) {
+		this.data = data;
+	}
+
 }

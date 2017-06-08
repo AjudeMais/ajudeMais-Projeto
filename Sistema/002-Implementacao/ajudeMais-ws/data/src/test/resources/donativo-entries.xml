@@ -12,6 +12,8 @@
 	
 	<categoria id="1" ativo="TRUE" nome="brinquedos" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
 	
-	<donativo id="1" quantidade="3" nome="Briquedos Iron man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1"/>
+	<donativo id="2" quantidade="3" nome="Briquedos Iron man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08"/>
 	
+	<donativo id="1" quantidade="3" nome="Briquedos Iron man 2" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-05"/>	
+
 </dataset>

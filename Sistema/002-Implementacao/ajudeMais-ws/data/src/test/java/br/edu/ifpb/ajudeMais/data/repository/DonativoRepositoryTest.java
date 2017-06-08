@@ -47,6 +47,9 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 @DirtiesContext
 public class DonativoRepositoryTest {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
 	
@@ -64,7 +67,7 @@ public class DonativoRepositoryTest {
 	 */
 	@Test
 	public void findByDoadorIdTest() {
-		List<Donativo> donativos = donativoRepository.findByDoadorId(1l);
+		List<Donativo> donativos = donativoRepository.findByDoadorIdOrderByDataAsc(1l);
 		assertThat(!donativos.isEmpty());
 	}
 	
@@ -86,6 +89,15 @@ public class DonativoRepositoryTest {
 		instituicaoCaridade.setId(1l);
 		List<Donativo> donativos = donativoRepository.findByCategoriaInstituicaoCaridade(instituicaoCaridade);
 		assertThat(!donativos.isEmpty());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void findAllByOrderByDataAscTest() {
+		List<Donativo> donativos = donativoRepository.findAllByOrderByDataAsc();
+		assertThat(donativos.get(0).getId() == 2l);
 	}
 
 }

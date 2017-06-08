@@ -9,7 +9,6 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
 /**
  * 
- * 
  * <p>
  * <b> {@link DonativoRepository}</b>
  * </p>
@@ -18,6 +17,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
  * Interface de persistência de um {@link Donativo}
  * </p>
  * 
+ * @author Franck
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  *
  */
@@ -29,16 +29,14 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByDoadorNome(String nome);
-	
-	
+
 	/**
 	 * Busca os donativos do doador com o id informado.
 	 * 
 	 * @param nome
 	 * @return
 	 */
-	List<Donativo> findByDoadorId(Long id);
-	
+	List<Donativo> findByDoadorIdOrderByDataAsc(Long id);
 
 	/**
 	 * 
@@ -57,5 +55,14 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+
+	/**
+	 * <p>
+	 * Busca donativos e retorna lista ordenada por data de criação
+	 * </p>
+	 * 
+	 * @return
+	 */
+	List<Donativo> findAllByOrderByDataAsc();
 
 }
