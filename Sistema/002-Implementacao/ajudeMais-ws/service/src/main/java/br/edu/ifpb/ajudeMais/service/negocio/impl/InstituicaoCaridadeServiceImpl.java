@@ -1,6 +1,20 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,7 +23,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.maps.errors.ApiException;
 
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
@@ -24,23 +37,53 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
 /**
  * 
+ * <p>
+ * {@link InstituicaoCaridadeServiceImpl}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para implementação de serviços definidos em
+ * {@link InstituicaoCaridadeService}
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
- * Service de instituições de caridade.
  *
  */
 @Service
 public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRespository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private ContaService contaService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private GoogleMapsServiceImpl googleMapsResponse;
 
 	/**
+	 * 
+	 * salva uma instituição de caridade no BD
+	 * 
+	 * @param entity
+	 *            entidade a ser salva
+	 * 
+	 * @return instituição salva
+	 * 
+	 * 
+	 * @throws AjudeMaisException
 	 * 
 	 */
 	@Transactional
@@ -61,6 +104,15 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
+	 * 
+	 * atualiza uma instituição de caridade previamente cadastrada no BD
+	 * 
+	 * @param entity
+	 *            entidade a ser atualizada
+	 * 
+	 * @return instituição atualizada
+	 * 
+	 * 
 	 * @throws AjudeMaisException
 	 * 
 	 */
@@ -74,6 +126,10 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	/**
 	 * 
+	 * lista todas as instituições de caridade salvas no BD
+	 * 
+	 * @return lista de instituições
+	 * 
 	 */
 	@Override
 	public List<InstituicaoCaridade> findAll() {
@@ -81,6 +137,12 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 	}
 
 	/**
+	 * busca e retorna uma instituição com base no id
+	 * 
+	 * @param id
+	 *            id a ser buscada no BD
+	 * 
+	 * @return instituição de caridade, caso exista
 	 * 
 	 */
 	@Override
@@ -90,6 +152,11 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	/**
 	 * 
+	 * remove uma instituição de caridade previamente cadastrada
+	 * 
+	 * @param entity
+	 *            instituição a ser removida
+	 * 
 	 */
 	@Transactional
 	@Override
@@ -97,11 +164,13 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 		instituicaoRespository.delete(entity);
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * busca e retorna as instituições de caridade situadas aquele endereco
 	 * 
-	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
-	 * filtersInstituicoesForAddress(java.lang.String, java.lang.String)
+	 * @param endereco
+	 *            endereco pesquisado
+	 * 
+	 * @return lista de instituicoes situadas
 	 */
 	@Override
 	public List<InstituicaoCaridade> filtersInstituicoesForAddress(Endereco endereco) {
@@ -109,31 +178,44 @@ public class InstituicaoCaridadeServiceImpl implements InstituicaoCaridadeServic
 
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService#
-	 * filtersInstituicaoCloseForLatAndLng(com.google.maps.model.LatLng)
+	 * busca e retorna instituicoes que estao situadas naquele ponto especifico
+	 * 
+	 * @param latLng
+	 *            latitude e longitude daquele ponto especifico no mapa
+	 * 
+	 * @return lista de instituicoes
+	 * @throws AjudeMaisException
+	 * 
 	 */
 	@Override
-	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) {
+	public List<InstituicaoCaridade> filtersInstituicaoCloseForLatAndLng(LatLng latLng) throws AjudeMaisException {
 
-		Endereco endereco = null;
+		Endereco endereco;
 
-		try {
-			endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(), latLng.getLongitude());
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (ApiException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+				latLng.getLongitude());
 
 		return instituicaoRespository.filtersInstituicaoCaridadeClose(endereco.getLocalidade(), endereco.getUf());
 
+	}
+
+	/**
+	 * Lista instituições por ativas ou não.
+	 */
+	@Override
+	public List<InstituicaoCaridade> findByContaAtivo(boolean ativo) {
+
+		return instituicaoRespository.findByContaAtivo(ativo);
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public Optional<InstituicaoCaridade> findOneByConta(Conta conta) {
+		return instituicaoRespository.findOneByConta(conta);
 	}
 
 }

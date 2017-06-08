@@ -35,6 +35,10 @@ public class LoginTest {
 
 	private LoginPage loginPage;
 
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void setUp() throws Exception {
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver");
@@ -54,6 +58,10 @@ public class LoginTest {
 		WebDriverRunner.setWebDriver(driver);
 	}
 	
+	/**
+	 * 
+	 * @throws Exception
+	 */
 	@After
 	public void tearDown() throws Exception {
 		driver.close();
@@ -72,6 +80,32 @@ public class LoginTest {
 		
 		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.",
 				houveCampoObgSenha && houveCampoObgUsername);
+	}
+	
+	/**
+	 * Faz login sem preencher username
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void fazerLoginSemUsername() throws InterruptedException{
+		loginPage.fazerLogin("dedede", "");
+		
+		boolean houveCampoObgUsername = loginPage.houveErroUsername("Nome do Usuário deve ser informado");
+		
+		assertTrue("A operação devia ter exibido as mensagens informando que o username é obg.",!houveCampoObgUsername);
+	}
+	
+	/**
+	 * Faz login sem preencher campo senha
+	 * @throws InterruptedException 
+	 */
+	@Test
+	public void fazerLoginSemSenha() throws InterruptedException{
+		loginPage.fazerLogin("", "dedede");
+		
+		boolean houveCampoObgSenha = loginPage.houveErroSenha("Senha deve ser informada");
+		
+		assertTrue("A operação devia ter exibido as mensagens informando que a senha é obg",!houveCampoObgSenha);
 	}
 
 	/**

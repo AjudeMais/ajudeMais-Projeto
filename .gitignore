@@ -2,23 +2,23 @@
 # TESTES ACEITACAO
 ######################
 /Sistema/003-Teste/Implementação TESTES ACEITAÇÃO/AjudeMaisTestesAceitacao/build/reports
-
-
 ######################
 # Project Specific
 ######################
 /target/www/**
 /src/test/javascript/coverage/
 /src/test/javascript/PhantomJS*/
+/Sistema/002-Implementacao/ajudeMais-ws/RESTful-api/src/main/resources/application-prod.properties
 
 ######################
-# Node
+# WEB
 ######################
 /node/
 node_tmp/
 node_modules/
 npm-debug.log.*
-
+/Sistema/002-Implementacao/ajudeMais-web/src/vendors
+/Sistema/002-Implementacao/ajudeMais-web/node_modules
 ######################
 # SASS
 ######################
@@ -158,3 +158,5 @@ Servers
 
 .springBeans
 .tern-project
+
+

@@ -1,3 +1,14 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +22,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -21,22 +33,32 @@ import br.edu.ifpb.ajudeMais.api.security.JwtTokenFilter;
 /**
  * 
  * <p>
- * <b> SecurityConfig </b>
+ * {@link SecurityConfig}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para configurações da parte de segurança da aplicação
+ * utilizando o Spring Security Framework.
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * 
+ * @see https://projects.spring.io/spring-security/ </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private UserDetailsService userDetailService;
 
-    @Autowired
-    private JwtEntryPoint unauthorizedHandler;
 
 	/**
 	 * 
@@ -49,6 +71,7 @@ public class SecurityConfig {
 	}
 
 	/**
+	 * {@link @Bean} para configuração de encriptação usando o {@link BCrypt}
 	 * 
 	 * @return
 	 */
@@ -56,44 +79,68 @@ public class SecurityConfig {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
+	/**
+	 * Bean para recuparar filtro do JWT implementado {@link JwtTokenFilter}
+	 * 
+	 * @return filtro
+	 * 
+	 * @throws Exception
+	 */
+	@Bean
+	public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
+		return new JwtTokenFilter();
+	}
 	
 	/**
 	 * 
+	 * <p>
+	 * Bean para exceção de autenticação.
+	 * </p>
 	 * @return
-	 * @throws Exception
 	 */
     @Bean
-    public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
-        return new JwtTokenFilter();
+    public JwtEntryPoint unauthorizedHandler() {
+        return new JwtEntryPoint();
     }
-
 
 	/**
 	 * 
-	 * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+	 * <p>
+	 * {@link ApiWebSecurityConfigurationAdapter}
+	 * </p>
+	 * 
+	 * <p>
+	 * Classe utilizada para configurações de permições
+	 * </p>
+	 *
+	 * <pre>
+	 * </pre
+	 *
+	 * @author <a href="https://franckaj.github.io">Franck Aragão</a>
 	 *
 	 */
 	@Configuration
 	public class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
-			
+
 			http.csrf().disable()
-				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+				.exceptionHandling()
+					.authenticationEntryPoint(unauthorizedHandler())
 					.and()
 				.sessionManagement()
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 				.authorizeRequests()
 					.antMatchers("/auth/login", "/auth/valida")
-						.permitAll()
-					.antMatchers(HttpMethod.POST, "/doador", "/conta")
-						.permitAll()
-					.antMatchers(HttpMethod.OPTIONS)
-						.permitAll()
-					.anyRequest().authenticated();
-			
-	        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+					.permitAll()
+				.antMatchers(HttpMethod.POST, "/doador", "/conta", "/mensageiro")
+					.permitAll()
+				.anyRequest()
+					.authenticated();
+
+			http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		}
 	}
 }

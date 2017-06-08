@@ -1,3 +1,18 @@
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.api.rest;
 
 import java.util.List;
@@ -22,57 +37,96 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
 /**
  * 
+ * <p>
+ * {@link InstituicaoCaridadeRestService}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para disponibilização de serviços relacionados a
+ * {@link InstituicaoCaridade}.
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @RestController
 @RequestMapping("/instituicao")
 public class InstituicaoCaridadeRestService {
-	
+
+	/**
+	 * 
+	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoService;
-	
+
 	/**
-	 * End point para salvar uma nova instituição de caridade no sistema.
+	 * <p>
+	 * POST /insituicao : Método disponibiliza recurso para salvar uma
+	 * insituição. <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
 	 * @param instituicaoCaridade
 	 * @return
 	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<InstituicaoCaridade> save(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade) throws AjudeMaisException {
+	public ResponseEntity<InstituicaoCaridade> save(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade)
+			throws AjudeMaisException {
 		InstituicaoCaridade instituicaoSalva = instituicaoService.save(instituicaoCaridade);
 		return new ResponseEntity<>(instituicaoSalva, HttpStatus.CREATED);
 	}
-	
+
 	/**
-	 * End point para atualizar informações de uma instituição de caridade.
+	 * 
+	 * <p>
+	 * PUT /insituicao : Endpoint para atualizar informações de uma instituição
+	 * de caridade. <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
 	 * @param instituicaoCaridade
 	 * @return
 	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade) throws AjudeMaisException {
+	public ResponseEntity<InstituicaoCaridade> update(@Valid @RequestBody InstituicaoCaridade instituicaoCaridade)
+			throws AjudeMaisException {
+
 		InstituicaoCaridade instituicao = instituicaoService.update(instituicaoCaridade);
-		
+
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * End point para buscar todas as instituições de caridade.
+	 * <p>
+	 * GET /insituicao : Endpoint para buscar todas as instituições de caridade.
+	 * <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
 	 * @return
 	 */
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN,  DOADOR')")
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<InstituicaoCaridade>> findAll() {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.findAll();
-		
+
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * End point para filtrar instituições por uma localidade e estado.
+	 * <p>
+	 * POST /insituicao/filterGeoAddress : Endpoint para filtrar instituições
+	 * por uma localidade e estado. <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
 	 * @param localidade
 	 * @param uf
 	 * @return
@@ -84,24 +138,31 @@ public class InstituicaoCaridadeRestService {
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}
-	
 
 	/**
-	 * End point para filtrar instituições pela latitude e longitude passada.
+	 * <p>
+	 * POST /insituicao/filterGeoCoordinates : Endpoint para filtrar
+	 * instituições pela latitude e longitude passada. <br>
+	 * ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
 	 * @param localidade
 	 * @param uf
 	 * @return
+	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasAnyRole('ADMIN, DOADOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/filterGeoCoordinates")
-	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(@RequestBody LatLng latLng) {
+	public ResponseEntity<List<InstituicaoCaridade>> filtersInstituicoesForLatitudeAndLongitude(
+			@RequestBody LatLng latLng) throws AjudeMaisException {
 		List<InstituicaoCaridade> instituicoes = instituicaoService.filtersInstituicaoCloseForLatAndLng(latLng);
 
 		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * End point para buscar uma instituição de caridade pelo ID.
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -109,8 +170,26 @@ public class InstituicaoCaridadeRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	public ResponseEntity<InstituicaoCaridade> findById(@PathVariable Long id) {
 		InstituicaoCaridade instituicao = instituicaoService.findById(id);
-		
+
 		return new ResponseEntity<InstituicaoCaridade>(instituicao, HttpStatus.OK);
-		
+
 	}
+
+	/**
+	 * <p>
+	 * GET /instituicao/ativas ROLE: ADMIN, DOADOR
+	 * </p>
+	 * 
+	 * @return {@link List} lista de instituições ativas
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN,DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/ativas")
+	public ResponseEntity<List<InstituicaoCaridade>> findByContaAtivo() {
+
+		List<InstituicaoCaridade> instituicoes = instituicaoService.findByContaAtivo(true);
+
+		return new ResponseEntity<>(instituicoes, HttpStatus.OK);
+
+	}
+
 }

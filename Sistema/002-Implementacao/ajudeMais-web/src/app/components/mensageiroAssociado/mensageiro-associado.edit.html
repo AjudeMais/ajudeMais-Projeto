@@ -1,0 +1,90 @@
+<div class="modal-header">
+    <button type="button" ng-click="vm.cancel()" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">Associação de Mensageiro</h4>
+</div>
+
+<form name="categoriaForm" ng-submit="categoriaForm.$valid && vm.save()" role="form" novalidate>
+    <div class="modal-body row" id="modal-body">
+        <div class="input-group col-sm-12" ng-show="!vm.isEdited()">
+
+            <input type="text" ng-model="vm.mensageiroAss.mensageiro" class="form-control"
+                   placeholder="E-mail do mensageiro"
+                   uib-typeahead="mensageiro as mensageiro.conta.email for mensageiro in vm.findMensageiro($viewValue)"
+                   typeahead-loading="loadingMens" typeahead-no-results="noResults"
+                   typeahead-editable="false"
+                   typeahead-on-select="vm.onSelect($model)"
+                   typeahead-template-url="app/components/partials/mensageiro-card-search.html"
+                   uib-tooltip="Entre com o e-mail de um mensageiro"
+                   tooltip-placement="top"
+                   tooltip-trigger="'mouseenter'"
+                   tooltip-enable="!vm.mensageiroAss.mensageiro" autofocus>
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+        <div class="am-card-result" ng-show="vm.mensageiroAss.mensageiro != null">
+            <div class="post am-card-result-content">
+                <div class="user-block">
+                    <img class="img-responsive img-circle" ng-show="vm.mensageiroAss.mensageiro.foto && vm.image"
+                         data-ng-src="data:{{vm.mensageiroAss.mensageiro.foto.contentType}};base64,{{vm.image}}">
+                    <img class="img-responsive img-circle" ng-show="!vm.mensageiroAss.mensageiro.foto"
+                         ng-src="{{vm.mockImage}}">
+
+                    <span class="username">
+                        {{vm.mensageiroAss.mensageiro.nome}}
+                        <a ng-click="vm.removeCurrentMensageiro()" ng-show="!vm.isEdited()"
+                           uib-tooltip="Remover Mensageiro"
+                           tooltip-placement="top"
+                           class="pull-right btn-box-tool"><i class="fa fa-1x fa-times"></i></a>
+                    </span>
+
+                    <span class="description">{{vm.mensageiroAss.mensageiro.conta.username}} - {{vm.mensageiroAss.mensageiro.conta.email}}</span>
+                    <span class="description">{{vm.mensageiroAss.mensageiro.telefone}}</span>
+                </div>
+                <table class="table" style="font-size: 13px;" ng-show="vm.mensageiroAss.mensageiro.enderecos.length">
+                    <thead>
+                    <tr>
+                        <th width="40%">Logradouro</th>
+                        <th width="10%">Bairro</th>
+                        <th width="10%">Localide</th>
+                        <th width="5%">UF</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="end in vm.mensageiroAss.mensageiro.enderecos">
+
+                        <td>{{end.logradouro}}</td>
+                        <td>{{end.bairro}}</td>
+                        <td>{{end.localidade}}</td>
+                        <td>{{end.uf}}</td>
+
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="am-card-adrrs-empty">
+                    <div class="well am-card-adrrs-empty" ng-show="!vm.mensageiroAss.mensageiro.enderecos.length">
+                        <span>Mensageiro não possuí nenhum endereço.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4" ng-show="vm.mensageiroAss.mensageiro != null">
+            Status<br/>
+            <input bs-switch name="ativo"
+                   switch-on-text="Ativo" switch-off-text="Inativo" switch-size="small"
+                   ng-model="vm.mensageiroAss.status" switch-off-color="danger" type="checkbox" class="form-control"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <input class="btn btn-primary" type="submit" value="{{vm.isEdited() ? 'Alterar':'Salvar' }}"/>
+        <button class="btn btn-default" type="button" ng-click="vm.cancel()">Cancelar</button>
+    </div>
+
+</form>
+
+<div class="overlay" ng-show="vm.loading">
+    <i class="fa fa-refresh fa-spin"></i>
+</div>

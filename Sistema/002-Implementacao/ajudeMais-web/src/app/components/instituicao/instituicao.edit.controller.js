@@ -10,15 +10,18 @@
     angular.module("amApp")
         .controller("InstituicaoEditController", InstituicaoEditController);
 
-    InstituicaoEditController.$inject = ['instituicaoService', 'growl', '$stateParams', '$state', 'viaCEP'];
+    InstituicaoEditController.$inject = ['instituicaoService', 'toastr', '$stateParams', '$state', 'viaCEP'];
 
-    function InstituicaoEditController(instituicaoService, growl, $stateParams, $state, viaCEP) {
+    function InstituicaoEditController(instituicaoService, toastr, $stateParams, $state, viaCEP) {
 
         var vm = this;
         vm.instituicao = {};
 
         if ($stateParams.instituicaoEdit) {
             vm.instituicao = $stateParams.instituicaoEdit;
+        } else {
+            vm.instituicao.conta = {};
+            vm.instituicao.conta.ativo = true;
         }
 
         /**
@@ -28,20 +31,20 @@
             if (!vm.isEdited()) {
                 _setDefaultAccount(vm.instituicao);
                 instituicaoService.save(vm.instituicao, function (response) {
-                    growl.success("<b>Instituição</b> criada com sucesso");
-                    $state.go('home.instituicao');
+                    toastr.success('criada com sucesso', 'Instituição');
+                    $state.go('home.instituicao.list');
                 }, function (response) {
                     var msgError = response.data.msg;
-                    growl.warning(msgError);
+                    toastr.warning(msgError);
                 });
 
             } else {
                 instituicaoService.update(vm.instituicao, function (response) {
-                    growl.success("<b>Instituição</b> alterada com sucesso");
-                    $state.go('home.instituicao');
+                    toastr.success('atualiada com sucesso', 'Instituição');
+                    $state.go('home.instituicao.list');
                 }, function (response) {
                     var msgError = response.data.msg;
-                    growl.warning(msgError);
+                    toastr.warning(msgError);
                 });
             }
         };
@@ -50,7 +53,7 @@
          *
          */
         vm.cancelar = function () {
-            $state.go('home.instituicao');
+            $state.go('home.instituicao.list');
         };
 
         /**
@@ -82,7 +85,6 @@
             vm.instituicao.conta.username = instituicao.documento;
             vm.instituicao.conta.senha = instituicao.documento;
             vm.instituicao.conta.grupos = ['ROLE_INSTITUICAO'];
-            vm.instituicao.conta.ativo = true;
         }
 
         /**

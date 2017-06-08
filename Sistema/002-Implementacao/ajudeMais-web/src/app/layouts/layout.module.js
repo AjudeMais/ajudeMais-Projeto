@@ -1,3 +1,3 @@
 (function () {
-    angular.module('layout', ['angular-growl', 'angular-loading-bar']);
+    angular.module('layout', ['toastr', 'angular-loading-bar']);
 })();

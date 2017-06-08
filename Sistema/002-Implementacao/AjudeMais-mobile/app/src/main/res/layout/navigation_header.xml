@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/background"
+    android:id="@+id/background_header"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@color/colorPrimary"
@@ -27,6 +27,7 @@
         android:id="@+id/tvEmailProfile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorFont"
         android:text="@string/userMailTemp"
         android:textAlignment="viewStart"
         android:layout_below="@+id/tvUserNameProfile"
@@ -38,6 +39,7 @@
         android:layout_height="wrap_content"
         android:paddingTop="17dp"
         android:text="@string/userNameTemp"
+        android:textColor="@color/colorFont"
         android:textAlignment="viewStart"
         android:textSize="18sp"
         android:layout_alignParentTop="true"

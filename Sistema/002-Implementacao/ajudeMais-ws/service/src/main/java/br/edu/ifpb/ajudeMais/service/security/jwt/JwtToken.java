@@ -4,19 +4,48 @@ import java.util.Date;
 
 /**
  * 
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <p>
+ * {@link JwtToken}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para representação de token de autenticação
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 public class JwtToken {
 
+	/**
+	 * 
+	 * 
+	 */
 	private String token;
 
+	/**
+	 * 
+	 * 
+	 */
 	private Date date = new Date();
 
+	/**
+	 * 
+	 * 
+	 */
 	public JwtToken() {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * 
+	 * @param token
+	 */
 	public JwtToken(String token) {
 		this.token = token;
 	}

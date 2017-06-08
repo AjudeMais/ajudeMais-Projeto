@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>br.edu.ifpb.ajudeMais</groupId>
 		<artifactId>AjudeMais</artifactId>
-		<version>0.5-SNAPSHOT</version>
+		<version>0.7-IT03</version>
 	</parent>
 	<artifactId>AjudeMais-RESTful-api</artifactId>
 	<name>RESTful-api</name>
@@ -57,11 +57,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-			<dependency>
-				<groupId>com.h2database</groupId>
-				<artifactId>h2</artifactId>
-				<scope>test</scope>
-			</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -72,6 +72,7 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-test</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<properties>
@@ -98,6 +99,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+
 		</plugins>
 	</build>
 

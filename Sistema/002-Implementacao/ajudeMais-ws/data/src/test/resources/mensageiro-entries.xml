@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<conta id="1" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
+	<mensageiro id="1" nome="Joao" cpf="102.106.104-50" telefone="999999999" conta_id="1"/>
+	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" mensageiro_id="1"/>
+</dataset>

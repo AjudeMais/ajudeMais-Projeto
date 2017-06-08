@@ -1,17 +1,24 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
- * Created by rafaelfeitosa on 12/04/17.
- * Créditos:
- * @author Roy Clarkson
- * @author Pierre-Yves Ricau
+ * <p>
+ * <b>{@link AbstractAsyncActivity}</b>
+ * </p>
+ * <p>
+ *     Activity base para reaproveitar métodos de carregamento de TASKS asycn
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 public class AbstractAsyncActivity extends AppCompatActivity implements AsyncActivity {
 
     protected static final String TAG = AbstractAsyncActivity.class.getSimpleName();
@@ -19,6 +26,8 @@ public class AbstractAsyncActivity extends AppCompatActivity implements AsyncAct
     private ProgressDialog progressDialog;
 
     private boolean destroyed = false;
+
+
 
     /**
      * Destroy

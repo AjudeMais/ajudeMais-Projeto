@@ -17,7 +17,10 @@
         var errorResolverInterceptor = {
             responseError: function (response) {
                 if (response.status >= 500) {
-                    $location.path('home/500');
+                    $location.path('/500');
+                }
+                if (response.status <= 0) {
+                    $location.path('/refused');
                 }
                 return $q.reject(response);
             }

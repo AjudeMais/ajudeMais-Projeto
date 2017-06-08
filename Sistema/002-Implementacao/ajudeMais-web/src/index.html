@@ -13,13 +13,14 @@
 
     <!-- inject:css -->
     <link rel="stylesheet" type="text/css" href="vendors/bootstrap/dist/css/bootstrap.min.css" /></script>
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" /></script>
     <link rel="stylesheet" type="text/css" href="content/css/main.css" /></script>
     <link rel="stylesheet" type="text/css" href="vendors/iCheck/skins/all.css" /></script>
     <link rel="stylesheet" type="text/css" href="vendors/font-awesome/css/font-awesome.css" /></script>
-    <link rel="stylesheet" type="text/css" href="vendors/angular-growl-v2/build/angular-growl.min.css" /></script>
     <link rel="stylesheet" type="text/css" href="vendors/angular-datatables/dist/css/angular-datatables.css" /></script>
     <link rel="stylesheet" type="text/css" href="vendors/angular-datatables/dist/plugins/bootstrap/datatables.bootstrap.min.css" /></script>
     <link rel="stylesheet" type="text/css" href="vendors/angular-loading-bar/build/loading-bar.css" media='all' /></script>
+    <link rel="stylesheet" type="text/css" href="vendors/angular-toastr/dist/angular-toastr.css" />
     <!-- endinject -->
 
     <!-- inject:js -->
@@ -27,57 +28,90 @@
     <script type="text/javascript" src="vendors/iCheck/icheck.js" /></script>
     <script type="text/javascript" src="vendors/datatables.net/js/jquery.dataTables.js" /></script>
     <script type="text/javascript" src="vendors/bootstrap/dist/js/bootstrap.js" /></script>
+    <script type="text/javascript" src="vendors/bootstrap-switch/dist/js/bootstrap-switch.min.js"/></script>
     <script type="text/javascript" src="vendors/angular/angular.js" /></script>
     <script type="text/javascript" src="vendors/angular-animate/angular-animate.js" /></script>
     <script type="text/javascript" src="vendors/angular-ui-router/release/angular-ui-router.js" /></script>
     <script type="text/javascript" src="vendors/ngstorage/ngStorage.js" /></script>
-    <script type="text/javascript" src="vendors/angular-datatables/dist/angular-datatables.js" /></script>
+    <script type="text/javascript" src="vendors/angular-datatables/dist/angular-datatables.js"/></script>
     <script type="text/javascript" src="vendors/angular-datatables/dist/plugins/bootstrap/angular-datatables.bootstrap.js" /></script>
-    <script type="text/javascript" src="vendors/angular-bootstrap/ui-bootstrap-tpls.js" /></script>
+    <script type="text/javascript" src="vendors/angular-bootstrap/ui-bootstrap-tpls.js"/></script>
     <script type="text/javascript" src="vendors/angular-cookies/angular-cookies.js"></script>
-    <script type="text/javascript" src="vendors/angular-growl-v2/build/angular-growl.js" /></script>
-    <script type="text/javascript" src="vendors/angular-loading-bar/build/loading-bar.js" /></script>
-    <script type="text/javascript" src="vendors/angular-input-masks/angular-input-masks-dependencies.js" /></script>
-    <script type="text/javascript" src="vendors/angular-input-masks/angular-input-masks.br.js" /></script>
-    <script type="text/javascript" src="vendors/angular-br-filters/release/angular-br-filters.js" /></script>
+    <script type="text/javascript" src="vendors/angular-loading-bar/build/loading-bar.js"/></script>
+    <script type="text/javascript" src="vendors/angular-input-masks/angular-input-masks-dependencies.js"/></script>
+    <script type="text/javascript" src="vendors/angular-input-masks/angular-input-masks.br.js"/></script>
+    <script type="text/javascript" src="vendors/angular-br-filters/release/angular-br-filters.js"/></script>
     <script type="text/javascript" src="vendors/angular-viacep/dist/angular-viacep.js"/></script>
+    <script type="text/javascript" src="vendors/angular-bootstrap-switch/dist/angular-bootstrap-switch.min.js"/></script>
+    <script type="text/javascript" src="vendors/angular-toastr/dist/angular-toastr.tpls.js"></script>
+    <script src="vendors/angular-i18n/angular-locale_pt-br.js"></script>
+    <script src="vendors/ngCapsLock/ng-caps-lock.js"></script>
+    <script src="vendors/ng-file-upload/ng-file-upload.min.js"></script>
 
-    <script type="text/javascript" src="app/util/app.util.module.js" /></script>
-    <script type="text/javascript" src="app/util/directives/date.util.directive.js" /></script>
-    <script type="text/javascript" src="app/util/directives/numbers-only.util.directive.js" /></script>
-    <script type="text/javascript" src="app/util/directives/access.util.directive.js" /></script>
+    <script type="text/javascript" src="app/util/app.util.module.js"/></script>
+    <script type="text/javascript" src="app/util/directives/date.util.directive.js"/></script>
+    <script type="text/javascript" src="app/util/directives/numbers-only.util.directive.js"/></script>
+    <script type="text/javascript" src="app/util/directives/access.util.directive.js"/></script>
     <script type="text/javascript" src="app/util/directives/title-page.util.directive.js"></script>
-    <script type="text/javascript" src="app/util/directives/icheck.util.directive.js" /></script>
+    <script type="text/javascript" src="app/util/directives/icheck.util.directive.js"/></script>
 
-    <script type="text/javascript" src="app/app.module.js" /></script>
-    <script type="text/javascript" src="app/constants/app.constants.js" /></script>
-    <script type="text/javascript" src="app/layouts/layout.module.js" /></script>
-    <script type="text/javascript" src="app/app.route.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/services/auth.service.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/services/instituicao.service.js" charset="UTF-8" /></script>
+    <script type="text/javascript" src="app/app.module.js"/></script>
+    <script type="text/javascript" src="app/constants/app.constants.js"/></script>
+    <script type="text/javascript" src="app/layouts/layout.module.js"/></script>
+    <script type="text/javascript" src="app/app.state.js"/></script>
 
-    <script type="text/javascript" src="app/blocks/interceptors/auth-expired.interceptor.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/interceptors/error-handler.interceptor.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/interceptors/auth-denied.interceptor.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/interceptors/auth.interceptor.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/config/http.config.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/config/loading-bar.config.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/config/datatables.config.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/blocks/config/growl-message.config.js" charset="UTF-8" /></script>
+    <script type="text/javascript" src="app/services/auth.service.js"/></script>
+    <script type="text/javascript" src="app/services/instituicao.service.js"/></script>
+    <script type="text/javascript" src="app/services/categoria.service.js"/></script>
+    <script type="text/javascript" src="app/services/account.service.js"/></script>
+    <script type="text/javascript" src="app/services/mensageiro-associado.service.js"/></script>
+    <script type="text/javascript" src="app/services/mensageiro.service.js"/></script>
+    <script type="text/javascript" src="app/services/image.service.js"/></script>
+    <script type="text/javascript" src="app/services/campanha.service.js"/></script>
+    <script type="text/javascript" src="app/services/donativo.service.js"/></script>
 
-    <script type="text/javascript" src="app/layouts/header/page-header.directive.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/layouts/notification/header-notification.directive.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/layouts/sidebar/directive/sidebar.directive.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/layouts/sidebar/sidebar.controller.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/layouts/widget/widget.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/layouts/widget/widget-body.js" charset="UTF-8" /></script>
+    <script type="text/javascript" src="app/blocks/interceptors/auth-expired.interceptor.js"/></script>
+    <script type="text/javascript" src="app/blocks/interceptors/error-handler.interceptor.js"/></script>
+    <script type="text/javascript" src="app/blocks/interceptors/auth-denied.interceptor.js"/></script>
+    <script type="text/javascript" src="app/blocks/interceptors/auth.interceptor.js"/></script>
+    <script type="text/javascript" src="app/blocks/config/http.config.js"/></script>
+    <script type="text/javascript" src="app/blocks/config/loading-bar.config.js"/></script>
+    <script type="text/javascript" src="app/blocks/config/datatables.config.js"/></script>
+    <script type="text/javascript" src="app/blocks/config/storage.config.js"/></script>
+    <script type="text/javascript" src="app/blocks/config/toatr.config.js"/></script>
 
-    <script type="text/javascript" src="app/components/auth/login.controller.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/components/instituicao/instituicoes.controller.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/components/instituicao/instituicao.edit.controller.js" charset="UTF-8" /></script>
-    <script type="text/javascript" src="app/components/instituicao/instituicao.detail.controller.js" charset="UTF-8" /></script>
+    <script type="text/javascript"  src="app/filters/donativo-status.filter.js"/></script>
+
+    <script type="text/javascript" src="app/layouts/header/page-header.directive.js"/></script>
+    <script type="text/javascript" src="app/layouts/notification/header-notification.directive.js"/></script>
+    <script type="text/javascript" src="app/layouts/sidebar/directive/sidebar.directive.js"/></script>
+    <script type="text/javascript" src="app/layouts/sidebar/sidebar.controller.js"/></script>
+    <script type="text/javascript" src="app/layouts/widget/widget.js"/></script>
+    <script type="text/javascript" src="app/layouts/widget/widget-body.js"/></script>
+
+    <script type="text/javascript" src="app/components/auth/login.controller.js"/></script>
+    <script type="text/javascript" src="app/components/auth/password/password.controller.js"/></script>
+    <script type="text/javascript" src="app/components/auth/auth.state.js"/></script>
+    <script type="text/javascript" src="app/components/erros/erros.state.js"/></script>
+    <script type="text/javascript" src="app/components/instituicao/instituicoes.controller.js"/></script>
+    <script type="text/javascript" src="app/components/instituicao/instituicao.edit.controller.js"/></script>
+    <script type="text/javascript" src="app/components/instituicao/instituicao.detail.controller.js"/></script>
+    <script type="text/javascript" src="app/components/instituicao/instituicao.state.js"/></script>
+    <script type="text/javascript" src="app/components/categoria/categorias.controller.js"/></script>
+    <script type="text/javascript" src="app/components/categoria/categoria.edit.controller.js"/></script>
+    <script type="text/javascript" src="app/components/categoria/categoria.state.js"/></script>
+    <script type="text/javascript" src="app/components/mensageiroAssociado/mensageiros-associados.controller.js"/></script>
+    <script type="text/javascript" src="app/components/mensageiroAssociado/mensageiro-associado.edit.controller.js"  /></script>
+    <script type="text/javascript" src="app/components/mensageiroAssociado/mensageiro-associado.state.js"/></script>
+    <script type="text/javascript" src="app/components/campanha/campanhas.controller.js"/></script>
+    <script type="text/javascript" src="app/components/campanha/campanha.edit.controller.js"/></script>
+    <script type="text/javascript" src="app/components/campanha/campanha.detail.js"/></script>
+    <script type="text/javascript" src="app/components/campanha/campanha.state.js"/></script>
+    <script type="text/javascript" src="app/components/donativo/donativos.controller.js"/></script>
+    <script type="text/javascript" src="app/components/donativo/donativo.detail.js"/></script>
+    <script type="text/javascript" src="app/components/donativo/donativo.state.js"/></script>
     <!-- endinject -->
-    
+
 </head>
 
 <body>

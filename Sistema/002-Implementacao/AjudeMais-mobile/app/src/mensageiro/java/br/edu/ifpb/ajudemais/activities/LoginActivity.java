@@ -1,29 +1,64 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-import org.springframework.web.client.RestClientException;
-import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
-import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
 
-public class LoginActivity extends AbstractAsyncActivity implements View.OnClickListener {
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Order;
+
+import java.util.List;
+
+import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.LoginMensageiroTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
+import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Mensageiro;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
+
+import static br.edu.ifpb.ajudemais.R.id.tvForgotPassword;
+
+
+/**
+ * <p>
+ * <b>LoginActivity</b>
+ * </p>
+ * <p>
+ * Activity para controlar Login.
+ * <p>
+ * <p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a> and
+ * @author <a href="https://github.com/amslv">Ana Silva</a>
+ */
+public class LoginActivity extends BaseActivity implements View.OnClickListener, Validator.ValidationListener {
 
     private Button btnOpenApp;
     private TextView tvRecoveryPassword;
+    private Button btnCreateAccount;
+    private Validator validator;
+    private LoginMensageiroTask loginMensageiroTask;
+    private GetImageTask getImageTask;
+    private byte[] imagem;
+
+    @Order(2)
+    @NotEmpty(messageResId = R.string.msgUserNameNotInformed, sequence = 1)
+    @Length(min = 4, messageResId = R.string.msgInvalideUserName, sequence = 2)
     private EditText edtUserName;
+
+    @Order(1)
+    @NotEmpty(messageResId = R.string.msgPasswordNotInformed, sequence = 1)
+    @Length(min = 6, messageResId = R.string.msgInvalidePassword, sequence = 2)
     private EditText edtPassword;
-    private Resources resources;
+
 
     /**
      * Método Que é executado no momento inicial da inicialização da activity.
@@ -33,90 +68,31 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         init();
 
+        validator = new Validator(this);
+        validator.setValidationListener(this);
+
         btnOpenApp.setOnClickListener(this);
-
-        tvRecoveryPassword.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-
-            }
-        });
+        btnCreateAccount.setOnClickListener(this);
+        tvRecoveryPassword.setOnClickListener(this);
     }
 
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
+        initProperties();
         btnOpenApp = (Button) findViewById(R.id.btnOpen);
-        tvRecoveryPassword = (TextView) findViewById(R.id.tvForgotPassword);
+        tvRecoveryPassword = (TextView) findViewById(tvForgotPassword);
         edtUserName = (EditText) findViewById(R.id.edtUserName);
         edtPassword = (EditText) findViewById(R.id.edtPassword);
-        resources = getResources();
+        btnCreateAccount = (Button) findViewById(R.id.btnCreateAccountAccount);
 
     }
 
-    /**
-     * Valida o se nome e senha do usuário estão corretos,
-     *
-     * @return boolean
-     */
-    private boolean validateLoginFields() {
-        String userName = edtUserName.getText().toString().trim();
-        String password = edtPassword.getText().toString().trim();
-        return (!validateEmptyFields(userName, password) && ValidateFieldsLength(userName, password));
-    }
-
-    /**
-     * Recebe o nome do usuário e password verifica se estão vazios. Se ao menos um destes campos estiverem vazios o método retorna true.
-     *
-     * @param userName
-     * @param password
-     * @return boolean
-     */
-    private boolean validateEmptyFields(String userName, String password) {
-
-        if (TextUtils.isEmpty(userName)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgUserNameNotInformed));
-            return true;
-
-        } else if (TextUtils.isEmpty(password)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgPasswordNotInformed));
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Verifica se o tamanho do nome de usuário informada é maior que 3 caracteres e se a password informada possui mais de 6 caracteres exigidos.
-     *
-     * @param userName
-     * @param password
-     * @return boolean
-     */
-    private boolean ValidateFieldsLength(String userName, String password) {
-
-        if (!(userName.length() > 3)) {
-            edtUserName.requestFocus();
-            edtUserName.setError(resources.getString(R.string.msgInvalideUserName));
-            return false;
-        } else if (!(password.length() > 3)) {
-            edtPassword.requestFocus();
-            edtPassword.setError(resources.getString(R.string.msgInvalidePassword));
-            return false;
-        }
-        return true;
-    }
 
     /**
      * Método implementado da interface View.OnClickListener para criação de eventos de clicks.
@@ -127,79 +103,80 @@ public class LoginActivity extends AbstractAsyncActivity implements View.OnClick
     public void onClick(View v) {
 
         if (v.getId() == R.id.btnOpen) {
-            if (validateLoginFields()) {
-                new LoginTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim()).execute();
+            validator.validate();
 
-            }
+        } else if (v.getId() == R.id.btnCreateAccountAccount) {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, CreateMensageiroAccountActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else if (v.getId() == tvForgotPassword) {
+            Intent intent = new Intent();
+            intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
         }
     }
 
-    /**
-     * @param result
-     */
-    private void showResult(String result) {
-        Toast.makeText(this, result, Toast.LENGTH_LONG).show();
-
+    @Override
+    public void onValidationSucceeded() {
+        if (androidUtil.isOnline()) {
+            executeTasksLoginMensageiro();
+        }else {
+            CustomToast.getInstance(this).createSimpleCustomSuperToastActivity(getString(R.string.no_internet_connection));
+        }
     }
 
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
 
-    private class LoginTask extends AsyncTask<Void, Void, Conta> {
-
-        private String message = null;
-        private Conta conta;
-        private AuthRemoteService authRemoteService;
-        private String username;
-        private String senha;
-
-        public LoginTask(Context context, String username, String senha) {
-            this.authRemoteService = new AuthRemoteService(context);
-            this.username = username;
-            this.senha = senha;
-
-        }
-
-        @Override
-        protected void onPreExecute() {
-           showLoadingProgressDialog();
-
-        }
-
-        @Override
-        protected Conta doInBackground(Void... params) {
-
-            try {
-                conta = new Conta(username, senha);
-                conta = authRemoteService.createAuthenticationToken(conta, Grupo.MENSAGEIRO);
-
-               return conta;
-
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Conta conta) {
-           dismissProgressDialog();
-
-            if (conta != null) {
-                Intent intent = new Intent();
-                intent.setClass(LoginActivity.this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", conta);
-                startActivity(intent);
-
-                finish();
-
+            if (view instanceof EditText) {
+                ((EditText) view).setError(message);
+                view.requestFocus();
             } else {
-               showResult(message);
-           }
+                CustomToast.getInstance(this).createSimpleCustomSuperToastActivity(message);
+            }
         }
-
     }
+
+
+    private void executeTasksLoginMensageiro() {
+        loginMensageiroTask = new LoginMensageiroTask(this, edtUserName.getText().toString().trim(), edtPassword.getText().toString().trim());
+        loginMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(final Mensageiro output) {
+                if (output.getFoto() != null){
+
+                    getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
+                    getImageTask.delegate = new AsyncResponse<byte[]>() {
+                        @Override
+                        public void processFinish(byte[] imaBytes) {
+                            imagem = imaBytes;
+                            redirectMainActivity(output.getConta());
+                        }
+                    };
+                    getImageTask.execute();
+
+                }else {
+                    redirectMainActivity(output.getConta());
+                }
+            }
+        };
+
+        loginMensageiroTask.execute();
+    }
+
+    private void redirectMainActivity(Conta conta){
+        Intent intent = new Intent();
+        intent.setClass(LoginActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("Conta", conta);
+        intent.putExtra("ImageByteArray", imagem);
+        startActivity(intent);
+        finish();
+    }
+
 }

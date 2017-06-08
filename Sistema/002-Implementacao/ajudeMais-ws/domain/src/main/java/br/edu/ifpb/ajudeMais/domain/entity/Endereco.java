@@ -1,3 +1,15 @@
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import javax.persistence.Entity;
@@ -10,44 +22,85 @@ import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 
+ * <p>
+ * {@link Endereco}
+ * </p>
+ * 
+ * <p>
+ * Classe representa entidade de négocio Endereço
+ * </p>
+ *
+ * <pre>
+ * </pre
+ *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Entity
 public class Endereco {
 
+	/**
+	 * 
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String logradouro;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String numero;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String bairro;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String cep;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String localidade;
 
+	/**
+	 * 
+	 */
 	@NotNull
 	@NotBlank
 	private String uf;
 
+	/**
+	 * 
+	 */
 	private String unidade;
 
+	/**
+	 * 
+	 */
 	private String complemento;
 
+	/**
+	 * 
+	 */
 	private String ibge;
 
 	/**

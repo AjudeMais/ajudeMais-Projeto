@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>br.edu.ifpb.ajudeMais</groupId>
 		<artifactId>AjudeMais</artifactId>
-		<version>0.5-SNAPSHOT</version>
+		<version>0.7-IT03</version>
 	</parent>
 	<artifactId>AjudeMais-service</artifactId>
 	<name>service</name>
@@ -57,13 +57,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.mobile</groupId>
 			<artifactId>spring-mobile-device</artifactId>
@@ -83,6 +83,7 @@
 			<groupId>com.squareup.okhttp</groupId>
 			<artifactId>okhttp</artifactId>
 		</dependency>
+
 	</dependencies>
 
 	<properties>

@@ -1,17 +1,31 @@
 package br.edu.ifpb.ajudemais.activities;
 
 /**
- * Created by rafaelfeitosa on 12/04/17.
- * Créditos:
- * @author Roy Clarkson
- * @author Pierre-Yves Ricau
+ * <p>
+ * <b>{@link AsyncActivity}</b>
+ * </p>
+ *
+ * <p>
+ *     Interface base para implementação de dialog de carregamento de Tasks.
+ *</p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 public interface AsyncActivity {
 
-    public void showLoadingProgressDialog();
+    /**
+     * Chama Progress Dialog para ser exibido no carregamento de alguma task.
+     */
+    void showLoadingProgressDialog();
 
-    public void showProgressDialog(CharSequence message);
+    /**
+     * Chama Progress Dialog para ser exibido no carregamento de alguma task com uma mensagem a ser exibida de alerta.
+     * @param message
+     */
+    void showProgressDialog(CharSequence message);
 
-    public void dismissProgressDialog();
+    /**
+     * Fecha Progress Dialog em execução.
+     */
+    void dismissProgressDialog();
 }

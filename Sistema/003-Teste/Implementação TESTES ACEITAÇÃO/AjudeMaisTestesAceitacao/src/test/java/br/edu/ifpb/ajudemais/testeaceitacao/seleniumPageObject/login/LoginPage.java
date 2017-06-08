@@ -48,30 +48,32 @@ public class LoginPage extends AbstractPage{
 		
 	}
 	
-	/*
-	 * 
+	/**
+	 * Verifica se a mensagem de errro no campo username foi informada.
+	 * @param message
+	 * @return
 	 */
 	public boolean houveErroUsername(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/form/fieldset/div[1]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/form/fieldset/div[1]/div")).toString().contains(message);
 	}
 	
 	/**
-	 * 
+	 * Verifica se a mensagem de errro no campo senha foi informada.
 	 * @param message
 	 * @return
 	 */
 	public boolean houveErroSenha(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/form/fieldset/div[2]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/form/fieldset/div[2]/div")).toString().contains(message);
 	}
 	
-	
+
 	/**
-	 * 
+	 * Verifica se mensagem passada foi exibida com login inválido.
 	 * @param message
 	 * @return
 	 */
 	public boolean houveLoginInvalido(String message){
-		return $(By.xpath("/html/body/div[3]/div/div/div/div[2]/div[2]/div")).toString().contains(message);
+		return $(By.xpath("/html/body/div[1]/div/div/div/div[2]/div[2]/div")).toString().contains(message);
 	}
 	
 

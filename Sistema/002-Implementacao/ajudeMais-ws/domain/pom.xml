@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>br.edu.ifpb.ajudeMais</groupId>
 		<artifactId>AjudeMais</artifactId>
-		<version>0.5-SNAPSHOT</version>
+		<version>0.7-IT03</version>
 	</parent>
 	<artifactId>AjudeMais-domain</artifactId>
 	<name>domain</name>
@@ -39,6 +39,10 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
 		</dependency>
 	</dependencies>
 

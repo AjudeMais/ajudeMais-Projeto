@@ -13,9 +13,17 @@ import br.edu.ifpb.ajudemais.domain.InstituicaoCaridade;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
- * Created by Franck on 10/04/17.
+ * <p>
+ * <b>InstituicaoRemoteService</b>
+ * </p>
+ * <p>
+ *     Provê serviços Relacionados a instituições de caridade
+ * <p>
+ *
+ * </p>
+ *
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class InstituicaoRemoteService extends AbstractRemoteService{
 
 
@@ -27,13 +35,22 @@ public class InstituicaoRemoteService extends AbstractRemoteService{
         super(context);
     }
 
-    public List<InstituicaoCaridade> getInstituicoes() {
+    /**
+     * Recupera todas instituições cadastradas.
+     * @return
+     */
+    public List<InstituicaoCaridade> getInstituicoesAtivas() {
 
-        ResponseEntity<InstituicaoCaridade[]> responseEntity = restTemplate.getForEntity(API+"/instituicao", InstituicaoCaridade[].class);
+        ResponseEntity<InstituicaoCaridade[]> responseEntity = restTemplate.getForEntity(API+"/instituicao/ativas", InstituicaoCaridade[].class);
 
         return Arrays.asList(responseEntity.getBody());
     }
 
+    /**
+     * Recupera as instituições com base na localização do device passada.
+     * @param latLng
+     * @return
+     */
     public List<InstituicaoCaridade> postInstituicoesForLocation(LatLng latLng) {
 
         ResponseEntity<InstituicaoCaridade[]> responseEntity = restTemplate.postForEntity(API+"/instituicao/filterGeoCoordinates", latLng, InstituicaoCaridade[].class);
@@ -43,4 +60,5 @@ public class InstituicaoRemoteService extends AbstractRemoteService{
 
 
 
-}
+
+    }

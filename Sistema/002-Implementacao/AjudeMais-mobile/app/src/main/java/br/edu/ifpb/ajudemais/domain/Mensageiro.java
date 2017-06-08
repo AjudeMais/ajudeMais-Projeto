@@ -1,5 +1,9 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>
  * <b>{@link Mensageiro}</b>
@@ -12,17 +16,36 @@ package br.edu.ifpb.ajudemais.domain;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-
-public class Mensageiro {
+public class Mensageiro implements Serializable {
 
     private Long id;
     private String nome;
     private String cpf;
-    private String email;
     private String telefone;
     private String tokenFCM;
     private Conta conta;
-    private Foto foto;
+    private Imagem foto;
+    private List<Endereco> enderecos;
+
+    public Mensageiro(){
+
+    }
+
+    /**
+     *
+     * @param nome
+     * @param cpf
+     * @param telefone
+     * @param conta
+     */
+    public Mensageiro(String nome, String cpf, String telefone, Conta conta) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.conta = conta;
+
+        enderecos = new ArrayList<>();
+    }
 
     /**
      *
@@ -76,22 +99,6 @@ public class Mensageiro {
      *
      * @return String
      */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     *
-     * @param email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     *
-     * @return String
-     */
     public String getTelefone() {
         return telefone;
     }
@@ -138,9 +145,9 @@ public class Mensageiro {
 
     /**
      *
-     * @return Foto
+     * @return Imagem
      */
-    public Foto getFoto() {
+    public Imagem getFoto() {
         return foto;
     }
 
@@ -148,7 +155,37 @@ public class Mensageiro {
      *
      * @param foto
      */
-    public void setFoto(Foto foto) {
+    public void setFoto(Imagem foto) {
         this.foto = foto;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Endereco> getEnderecos() {
+        return enderecos;
+    }
+
+    /**
+     *
+     * @param enderecos
+     */
+    public void setEnderecos(List<Endereco> enderecos) {
+        this.enderecos = enderecos;
+    }
+
+    @Override
+    public String toString() {
+        return "Mensageiro{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", cpf='" + cpf + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", tokenFCM='" + tokenFCM + '\'' +
+                ", conta=" + conta +
+                ", foto=" + foto +
+                ", enderecos=" + enderecos +
+                '}';
     }
 }

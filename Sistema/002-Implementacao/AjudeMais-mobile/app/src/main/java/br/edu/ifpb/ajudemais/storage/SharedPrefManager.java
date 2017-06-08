@@ -2,29 +2,32 @@ package br.edu.ifpb.ajudemais.storage;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.provider.Settings;
-import android.util.Log;
 
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Grupo;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
+ * <p>
+ * <b>SharedPrefManager</b>
+ * </p>
  * Classe utilitaria para armazenamento em preferências do app.
+ * <p>
+ * <p>
+ * Gerencia informações constantemente usadas
+ * </p>
  *
- * Created by Franck Aragão
+ * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
-
 public class SharedPrefManager {
 
     private static final String SHARED_PREF_NAME = "authPrefs";
     private static final String SHARED_PREF_LOCATION = "br.edu.ifpb.ajudemais.location";
 
     private static final String KEY_ACCESS_TOKEN = "authToken";
-    private static final  String USER_SESSION_USERNAME = "userSessionUsername";
-    private static final  String USER_SESSION_MAIL = "userSessionMail";
-    private static final  String LOCATION_LAT = "location_lat";
-    private static final  String LOCATION_LONG = "location_lng";
+    private static final String USER_SESSION_USERNAME = "userSessionUsername";
+    private static final String USER_SESSION_MAIL = "userSessionMail";
+    private static final String LOCATION_LAT = "location_lat";
+    private static final String LOCATION_LONG = "location_lng";
 
     private static Context context;
 
@@ -35,17 +38,18 @@ public class SharedPrefManager {
      *
      * @param context
      */
-    public SharedPrefManager(Context context){
-        this.context = context;
+    public SharedPrefManager(Context context) {
+        SharedPrefManager.context = context;
     }
 
     /**
+     * Recupera a instância da classe.
      *
      * @param context
      * @return
      */
-    public static  synchronized SharedPrefManager getInstance(Context context) {
-        if(instance == null)
+    public static synchronized SharedPrefManager getInstance(Context context) {
+        if (instance == null)
             instance = new SharedPrefManager(context);
         return instance;
 
@@ -58,42 +62,43 @@ public class SharedPrefManager {
      * @return
      */
     public boolean storeToken(String token) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_ACCESS_TOKEN, token);
         editor.apply();
-        Log.d("LOGIN", "guardando token.." + token);
         return true;
     }
 
     /**
+     * Guarda  a conta de acesso do usuário para o mesmo não precisar inserir suas credencias novamente
      *
      * @param conta
      * @return
      */
     public boolean storeUser(Conta conta) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_SESSION_USERNAME, conta.getUsername());
         editor.putString(USER_SESSION_MAIL, conta.getEmail());
         editor.apply();
-        Log.d("LOGIN", "guardando user..");
         return true;
     }
 
     /**
-     * Salva a localização do doador
+     * Salva a localização do device.
+     *
      * @param latLng
      * @return
      */
     public boolean storeLatLng(LatLng latLng) {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(LOCATION_LAT,  Double.toString(latLng.getLatitude()));
+        editor.putString(LOCATION_LAT, Double.toString(latLng.getLatitude()));
         editor.putString(LOCATION_LONG, Double.toString(latLng.getLongitude()));
         editor.apply();
+
         return true;
     }
 
@@ -103,16 +108,17 @@ public class SharedPrefManager {
      * @return token salvo nas preferencias do app.
      */
     public String getToken() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
     }
 
     /**
+     * Recupera Usuário.
      *
      * @return
      */
     public Conta getUser() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(USER_SESSION_USERNAME, null);
         String mail = sharedPreferences.getString(USER_SESSION_MAIL, null);
 
@@ -123,26 +129,35 @@ public class SharedPrefManager {
     }
 
     /**
-     *retorna a última localização salva.
+     * Retorna a última localização salva.
+     *
      * @return
      */
     public LatLng getLocation() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        LatLng latLng = null;
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
         String lat = sharedPreferences.getString(LOCATION_LAT, null);
         String lgn = sharedPreferences.getString(LOCATION_LONG, null);
 
-        LatLng latLng = new LatLng();
-        latLng.setLatitude(Double.parseDouble(lat));
-        latLng.setLongitude(Double.parseDouble(lgn));
+        if (lat != null && lgn != null) {
+            latLng = new LatLng();
+            latLng.setLatitude(Double.parseDouble(lat));
+            latLng.setLongitude(Double.parseDouble(lgn));
+        }
+
         return latLng;
     }
 
     /**
-     *
+     * Limpa dados armazenados da conta do usuário e localização no device.
      */
     public void clearSharedPrefs() {
-        SharedPreferences sharedPreferences = this.context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+        sharedPreferences = context.getSharedPreferences(SHARED_PREF_LOCATION, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
     }

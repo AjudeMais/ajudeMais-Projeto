@@ -9,6 +9,19 @@ import android.view.MenuItem;
 
 import br.edu.ifpb.ajudemais.R;
 
+
+
+/**
+ * <p>
+ * <b>RecoveryPasswordActivity</b>
+ * </p>
+ * <p>
+ *     Activity para controlar Login.
+ * <p>
+ *
+ * </p>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
 public class RecoveryPasswordActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mToggle;
@@ -16,6 +29,10 @@ public class RecoveryPasswordActivity extends AppCompatActivity {
     private Toolbar mToolbar;
 
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +46,11 @@ public class RecoveryPasswordActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

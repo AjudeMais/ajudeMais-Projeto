@@ -1,67 +1,90 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.TabFragment;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais</b>
+ * <b>MainActivity</b>
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ * Activity inicial para Mensageiro
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class MainActivity extends AbstractActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends DrawerMenuActivity {
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
-    private FloatingActionButton fab;
+    private RelativeLayout componentLoading;
+    private FrameLayout componentView;
+    private RelativeLayout componentNoInternet;
 
+
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-        findViewById(R.id.containerView).setVisibility(View.GONE);
-
         init();
+
         setUpAccount();
         setUpToggle();
         setupNavDrawer();
+
+        componentLoading.setVisibility(View.VISIBLE);
+        componentView.setVisibility(View.GONE);
 
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         new LoadingColetasTask().execute();
 
     }
 
+    @Override
+    public void init() {
+        super.init();
+        componentLoading = (RelativeLayout) findViewById(R.id.loadingPanel);
+        componentLoading.setVisibility(View.VISIBLE);
+
+        componentView = (FrameLayout) findViewById(R.id.containerView);
+        componentView.setVisibility(View.GONE);
+
+        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
+        componentNoInternet.setVisibility(View.GONE);
+
+    }
+
+    private void showVisibleComponentNoInternet() {
+        componentNoInternet.setVisibility(View.VISIBLE);
+        componentLoading.setVisibility(View.GONE);
+        componentView.setVisibility(View.GONE);
+    }
+
+
+    /**
+     * Classe auxiliar para acessar Serviços
+     */
     private class LoadingColetasTask extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -73,7 +96,6 @@ public class MainActivity extends AbstractActivity implements NavigationView.OnN
         protected void onPostExecute(String message) {
             findViewById(R.id.loadingPanel).setVisibility(View.GONE);
             findViewById(R.id.containerView).setVisibility(View.VISIBLE);
-            Toast.makeText(getApplication(), "CARREGADO", Toast.LENGTH_LONG).show();
         }
 
     }

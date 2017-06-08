@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>br.edu.ifpb.ajudeMais</groupId>
 	<artifactId>AjudeMais</artifactId>
-	<version>0.5-SNAPSHOT</version>
+	<version>0.7-IT03</version>
 	<packaging>pom</packaging>
 
 	<developers>
@@ -27,8 +27,6 @@
 
 	<dependencyManagement>
 		<dependencies>
-
-
 
 			<dependency>
 				<groupId>org.postgresql</groupId>
@@ -70,6 +68,12 @@
 				<groupId>com.squareup.okhttp</groupId>
 				<artifactId>okhttp</artifactId>
 				<version>2.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -1,33 +1,27 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
+import android.util.Log;
 
-import org.springframework.http.HttpAuthentication;
-import org.springframework.http.HttpBasicAuthentication;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Collections;
-
-import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.exceptions.RemoteAccessErrorException;
-import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
+
 
 /**
- * Created by rafaelfeitosa on 10/04/17.
- * Faz comunicação com API RestFul para os serviços relacionandos a doador.
+ * <p>
+ * <b>{@link DoadorRemoteService}</b>
+ * </p>
+ * <p>
+ * <p>
+ * Faz comunicação com API RestFul para os serviços relacionados a doador.
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-public class DoadorRemoteService extends AbstractRemoteService{
+public class DoadorRemoteService extends AbstractRemoteService {
 
 
     /**
@@ -43,11 +37,30 @@ public class DoadorRemoteService extends AbstractRemoteService{
      * @param doador
      * @return
      */
-    public Doador saveDoador(Doador doador){
-        doador = restTemplate.postForObject(API+"/doador", doador, Doador.class);
+    public Doador saveDoador(Doador doador) {
+        doador = restTemplate.postForObject(API + "/doador", doador, Doador.class);
         return doador;
     }
 
 
+    /**
+     * Atualiza informações do Doador
+     * @param doador
+     * @return
+     */
+    public Doador updateDoador(Doador doador){
+        HttpEntity<Doador> requestUpdate = new HttpEntity<>(doador);
+        HttpEntity<Doador> response = restTemplate.exchange(API + "/doador", HttpMethod.PUT, requestUpdate, Doador.class);
+        return response.getBody();
+    }
 
+    /**
+     * Recupera Doador pelo username de sua conta.
+     *
+     * @param username
+     * @return
+     */
+    public Doador getDoador(String username) {
+        return restTemplate.getForObject(API + "/doador/filter/username?username={username}", Doador.class, username);
+    }
 }

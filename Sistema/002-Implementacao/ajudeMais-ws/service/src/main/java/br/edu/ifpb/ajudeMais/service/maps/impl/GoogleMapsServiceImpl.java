@@ -1,4 +1,18 @@
-
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.service.maps.impl;
 
 import java.io.IOException;
@@ -19,6 +33,7 @@ import com.google.maps.model.TravelMode;
 import com.google.maps.model.Unit;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsService;
 
 /**
@@ -75,19 +90,28 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 	 * @param latitude
 	 * @param logitude
 	 * @return
-	 * @throws ApiException
-	 * @throws InterruptedException
-	 * @throws IOException
+	 * @throws AjudeMaisException
 	 */
-	public Endereco converteLatitudeAndLongitudeInAddress(double latitude, double logitude)
-			throws ApiException, InterruptedException, IOException {
+	public Endereco converteLatitudeAndLongitudeInAddress(double latitude, double logitude) throws AjudeMaisException{
 
 		apiContext = new GeoApiContext().setApiKey(key);
 
-		GeocodingResult[] results = GeocodingApi.newRequest(apiContext).latlng(new LatLng(latitude, logitude))
-				.language("pt-BR").await();
+		try {
+			GeocodingResult[] results;
 
-		return setResultEnderecoGoogleMaps(results);
+			results = GeocodingApi.newRequest(apiContext).latlng(new LatLng(latitude, logitude))
+					.language("pt-BR").await();
+			
+			return setResultEnderecoGoogleMaps(results);
+
+		} catch (ApiException e) {
+			throw new AjudeMaisException(e.getMessage());
+		} catch (InterruptedException e) {
+			throw new AjudeMaisException("Sem conexão com a internet.");
+		} catch (IOException e) {
+			throw new AjudeMaisException(e.getMessage());
+		}
+
 
 	}
 

@@ -1,4 +1,14 @@
-
+/**
+ * Ajude Mais - Módulo Web Service
+ * 
+ * Sistema para potencializar o processo de doação.
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
 package br.edu.ifpb.ajudeMais.domain.entity;
 
 import java.util.List;
@@ -38,6 +48,9 @@ import org.hibernate.validator.constraints.br.CPF;
 query = "SELECT m,e FROM Mensageiro m JOIN FETCH m.enderecos e WHERE e.logradouro like :logradouro and e.bairro like :bairro and e.localidade like :localidade and e.uf like :uf")})
 public class Mensageiro {
 
+	/**
+	 * 
+	 */
 	@Id
 	@Column(name = "id", unique = true)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -54,6 +67,7 @@ public class Mensageiro {
 	 */
 	@CPF
 	@NotNull(message = "O CPF deve ser informado")
+	@Column(unique = true)
 	private String cpf;
 
 	
@@ -63,13 +77,22 @@ public class Mensageiro {
 	@NotNull(message = "O telefone deve ser informado")
 	private String telefone;
 
+	/**
+	 * 
+	 */
 	private String tokenFCM;
 
+	/**
+	 * 
+	 */
 	@OneToOne(cascade = CascadeType.ALL)
 	private Conta conta;
 
+	/**
+	 * 
+	 */
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@OneToMany(cascade = { CascadeType.ALL })
+	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval=true)
 	@JoinColumn(name = "mensageiro_id")
 	private List<Endereco> enderecos;
 
@@ -77,7 +100,7 @@ public class Mensageiro {
 	 * 
 	 */
 	@OneToOne(cascade = CascadeType.ALL)
-	private Foto foto;
+	private Imagem foto;
 
 	/**
 	 * @return the id
@@ -173,7 +196,7 @@ public class Mensageiro {
 	/**
 	 * @return the foto
 	 */
-	public Foto getFoto() {
+	public Imagem getFoto() {
 		return foto;
 	}
 
@@ -181,7 +204,7 @@ public class Mensageiro {
 	 * @param foto
 	 *            the foto to set
 	 */
-	public void setFoto(Foto foto) {
+	public void setFoto(Imagem foto) {
 		this.foto = foto;
 	}
 
@@ -207,8 +230,4 @@ public class Mensageiro {
 		return "Mensageiro [id=" + id + ", nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", tokenFCM="
 				+ tokenFCM + ", conta=" + conta + ", enderecos=" + enderecos + ", foto=" + foto + "]";
 	}
-
-	
-	
-	
 }

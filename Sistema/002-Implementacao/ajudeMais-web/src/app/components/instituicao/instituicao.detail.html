@@ -7,7 +7,7 @@
 
             <div class="row box-topic">
                 <div class="col-lg-6">
-                    <div class="table-responsive">
+                    <div class="table-responsive am-no-border-table">
                         <table class="table">
                             <tr>
                                 <th width="30%">Nome da Intituição</th>
@@ -29,13 +29,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="box box-primary">
             <div class="box-header">
                 <h2 class="box-title">Endereço</h2>
             </div>
             <div>
                 <div class="row box-topic">
                     <div class="col-lg-6">
-                        <div class="table-responsive">
+                        <div class="table-responsive am-no-border-table">
                             <table class="table">
                                 <tr>
                                     <th width="30%">Logradouro</th>
@@ -53,7 +55,7 @@
                         </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="table-responsive">
+                        <div class="table-responsive am-no-border-table">
                             <table class="table">
                                 <tr ng-show="!!vm.instituicao.endereco.complemento">
                                     <th width="30%">Completamento</th>
@@ -71,27 +73,44 @@
                         </div>
                     </div>
                 </div>
-                <div class="box-header">
-                    <h2 class="box-title">Conta</h2>
-                </div>
-                <div class="row box-topic">
-                    <div class="col-lg-6">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <tr>
-                                    <th width="30%">E-mail</th>
-                                    <td>{{vm.instituicao.conta.email}}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nome de Usuário</th>
-                                    <td>{{vm.instituicao.conta.username}}</td>
-                                </tr>
-                            </table>
-                        </div>
+            </div>
+        </div>
+
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <h2 class="box-title">Conta</h2>
+            </div>
+            <div class="row box-topic">
+                <div class="col-lg-6">
+                    <div class="table-responsive am-no-border-table">
+                        <table class="table">
+                            <tr>
+                                <th width="30%">E-mail</th>
+                                <td>{{vm.instituicao.conta.email}}</td>
+                            </tr>
+                            <tr>
+                                <th>Nome de Usuário</th>
+                                <td>{{vm.instituicao.conta.username}}</td>
+                            </tr>
+                            <tr>
+                                <th>Senha alterada</th>
+                                <td ng-if="vm.instituicao.conta.resetSenha">{{vm.instituicao.conta.resetSenha | date:
+                                    "dd/MM/yyyy hh:mm:ss"}}
+                                </td>
+                                <td ng-if="!vm.instituicao.conta.resetSenha">Não alterada</td>
+                            </tr>
+                            <tr>
+                                <th>Status da conta</th>
+                                <td><span ng-class="{'label label-danger': !vm.instituicao.conta.ativo,
+													'label label-success': vm.instituicao.conta.ativo}">{{vm.instituicao.conta.ativo? 'Ativa': 'Inativa'}}
+                                </span></td>
+                            </tr>
+
+                        </table>
                     </div>
                 </div>
             </div>
-
         </div>
 
         <div class="row form-group">

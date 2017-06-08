@@ -2,7 +2,7 @@ package br.edu.ifpb.ajudemais.dto;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.dto</b>
+ * <b>{@link LatLng}</b>
  * </p>
  * <p>
  * <p>
@@ -11,7 +11,6 @@ package br.edu.ifpb.ajudemais.dto;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
 
 public class LatLng {
 
@@ -50,4 +49,12 @@ public class LatLng {
         this.longitude = longitude;
     }
 
+
+    @Override
+    public String toString() {
+        return "LatLng{" +
+                "latitude=" + latitude +
+                ", longitude=" + longitude +
+                '}';
+    }
 }

@@ -44,7 +44,7 @@
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.descricao.$invalid }">
                             <label class="control-label" for="nome">Descrição</label>
-                            <textarea id="descricao" placeholder="Descreva uma breve introdução sobre a instituição" name="descricao" ng-model="vm.instituicao.descricao" class="form-control" rows="3" id="comment" required></textarea>
+                            <textarea id="descricao" maxlength="220" placeholder="Descreva uma breve introdução sobre a instituição" name="descricao" ng-model="vm.instituicao.descricao" class="form-control" rows="3" id="comment" required></textarea>
                             <div ng-show="instituicaoForm.$submitted && instituicaoForm.descricao.$invalid"
                                  class="help-block">A descrição deve ser informada
                             </div>
@@ -66,7 +66,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-8">
+                    <div class="col-lg-5">
                         <div class="form-group am-required"
                              ng-class="{ 'has-error': instituicaoForm.$submitted && instituicaoForm.email.$invalid }">
                             <label class="control-label" for="email">E-mail</label>
@@ -77,6 +77,14 @@
                                  class="help-block">E-mail deve ser informado corretamente
                             </div>
                         </div>
+                    </div>
+
+                    <div class="form-group am-required col-lg-3"
+                         ng-class="{'has-error': instituicaoForm.$submitted && instituicaoForm.ativo.$invalid}">
+                        <label class="control-label">Status</label> <br>
+                        <input bs-switch name="ativo" ng-model="vm.instituicao.conta.ativo"
+                               switch-on-text="Ativa" switch-off-text="Inativa" switch-size="normal"
+                               switch-off-color = "danger" type="checkbox" class="form-control"/>
                     </div>
                 </div>
 
@@ -93,7 +101,7 @@
                                 <input name="zipCode" id="zipCode" ng-model="vm.instituicao.endereco.cep" type="text"
                                        class="form-control" required ui-br-cep-mask/>
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" title="Buscar endereço pelo CEP" data-toggle="tooltip"
+                                    <button class="btn btn-default" tooltip-placement="top" uib-tooltip="Buscar endereço pelo CEP"
                                             ng-click="vm.getLocation(vm.instituicao.endereco.cep)" type="button">
                                         <i class="fa fa-search"></i>
                                     </button>

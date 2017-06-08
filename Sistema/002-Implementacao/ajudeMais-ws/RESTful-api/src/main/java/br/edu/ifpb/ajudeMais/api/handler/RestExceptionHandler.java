@@ -1,4 +1,16 @@
 /**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
  * 
  */
 package br.edu.ifpb.ajudeMais.api.handler;
@@ -20,23 +32,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import br.edu.ifpb.ajudeMais.api.dto.MessageErrorDTO;
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
+import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
+import br.edu.ifpb.ajudeMais.service.exceptions.InvalidAttributeException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
 /**
  * 
  * <p>
- * <b> RestExceptionHandler </b>
+ * {@link RestExceptionHandler}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para controle de exceções não taradas pela API. Utiliza
+ * {@link ControllerAdvice}
  * </p>
  *
- * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * <pre>
+ * </pre
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
  */
 @ControllerAdvice(basePackageClasses = { DoadorRestService.class })
 public class RestExceptionHandler {
 
 	/**
+	 * Handler de erro para tratamento de exceções do {@link BeanValidation}
 	 * 
 	 * @param req
+	 * 
 	 * @param manvex
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -60,7 +86,12 @@ public class RestExceptionHandler {
 
 	/**
 	 * 
+	 * <p>
+	 * Tratammento de erro para exceção {@link UniqueConstraintAlreadyException}
+	 * </p>
+	 * 
 	 * @param e
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(UniqueConstraintAlreadyException.class)
@@ -69,15 +100,53 @@ public class RestExceptionHandler {
 		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
 	}
 	
+
 	/**
 	 * 
+	 * <p>
+	 * Tratammento de erro para exceção {@link InvalidAttributeException}
+	 * </p>
+	 * 
 	 * @param e
+	 * 
+	 * @return
+	 */
+	@ExceptionHandler(InvalidAttributeException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleInvalidAttributeException(InvalidAttributeException e) {
+		return ResponseEntity.badRequest().body(new MessageErrorDTO(e.getMessage()));
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Tratamento para exceção {@link AccessDeniedException}
+	 * </p>
+	 * 
+	 * @param e
+	 * 
 	 * @return
 	 */
 	@ExceptionHandler(AccessDeniedException.class)
 	@ResponseBody
 	public ResponseEntity<MessageErrorDTO> handleAccessDeniedException(AccessDeniedException e) {
 		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.FORBIDDEN);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Tratamento para exceção {@link ImageErrorException}
+	 * </p>
+	 * 
+	 * @param e
+	 * 
+	 * @return
+	 */
+	@ExceptionHandler(ImageErrorException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleImageError(ImageErrorException e) {
+		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
 
 }

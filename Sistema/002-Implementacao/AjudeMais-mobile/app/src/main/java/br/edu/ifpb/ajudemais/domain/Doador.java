@@ -1,13 +1,17 @@
 package br.edu.ifpb.ajudemais.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * Created by rafaelfeitosa on 10/04/17.
- * Classe que representa um doador no Sistema.
+ * <p>
+ * <b>{@link Doador}</b>
+ * </p>
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-public class Doador implements Serializable{
+public class Doador implements Serializable {
 
     private Long id;
     private String nome;
@@ -15,10 +19,24 @@ public class Doador implements Serializable{
     private String facebookID;
     private String tokenFCM;
     private Conta conta;
-    private Foto foto;
+    private List<Campanha> campanhas;
+    private Imagem foto;
 
-    public Doador(){}
+    /**
+     *
+     */
+    public Doador(){
+        conta = new Conta();
+    }
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param facebookID
+     * @param tokenFCM
+     * @param conta
+     */
     public Doador(String nome, String telefone, String facebookID, String tokenFCM, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
@@ -27,6 +45,13 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param facebookID
+     * @param conta
+     */
     public Doador(String nome, String telefone, String facebookID, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
@@ -34,6 +59,12 @@ public class Doador implements Serializable{
         this.conta = conta;
     }
 
+    /**
+     *
+     * @param nome
+     * @param telefone
+     * @param conta
+     */
     public Doador(String nome, String telefone, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
@@ -140,9 +171,25 @@ public class Doador implements Serializable{
 
     /**
      *
-     * @return Foto
+     * @return campanhas
      */
-    public Foto getFoto() {
+    public List<Campanha> getCampanhas() {
+        return campanhas;
+    }
+
+    /**
+     *
+     * @param campanhas
+     */
+    public void setCampanhas(List<Campanha> campanhas) {
+        this.campanhas = campanhas;
+    }
+
+    /**
+     *
+     * @return Imagem
+     */
+    public Imagem getFoto() {
         return foto;
     }
 
@@ -150,7 +197,7 @@ public class Doador implements Serializable{
      *
      * @param foto
      */
-    public void setFoto(Foto foto) {
+    public void setFoto(Imagem foto) {
         this.foto = foto;
     }
 

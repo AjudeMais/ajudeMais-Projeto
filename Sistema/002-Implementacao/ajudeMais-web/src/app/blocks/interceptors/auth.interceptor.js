@@ -10,9 +10,9 @@
 (function () {
     angular.module('amApp').factory("authInterceptor", authInterceptor);
 
-    authInterceptor.$inject = ['$rootScope', '$q', '$sessionStorage'];
+    authInterceptor.$inject = ['Api', '$sessionStorage'];
 
-    function authInterceptor($rootScope, $q, $sessionStorage) {
+    function authInterceptor(Api, $sessionStorage) {
         var service = {
             request: request,
             response: response
@@ -22,8 +22,8 @@
 
         function request(config) {
             config.headers = config.headers || {};
-            var token = $sessionStorage.authToken;
-            if (token && (!config.url.startsWith('https://viacep.com.br/ws'))) {
+            var token = $sessionStorage.at;
+            if (token && config.url.startsWith(Api)) {
                 config.headers.Authorization = token;
             }
             return config;
@@ -32,7 +32,7 @@
         function response(config) {
             var token = config.headers.Authorization;
             if (token) {
-                $sessionStorage.authToken = token;
+                $sessionStorage.at = token;
             }
             return config;
         }

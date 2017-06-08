@@ -1,6 +1,7 @@
 
 package br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject;
 
+
 import org.openqa.selenium.WebDriver;
 
 import com.codeborne.selenide.SelenideElement;
@@ -24,8 +25,6 @@ public abstract class AbstractPage {
 	protected WebDriver driver;
 
 	private static final String URL_BASE = "http://localhost:8000/#!";
-	private static final String USERNAME = "admin123";
-	private static final String PASSWORD = "admin123";
 
 	/**
 	 * 
@@ -43,18 +42,32 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Faz login e se for primeiro acesso preenche os campos com a mesma senha anterior.
 	 * @param username
 	 * @param senha
 	 */
-	public void fazlogin() {
-		$("#tLogin").setValue(USERNAME);
-		$("#tSenha").setValue(PASSWORD);
+	public void fazlogin(String username, String password) {
+		$("#tLogin").setValue(username);
+		$("#tSenha").setValue(password);
 		$("#btnLogin").click();
+
+		try {
+			Thread.sleep(1000l);
+			if ($("#nSenha").exists()) {
+				$("#nSenha").setValue(password);
+				$("#rSenha").setValue(password);
+				$("#btnLogin").click();
+
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
 	}
 
+
 	/**
-	 * 
+	 * Recuperar mensagem exibida
 	 * @return {@link SelenideElement}
 	 */
 	protected SelenideElement recuperarCaixaMensagem() {
@@ -63,7 +76,8 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * 
+	 * Recuperar mensagem de sucesso exibida
+
 	 * @return {@link SelenideElement}
 	 */
 	protected SelenideElement recuperarCaixaMensagemSuc() {
@@ -72,26 +86,11 @@ public abstract class AbstractPage {
 	}
 
 	/**
-	 * @return the urlBase
+	 * @return a URL base da aplicação 
 	 */
 	public static String getUrlBase() {
 		return URL_BASE;
 	}
 
-	/**
-	 * @return the username
-	 */
-	public static String getUsername() {
-		return USERNAME;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public static String getPassword() {
-		return PASSWORD;
-	}
 	
-	
-
 }
