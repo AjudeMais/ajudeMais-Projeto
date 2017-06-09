@@ -15,16 +15,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 
- * 
  * <p>
- * <b> Donativo </b>
+ * <b> {@link Donativo}</b>
  * </p>
- *
  * <p>
  * Classe que representa um donativo no sistema
  * </p>
@@ -102,6 +99,10 @@ public class Donativo implements Serializable {
 	@NotNull
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private Categoria categoria;
+	
+	
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private Campanha campanha;
 
 	/**
 	 * 
@@ -273,6 +274,22 @@ public class Donativo implements Serializable {
 	 */
 	public void setData(Date data) {
 		this.data = data;
+	}
+	
+	
+
+	/**
+	 * @return the campanha
+	 */
+	public Campanha getCampanha() {
+		return campanha;
+	}
+
+	/**
+	 * @param campanha the campanha to set
+	 */
+	public void setCampanha(Campanha campanha) {
+		this.campanha = campanha;
 	}
 
 	/*
