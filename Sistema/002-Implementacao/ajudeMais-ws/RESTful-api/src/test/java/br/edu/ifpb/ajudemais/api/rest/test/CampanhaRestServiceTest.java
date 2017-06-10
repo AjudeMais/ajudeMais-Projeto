@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,8 @@ import br.edu.ifpb.ajudeMais.api.rest.CampanhaRestService;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Meta;
+import br.edu.ifpb.ajudeMais.domain.enumerations.UnidadeMedida;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
 
@@ -198,9 +201,13 @@ public class CampanhaRestServiceTest extends AbstractRestTest {
 
 		Categoria categoria = categoriaService.findAll().get(0);
 
-		List<Categoria> categorias = new ArrayList<>();
-		categorias.add(categoria);
-		campanha.setItensDoaveis(categorias);
+		List<Meta> metas = new ArrayList<>();
+		Meta meta = new Meta();
+		meta.setCategoria(categoria);
+		meta.setQuantidade(new BigDecimal(2000));
+		meta.setUnidadeMedida(UnidadeMedida.UNIDADE);
+		metas.add(meta);
 
+		campanha.setMetas(metas);
 	}
 }
