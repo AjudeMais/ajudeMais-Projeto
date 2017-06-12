@@ -6,12 +6,16 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
+import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.service.event.campanha.notification.CampanhaNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
@@ -37,6 +41,15 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Autowired
 	private GoogleMapsServiceImpl googleMapsResponse;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DoadorRepository doadorRepository;
+	
+	@Autowired
+	private ApplicationEventPublisher publisher;
 
 	/**
 	 * Salva uma campanha no BD
@@ -48,7 +61,17 @@ public class CampanhaServiceImpl implements CampanhaService {
 	@Override
 	@Transactional
 	public Campanha save(Campanha donativo) throws AjudeMaisException {
-		return campanhaRepository.save(donativo);
+		
+		List<String> notificaveis = new ArrayList<>();
+		
+		List<Doador> doadores = doadorRepository.findAll();
+		doadores.forEach(d -> {
+			notificaveis.add(d.getTokenFCM().getToken());
+		});
+		Campanha campanhaSaved = campanhaRepository.save(donativo);
+		publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+		
+		return campanhaSaved;
 	}
 
 	/**

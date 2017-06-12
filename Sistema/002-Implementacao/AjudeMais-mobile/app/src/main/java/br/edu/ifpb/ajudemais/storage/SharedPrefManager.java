@@ -28,6 +28,7 @@ public class SharedPrefManager {
     private static final String USER_SESSION_MAIL = "userSessionMail";
     private static final String LOCATION_LAT = "location_lat";
     private static final String LOCATION_LONG = "location_lng";
+    private static final String FCM_KEY = "fcm_key";
 
     private static Context context;
 
@@ -65,6 +66,20 @@ public class SharedPrefManager {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_ACCESS_TOKEN, token);
+        editor.apply();
+        return true;
+    }
+
+    /**
+     * Salva token do FCM no arquivo de configuraçeõs do app.
+     *
+     * @param token
+     * @return
+     */
+    public boolean storageFcmToken(String token) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(FCM_KEY, token);
         editor.apply();
         return true;
     }
@@ -110,6 +125,16 @@ public class SharedPrefManager {
     public String getToken() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_ACCESS_TOKEN, null);
+    }
+
+    /**
+     * Obtem token
+     *
+     * @return token salvo nas preferencias do app.
+     */
+    public String getFcmToken() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(FCM_KEY, null);
     }
 
     /**

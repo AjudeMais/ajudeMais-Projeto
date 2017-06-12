@@ -17,7 +17,7 @@ public class Doador implements Serializable {
     private String nome;
     private String telefone;
     private String facebookID;
-    private String tokenFCM;
+    private FcmToken tokenFCM;
     private Conta conta;
     private List<Campanha> campanhas;
     private Imagem foto;
@@ -25,28 +25,25 @@ public class Doador implements Serializable {
     /**
      *
      */
-    public Doador(){
+    public Doador() {
         conta = new Conta();
     }
 
     /**
-     *
      * @param nome
      * @param telefone
      * @param facebookID
      * @param tokenFCM
      * @param conta
      */
-    public Doador(String nome, String telefone, String facebookID, String tokenFCM, Conta conta) {
+    public Doador(String nome, String telefone, FcmToken tokenFCM, Conta conta) {
         this.nome = nome;
         this.telefone = telefone;
-        this.facebookID = facebookID;
         this.tokenFCM = tokenFCM;
         this.conta = conta;
     }
 
     /**
-     *
      * @param nome
      * @param telefone
      * @param facebookID
@@ -60,7 +57,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param nome
      * @param telefone
      * @param conta
@@ -114,7 +110,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param nome
      */
     public void setNome(String nome) {
@@ -122,7 +117,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @return String
      */
     public String getTelefone() {
@@ -130,7 +124,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param telefone
      */
     public void setTelefone(String telefone) {
@@ -138,7 +131,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @return String
      */
     public String getFacebookID() {
@@ -146,31 +138,21 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param facebookID
      */
     public void setFacebookID(String facebookID) {
         this.facebookID = facebookID;
     }
 
-    /**
-     *
-     * @return String
-     */
-    public String getTokenFCM() {
+    public FcmToken getTokenFCM() {
         return tokenFCM;
     }
 
-    /**
-     *
-     * @param tokenFCM
-     */
-    public void setTokenFCM(String tokenFCM) {
+    public void setTokenFCM(FcmToken tokenFCM) {
         this.tokenFCM = tokenFCM;
     }
 
     /**
-     *
      * @return campanhas
      */
     public List<Campanha> getCampanhas() {
@@ -178,7 +160,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param campanhas
      */
     public void setCampanhas(List<Campanha> campanhas) {
@@ -186,7 +167,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @return Imagem
      */
     public Imagem getFoto() {
@@ -194,7 +174,6 @@ public class Doador implements Serializable {
     }
 
     /**
-     *
      * @param foto
      */
     public void setFoto(Imagem foto) {

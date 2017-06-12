@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,7 @@ import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.FcmToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -53,6 +55,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
     private TextInputLayout ltedtPassword;
     private TextInputLayout ltedtUserName;
     private Validator validator;
+    private SharedPrefManager sharedPrefManager;
 
     private CreateDoadorTask createDoadorTask;
     private UpdateDoadorTask updateDoadorTask;
@@ -114,6 +117,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
+        sharedPrefManager = new SharedPrefManager(this);
         initProperties();
         doadorEdit = (Doador) getIntent().getSerializableExtra("Doador");
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -253,7 +257,9 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         } else {
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_DOADOR");
-            Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(),
+            FcmToken fcmToken = new FcmToken(sharedPrefManager.getFcmToken());
+            Log.e("FCM TOKEN", sharedPrefManager.getFcmToken());
+            Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(), fcmToken,
                     new Conta(edtUserName.getText().toString().trim(),
                             edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));
 
