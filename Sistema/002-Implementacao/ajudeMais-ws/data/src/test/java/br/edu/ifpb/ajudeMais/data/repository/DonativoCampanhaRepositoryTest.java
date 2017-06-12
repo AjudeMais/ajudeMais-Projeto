@@ -1,0 +1,85 @@
+
+/**
+ * 
+ * <p>
+ * <b> DonativoCampanhaRepositoryTest.java </b>
+ * </p>
+ *
+ * <p>
+ * Entidade ...
+ * </p>
+ * 
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
+package br.edu.ifpb.ajudeMais.data.repository;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
+import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+
+/**
+ * 
+ * <p>
+ * <b>{@link DonativoCampanhaRepositoryTest} </b>
+ * </p>
+ *
+ * <p>
+ * Execita testes para donativos relacionados a uma campanha
+ * </p>
+ * 
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ */
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+	TransactionalTestExecutionListener.class, DbUnitTestExecutionListener.class })
+@RunWith(SpringRunner.class)
+@DataJpaTest
+@DatabaseSetup("/donativo-campanha-entries.xml")
+@DatabaseTearDown(type = DatabaseOperation.DELETE_ALL, value = { "/donativo-campanha-entries.xml" })
+@DirtiesContext
+public class DonativoCampanhaRepositoryTest {
+
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoCampanhaRepository donativoRepository;
+	
+	/**
+	 * Testa se com base no id da campanha é retorna a lista de donativos.
+	 */
+	@Test
+	public void findDonativoByCampanhaIdTest() {
+		List<Donativo> donativos = donativoRepository.findDonativoByCampanhaId(2l);
+		assertThat(!donativos.isEmpty());
+	}
+	
+
+	/**
+	 * Testa se retornará null caso o id da campanha não existe.
+	 */
+	@Test
+	public void findDonativoByCampanhaIdWithInvalidIdTest() {
+		List<Donativo> donativos = donativoRepository.findDonativoByCampanhaId(4l);
+		assertThat(donativos.isEmpty());
+	}
+	
+}

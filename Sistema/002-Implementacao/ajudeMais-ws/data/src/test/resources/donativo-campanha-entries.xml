@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+
+	<endereco id="2" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" />
+	<conta id="2" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
+	<intituicao_caridade id="2" nome="Instituicao XPTO" descricao="Ajude gente" telefone="9999999" documento="16925680945" endereco_id="2" conta_id="2" />
+	
+	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2"/>
+	<campanha id="2" status="TRUE" nome="campanha para brinquedos2" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2"/>
+	
+
+	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" />
+	
+	<estado_doacao id="1" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="DISPONIBILIZADO" />
+
+	<conta id="1" username="zefao" email="zefao@mail.com" senha="zefao" ativo="true" />
+	
+	<doador id="1" nome="Ze" conta_id="1" telefone="(85)99800-5422" />
+	
+	<intituicao_caridade id="1" nome="Instituicao XPTO" descricao="Ajude gente" telefone="9999999" documento="48469995561" endereco_id="1" conta_id="1" />
+	
+	<categoria id="1" ativo="TRUE" nome="brinquedos" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
+	
+	<donativo_campanha id="2" quantidade="3" nome="Briquedos Iron man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08" campanha_id="2"/>
+	<donativo_campanha id="3" quantidade="3" nome="Briquedos Spider man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08" campanha_id="2"/>
+	
+	<donativo_campanha id="1" quantidade="3" nome="Briquedos Iron man 2" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-05" campanha_id="1"/>	
+
+</dataset>

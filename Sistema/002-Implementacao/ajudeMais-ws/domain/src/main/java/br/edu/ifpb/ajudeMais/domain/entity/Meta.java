@@ -55,12 +55,24 @@ public class Meta {
 	@ManyToOne(cascade = { CascadeType.MERGE })
 	private Categoria categoria;
 	
+	/**
+	 * 
+	 */
 	@Transient
 	private Float percentualAtingido;//(quantidade esperada*100)/quantidade atual.
 	
 	
+	/**
+	 * 
+	 */
 	@Transient
 	private Integer previsaoDias;//
+	
+	/**
+	 * 
+	 */
+	@ManyToOne
+	private Campanha campanha;
 	
 
 	/**
