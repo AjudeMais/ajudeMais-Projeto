@@ -1,12 +1,9 @@
 
 package br.edu.ifpb.ajudeMais.domain.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -24,54 +21,20 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "donativo_campanha")
-public class DonativoCampanha {
+public class DonativoCampanha extends Donativo{
 	
 	/**
 	 * 
 	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long id;
+	private static final long serialVersionUID = 1L;
+
 	
 	/**
 	 * 
 	 */
-	@OneToOne
-	private Donativo donativo;
-	
-	/**
-	 * 
-	 */
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.MERGE)
 	private Campanha campanha;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the donativo
-	 */
-	public Donativo getDonativo() {
-		return donativo;
-	}
-
-	/**
-	 * @param donativo the donativo to set
-	 */
-	public void setDonativo(Donativo donativo) {
-		this.donativo = donativo;
-	}
 
 	/**
 	 * @return the campanha

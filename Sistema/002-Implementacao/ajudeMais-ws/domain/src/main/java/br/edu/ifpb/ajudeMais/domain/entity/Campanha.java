@@ -94,7 +94,9 @@ public class Campanha {
 	//@NotNull(message = "Ao menos uma meta deve ser adicionado a campanha")
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Meta> metas;
-
+	
+	
+	
 	/**
 	 * @return o atributo id
 	 */
