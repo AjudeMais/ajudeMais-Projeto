@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 
 /**
@@ -52,4 +53,14 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 		return donativos;
 	}
 
+	/**
+	 * Busca todos os donativos doados para um campanha com o estado passsado.
+	 */
+	@Override
+	public List<DonativoCampanha> filterDonativoByEstadoAfterAceito(Long idCampanha) {
+		List<DonativoCampanha> donativos = donativoCampanhaRespository.filterDonativoByEstadoAfterAceito(idCampanha);
+		return donativos;
+	}
+
+	
 }

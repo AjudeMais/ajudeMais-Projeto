@@ -33,6 +33,7 @@ public class DonativoRestTest extends AbstractRestTest {
 
 	private Donativo donativo;
 	
+	
 	@Autowired
 	private ContaService contaService;
 	
@@ -101,6 +102,18 @@ public class DonativoRestTest extends AbstractRestTest {
 		mockMvc.perform(get("/donativo")).andExpect(status().isUnauthorized());
 	}
 	
+	/**
+	 *  Buscar todos os donativos de uma campanha com estado ativo depois de aceito.
+	 *  utilizando um perfil de instituição de caridade
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	@Test
+	public void filterDonativoByEstadoAfterAceitoOk() throws IOException, Exception {
+		mockMvc.perform(get("/donativo/filter/campanha/estado/2").header("Authorization", getAuth("Instituicao", "123456")))
+				.andExpect(status().isOk());
+	}
+	
 	private Donativo getDonativo() {
 		donativo = new Donativo();
 		donativo.setNome("Roupas");
@@ -109,5 +122,6 @@ public class DonativoRestTest extends AbstractRestTest {
 		
 		return donativo;
 	}
+	
 	
 }

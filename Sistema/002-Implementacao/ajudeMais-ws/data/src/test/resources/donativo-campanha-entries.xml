@@ -21,9 +21,17 @@
 	
 	<categoria id="1" ativo="TRUE" nome="brinquedos" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
 	
+	<estado_doacao id="2" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="RECOLHIDO"/>
+	<estado_doacao id="3" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="RECOLHIDO"/>
+	<estado_doacao id="4" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="DISPONIBILIZADO"/>
+	
 	<donativo_campanha id="2" quantidade="3" nome="Briquedos Iron man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08" campanha_id="2"/>
 	<donativo_campanha id="3" quantidade="3" nome="Briquedos Spider man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08" campanha_id="2"/>
-	
+	<donativo_campanha id="4" quantidade="3" nome="Briquedos Spider man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08" campanha_id="2"/>
 	<donativo_campanha id="1" quantidade="3" nome="Briquedos Iron man 2" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-05" campanha_id="1"/>	
-
+	
+	<donativo_estados_da_doacao donativo_id="2" estados_da_doacao_id="2"/>
+	<donativo_estados_da_doacao donativo_id="3" estados_da_doacao_id="3"/>
+	<donativo_estados_da_doacao donativo_id="4" estados_da_doacao_id="4"/>
+	
 </dataset>

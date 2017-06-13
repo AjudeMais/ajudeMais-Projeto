@@ -25,6 +25,7 @@
         vm.isCtgNotEmpty = true;
         vm.isQtdNotEmpty = true;
         vm.isUnMediadeNotEmpty = true;
+        vm.isEditMeta = false;
 
         if ($stateParams.campanhaEdit) {
             vm.campanha = $stateParams.campanhaEdit;
@@ -46,7 +47,7 @@
                 vm.campanha.dataInicio = new Date();
             }
 
-            if (vm.campanha.metas.length>0) {
+            if (vm.campanha.metas.length > 0) {
                 if (!vm.isEdited()) {
                     campanhaService.save(vm.campanha).then(function (response) {
                         toastr.success('criada com sucesso', 'Campanha');
@@ -68,7 +69,7 @@
                     });
                 }
 
-            }else {
+            } else {
                 toastr.warning('A campanha deve possui ao menos uma meta');
             }
         };
@@ -115,17 +116,30 @@
             validateFieldsMeta(meta);
 
             if (vm.isCtgNotEmpty && (vm.isUnMediadeNotEmpty && vm.isQtdNotEmpty)) {
-                vm.campanha.metas.forEach(function (i) {
-                    if (meta.categoria.id == i.categoria.id) {
-                        flag = true;
+                if (!vm.isEditMeta) {
+                    vm.campanha.metas.forEach(function (i) {
+                        if (meta.categoria.id === i.categoria.id) {
+                            flag = true;
+                        }
+                    })
+                    if (flag) {
+                        toastr.warning('Item já adicionado a uma meta');
+                    } else {
+                        vm.campanha.metas.push(meta);
+                        vm.meta = {};
                     }
-                })
-                if (flag) {
-                    toastr.warning('Item já adicionado a uma meta');
+
                 } else {
-                    vm.campanha.metas.push(meta);
-                    vm.meta = {};
+                    vm.campanha.metas.forEach(function (i) {
+                        if (meta.id === i.id) {
+                            i.quantidade = meta.quantidade;
+                            vm.isEditMeta = false;
+                            vm.meta = {};
+                        }
+                    })
                 }
+
+
             }
         };
 
@@ -133,8 +147,8 @@
          * valida os campos de uma meta;
          * @param meta
          */
-        validateFieldsMeta =  function (meta) {
-            if (meta.categoria == undefined ) {
+        validateFieldsMeta = function (meta) {
+            if (meta.categoria == undefined) {
                 vm.isCtgNotEmpty = false;
             } else {
                 vm.isCtgNotEmpty = true;
@@ -148,7 +162,7 @@
 
             if (meta.quantidade == null) {
                 vm.isQtdNotEmpty = false;
-            }else {
+            } else {
                 vm.isQtdNotEmpty = true;
             }
         };
@@ -160,6 +174,20 @@
         vm.removeMeta = function (meta) {
             var index = vm.campanha.metas.indexOf(meta);
             vm.campanha.metas.splice(index, 1);
+        };
+
+        /**
+         *
+         * @param meta
+         */
+        vm.editMeta = function (meta) {
+            var index = vm.campanha.metas.indexOf(meta);
+            vm.meta = vm.campanha.metas[index];
+            vm.isEditMeta = true;
+        };
+
+        vm.onSelect = function (mensageiro) {
+            vm.isCtgNotEmpty = true;
         };
 
         /**

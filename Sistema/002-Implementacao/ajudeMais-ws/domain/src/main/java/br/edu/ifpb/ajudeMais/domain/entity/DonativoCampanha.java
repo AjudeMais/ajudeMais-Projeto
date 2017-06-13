@@ -4,6 +4,8 @@ package br.edu.ifpb.ajudeMais.domain.entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -21,6 +23,10 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "donativo_campanha")
+@NamedQueries({
+	@NamedQuery(name = "DonativoCampanha.filterDonativoByEstadoAfterAceito", query = "SELECT dc FROM DonativoCampanha dc JOIN FETCH dc.estadosDaDoacao ed "
+			+ "WHERE dc.campanha.id = :idcampanha and ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
+			+ "and  ed.estadoDoacao != 'ACEITO'  and ed.ativo is true"), })
 public class DonativoCampanha extends Donativo{
 	
 	/**
