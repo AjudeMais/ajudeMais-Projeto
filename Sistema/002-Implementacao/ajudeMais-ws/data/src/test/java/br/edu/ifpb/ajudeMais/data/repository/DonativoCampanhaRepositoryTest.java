@@ -34,6 +34,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 
 /**
  * 
@@ -79,6 +80,17 @@ public class DonativoCampanhaRepositoryTest {
 	@Test
 	public void findDonativoByCampanhaIdWithInvalidIdTest() {
 		List<Donativo> donativos = donativoRepository.findDonativoByCampanhaId(4l);
+		assertThat(donativos.isEmpty());
+	}
+	
+	
+	
+	/**
+	 * Testa se com base no id da campanha é retorna a lista de donativos com estado ativo depois de aceito.
+	 */
+	@Test
+	public void filterDonativoByEstadoAfterAceitoTest() {
+		List<DonativoCampanha> donativos = donativoRepository.filterDonativoByEstadoAfterAceito(2l);
 		assertThat(donativos.isEmpty());
 	}
 	

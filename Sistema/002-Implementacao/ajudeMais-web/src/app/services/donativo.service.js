@@ -16,7 +16,8 @@
     function donativoService($http, Api) {
 
         var service = {
-            getByInstituicao: _getByInstituicao
+            getByInstituicao: _getByInstituicao,
+            filterDonativoByEstadoAfterAceito: _filterDonativoByEstadoAfterAceito
         };
         return service;
 
@@ -26,6 +27,15 @@
          */
         function _getByInstituicao() {
             return $http.get(Api + "/donativo/filter/instituicao");
+        };
+
+
+        /**
+         *
+         * @private
+         */
+        function _filterDonativoByEstadoAfterAceito(id) {
+            return $http.get(Api + "/donativo/filter/campanha/estado/"+id);
         };
     }
 })();

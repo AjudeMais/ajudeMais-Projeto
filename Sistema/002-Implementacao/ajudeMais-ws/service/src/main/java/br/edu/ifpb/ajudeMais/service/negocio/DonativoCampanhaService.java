@@ -16,6 +16,7 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 import java.util.List;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 
 /**
  * 
@@ -37,5 +38,13 @@ public interface DonativoCampanhaService {
 	 * @return
 	 */
 	List<Donativo> findDonativoByCampanhaId(Long id);
+
+
+	/**
+	 * Busca todos os donativos doados para um campanha com o estado estado depois de aceito.
+	 * @param id
+	 * @return
+	 */
+	List<DonativoCampanha> filterDonativoByEstadoAfterAceito(Long id);
 
 }

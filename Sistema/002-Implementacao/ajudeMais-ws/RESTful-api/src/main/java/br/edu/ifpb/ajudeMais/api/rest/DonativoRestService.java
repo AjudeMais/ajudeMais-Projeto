@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
+import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
 /**
@@ -41,13 +43,16 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 @RestController
 @RequestMapping(value = "/donativo")
 public class DonativoRestService {
-	
+
 	@Autowired
 	private DonativoService donativoService;
 	
 	@Autowired
+	private DonativoCampanhaService donativoCampanhaService;
+
+	@Autowired
 	private AuthService authService;
-	
+
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
 
@@ -57,14 +62,14 @@ public class DonativoRestService {
 		Donativo donativoSalvo = donativoService.save(donativo);
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
 	}
-	
+
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoService.update(donativo);
 		return new ResponseEntity<>(donativoUpdated, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * Endpoint para listar todos os donativos cadastros no sistema.
 	 *
@@ -76,9 +81,10 @@ public class DonativoRestService {
 		List<Donativo> donativos = donativoService.findAll();
 		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * GET /donativo/filter/doadorNome : Endpoint para buscar os donativos doados por doador
+	 * GET /donativo/filter/doadorNome : Endpoint para buscar os donativos
+	 * doados por doador
 	 * 
 	 * @return donativos
 	 */
@@ -88,9 +94,10 @@ public class DonativoRestService {
 		List<Donativo> donativos = donativoService.findByDoadorNome(nome);
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos doados por doador
+	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos doados
+	 * por doador
 	 * 
 	 * @return donativos
 	 */
@@ -100,7 +107,7 @@ public class DonativoRestService {
 		List<Donativo> donativos = donativoService.findByDoadorId(id);
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * GET /donativo/filter/nome : Endpoint para buscar os donativos pelo nome
 	 * 
@@ -112,7 +119,7 @@ public class DonativoRestService {
 		List<Donativo> donativos = donativoService.findByNome(nome);
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * GET /donativo/filter/instituicao : Busca donativos pela instituição.
 	 * 
@@ -123,11 +130,25 @@ public class DonativoRestService {
 	public ResponseEntity<List<Donativo>> findByInstituicao() {
 		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
-		
+
 		List<Donativo> donativos = new ArrayList<>();
 		if (instituicaoOp.isPresent()) {
 			donativos = donativoService.findByCategoriaInstituicaoCaridade(instituicaoOp.get());
 		}
+		return new ResponseEntity<>(donativos, HttpStatus.OK);
+	}
+
+	/**
+	 * /filter/campanha/estado/{id} : Busca todos os donativos de doados para a campanha com id passado que estão no estado depois de aceito.
+	 * 
+	 * @return donativos
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/campanha/estado/{id}")
+	public ResponseEntity<List<DonativoCampanha>> filterDonativoByEstadoAfterAceito(@PathVariable Long id) {
+		
+		List<DonativoCampanha> donativos = donativoCampanhaService.filterDonativoByEstadoAfterAceito(id);
+
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
 }

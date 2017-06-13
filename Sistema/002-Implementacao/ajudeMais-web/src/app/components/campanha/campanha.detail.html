@@ -45,8 +45,8 @@
                             <th width="20%">Nome</th>
                             <th width="30%">Descrição</th>
                             <th width="20%">Quantidade</th>
-                            <th width="20%">Uni. Medida</th>
-                            <th width="3%">Ativo</th>
+                            <th width="10%">Uni. Medida</th>
+                            <th width="10%">% atiginda</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -54,11 +54,9 @@
                             <td>{{meta.categoria.nome}}</td>
                             <td>{{meta.categoria.descricao}}</td>
                             <td>{{meta.quantidade}}</td>
-                            <td>{{meta.unidadeMedida == 'UNIDADE' ? 'Unidade' :
-                                meta.unidadeMedida == 'QUILOGRAMA' ? 'Quilograma' : 'Litro'}}</td>
-                            <td><span ng-class="{'label label-danger': !meta.categoria.ativo,
-													'label label-success': meta.categoria.ativo}">{{meta.categoria.ativo? 'Sim': 'Não'}}</span>
-                            </td>
+                            <td>{{meta.unidadeMedida | capitalize}}</td>
+                            <td>{{meta.percentage }}</td>
+
                         </tr>
                         </tbody>
                     </table>

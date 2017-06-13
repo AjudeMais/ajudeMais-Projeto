@@ -85,5 +85,17 @@
                 }
             });
         };
+
+
+        vm.getDifferentDatesInDays = function (date1) {
+            console.log(date1);
+            var ONE_DAY = 1000 * 60 * 60 * 24
+            var date1_ms = date1;
+            var date2_ms = new Date().getTime();
+            var difference_ms = Math.abs(date1_ms - date2_ms);
+            return Math.round(difference_ms / ONE_DAY);
+
+        };
+
     }
 })();

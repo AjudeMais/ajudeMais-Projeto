@@ -91,9 +91,11 @@
 
                     <div class="col-sm-4" ng-class="{ 'has-error': !vm.isCtgNotEmpty}">
                         <div class="input-group col-sm-12">
-                            <input ng-click="vm.meta.categoria != undefined ? vm.isCtgNotEmpty = true : vm.isCtgNotEmpty = false"
+                            <input ng-="vm.meta.categoria != undefined ? vm.isCtgNotEmpty = true : vm.isCtgNotEmpty = false"
                                    type="text" ng-model="vm.meta.categoria" class="form-control"
+                                   ng-disabled="vm.isEditMeta"
                                    placeholder="Nome do Item"
+                                   typeahead-on-select="vm.onSelect($model)"
                                    uib-typeahead="item as item.nome for item in vm.findByName($viewValue)"
                                    typeahead-loading="loadingMens"  typeahead-no-results="noResults"
                                    typeahead-editable="false"
@@ -115,7 +117,8 @@
 
                     <div class="col-sm-3" ng-class="{ 'has-error': !vm.isUnMediadeNotEmpty}">
                         <select ng-change="vm.meta.unidadeMedida != null ? vm.isUnMediadeNotEmpty = true: vm.isUnMediadeNotEmpty = false"
-                                ng-model="vm.meta.unidadeMedida" class="form-control" >
+                                ng-model="vm.meta.unidadeMedida" class="form-control"
+                                ng-disabled="vm.isEditMeta">
                             <option value="">Selecione</option>
                             <option value="UNIDADE">Unidade</option>
                             <option value="QUILOGRAMA">Quilograma</option>
@@ -128,7 +131,7 @@
 
                     <div class="col-sm-2" ng-class="{ 'has-error': !vm.isQtdNotEmpty}">
                         <input ng-change="vm.meta.unidadeMedida != null ? vm.isQtdNotEmpty = true: vm.isQtdNotEmpty = false"
-                               min="1" type="number" ng-model="vm.meta.quantidade" ng-disabled="!vm.meta.unidadeMedida"
+                               min="1" type="number" ng-model="vm.meta.quantidade"
                                class="form-control"
                                placeholder="Quantidade">
 
@@ -139,7 +142,7 @@
                     <div class="col-sm-3">
                         <button type="button" ng-click="vm.setMeta(vm.meta)"
                                 class="btn btn-primary"
-                                uib-tooltip="Adicionar Meta">Adicionar
+                                uib-tooltip="{{vm.isEditMeta ? 'Editar meta': 'Adicionar Meta'}}">{{vm.isEditMeta ? "Editar" : "Adicionar"}}
                         </button>
                     </div>
                 </div>
@@ -151,30 +154,31 @@
                             <tr>
                                 <th width="8%">#</th>
                                 <th width="20%">Nome</th>
-                                <th width="30%">Descrição</th>
+                                <th width="40%">Descrição</th>
                                 <th width="20%">Quantidade</th>
                                 <th width="20%">Uni. Medida</th>
-                                <th width="3%">Ativo</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr class="odd gradeX" ng-repeat="meta in vm.campanha.metas">
                                 <td>
-                                    <button type="button" ng-click="vm.removeMeta(meta)"
+                                    <button ng-disabled="meta.id != null" type="button" ng-click="vm.removeMeta(meta)"
                                             tooltip-placement="top" uib-tooltip="Remover Item"
                                             class="btn btn-xs btn-danger"
                                             access-view="ROLE_INSTITUICAO">
                                         <i class='fa fa-trash'></i>
                                     </button>
+                                    <button type="button" ng-click="vm.editMeta(meta)"
+                                            class="btn btn-xs btn-default"
+                                            tooltip-placement="top" uib-tooltip="Editar Meta"
+                                            access-view="ROLE_INSTITUICAO">
+                                        <i class='fa fa-pencil'></i>
+                                    </button>
                                 </td>
                                 <td>{{meta.categoria.nome}}</td>
                                 <td>{{meta.categoria.descricao}}</td>
                                 <td>{{meta.quantidade}}</td>
-                                <td>{{meta.unidadeMedida == 'UNIDADE' ? 'Unidade' :
-                                    meta.unidadeMedida == 'QUILOGRAMA' ? 'Quilograma' : 'Litro'}}</td>
-                                <td><span ng-class="{'label label-danger': !meta.categoria.ativo,
-													'label label-success': meta.categoria.ativo}">{{meta.categoria.ativo? 'Sim': 'Não'}}</span>
-                                </td>
+                                <td>{{meta.unidadeMedida | capitalize}}</td>
 
                             </tr>
                             </tbody>
