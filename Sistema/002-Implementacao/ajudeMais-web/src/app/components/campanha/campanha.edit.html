@@ -85,62 +85,95 @@
             </div>
             <div class="box box-primary">
                 <div class="box-header with-border box-topic">
-                    <h3 class="box-title">Itens doáveis aceitos</h3>
+                    <h3 class="box-title">Metas para campanha</h3>
                 </div>
+                <div class="form-group row box-topic">
 
-                <div class="row box-topic">
-                    <div class="col-sm-6">
+                    <div class="col-sm-4" ng-class="{ 'has-error': !vm.isCtgNotEmpty}">
                         <div class="input-group col-sm-12">
-
-                            <input type="text" ng-model="vm.item" class="form-control"
+                            <input ng-click="vm.meta.categoria != undefined ? vm.isCtgNotEmpty = true : vm.isCtgNotEmpty = false"
+                                   type="text" ng-model="vm.meta.categoria" class="form-control"
                                    placeholder="Nome do Item"
                                    uib-typeahead="item as item.nome for item in vm.findByName($viewValue)"
-                                   typeahead-loading="loadingMens" typeahead-no-results="noResults"
+                                   typeahead-loading="loadingMens"  typeahead-no-results="noResults"
                                    typeahead-editable="false"
                                    typeahead-template-url="app/components/partials/item-card-search.html">
 
-                            <div class="input-group-btn">
-                                <button class="btn btn-primary" ng-click="vm.setItem(vm.item)" type="button">Adicionar
+
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-primary" ng-click="vm.addItem()"
+                                        uib-tooltip="Cadastro Rápido de Item Doável">
+                                    <i class="fa fa-plus"></i>
                                 </button>
-                            </div>
+                            </span>
+                        </div>
+                        <div ng-show="!vm.isCtgNotEmpty"
+                             class="help-block">O item deve ser informado.
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-3" ng-class="{ 'has-error': !vm.isUnMediadeNotEmpty}">
+                        <select ng-change="vm.meta.unidadeMedida != null ? vm.isUnMediadeNotEmpty = true: vm.isUnMediadeNotEmpty = false"
+                                ng-model="vm.meta.unidadeMedida" class="form-control" >
+                            <option value="">Selecione</option>
+                            <option value="UNIDADE">Unidade</option>
+                            <option value="QUILOGRAMA">Quilograma</option>
+                            <option value="LITRO">Litro</option>
+                        </select>
+                        <div ng-show="!vm.isUnMediadeNotEmpty"
+                             class="help-block">A unidade de medida deve ser informada.
                         </div>
                     </div>
 
-                    <div class="col-sm-1">
-                        <div class="form-group">
-                            <button type="button" class="btn btn-circle btn-primary" ng-click="vm.addItem()"
-                                    uib-tooltip="Cadastro Rápido de Item Doável">
-                                <i class="fa fa-plus"></i>
-                            </button>
+                    <div class="col-sm-2" ng-class="{ 'has-error': !vm.isQtdNotEmpty}">
+                        <input ng-change="vm.meta.unidadeMedida != null ? vm.isQtdNotEmpty = true: vm.isQtdNotEmpty = false"
+                               min="1" type="number" ng-model="vm.meta.quantidade" ng-disabled="!vm.meta.unidadeMedida"
+                               class="form-control"
+                               placeholder="Quantidade">
+
+                        <div ng-show="!vm.isQtdNotEmpty"
+                             class="help-block">Quantidade inválida.
                         </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" ng-click="vm.setMeta(vm.meta)"
+                                class="btn btn-primary"
+                                uib-tooltip="Adicionar Meta">Adicionar
+                        </button>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12" ng-show="vm.campanha.itensDoaveis.length">
+                    <div class="col-sm-12" ng-show="vm.campanha.metas.length">
                         <table class="table">
                             <thead>
                             <tr>
                                 <th width="8%">#</th>
-                                <th width="30%">Nome</th>
-                                <th width="40%">Descrição</th>
-                                <th width="10%">Ativo</th>
+                                <th width="20%">Nome</th>
+                                <th width="30%">Descrição</th>
+                                <th width="20%">Quantidade</th>
+                                <th width="20%">Uni. Medida</th>
+                                <th width="3%">Ativo</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr class="odd gradeX" ng-repeat="item in vm.campanha.itensDoaveis">
+                            <tr class="odd gradeX" ng-repeat="meta in vm.campanha.metas">
                                 <td>
-                                    <button type="button" ng-click="vm.removeItem(item)"
+                                    <button type="button" ng-click="vm.removeMeta(meta)"
                                             tooltip-placement="top" uib-tooltip="Remover Item"
                                             class="btn btn-xs btn-danger"
                                             access-view="ROLE_INSTITUICAO">
                                         <i class='fa fa-trash'></i>
                                     </button>
                                 </td>
-                                <td>{{item.nome}}</td>
-                                <td>{{item.descricao}}</td>
-                                <td><span ng-class="{'label label-danger': !item.ativo,
-													'label label-success': item.ativo}">{{item.ativo? 'Sim': 'Não'}}</span>
+                                <td>{{meta.categoria.nome}}</td>
+                                <td>{{meta.categoria.descricao}}</td>
+                                <td>{{meta.quantidade}}</td>
+                                <td>{{meta.unidadeMedida == 'UNIDADE' ? 'Unidade' :
+                                    meta.unidadeMedida == 'QUILOGRAMA' ? 'Quilograma' : 'Litro'}}</td>
+                                <td><span ng-class="{'label label-danger': !meta.categoria.ativo,
+													'label label-success': meta.categoria.ativo}">{{meta.categoria.ativo? 'Sim': 'Não'}}</span>
                                 </td>
 
                             </tr>
@@ -149,10 +182,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12" ng-show="!vm.campanha.itensDoaveis.length">
-                        <div class="well">Nenhum item doável adicionado.</div>
+                    <div class="col-sm-12" ng-show="!vm.campanha.metas.length">
+                        <div class="well">Nenhuma meta adicionada.</div>
                     </div>
                 </div>
+
             </div>
             <div class="form-group">
                 <input class="btn btn-primary" type="submit" value="{{vm.isEdited() ? 'Alterar':'Salvar' }}"/>

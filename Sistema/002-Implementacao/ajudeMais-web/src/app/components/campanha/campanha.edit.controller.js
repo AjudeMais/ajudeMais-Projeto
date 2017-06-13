@@ -5,6 +5,8 @@
  * @description Controller para página de Edição de Campanha
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+
  */
 (function () {
     angular.module("amApp")
@@ -17,8 +19,12 @@
         var vm = this;
         vm.campanha = {};
         vm.dtpk = false;
-        vm.item;
+        vm.meta = {};
         vm.currentDate = new Date();
+
+        vm.isCtgNotEmpty = true;
+        vm.isQtdNotEmpty = true;
+        vm.isUnMediadeNotEmpty = true;
 
         if ($stateParams.campanhaEdit) {
             vm.campanha = $stateParams.campanhaEdit;
@@ -27,7 +33,7 @@
                 vm.campanha.dataFim = undefined;
             }
         } else {
-            vm.campanha.itensDoaveis = [];
+            vm.campanha.metas = [];
             vm.campanha.status = true;
         }
 
@@ -35,28 +41,35 @@
          * Editar/Salvar uma campanha
          */
         vm.save = function () {
+
             if (vm.campanha.status) {
                 vm.campanha.dataInicio = new Date();
             }
-            if (!vm.isEdited()) {
-                campanhaService.save(vm.campanha).then(function (response) {
-                    toastr.success('criada com sucesso', 'Campanha');
-                    $state.go('home.campanha.list');
-                }, function (response) {
-                    response.data.forEach(function (data) {
-                        toastr.warning(data);
-                    });
-                });
 
-            } else {
-                campanhaService.update(vm.campanha).then(function (response) {
-                    toastr.success('atualizada com sucesso', 'Campanha');
-                    $state.go('home.campanha.list');
-                }, function (response) {
-                    response.data.forEach(function (data) {
-                        toastr.warning(data);
+            if (vm.campanha.metas.length>0) {
+                if (!vm.isEdited()) {
+                    campanhaService.save(vm.campanha).then(function (response) {
+                        toastr.success('criada com sucesso', 'Campanha');
+                        $state.go('home.campanha.list');
+                    }, function (response) {
+                        response.data.forEach(function (data) {
+                            toastr.warning(data);
+                        });
                     });
-                });
+
+                } else {
+                    campanhaService.update(vm.campanha).then(function (response) {
+                        toastr.success('atualizada com sucesso', 'Campanha');
+                        $state.go('home.campanha.list');
+                    }, function (response) {
+                        response.data.forEach(function (data) {
+                            toastr.warning(data);
+                        });
+                    });
+                }
+
+            }else {
+                toastr.warning('A campanha deve possui ao menos uma meta');
             }
         };
 
@@ -96,32 +109,57 @@
          *
          * @param mensageiro
          */
-        vm.setItem = function (item) {
+        vm.setMeta = function (meta) {
             var flag = false;
-            if (item == null) {
-                toastr.warning('Selecione um item');
-            } else {
-                vm.campanha.itensDoaveis.forEach(function (i) {
-                    if (item.id == i.id) {
+
+            validateFieldsMeta(meta);
+
+            if (vm.isCtgNotEmpty && (vm.isUnMediadeNotEmpty && vm.isQtdNotEmpty)) {
+                vm.campanha.metas.forEach(function (i) {
+                    if (meta.categoria.id == i.categoria.id) {
                         flag = true;
                     }
                 })
                 if (flag) {
-                    toastr.warning('Item Já adicionado');
+                    toastr.warning('Item já adicionado a uma meta');
                 } else {
-                    vm.campanha.itensDoaveis.push(item);
-                    vm.item = null;
+                    vm.campanha.metas.push(meta);
+                    vm.meta = {};
                 }
             }
         };
 
         /**
-         *
-         * @param item
+         * valida os campos de uma meta;
+         * @param meta
          */
-        vm.removeItem = function (item) {
-            var index = vm.campanha.itensDoaveis.indexOf(item);
-            vm.campanha.itensDoaveis.splice(index, 1);
+        validateFieldsMeta =  function (meta) {
+            if (meta.categoria == undefined ) {
+                vm.isCtgNotEmpty = false;
+            } else {
+                vm.isCtgNotEmpty = true;
+            }
+
+            if (meta.unidadeMedida == null) {
+                vm.isUnMediadeNotEmpty = false;
+            } else {
+                vm.isUnMediadeNotEmpty = true;
+            }
+
+            if (meta.quantidade == null) {
+                vm.isQtdNotEmpty = false;
+            }else {
+                vm.isQtdNotEmpty = true;
+            }
+        };
+
+        /**
+         *
+         * @param meta
+         */
+        vm.removeMeta = function (meta) {
+            var index = vm.campanha.metas.indexOf(meta);
+            vm.campanha.metas.splice(index, 1);
         };
 
         /**
@@ -149,7 +187,8 @@
             var modal = openModal({});
 
             modal.result.then(function (categoria) {
-                vm.campanha.itensDoaveis.push(categoria);
+                vm.meta.categoria = categoria;
+                vm.isCtgNotEmpty = true;
             });
         }
     }

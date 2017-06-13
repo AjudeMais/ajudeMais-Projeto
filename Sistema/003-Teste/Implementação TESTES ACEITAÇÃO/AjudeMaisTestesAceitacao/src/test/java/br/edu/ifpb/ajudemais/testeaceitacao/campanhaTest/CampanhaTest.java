@@ -75,7 +75,7 @@ public class CampanhaTest {
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		String nome = "Campanha solidaria";
 		
-		criarCampanhaPage.adicionarOuEditarCampanha(nome, "uma campanha para arrecadar alimentos", "17/11/2017", true);
+		criarCampanhaPage.adicionarOuEditarCampanha(nome, "uma campanha para arrecadar alimentos", "17/11/2017", true, "Alimentos", 2000d, "Quilograma");
 		Thread.sleep(2000);
 		
 		boolean campanhaCadastradaComSucesso = campanhaPage.foiCadastradaComSucessoCampanha(nome);
@@ -94,7 +94,7 @@ public class CampanhaTest {
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		String nome = "Criança feliz";
 		criarCampanhaPage.adicionarCampanhaCriandoItemDoavel(nome, "arrecadar brinquedos", "08/10/2017", 
-				"Brinquedo", "Qualquer tipo de brinquedo", true);
+				"Brinquedo", "Qualquer tipo de brinquedo", true, 300d, "Unidade");
 		Thread.sleep(2000);
 		boolean campanhaCadastradaComSucesso = campanhaPage.foiCadastradaComSucessoCampanha(nome);
 		assertTrue("A campanha deveria ter sido cadastrada com sucesso", campanhaCadastradaComSucesso);
@@ -110,7 +110,7 @@ public class CampanhaTest {
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		
-		campanhaPage.adicionarOuEditarCampanha("", "Campanha para arrecadar roupas", "25/10/2017", true);
+		campanhaPage.adicionarOuEditarCampanha("", "Campanha para arrecadar roupas", "25/10/2017", true, "Roupas", 300d, "Unidade");
 
 		boolean houveErroCampoObgNaoInformado = criarCampanhaPage.houveUmErroCampoObgNome();
 
@@ -128,7 +128,7 @@ public class CampanhaTest {
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		
-		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Solidária", "", "25/11/2017", true);
+		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Solidária", "", "25/11/2017", true, "Leite", 5000d, "Litro");
 
 		boolean houveErroCampoObgNaoInformado = criarCampanhaPage.houveUmErroCampoObgDescricao();
 
@@ -147,7 +147,7 @@ public class CampanhaTest {
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		
-		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Solidária", "Uma campanha para os desabrigados", "", true);
+		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Solidária", "Uma campanha para os desabrigados", "", true, "Alimentos", 600d, "Quilograma");
 
 		boolean houveErroCampoObgNaoInformado = criarCampanhaPage.houveUmErroCampoObgTermino();
 
@@ -165,7 +165,7 @@ public class CampanhaTest {
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		
-		criarCampanhaPage.adicionarOuEditarCampanha("", "", "", true);
+		criarCampanhaPage.adicionarOuEditarCampanha("", "", "", true, "", 0d, "");
 
 		boolean houveErroCamposObgNaoInformados = criarCampanhaPage.houveUmErroTodosCamposObgs();
 
@@ -182,15 +182,15 @@ public class CampanhaTest {
 		campanhaPage.visita();
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		criarCampanhaPage.adicionarOuEditarCampanha("Campanha do amor", "Leva carinho aos necessitados", "22/09/2017", true);
-		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Campanha do amor");
+		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Teste", "Leva cobertores aos necessitados", "22/09/2017", true, "Cobertores", 1200d, "Unidade");
+		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("CAmpanha Teste");
 
 		try {
 			Thread.sleep(1000l);
-			EditaCampanhaPage editarCampanhaPage = campanhaPage.edit("Campanha do amor");
-			editarCampanhaPage.adicionarOuEditarCampanha("CAMPANHA DO AMOR EDITADA", "DESCRIÇÃO DA CAMPANHA EDITADA", "28/10/2017", false);
+			EditaCampanhaPage editarCampanhaPage = campanhaPage.edit("Campanha Teste");
+			editarCampanhaPage.adicionarOuEditarCampanha("CAMPANHA Teste editada", "DESCRIÇÃO DA CAMPANHA EDITADA", "28/10/2017", false, "", 5000d, "");
 			Thread.sleep(1000l);
-			boolean foiEditadoComSucesso = campanhaPage.foiEditadoComSucessoCampanha("CAMPANHA DO AMOR EDITADA");
+			boolean foiEditadoComSucesso = campanhaPage.foiEditadoComSucessoCampanha("CAMPANHA Teste editada");
 
 			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
 					foiCadastradoComSucesso && foiEditadoComSucesso);
@@ -208,7 +208,7 @@ public class CampanhaTest {
 		campanhaPage.visita();
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		criarCampanhaPage.adicionarOuEditarCampanha("Doe vida, doe sangue", "doação de sangue", "23/09/2017", true);
+		criarCampanhaPage.adicionarOuEditarCampanha("Doe vida, doe sangue", "doação de sangue", "23/09/2017", true, "Sangue", 200d, "Unidade");
 		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Doe vida, doe sangue");
 
 		try {
@@ -232,7 +232,7 @@ public class CampanhaTest {
 		campanhaPage.visita();
 		
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		criarCampanhaPage.adicionarOuEditarCampanha("Natal feliz", "Leva carinho aos necessitados", "25/12/2017", true);
+		criarCampanhaPage.adicionarOuEditarCampanha("Natal feliz", "Leva carinho aos necessitados", "25/12/2017", true, "Roupas", 2000d, "Unidade");
 		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Natal feliz");
 		
 		DetalhesCampanhaPage detalhe = campanhaPage.detail("Natal feliz");
