@@ -35,28 +35,30 @@
         </div>
         <div class="box box-primary">
             <div class="box-header">
-                <h2 class="box-title">Itens Doáveis</h2>
+                <h2 class="box-title">Metas da Campanha</h2>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="well" ng-show="!vm.campanha.itensDoaveis.length">Nenhum item associado.</div>
-
-                    <table class="table" ng-show="vm.campanha.itensDoaveis.length">
+                    <table class="table" ng-show="vm.campanha.metas.length">
                         <thead>
                         <tr>
-                            <th width="30%">Nome</th>
-                            <th width="40%">Descrição</th>
-                            <th width="10%">Ativo</th>
+                            <th width="20%">Nome</th>
+                            <th width="30%">Descrição</th>
+                            <th width="20%">Quantidade</th>
+                            <th width="20%">Uni. Medida</th>
+                            <th width="3%">Ativo</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="odd gradeX" ng-repeat="campanha in vm.campanha.itensDoaveis">
-                            <td>{{campanha.nome}}</td>
-                            <td>{{campanha.descricao}}</td>
-                            <td><span ng-class="{'label label-danger': !campanha.ativo,
-													'label label-success': campanha.ativo}">{{campanha.ativo? 'Sim': 'Não'}}</span>
+                        <tr class="odd gradeX" ng-repeat="meta in vm.campanha.metas">
+                            <td>{{meta.categoria.nome}}</td>
+                            <td>{{meta.categoria.descricao}}</td>
+                            <td>{{meta.quantidade}}</td>
+                            <td>{{meta.unidadeMedida == 'UNIDADE' ? 'Unidade' :
+                                meta.unidadeMedida == 'QUILOGRAMA' ? 'Quilograma' : 'Litro'}}</td>
+                            <td><span ng-class="{'label label-danger': !meta.categoria.ativo,
+													'label label-success': meta.categoria.ativo}">{{meta.categoria.ativo? 'Sim': 'Não'}}</span>
                             </td>
-
                         </tr>
                         </tbody>
                     </table>
