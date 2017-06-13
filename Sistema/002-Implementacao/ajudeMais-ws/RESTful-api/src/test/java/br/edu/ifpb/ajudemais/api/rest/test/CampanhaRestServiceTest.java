@@ -20,10 +20,13 @@ import br.edu.ifpb.ajudeMais.api.rest.CampanhaRestService;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Meta;
 import br.edu.ifpb.ajudeMais.domain.enumerations.UnidadeMedida;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 import br.edu.ifpb.ajudeMais.service.negocio.ContaService;
+import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 
 /**
  * Classe utilizada para executar testes para {@link CampanhaRestService}
@@ -49,6 +52,12 @@ public class CampanhaRestServiceTest extends AbstractRestTest {
 	 */
 	@Autowired
 	private CategoriaService categoriaService;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private InstituicaoCaridadeService instituicaoCaridadeService;
 
 	/**
 	 * <p>
@@ -72,6 +81,31 @@ public class CampanhaRestServiceTest extends AbstractRestTest {
 		categoria.setDescricao("agasalho");
 		categoria.setAtivo(true);
 		categoriaService.save(categoria);
+		
+		final Conta conta1 = new Conta();
+		conta1.setUsername("instituicaoTESTE1");
+		conta1.setSenha("123456");
+		conta1.setGrupos(Arrays.asList("ROLE_INSTITUICAO"));
+		conta1.setEmail("istituicaoteste1@gmail.com");
+		conta1.setAtivo(true);
+		
+		InstituicaoCaridade instituicao = new InstituicaoCaridade();
+		instituicao.setNome("ONG XPTO");
+		instituicao.setDescricao("ONG visa algo.");
+		instituicao.setTelefone("8399273464");
+		instituicao.setDocumento("107.345.123-40");
+
+		instituicao.setConta(conta1);
+		
+		Endereco endereco = new Endereco();
+		endereco.setLogradouro("Rua Maira Nunes");
+		endereco.setBairro("Centro");
+		endereco.setCep("58560-0000");
+		endereco.setNumero("s/n");
+		endereco.setLocalidade("Monteiro");
+		endereco.setUf("PB");
+		instituicao.setEndereco(endereco);
+		instituicaoCaridadeService.save(instituicao);
 	}
 
 	/**
@@ -209,5 +243,8 @@ public class CampanhaRestServiceTest extends AbstractRestTest {
 		metas.add(meta);
 
 		campanha.setMetas(metas);
+		
+
+		campanha.setInstituicaoCaridade(instituicaoCaridadeService.findAll().get(0));
 	}
 }
