@@ -67,6 +67,40 @@ public class CreateCampanhaPage extends CampanhaPage{
 				"Data de término deve ser informada");
 	}
 	
+	/**
+	 * Verifica se é exibido uma mensagem de erro para campo obg item doável da
+	 * campanha.
+	 * 
+	 * @return
+	 */
+	public boolean houveUmErroCampoObgItemDoavel() {
+
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[2]",
+				"O item deve ser informado.");
+	}
+	/**
+	 * Verifica se é exibido uma mensagem de erro para campo obg unidade de medida da meta da
+	 * campanha.
+	 * 
+	 * @return
+	 */
+	public boolean houveUmErroCampoObgUnidMedida() {
+
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[2]/div",
+				"A unidade de medida deve ser informada.");
+	}
+	
+	/**
+	 * Verifica se é exibido uma mensagem de erro para campo obg quantidade da meta da
+	 * campanha.
+	 * 
+	 * @return
+	 */
+	public boolean houveUmErroCampoObgQuantidade() {
+
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[3]/div",
+				"Quantidade inválida.");
+	}
 	
 	/**
 	 * Verifica erros existentes nos campos obrigatórios.
@@ -75,7 +109,9 @@ public class CreateCampanhaPage extends CampanhaPage{
 	public boolean houveUmErroTodosCamposObgs() {		
 	
 				
-		return (houveUmErroCampoObgNome() && houveUmErroCampoObgDescricao() && houveUmErroCampoObgTermino());
+		return (houveUmErroCampoObgNome() && houveUmErroCampoObgDescricao() 
+				&& houveUmErroCampoObgTermino() && houveUmErroCampoObgItemDoavel() 
+				&& houveUmErroCampoObgQuantidade() && houveUmErroCampoObgUnidMedida());
 	}
 
 }
