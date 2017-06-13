@@ -3,6 +3,8 @@ package br.edu.ifpb.ajudemais.domain;
 import java.io.Serializable;
 import java.util.List;
 
+import br.edu.ifpb.ajudemais.dto.LatLng;
+
 /**
  * <p>
  * <b>{@link Doador}</b>
@@ -21,6 +23,7 @@ public class Doador implements Serializable {
     private Conta conta;
     private List<Campanha> campanhas;
     private Imagem foto;
+    private Endereco enderecoAtual;
 
     /**
      *
@@ -32,7 +35,6 @@ public class Doador implements Serializable {
     /**
      * @param nome
      * @param telefone
-     * @param facebookID
      * @param tokenFCM
      * @param conta
      */
@@ -178,6 +180,14 @@ public class Doador implements Serializable {
      */
     public void setFoto(Imagem foto) {
         this.foto = foto;
+    }
+
+    public Endereco getEnderecoAtual() {
+        return enderecoAtual;
+    }
+
+    public void setEnderecoAtual(Endereco enderecoAtual) {
+        this.enderecoAtual = enderecoAtual;
     }
 
     @Override

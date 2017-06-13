@@ -258,7 +258,6 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_DOADOR");
             FcmToken fcmToken = new FcmToken(sharedPrefManager.getFcmToken());
-            Log.e("FCM TOKEN", sharedPrefManager.getFcmToken());
             Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(), fcmToken,
                     new Conta(edtUserName.getText().toString().trim(),
                             edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));

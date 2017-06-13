@@ -20,6 +20,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 
@@ -36,6 +38,8 @@ import javax.validation.constraints.NotNull;
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a> And
  *         <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
+@NamedQueries({
+		@NamedQuery(name = "Doador.filterByLocal", query = "SELECT d FROM Doador d WHERE d.enderecoAtual.localidade like :localidade and d.enderecoAtual.uf like :uf"), })
 @Entity
 public class Doador implements Serializable {
 
@@ -77,6 +81,12 @@ public class Doador implements Serializable {
 	 */
 	@OneToOne(cascade = CascadeType.MERGE)
 	private Conta conta;
+
+	/**
+	 * 
+	 */
+	@OneToOne(cascade = CascadeType.ALL)
+	private Endereco enderecoAtual;
 
 	/**
 	 * @return the id
@@ -181,6 +191,21 @@ public class Doador implements Serializable {
 	 */
 	public void setFoto(Imagem foto) {
 		this.foto = foto;
+	}
+
+	/**
+	 * @return o atributo enderecoAtual
+	 */
+	public Endereco getEnderecoAtual() {
+		return enderecoAtual;
+	}
+
+	/**
+	 * @param o
+	 *            parametro enderecoAtual é setado em enderecoAtual
+	 */
+	public void setEnderecoAtual(Endereco enderecoAtual) {
+		this.enderecoAtual = enderecoAtual;
 	}
 
 	/*

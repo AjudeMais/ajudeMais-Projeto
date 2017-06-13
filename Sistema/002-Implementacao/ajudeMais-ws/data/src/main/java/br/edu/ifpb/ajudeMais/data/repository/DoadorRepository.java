@@ -18,6 +18,7 @@ package br.edu.ifpb.ajudeMais.data.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 
@@ -59,4 +60,12 @@ public interface DoadorRepository extends JpaRepository<Doador, Long> {
 	 * @return doador encontrado.
 	 */
 	Doador findOneByContaUsername(String username);
+	
+	/**
+	 * 
+	 * @param localidade
+	 * @param uf
+	 * @return
+	 */
+	List<Doador> filterByLocal(@Param("localidade") String localidade, @Param("uf") String uf);
 }

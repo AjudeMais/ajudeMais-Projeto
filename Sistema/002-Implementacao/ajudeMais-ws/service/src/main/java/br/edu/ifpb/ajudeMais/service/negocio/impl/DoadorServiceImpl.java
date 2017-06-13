@@ -102,7 +102,8 @@ public class DoadorServiceImpl implements DoadorService {
 	 * 
 	 * 
 	 * atualiza um doador previamente cadastrado
-	 * @throws AjudeMaisException 
+	 * 
+	 * @throws AjudeMaisException
 	 * 
 	 * 
 	 */
@@ -159,5 +160,4 @@ public class DoadorServiceImpl implements DoadorService {
 	public Doador findByContaUsername(String username) {
 		return doadorRepository.findOneByContaUsername(username);
 	}
-
 }

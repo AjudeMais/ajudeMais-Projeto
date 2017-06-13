@@ -31,7 +31,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsService;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.DoadorService;
 
 /**
@@ -55,6 +58,12 @@ public class DoadorRestService {
 	 */
 	@Autowired
 	private DoadorService doadorService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private GoogleMapsService googleMapsService;
 
 	/**
 	 * 
@@ -92,6 +101,37 @@ public class DoadorRestService {
 		Doador pacienteAtualizado = doadorService.update(doador);
 
 		return new ResponseEntity<Doador>(pacienteAtualizado, HttpStatus.CREATED);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * PUT /doador/localizacao : Atualiza localização atual de um doador. <br/>
+	 * ROLE: DOADOR
+	 * </p>
+	 * 
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasRole('DOADOR')")
+	@RequestMapping(method = RequestMethod.PUT, value = "/localizacao")
+	public ResponseEntity<Doador> updateLocalizacao(@RequestParam("doadorId") Long doadorId, @RequestBody LatLng latLng)
+			throws AjudeMaisException {
+
+		Doador doador = doadorService.findById(doadorId);
+		Endereco endereco = null;
+
+		try {
+			endereco = googleMapsService.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+					latLng.getLongitude());
+		} catch (AjudeMaisException e) {
+			e.printStackTrace();
+		}
+
+		doador.setEnderecoAtual(endereco);
+		doadorService.update(doador);
+
+		return new ResponseEntity<Doador>(doador, HttpStatus.OK);
 	}
 
 	/**

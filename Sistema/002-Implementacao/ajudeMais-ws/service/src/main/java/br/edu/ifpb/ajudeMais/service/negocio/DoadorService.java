@@ -42,5 +42,5 @@ public interface DoadorService extends Service<Doador, Long> {
 	 * @return Doador encontrado.
 	 */
 	Doador findByContaUsername(String username);
-
+	
 }

@@ -49,22 +49,16 @@ public class Endereco {
 	/**
 	 * 
 	 */
-	@NotNull
-	@NotBlank
 	private String logradouro;
 
 	/**
 	 * 
 	 */
-	@NotNull
-	@NotBlank
 	private String numero;
 
 	/**
 	 * 
 	 */
-	@NotNull
-	@NotBlank
 	private String bairro;
 
 	/**

@@ -63,8 +63,9 @@ public class CampanhaServiceImpl implements CampanhaService {
 	public Campanha save(Campanha donativo) throws AjudeMaisException {
 		
 		List<String> notificaveis = new ArrayList<>();
-		
-		List<Doador> doadores = doadorRepository.findAll();
+		String localidade = donativo.getInstituicaoCaridade().getEndereco().getLocalidade();
+		String uf = donativo.getInstituicaoCaridade().getEndereco().getUf();
+		List<Doador> doadores = doadorRepository.filterByLocal(localidade, uf);
 		doadores.forEach(d -> {
 			notificaveis.add(d.getTokenFCM().getToken());
 		});

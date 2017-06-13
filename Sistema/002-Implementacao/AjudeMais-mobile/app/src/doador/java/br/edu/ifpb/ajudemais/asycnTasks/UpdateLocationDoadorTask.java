@@ -7,31 +7,34 @@ import org.springframework.web.client.RestClientException;
 
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.asyncTasks</b>
+ * <b>br.edu.ifpb.ajudemais.asyncTasks.UpdateLocationDoadorTask</b>
  * </p>
  * <p>
  * <p>
- * Asycn Task para Atualizar um Doador
+ * Asycn Task para Atualizar localizacao de um Doador
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
+public class UpdateLocationDoadorTask extends AsyncTask<Void, Void, Void> {
 
     /**
      *
      */
-    public AsyncResponse<Doador> delegate;
+    public AsyncResponse<LatLng> delegate;
     private String message = null;
     private ProgressDialog progressDialog;
     private DoadorRemoteService doadorRemoteService;
     private Context context;
+    private LatLng latLng;
+    private Long doadorId;
     private Doador doador;
     private boolean progressAtivo = true;
 
@@ -52,9 +55,10 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
     /**
      * @param context
      */
-    public UpdateDoadorTask(Context context, Doador doador) {
+    public UpdateLocationDoadorTask(Context context, LatLng latLng, Long doadorId) {
         this.context = context;
-        this.doador = doador;
+        this.latLng = latLng;
+        this.doadorId = doadorId;
         this.progressDialog = new ProgressDialog(context);
         this.doadorRemoteService = new DoadorRemoteService(context);
     }
@@ -64,10 +68,9 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
      * @return
      */
     @Override
-    protected Doador doInBackground(Void... params) {
+    protected Void doInBackground(Void... params) {
         try {
-            doador = doadorRemoteService.updateDoador(doador);
-            return  doador;
+            doadorRemoteService.updateLocationDoador(latLng, doadorId);
         } catch (RestClientException e) {
             message = e.getMessage();
             e.printStackTrace();
@@ -75,24 +78,8 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
             message = e.getMessage();
             e.printStackTrace();
         }
+
         return null;
-    }
-
-    /**
-     *
-     * @param doadorUpdated
-     */
-    @Override
-    protected void onPostExecute(Doador doadorUpdated) {
-        progressDialog.dismissProgressDialog();
-
-        if (doadorUpdated != null) {
-            delegate.processFinish(doadorUpdated);
-        }
-
-        if (message != null) {
-            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
-        }
     }
 
     public void setProgressAtivo(boolean progressAtivo) {

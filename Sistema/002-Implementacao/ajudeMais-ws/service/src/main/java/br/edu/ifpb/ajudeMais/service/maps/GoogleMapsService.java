@@ -15,6 +15,10 @@
  */
 package br.edu.ifpb.ajudeMais.service.maps;
 
+import com.google.maps.model.DistanceMatrix;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 
 /**
  * 
@@ -29,5 +33,9 @@ package br.edu.ifpb.ajudeMais.service.maps;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public interface GoogleMapsService{
+	
+	Endereco converteLatitudeAndLongitudeInAddress(double latitude, double logitude) throws AjudeMaisException;
+	
+	DistanceMatrix findDistanceBetweenAddress(String origem, String[] destinations) throws Exception;
 
 }

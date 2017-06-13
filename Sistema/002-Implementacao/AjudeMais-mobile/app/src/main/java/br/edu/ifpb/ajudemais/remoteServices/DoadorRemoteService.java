@@ -5,8 +5,11 @@ import android.util.Log;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 
 
 /**
@@ -51,6 +54,16 @@ public class DoadorRemoteService extends AbstractRemoteService {
     public Doador updateDoador(Doador doador){
         HttpEntity<Doador> requestUpdate = new HttpEntity<>(doador);
         HttpEntity<Doador> response = restTemplate.exchange(API + "/doador", HttpMethod.PUT, requestUpdate, Doador.class);
+        return response.getBody();
+    }
+
+    /**
+     * @param
+     * @return
+     */
+    public Doador updateLocationDoador(LatLng latLng, Long doadorId){
+        HttpEntity<LatLng> requestUpdate = new HttpEntity<>(latLng);
+        HttpEntity<Doador> response = restTemplate.exchange(API + "/doador/localizacao?doadorId={doadorId}", HttpMethod.PUT, requestUpdate, Doador.class, doadorId);
         return response.getBody();
     }
 
