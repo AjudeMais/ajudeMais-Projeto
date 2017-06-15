@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.springframework.http.ResponseEntity;
 
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Campanha;
+import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
@@ -55,5 +57,10 @@ public class CampanhaRemoteService extends AbstractRemoteService {
                 Campanha[].class, status);
 
         return Arrays.asList(responseEntity.getBody());
+    }
+
+    public Campanha findById(Long id){
+        ResponseEntity<Campanha> responseEntity = restTemplate.getForEntity(API+"/campanha/{id}", Campanha.class, id);
+        return responseEntity.getBody();
     }
 }

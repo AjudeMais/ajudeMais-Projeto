@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -33,7 +31,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  *
  */
 @Entity
-@Inheritance( strategy = InheritanceType.TABLE_PER_CLASS )
 public class Donativo implements Serializable {
 
 	/**
@@ -104,9 +101,6 @@ public class Donativo implements Serializable {
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private Categoria categoria;
 	
-	
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Campanha campanha;
 
 	/**
 	 * 
@@ -280,21 +274,6 @@ public class Donativo implements Serializable {
 		this.data = data;
 	}
 	
-	
-
-	/**
-	 * @return the campanha
-	 */
-	public Campanha getCampanha() {
-		return campanha;
-	}
-
-	/**
-	 * @param campanha the campanha to set
-	 */
-	public void setCampanha(Campanha campanha) {
-		this.campanha = campanha;
-	}
 
 	/*
 	 * (non-Javadoc)

@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.utils.ConvertsDate;
@@ -31,7 +32,7 @@ import br.edu.ifpb.ajudemais.validator.annotations.ValidDatePtBr;
 import br.edu.ifpb.ajudemais.validator.annotations.ValidHourPtBr;
 
 
-public class AddIntervalDataDoacaoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, Validator.ValidationListener{
+public class AddIntervalDataDoacaoActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, Validator.ValidationListener {
 
     private Calendar myCalendar;
     private Validator validator;
@@ -40,6 +41,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
     private Toolbar mToolbar;
     private Integer positionEdit;
     private Donativo donativo;
+    private Campanha campanha;
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog mTimePickerDialog;
 
@@ -110,7 +112,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-                    openEndSetTimePicker(edtEndHour,"Selecione o Horário Para o fim da disponibilidade");
+                    openEndSetTimePicker(edtEndHour, "Selecione o Horário Para o fim da disponibilidade");
                 } else {
                     if (mTimePickerDialog != null) {
                         mTimePickerDialog.dismiss();
@@ -124,7 +126,9 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
     @Override
     public void init() {
         initProperties();
+
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+        campanha = (Campanha) getIntent().getSerializableExtra("Campanha");
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         if (positionEdit != null) {
@@ -208,7 +212,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
             openEndSetTimePicker(edtInitalHour, "Selecione o Horário Inicial");
 
         } else if (v.getId() == R.id.edtEndHour) {
-            openEndSetTimePicker(edtEndHour,"Selecione o Horário Para o fim da disponibilidade");
+            openEndSetTimePicker(edtEndHour, "Selecione o Horário Para o fim da disponibilidade");
 
         }
     }
@@ -241,6 +245,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
     }
 
 
+
     @Override
     public void onValidationSucceeded() {
 
@@ -257,6 +262,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
                 Intent intent = new Intent();
                 intent.setClass(AddIntervalDataDoacaoActivity.this, AgendamentoDoacaoActivity.class);
                 intent.putExtra("Donativo", donativo);
+                intent.putExtra("Campanha", campanha);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
@@ -285,7 +291,7 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
 
             }
             donativo.getHorariosDisponiveis().add(disponibilidadeHorario);
-            msgOperacao =getString(R.string.create_dosponibilidade);
+            msgOperacao = getString(R.string.create_dosponibilidade);
 
         } else {
             donativo.getHorariosDisponiveis().get(positionEdit).setHoraInicio(disponibilidadeHorario.getHoraInicio());
@@ -311,8 +317,8 @@ public class AddIntervalDataDoacaoActivity extends BaseActivity implements DateP
     }
 
     /**
-     *  Abri timepicker e seta value
-
+     * Abri timepicker e seta value
+     *
      * @param textInputEditText
      */
     private void openEndSetTimePicker(final TextInputEditText textInputEditText, String title) {

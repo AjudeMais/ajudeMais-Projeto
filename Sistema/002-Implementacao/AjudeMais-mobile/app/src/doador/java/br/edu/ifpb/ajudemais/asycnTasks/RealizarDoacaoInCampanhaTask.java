@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.asycnTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.springframework.web.client.RestClientException;
 
@@ -10,7 +11,7 @@ import java.util.Date;
 
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
@@ -18,35 +19,34 @@ import br.edu.ifpb.ajudemais.remoteServices.DonativoRemoteService;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
+
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.asycnTasks</b>
+ * <b>{@link RealizarDoacaoInCampanhaTask}</b>
  * </p>
  * <p>
  * <p>
- * Asycn Task para realizar uma doação avulsa
+ * Entidade que representa um foto.
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
-public class RealizarDoacaoTask extends AsyncTask<Void, Void, Donativo> {
+public class RealizarDoacaoInCampanhaTask extends AsyncTask<Void, Void, DonativoCampanha> {
 
     private DoadorRemoteService doadorRemoteService;
-    public AsyncResponse<Donativo> delegate = null;
+    public AsyncResponse<DonativoCampanha> delegate = null;
     private String message = null;
     private Doador doador;
-    private Donativo donativo;
+    private DonativoCampanha donativoCampanha;
     private Context context;
     private String username;
     private ProgressDialog progressDialog;
     private DonativoRemoteService donativoRemoteService;
 
-    public RealizarDoacaoTask(Context context, String usernameDoador, Donativo donativo) {
+    public RealizarDoacaoInCampanhaTask(Context context, String usernameDoador, DonativoCampanha donativoCampanha) {
         this.username = usernameDoador;
         this.context = context;
-        this.donativo = donativo;
+        this.donativoCampanha = donativoCampanha;
         this.doadorRemoteService = new DoadorRemoteService(context);
         this.donativoRemoteService = new DonativoRemoteService(context);
         this.progressDialog = new ProgressDialog(context);
@@ -59,20 +59,19 @@ public class RealizarDoacaoTask extends AsyncTask<Void, Void, Donativo> {
     }
 
     @Override
-    protected Donativo doInBackground(Void... params) {
+    protected DonativoCampanha doInBackground(Void... params) {
         try {
-
-            doador = doadorRemoteService.getDoador(username);
-            donativo.setDoador(doador);
-            donativo.setEstadosDaDoacao(new ArrayList<EstadoDoacao>());
             EstadoDoacao estadoDoacao = new EstadoDoacao();
             estadoDoacao.setData(new Date());
             estadoDoacao.setAtivo(true);
             estadoDoacao.setEstadoDoacao(Estado.DISPONIBILIZADO);
-            donativo.getEstadosDaDoacao().add(estadoDoacao);
-            donativo = donativoRemoteService.saveDonativo(donativo);
-
-            return  donativo;
+            doador = doadorRemoteService.getDoador(username);
+            donativoCampanha.getDonativo().setDoador(doador);
+            donativoCampanha.getDonativo().setEstadosDaDoacao(new ArrayList<EstadoDoacao>());
+            donativoCampanha.getDonativo().getEstadosDaDoacao().add(estadoDoacao);
+            donativoCampanha = donativoRemoteService.saveDonativoCampanha(donativoCampanha);
+            Log.e("AJUDEMAIS", donativoCampanha.toString());
+            return donativoCampanha;
         } catch (RestClientException e) {
             message = e.getMessage();
             e.printStackTrace();
@@ -83,16 +82,15 @@ public class RealizarDoacaoTask extends AsyncTask<Void, Void, Donativo> {
     }
 
     @Override
-    protected void onPostExecute(Donativo donativo) {
-        super.onPostExecute(donativo);
+    protected void onPostExecute(DonativoCampanha donativoCampanha) {
 
         progressDialog.dismissProgressDialog();
 
-        if (donativo != null){
-            delegate.processFinish(donativo);
+        if (donativoCampanha != null) {
+            delegate.processFinish(donativoCampanha);
         }
 
-        if (message != null){
+        if (message != null) {
             CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
         }
     }

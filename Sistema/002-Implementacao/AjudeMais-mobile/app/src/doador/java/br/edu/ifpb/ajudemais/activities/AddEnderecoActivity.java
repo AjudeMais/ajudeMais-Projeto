@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,7 @@ import com.mobsandgeeks.saripaar.annotation.Order;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
@@ -41,6 +43,7 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
     private Validator validator;
     private Endereco endereco;
     private Donativo donativo;
+    private Campanha campanha;
 
     private TextInputEditText edtComplemento;
 
@@ -70,6 +73,7 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
 
         this.endereco = (Endereco) getIntent().getExtras().get("Endereco");
         this.donativo = (Donativo) getIntent().getExtras().get("Donativo");
+        this.campanha = (Campanha) getIntent().getExtras().get("Campanha");
 
         if (donativo.getEndereco() != null){
             endereco = donativo.getEndereco();
@@ -148,6 +152,7 @@ public class AddEnderecoActivity extends BaseActivity implements Validator.Valid
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("Endereco", endereco);
         intent.putExtra("Donativo", donativo);
+        intent.putExtra("Campanha", campanha);
         startActivity(intent);
         finish();
         CustomToast.getInstance(AddEnderecoActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.endereco_adicionado));

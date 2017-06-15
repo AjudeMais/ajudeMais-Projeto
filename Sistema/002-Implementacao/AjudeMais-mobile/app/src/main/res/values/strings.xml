@@ -191,7 +191,7 @@
     <string name="endereco_removed">Enderço removido.</string>
     <string name="endereco_adicionado">Novo endereço adicionado</string>
     <string name="doacao_save">Sua doação foi realizada com sucesso.</string>
-    <string name="disponibilidade_not_informed">Você deve informar ao meno uma dispobilidade para a coleta</string>
+    <string name="disponibilidade_not_informed">Você deve informar ao menos uma dispobilidade para a coleta</string>
     <string name="hitQuantidade">Quantidade</string>
     <string name="msgQuantidadeNotInformed">A quantidade de itens deve ser informada</string>
     <string name="msgNumberInvalid">Quantidade inválida</string>
@@ -217,5 +217,6 @@
     <string name="image_logo_desc">Logo  marca do Ajude Mais</string>
     <string name="disponibilidades">Disponibilidades para coleta</string>
     <string name="visualizarDisponibilizades">Visualizar disponibilidades</string>
+    <string name="lista_metas">Metas da campanha</string>
 
 </resources>
