@@ -14,6 +14,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -33,7 +34,6 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 
 /**
@@ -69,7 +69,7 @@ public class DonativoCampanhaRepositoryTest {
 	 */
 	@Test
 	public void findDonativoByCampanhaIdTest() {
-		List<Donativo> donativos = donativoRepository.findDonativoByCampanhaId(2l);
+		List<DonativoCampanha> donativos = donativoRepository.findByCampanhaId(2l);
 		assertThat(!donativos.isEmpty());
 	}
 	
@@ -79,7 +79,7 @@ public class DonativoCampanhaRepositoryTest {
 	 */
 	@Test
 	public void findDonativoByCampanhaIdWithInvalidIdTest() {
-		List<Donativo> donativos = donativoRepository.findDonativoByCampanhaId(4l);
+		List<DonativoCampanha> donativos = donativoRepository.findByCampanhaId(4l);
 		assertThat(donativos.isEmpty());
 	}
 	
@@ -92,6 +92,15 @@ public class DonativoCampanhaRepositoryTest {
 	public void filterDonativoByEstadoAfterAceitoTest() {
 		List<DonativoCampanha> donativos = donativoRepository.filterDonativoByEstadoAfterAceito(2l);
 		assertThat(donativos.isEmpty());
+	}
+	
+	/**
+	 * Testa que a quantidade de donativos, doados para camapanha e da categoria com os ids passados e com estado após aceito é mesmo informado 
+	 */
+	@Test
+	public void filterCountByEstadoAndCategoriaAfterAceitoTest() {
+		Long qtdDonativos = donativoRepository.filterCountByEstadoAndCategoriaAfterAceito(2l, 2l);
+		assertEquals(new Long(1), qtdDonativos);
 	}
 	
 }

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +16,10 @@ import android.widget.RelativeLayout;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
+import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -32,6 +35,7 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
     private FrameLayout componentListEmpty;
     private DisponibilidadeHorarioAdapter disponibilidadeHorarioAdapte;
     private RelativeLayout componentNoInternet;
+    private Campanha campanha;
 
 
     @Override
@@ -57,6 +61,7 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
     public void init() {
         initProperties();
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+        campanha = (Campanha) getIntent().getSerializableExtra("Campanha");
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         btnKeep = (Button) findViewById(R.id.btnKeepDetalhes);
@@ -72,7 +77,6 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
         recyclerView.setLayoutManager(layout);
         setSupportActionBar(mToolbar);
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
@@ -85,14 +89,17 @@ public class AgendamentoDoacaoActivity extends BaseActivity implements View.OnCl
             intent.setClass(AgendamentoDoacaoActivity.this, AddIntervalDataDoacaoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("Donativo", donativo);
+            intent.putExtra("Campanha",campanha);
             startActivity(intent);
         } else if (v.getId() == R.id.btnKeepDetalhes) {
             if (donativo.getHorariosDisponiveis() != null && donativo.getHorariosDisponiveis().size() > 0) {
                 Intent intent = new Intent();
                 intent.setClass(AgendamentoDoacaoActivity.this, ConfirmDoacaoActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Donativo", donativo);
+                intent.putExtra("Donativo",donativo);
+                intent.putExtra("Campanha",campanha);
                 startActivity(intent);
+
             }else {
                 CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.disponibilidade_not_informed));
             }

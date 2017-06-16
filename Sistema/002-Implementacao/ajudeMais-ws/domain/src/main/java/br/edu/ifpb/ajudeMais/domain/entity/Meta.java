@@ -59,14 +59,9 @@ public class Meta {
 	 * 
 	 */
 	@Transient
-	private Float percentualAtingido;//(quantidade esperada*100)/quantidade atual.
+	private Float percentualAtingido = 0f;//(quantidade esperada*100)/quantidade atual.
 	
-	
-	/**
-	 * 
-	 */
-	@Transient
-	private Integer previsaoDias;//
+
 	
 	/**
 	 * 
@@ -117,20 +112,6 @@ public class Meta {
 		this.percentualAtingido = percentualAtingido;
 	}
 
-	/**
-	 * @return the previsaoDias
-	 */
-	public Integer getPrevisaoDias() {
-		return previsaoDias;
-	}
-
-	/**
-	 * @param previsaoDias the previsaoDias to set
-	 */
-	public void setPrevisaoDias(Integer previsaoDias) {
-		this.previsaoDias = previsaoDias;
-
-	}
 
 	/**
 	 * @return the categoria
@@ -158,6 +139,15 @@ public class Meta {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Meta [id=" + id + ", quantidade=" + quantidade + ", unidadeMedida=" + unidadeMedida + ", categoria="
+				+ categoria + ", percentualAtingido=" + percentualAtingido + ", campanha=" + campanha + "]";
 	}
 
 	

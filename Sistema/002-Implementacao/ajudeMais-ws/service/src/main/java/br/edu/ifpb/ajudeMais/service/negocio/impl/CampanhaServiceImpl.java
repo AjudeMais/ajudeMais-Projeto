@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Meta;
 import br.edu.ifpb.ajudeMais.service.event.campanha.notification.CampanhaNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
@@ -47,6 +49,12 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Autowired
 	private DoadorRepository doadorRepository;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoCampanhaRepository donativoCampanhaRepository;
 
 	/**
 	 * 
@@ -98,6 +106,10 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Override
 	public List<Campanha> findAll() {
+		List<Campanha> campanhas = campanhaRepository.findAll();
+		for (Campanha campanha : campanhas) {
+			setPercetualAtingidoInMeta(campanha);
+		}
 		return campanhaRepository.findAll();
 	}
 
@@ -106,7 +118,8 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Override
 	public Campanha findById(Long id) {
-		return campanhaRepository.findOne(id);
+		Campanha campanha = campanhaRepository.findOne(id);
+		return campanha;
 	}
 
 	/**
@@ -123,7 +136,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public List<Campanha> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
-		return campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		for (Campanha campanha : campanhas) {
+			setPercetualAtingidoInMeta(campanha);
+		}
+		return campanhas;
 	}
 
 	/**
@@ -137,6 +154,9 @@ public class CampanhaServiceImpl implements CampanhaService {
 		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(),
 				endereco.getUf());
 
+		for (Campanha campanha : campanhas) {
+			setPercetualAtingidoInMeta(campanha);
+		}
 		return getByCurrentStatus(campanhas);
 	}
 
@@ -145,6 +165,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Override
 	public List<Campanha> findByStatus(boolean status) {
+
 		return this.getByCurrentStatus(campanhaRepository.findByStatus(status));
 	}
 
@@ -163,6 +184,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		if (campanhas != null) {
 			campanhas.forEach(c -> {
 				if (c.isStatus()) {
+					setPercetualAtingidoInMeta(c);
 					camps.add(c);
 				}
 			});
@@ -192,5 +214,20 @@ public class CampanhaServiceImpl implements CampanhaService {
 		});
 
 		return notificaveis;
+	}
+
+	private void setPercetualAtingidoInMeta(Campanha campanha) {
+
+		for (Meta m : campanha.getMetas()) {
+			Long qtdDonativos = donativoCampanhaRepository.filterCountByEstadoAndCategoriaAfterAceito(campanha.getId(),
+					m.getCategoria().getId());
+			if (qtdDonativos > 0) {
+				m.setPercentualAtingido((m.getQuantidade().floatValue() * 100) / qtdDonativos);
+
+			} else {
+				m.setPercentualAtingido(0f);
+			}
+
+		}
 	}
 }

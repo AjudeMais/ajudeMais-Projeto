@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -43,8 +44,10 @@ import br.edu.ifpb.ajudemais.asyncTasks.FindByMyLocationActualTask;
 import br.edu.ifpb.ajudemais.asyncTasks.GetTempImageTask;
 import br.edu.ifpb.ajudemais.asyncTasks.RemoveTmpImageTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
+import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.dto.LatLng;
@@ -86,6 +89,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
     private UploadImageTask uploadImageTask;
     private GetTempImageTask getTempImageTask;
     private RemoveTmpImageTask removeTmpImageTask;
+    private Campanha campanha;
 
     @Order(3)
     @NotEmpty(messageResId = R.string.msgNameNotInformed)
@@ -106,8 +110,12 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         initGoogleAPIClient();
 
         init();
-
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+
+        if (getIntent().hasExtra("Campanha")){
+            campanha = (Campanha) getIntent().getSerializableExtra("Campanha");
+        }
+
 
         if (donativo == null) {
             donativo = new Donativo();
@@ -208,6 +216,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                     setValueInDonativo();
                     Intent intent = new Intent(DoacaoActivity.this, AddEnderecoActivity.class);
                     intent.putExtra("Donativo", donativo);
+                    intent.putExtra("Campanha", campanha);
                     startActivity(intent);
                 } else if (items[item].equals(getString(R.string.removeAddress))) {
                     cardView.setVisibility(View.GONE);
@@ -243,6 +252,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("Endereco", output);
                     intent.putExtra("Donativo", donativo);
+                    intent.putExtra("Campanha", campanha);
                     startActivity(intent);
                 }
             };
@@ -345,12 +355,14 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
         outState.putString("quantidade", edtQuantidade.getText().toString().trim());
 
         outState.putSerializable("Donativo", donativo);
+        outState.putSerializable("Campanha", campanha);
         outState.putSerializable("images", donativeImages);
     }
 
     protected void onRestoreInstanceState(Bundle savedState) {
         donativeImages = (HashMap<String, byte[]>) savedState.getSerializable("images");
         donativo = (Donativo) savedState.getSerializable("Donativo");
+        campanha = (Campanha) savedState.getSerializable("Campanha");
         String nome = savedState.getString("edtNome");
         String desciption = savedState.getString("edtDescription");
         String quantidade = savedState.getString("quantidade");
@@ -602,6 +614,7 @@ public class DoacaoActivity extends LocationActivity implements View.OnClickList
             Intent intent = new Intent(DoacaoActivity.this, AgendamentoDoacaoActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("Donativo", donativo);
+            intent.putExtra("Campanha", campanha);
             startActivity(intent);
         } else {
             CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.addres_not_informed));

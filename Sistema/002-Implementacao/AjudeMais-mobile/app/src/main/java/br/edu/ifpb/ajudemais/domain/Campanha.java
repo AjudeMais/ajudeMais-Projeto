@@ -3,8 +3,16 @@ package br.edu.ifpb.ajudemais.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-
 /**
+ * <p>
+ * <b>{@link Campanha}</b>
+ * </p>
+ * <p>
+ * <p>
+ * Entidade que representa uma campanha de uma instituição de caridade.
+ * </p>
+ *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
 public class Campanha implements Serializable{
@@ -44,7 +52,7 @@ public class Campanha implements Serializable{
     /**
      *
      */
-    private List<Categoria> itensDoaveis;
+    private List<Meta> metas;
 
     public String getNome() {
         return nome;
@@ -94,14 +102,6 @@ public class Campanha implements Serializable{
         this.instituicaoCaridade = instituicaoCaridade;
     }
 
-    public List<Categoria> getItensDoaveis() {
-        return itensDoaveis;
-    }
-
-    public void setItensDoaveis(List<Categoria> itensDoaveis) {
-        this.itensDoaveis = itensDoaveis;
-    }
-
     public Long getId() {
         return id;
     }
@@ -110,16 +110,25 @@ public class Campanha implements Serializable{
         this.id = id;
     }
 
+    public List<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(List<Meta> metas) {
+        this.metas = metas;
+    }
+
     @Override
     public String toString() {
         return "Campanha{" +
-                "nome='" + nome + '\'' +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
                 ", descricao='" + descricao + '\'' +
                 ", dataInicio=" + dataInicio +
                 ", status=" + status +
                 ", dataFim=" + dataFim +
                 ", instituicaoCaridade=" + instituicaoCaridade +
-                ", itensDoaveis=" + itensDoaveis +
+                ", metas=" + metas +
                 '}';
     }
 }

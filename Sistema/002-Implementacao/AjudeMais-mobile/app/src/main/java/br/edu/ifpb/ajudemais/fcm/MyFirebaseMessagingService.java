@@ -31,9 +31,35 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        getDataNotification(remoteMessage);
+    }
 
-        getDataNotification(remoteMessage.getData());
 
+    public void getDataNotification(RemoteMessage remoteMessage) {
+
+        String tipoAs = remoteMessage.getData().get("tipo");
+        String idAs = remoteMessage.getData().get("id");
+        Long id = Long.parseLong(idAs);
+
+        switch (tipoAs) {
+            case "CAMPANHA":
+                executeLoadingCampanhaByIdTask(id, remoteMessage);
+                break;
+            case "DOACAO":
+
+                break;
+            default:
+
+                break;
+        }
+    }
+
+    /**
+     * Componente de notificação
+     *
+     * @param remoteMessage
+     */
+    private void notifyComponent(RemoteMessage remoteMessage) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
@@ -53,27 +79,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(001, mBuilder.build());
     }
 
-
-    public void getDataNotification(Map<String, String> data) {
-
-        String tipoAs = data.get("tipo");
-        String idAs = data.get("id");
-        Long id = Long.parseLong(idAs);
-
-        switch (tipoAs) {
-            case "CAMPANHA":
-                executeLoadingCampanhaByIdTask(id);
-                break;
-            case "DOACAO":
-
-                break;
-            default:
-
-                break;
-        }
-    }
-
-    private void executeLoadingCampanhaByIdTask(Long campanhaId) {
+    /**
+     * Recupera campanha de notificação.
+     *
+     * @param campanhaId
+     * @param remoteMessage
+     */
+    private void executeLoadingCampanhaByIdTask(Long campanhaId, final RemoteMessage remoteMessage) {
         GetCampanhaByIdTask getCampanhaByIdTask = new GetCampanhaByIdTask(getApplicationContext(), campanhaId);
         getCampanhaByIdTask.delegate = new AsyncResponse<Campanha>() {
             @Override
@@ -81,6 +93,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 campanha = output;
                 resultIntent = new Intent(getBaseContext(), CampanhaActivity.class);
                 resultIntent.putExtra("campanha", campanha);
+                notifyComponent(remoteMessage);
             }
         };
         getCampanhaByIdTask.execute();

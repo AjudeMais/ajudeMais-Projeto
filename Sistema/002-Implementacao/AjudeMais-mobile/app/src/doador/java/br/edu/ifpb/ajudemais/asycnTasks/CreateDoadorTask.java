@@ -25,8 +25,6 @@ import br.edu.ifpb.ajudemais.utils.ProgressDialog;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
 public class CreateDoadorTask extends AsyncTask<Void, Void, Doador> {
 
     private String message;
@@ -75,6 +73,7 @@ public class CreateDoadorTask extends AsyncTask<Void, Void, Doador> {
 
     @Override
     protected void onPostExecute(Doador doador) {
+        progressDialog.dismissProgressDialog();
         if (doador != null) {
             delegate.processFinish(doador);
         }

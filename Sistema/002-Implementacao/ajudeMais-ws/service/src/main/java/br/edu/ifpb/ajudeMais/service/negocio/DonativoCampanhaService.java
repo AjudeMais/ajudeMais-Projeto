@@ -15,8 +15,11 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.util.List;
 
-import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 
 /**
  * 
@@ -33,11 +36,23 @@ import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 public interface DonativoCampanhaService {
 	
 	/**
+	 * 
+	 * <p>
+	 * Salvar uma DonativoCampanha
+	 * </p>
+	 * 
+	 * @param entity
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	DonativoCampanha save(@Valid @NotNull DonativoCampanha entity) throws AjudeMaisException;
+	
+	/**
 	 * Busca os donativos da camapanha com id passado.
 	 * @param id
 	 * @return
 	 */
-	List<Donativo> findDonativoByCampanhaId(Long id);
+	List<DonativoCampanha> findByCampanhaId(Long id);
 
 
 	/**

@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import java.util.Arrays;
 import java.util.List;
 
-import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 
 /**
  * <p>
@@ -49,11 +49,22 @@ public class DonativoRemoteService extends AbstractRemoteService {
     }
 
     /**
-     * Atualiza informações do donativo
+     * Salva DOnativo com campanha via requisão post Http um novo Donativo no banco.
+     *
      * @param donativo
      * @return
      */
-    public Donativo updateDonativo(Donativo donativo){
+    public DonativoCampanha saveDonativoCampanha(DonativoCampanha donativo) {
+        return restTemplate.postForObject(API + "/donativo/save/donativocampanha", donativo, DonativoCampanha.class);
+    }
+
+    /**
+     * Atualiza informações do donativo
+     *
+     * @param donativo
+     * @return
+     */
+    public Donativo updateDonativo(Donativo donativo) {
         HttpEntity<Donativo> requestUpdate = new HttpEntity<>(donativo);
         HttpEntity<Donativo> response = restTemplate.exchange(API + "/donativo", HttpMethod.PUT, requestUpdate, Donativo.class);
         return response.getBody();

@@ -1,12 +1,13 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by millanium on 6/11/17.
  */
 
-public class FcmToken {
+public class FcmToken implements Serializable{
 
     /**
      *
