@@ -49,11 +49,10 @@ public class MensageiroPage extends AbstractPage {
 	 * 
 	 */
 	public void visita() {
-		open(getUrlBase() + "/home/associacao");
+		open(getUrlBase() + "/home/mensageirosAssociados");
 
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 
-		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
 		try {
 			Thread.sleep(1000);
 
@@ -70,14 +69,13 @@ public class MensageiroPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
-			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
+			$("#op_mensageiros").click();
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
 	}
 
 	/**
@@ -144,7 +142,7 @@ public class MensageiroPage extends AbstractPage {
 	 */
 	public boolean erroAssociarMensageiroIgual() {
 
-		if ($(By.xpath("//*[@id=\"loading-bar-container\"]/div")).getText()
+		if ($(By.xpath("//*[@id=\"toast-container\"]/div")).getText()
 				.equals("Este mensageiro já esta associado a esta instituição.")) {
 			return true;
 		}

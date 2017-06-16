@@ -103,7 +103,7 @@ public class CategoriaPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
-			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[6]/a")).click();
+			$("#op_itens_doaveis").click();
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

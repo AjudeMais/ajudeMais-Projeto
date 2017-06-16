@@ -17,7 +17,7 @@
     function stateConfig($stateProvider) {
 
         $stateProvider.state('home.mensageirosAss', {
-            url: "/mensageirosAss",
+            url: "/mensageirosAssociados",
             templateUrl: "app/components/mensageiroAssociado/mensageiros-associados.html",
             controller: "MensageiroAssociadoController",
             controllerAs: 'vm',
