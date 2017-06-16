@@ -155,7 +155,7 @@ public class MensageiroPage extends AbstractPage {
 	 * @return
 	 */
 	public boolean foiEditadoMensageiroComSucesso(String nome) {
-		$(By.xpath("//*[@id=\"loading-bar-container\"]/div")).should(appears);
+		$(By.xpath("//*[@id=\"toast-container\"]/div")).should(appears);
 		boolean value = driver.getPageSource().contains(nome);
 		return value;
 	}
