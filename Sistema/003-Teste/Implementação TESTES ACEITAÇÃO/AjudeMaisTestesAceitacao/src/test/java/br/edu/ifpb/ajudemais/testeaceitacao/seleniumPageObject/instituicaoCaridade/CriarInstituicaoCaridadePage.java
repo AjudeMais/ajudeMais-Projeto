@@ -61,7 +61,10 @@ public class CriarInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	 * @return
 	 */
 	public boolean houveUmErroCampoObgNome() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[2]/div[1]/div/div",
 				"Nome deve ser informado");
 	}
@@ -197,10 +200,10 @@ public class CriarInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	 */
 	public boolean houveUmErroTodosCamposObgs() {		
 	
-				
-		return (houveUmErroCampoObgNome() && houveUmErroCampoObgDocumento()) && (houveUmErroCampoObgEmail() && houveUmErroCampoObgTelefone()) 
+
+		return ((houveUmErroCampoObgNome() && houveUmErroCampoObgDocumento()) && (houveUmErroCampoObgEmail() && houveUmErroCampoObgTelefone()) 
 				&& (houveUmErroCampoObgCep() && houveUmErroCampoObgLogradouro()) && (houveUmErroCampoObgNumero() && houveUmErroCampoObgBairro()) 
-				&& (houveUmErroCampoObgCidade() && houveUmErroCampoObgUf()) && houveUmErroCampoObgDescricao() ;
+				&& (houveUmErroCampoObgCidade() && houveUmErroCampoObgUf()) && houveUmErroCampoObgDescricao());
 	}
 	
 	
@@ -218,9 +221,15 @@ public class CriarInstituicaoCaridadePage extends InstituicaoCaridadePage {
 	 * Verifica se houve um erro de documento inválido
 	 * @return {@link Boolean}
 	 */
+<<<<<<< HEAD
 	public boolean houveUmErroCampoDocumentoInvalido() {				
 		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[2]/div[2]/div/div", "CPF ou CNPJ deve ser informado corretamente");
 		
+=======
+	public boolean houveUmErroCampoDocumentoInvalido() {	
+		return houveUmErroCampoObg("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[2]/div[2]/div/div", "CPF ou CNPJ deve ser informado corretamente");
+				
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 	}
 	
 	/**verifica se houve um erro de telefone inválido

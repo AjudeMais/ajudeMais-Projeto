@@ -63,6 +63,20 @@ public class DonativoRestService {
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
 	}
 
+	/**
+	 * Salva Donativo de uma campanha
+	 * @param donativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasRole('DOADOR')")
+	@RequestMapping(method = RequestMethod.POST, value = "/save/donativocampanha")
+	public ResponseEntity<DonativoCampanha> saveWithCampanha(@RequestBody DonativoCampanha donativo) throws AjudeMaisException {
+		DonativoCampanha donativoSalvo = donativoCampanhaService.save(donativo);
+		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
+	}
+
+	
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {

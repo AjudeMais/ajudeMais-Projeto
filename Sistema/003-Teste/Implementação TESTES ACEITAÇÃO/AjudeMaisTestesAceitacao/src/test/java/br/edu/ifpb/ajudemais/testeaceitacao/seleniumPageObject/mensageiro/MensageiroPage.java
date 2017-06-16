@@ -49,7 +49,7 @@ public class MensageiroPage extends AbstractPage {
 	 * 
 	 */
 	public void visita() {
-		open(getUrlBase() + "/home/associacao");
+		open(getUrlBase() + "/home/mensageirosAssociados");
 
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 
@@ -68,7 +68,11 @@ public class MensageiroPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
+<<<<<<< HEAD
 			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[7]/a")).click();
+=======
+			$("#op_mensageiros").click();
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -139,10 +143,20 @@ public class MensageiroPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
+<<<<<<< HEAD
 	public boolean erroAssociarMensageiroIgual(String msg) {
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div")).should(appears);
 		boolean igual = driver.getPageSource().contains(msg);		
 		return igual;
+=======
+	public boolean erroAssociarMensageiroIgual() {
+
+		if ($(By.xpath("//*[@id=\"toast-container\"]/div")).getText()
+				.equals("Este mensageiro já esta associado a esta instituição.")) {
+			return true;
+		}
+		return false;
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 	}
 	
 	/**
@@ -151,7 +165,7 @@ public class MensageiroPage extends AbstractPage {
 	 * @return
 	 */
 	public boolean foiEditadoMensageiroComSucesso(String nome) {
-		$(By.xpath("//*[@id=\"loading-bar-container\"]/div")).should(appears);
+		$(By.xpath("//*[@id=\"toast-container\"]/div")).should(appears);
 		boolean value = driver.getPageSource().contains(nome);
 		return value;
 	}

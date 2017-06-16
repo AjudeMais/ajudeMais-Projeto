@@ -4,6 +4,10 @@ import static com.codeborne.selenide.Condition.appears;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -21,6 +25,7 @@ public class CampanhaPage extends AbstractPage {
 	 * 
 	 */
 	private static final String PASSWORD_INSTIUTICAO = "42199149196";
+<<<<<<< HEAD
 	/**
 	 * 
 	 */
@@ -29,6 +34,12 @@ public class CampanhaPage extends AbstractPage {
 	 * 
 	 */
 	private LoginPage loginPage;
+=======
+	private LoginPage loginPage;
+	private InstituicaoCaridadePage instituicaoCaridadePage;
+
+
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 	/**
 	 * 
 	 * @param driver
@@ -84,11 +95,35 @@ public class CampanhaPage extends AbstractPage {
 
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 		
+<<<<<<< HEAD
 		boolean houveErroLogin = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
 		try {
 			Thread.sleep(1000);
 		if(houveErroLogin){
 			addInstituicao();
+=======
+		try {
+			Thread.sleep(1000);
+
+			boolean houveLoginInvalido = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
+
+			if (houveLoginInvalido) {
+				addInstituicao();
+
+				Thread.sleep(1000l);
+
+				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/a")).click();
+				$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div/div/div[1]/ul/div/ul/a[2]")).click();
+
+				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
+			}
+
+			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[6]/a")).click();
+
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 
 			Thread.sleep(1000l);
 
@@ -117,6 +152,18 @@ public class CampanhaPage extends AbstractPage {
 				"Centro", "casa");
 	}
 
+	/**
+	 * Adiciona uma instituição de caridade caso ela não exista.
+	 */
+	private void addInstituicao() {
+		instituicaoCaridadePage.visita();
+
+		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
+
+		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P TESTE", "CRIADA EM CATEGORIA PAGE",
+				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Rua Teste", "123",
+				"Centro", "casa");
+	}
 
 	/**
 	 * Clicar no botão novo item e acessa a página de crição/edição de campanha.
@@ -166,9 +213,8 @@ public class CampanhaPage extends AbstractPage {
 		$("#descricao").setValue(descricao);
 
 		$("#tDateEnd").setValue(termino);
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/input")).setValue(itemDoavel).pressEnter();
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[2]/select")).selectOption(unidMedida);;
 		String value = String.valueOf(qtd);
+<<<<<<< HEAD
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[3]/input")).setValue(value).pressTab();
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
 		CreateCampanhaPage campanha = new CreateCampanhaPage(driver);
@@ -192,6 +238,54 @@ public class CampanhaPage extends AbstractPage {
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[3]/input")).click();
 	}
 	public void editarCampanha(String nome, String descricao, String termino){
+=======
+
+		validaEadicionarMeta(itemDoavel, "teste", unidMedida, value);
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[3]/input")).click();
+	}
+	
+	public void validaEadicionarMeta(String nomeCategoria, String descricaoCategoria, String unidadeMedida, String quantidade){
+		
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/input")).setValue(nomeCategoria).pressEnter();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
+
+		boolean categoriaExiste = campoObgCategoriaNaoInformado();
+		
+		if (categoriaExiste) {
+			cadastraNovaCategoria(nomeCategoria, descricaoCategoria);
+		}
+
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[2]/select")).selectOption(unidadeMedida);
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[3]/input")).setValue(quantidade).pressTab();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
+
+	
+	
+	}
+	
+	private void cadastraNovaCategoria(String nomeCategoria, String descricaoCategoria){
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/span/button")).click();
+		
+		$(By.xpath("//*[@id=\"modal-body\"]/div[1]/input")).setValue(nomeCategoria);
+		$(By.xpath("//*[@id=\"modal-body\"]/div[3]/textarea")).setValue(descricaoCategoria);
+		
+		$(By.xpath("/html/body/div[1]/div/div/form/div[2]/input")).click();
+
+	}
+	
+	public boolean campoObgCategoriaNaoInformado(){
+		return $(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[2]")).toString().contains("O item deve ser informado.");
+	}
+
+	/**
+	 * Adiciona uma campanha criando item doável
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void adicionarCampanhaCriandoItemDoavel(String nome, String descricao, String termino, String nomeItem,
+			String descItem, boolean ativo, double qtd, String unidMedida) throws InterruptedException {
+
+>>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 		$("#nome").setValue(nome);
 
 		$("#descricao").setValue(descricao);

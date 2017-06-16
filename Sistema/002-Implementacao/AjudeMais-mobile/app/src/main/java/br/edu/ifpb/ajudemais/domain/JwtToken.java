@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -10,7 +11,7 @@ import java.util.Date;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class JwtToken {
+public class JwtToken implements Serializable{
 
     private String token;
 

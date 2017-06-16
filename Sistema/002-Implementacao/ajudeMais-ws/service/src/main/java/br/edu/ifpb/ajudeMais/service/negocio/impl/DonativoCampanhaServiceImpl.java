@@ -15,12 +15,16 @@ package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
-import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
+import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 
 /**
@@ -44,12 +48,21 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	@Autowired
 	DonativoCampanhaRepository donativoCampanhaRespository;
 	
+	
+
+	/**
+	 *           
+	 */
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
+	
 	/**
 	 * Busca todos os donativos doados para um campanha com base em seu ID.
 	 */
 	@Override
-	public List<Donativo> findDonativoByCampanhaId(Long id) {
-		List<Donativo> donativos = donativoCampanhaRespository.findDonativoByCampanhaId(id);
+	public List<DonativoCampanha> findByCampanhaId(Long id) {
+		List<DonativoCampanha> donativos = donativoCampanhaRespository.findByCampanhaId(id);
 		return donativos;
 	}
 
@@ -60,6 +73,17 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	public List<DonativoCampanha> filterDonativoByEstadoAfterAceito(Long idCampanha) {
 		List<DonativoCampanha> donativos = donativoCampanhaRespository.filterDonativoByEstadoAfterAceito(idCampanha);
 		return donativos;
+	}
+
+	/**
+	 * Salva um donativoCampanha
+	 */
+	@Override
+	@Transactional
+	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
+		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
+		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
+		return donativoSaved;
 	}
 
 	

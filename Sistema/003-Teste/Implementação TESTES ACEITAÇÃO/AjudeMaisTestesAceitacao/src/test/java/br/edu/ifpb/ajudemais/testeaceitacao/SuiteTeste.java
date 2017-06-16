@@ -6,6 +6,7 @@ import org.junit.runners.Suite;
 
 import br.edu.ifpb.ajudemais.testeaceitacao.campanhaTest.CampanhaTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.categoriaTest.CategoriaTest;
+import br.edu.ifpb.ajudemais.testeaceitacao.doacaoTest.AcompanhamentoDoacaoTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.instituicaoCaridadeTest.CrudInstituicaoCaridadeTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.loginTest.LoginTest;
 import br.edu.ifpb.ajudemais.testeaceitacao.mensageiroTest.MensageiroTest;
@@ -30,7 +31,8 @@ import br.edu.ifpb.ajudemais.testeaceitacao.mensageiroTest.MensageiroTest;
 	CrudInstituicaoCaridadeTest.class,
 	CategoriaTest.class,
 	MensageiroTest.class,
-	CampanhaTest.class
+	CampanhaTest.class,
+	AcompanhamentoDoacaoTest.class,
 })
 public class SuiteTeste {
 
