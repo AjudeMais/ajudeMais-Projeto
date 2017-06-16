@@ -163,12 +163,43 @@ public class CampanhaPage extends AbstractPage {
 		$("#descricao").setValue(descricao);
 
 		$("#tDateEnd").setValue(termino);
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/input")).setValue(itemDoavel).pressEnter();
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[2]/select")).selectOption(unidMedida);;
 		String value = String.valueOf(qtd);
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[3]/input")).setValue(value).pressTab();
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
+
+		validaEadicionarMeta(itemDoavel, "teste", unidMedida, value);
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[3]/input")).click();
+	}
+	
+	public void validaEadicionarMeta(String nomeCategoria, String descricaoCategoria, String unidadeMedida, String quantidade){
+		
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/input")).setValue(nomeCategoria).pressEnter();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
+
+		boolean categoriaExiste = campoObgCategoriaNaoInformado();
+		
+		if (categoriaExiste) {
+			cadastraNovaCategoria(nomeCategoria, descricaoCategoria);
+		}
+
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[2]/select")).selectOption(unidadeMedida);
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[3]/input")).setValue(quantidade).pressTab();
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[4]/button")).click();
+
+	
+	
+	}
+	
+	private void cadastraNovaCategoria(String nomeCategoria, String descricaoCategoria){
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[1]/span/button")).click();
+		
+		$(By.xpath("//*[@id=\"modal-body\"]/div[1]/input")).setValue(nomeCategoria);
+		$(By.xpath("//*[@id=\"modal-body\"]/div[3]/textarea")).setValue(descricaoCategoria);
+		
+		$(By.xpath("/html/body/div[1]/div/div/form/div[2]/input")).click();
+
+	}
+	
+	public boolean campoObgCategoriaNaoInformado(){
+		return $(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[2]/div[2]/div[1]/div[2]")).toString().contains("O item deve ser informado.");
 	}
 
 	/**
