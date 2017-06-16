@@ -1,7 +1,6 @@
 package br.edu.ifpb.ajudemais.remoteServices;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.springframework.http.ResponseEntity;
 
@@ -9,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Campanha;
-import br.edu.ifpb.ajudemais.domain.Categoria;
 import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**

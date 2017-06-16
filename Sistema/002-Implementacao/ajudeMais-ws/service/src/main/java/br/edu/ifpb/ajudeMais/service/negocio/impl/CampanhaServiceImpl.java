@@ -26,7 +26,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
 /**
  * Classe utilizada para serviços de {@link Campanha}
  * 
- * @author elson
+ * @author elson / Franck
  *
  */
 @Service
@@ -73,15 +73,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 	@Transactional
 	public Campanha save(Campanha campanha) throws AjudeMaisException {
 
-		List<String> notificaveis = new ArrayList<>();
-		String localidade = campanha.getInstituicaoCaridade().getEndereco().getLocalidade();
-		String uf = campanha.getInstituicaoCaridade().getEndereco().getUf();
-		List<Doador> doadores = doadorRepository.filterByLocal(localidade, uf);
-		doadores.forEach(d -> {
-			notificaveis.add(d.getTokenFCM().getToken());
-		});
 		Campanha campanhaSaved = campanhaRepository.save(campanha);
-		publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+		if (campanha.isStatus()) {
+			List<String> notificaveis = getNotificaveis(campanha);
+			publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+		}
 
 		return campanhaSaved;
 	}
@@ -95,9 +91,14 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Override
 	@Transactional
-	public Campanha update(Campanha donativo) throws AjudeMaisException {
+	public Campanha update(Campanha campanha) throws AjudeMaisException {
+		Campanha campanhaSaved = campanhaRepository.save(campanha);
+		if (campanha.isStatus()) {
+			List<String> notificaveis = getNotificaveis(campanha);
+			publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+		}
 
-		return campanhaRepository.save(donativo);
+		return campanhaSaved;
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 				latLng.getLongitude());
 		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(),
 				endereco.getUf());
-		
+
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);
 		}
@@ -164,7 +165,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 	 */
 	@Override
 	public List<Campanha> findByStatus(boolean status) {
-		
+
 		return this.getByCurrentStatus(campanhaRepository.findByStatus(status));
 	}
 
@@ -192,18 +193,41 @@ public class CampanhaServiceImpl implements CampanhaService {
 		return camps;
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de doadores que serão notificados.
+	 * </p>
+	 * 
+	 * @param campanha
+	 * @return
+	 */
+	private List<String> getNotificaveis(Campanha campanha) {
+		List<String> notificaveis = new ArrayList<>();
+
+		String localidade = campanha.getInstituicaoCaridade().getEndereco().getLocalidade();
+		String uf = campanha.getInstituicaoCaridade().getEndereco().getUf();
+
+		List<Doador> doadores = doadorRepository.filterByLocal(localidade, uf);
+		doadores.forEach(d -> {
+			notificaveis.add(d.getTokenFCM().getToken());
+		});
+
+		return notificaveis;
+	}
+
 	private void setPercetualAtingidoInMeta(Campanha campanha) {
 
 		for (Meta m : campanha.getMetas()) {
 			Long qtdDonativos = donativoCampanhaRepository.filterCountByEstadoAndCategoriaAfterAceito(campanha.getId(),
 					m.getCategoria().getId());
-			if(qtdDonativos>0){
-				m.setPercentualAtingido((m.getQuantidade().floatValue()*100)/qtdDonativos);
+			if (qtdDonativos > 0) {
+				m.setPercentualAtingido((m.getQuantidade().floatValue() * 100) / qtdDonativos);
 
-			}else{
+			} else {
 				m.setPercentualAtingido(0f);
 			}
-		
+
 		}
 	}
 }

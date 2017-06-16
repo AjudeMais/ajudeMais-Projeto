@@ -59,7 +59,7 @@ public class Meta {
 	 * 
 	 */
 	@Transient
-	private Float percentualAtingido;//(quantidade esperada*100)/quantidade atual.
+	private Float percentualAtingido = 0f;//(quantidade esperada*100)/quantidade atual.
 	
 
 	

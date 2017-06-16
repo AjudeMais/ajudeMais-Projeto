@@ -31,6 +31,8 @@ public class Push {
 	@JsonProperty(value = "registration_ids")
 	private List<String> registrationIds;
 
+	private Data data;
+
 	/**
 	 * 
 	 * @param priority
@@ -93,4 +95,20 @@ public class Push {
 	public void setTo(String to) {
 		this.to = to;
 	}
+
+	/**
+	 * @return o atributo data
+	 */
+	public Data getData() {
+		return data;
+	}
+
+	/**
+	 * @param o
+	 *            parametro data é setado em data
+	 */
+	public void setData(Data data) {
+		this.data = data;
+	}
+
 }
