@@ -56,4 +56,9 @@ public class CampanhaRemoteService extends AbstractRemoteService {
 
         return Arrays.asList(responseEntity.getBody());
     }
+
+    public Campanha findById(Long id) {
+        return restTemplate.getForObject(API + "/campanha/{id}", Campanha.class, id);
+
+    }
 }

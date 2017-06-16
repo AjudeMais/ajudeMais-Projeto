@@ -20,40 +20,88 @@ public class Notification {
 
 	private String sound;
 
+	private String icon = "ic_notification";
+
 	private String title;
 
 	private String body;
 
+	/**
+	 * 
+	 */
 	public Notification() {
 	}
 
+	/**
+	 * 
+	 * @param sound
+	 * @param title
+	 * @param body
+	 */
 	public Notification(String sound, String title, String body) {
 		this.sound = sound;
 		this.title = title;
 		this.body = body;
 	}
 
+	/**
+	 * @return o atributo sound
+	 */
 	public String getSound() {
 		return sound;
 	}
 
+	/**
+	 * @param o
+	 *            parametro sound é setado em sound
+	 */
 	public void setSound(String sound) {
 		this.sound = sound;
 	}
 
+	/**
+	 * @return o atributo icon
+	 */
+	public String getIcon() {
+		return icon;
+	}
+
+	/**
+	 * @param o
+	 *            parametro icon é setado em icon
+	 */
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	/**
+	 * @return o atributo title
+	 */
 	public String getTitle() {
 		return title;
 	}
 
+	/**
+	 * @param o
+	 *            parametro title é setado em title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	/**
+	 * @return o atributo body
+	 */
 	public String getBody() {
 		return body;
 	}
 
+	/**
+	 * @param o
+	 *            parametro body é setado em body
+	 */
 	public void setBody(String body) {
 		this.body = body;
 	}
+
 }
