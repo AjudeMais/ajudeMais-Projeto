@@ -144,18 +144,18 @@ public class CategoriaTest {
 		categoriaPage.visita();
 
 		CreateCategoriaPage criarCategoriaPage = categoriaPage.novo();
-		criarCategoriaPage.adicionarOuEditarCategoria("Informatica ", "informatica em geral", true);
-		boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Informatica");
 
 		try {
+			criarCategoriaPage.adicionarOuEditarCategoria("Informatica ", "informatica em geral", true);
+			boolean foiCadastradoComSucesso = categoriaPage.foiCadastradaComSucessoCategoria("Informatica");
 			Thread.sleep(700l);
 			EditarCategoriaPage editarCategoriaPage = categoriaPage.edit("Informatica");
-			editarCategoriaPage.adicionarOuEditarCategoria("INFORMATICA EDITADO", "INFORMATICA EM GERAL EDITADO", true);
-
-			boolean foiEditadoComSucesso = categoriaPage.foiEditadoComSucessoCategoria("INFORMATICA EDITADO");
-			Thread.sleep(700l);
-			assertTrue("Uma mensagem deveria ter sido mostrada",
-					foiCadastradoComSucesso && foiEditadoComSucesso);
+			editarCategoriaPage.adicionarOuEditarCategoria("TESTE EDIT", "DESC EDIT", true);
+			Thread.sleep(1000l);
+			boolean foiEditadoComSucesso = categoriaPage.foiEditadoComSucessoCategoria("TESTE EDIT", "DESC EDIT");
+			Thread.sleep(1000l);
+			assertTrue("Uma mensagem deveria ter sido mostrada",foiCadastradoComSucesso && foiEditadoComSucesso);
+			
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -56,11 +56,12 @@ public class CategoriaPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
-	public boolean foiEditadoComSucessoCategoria(String nome) {
+	public boolean foiEditadoComSucessoCategoria(String nome, String descricao) {
 		$(By.xpath("//*[@id=\"dtCategorias\"]/tbody")).should(appears);
 		
 		boolean nomeCategoria = driver.getPageSource().contains(nome);
-		return nomeCategoria;
+		boolean descricaoCategoria = driver.getPageSource().contains(descricao);
+		return nomeCategoria && descricaoCategoria;
 	}
 
 
@@ -121,7 +122,7 @@ public class CategoriaPage extends AbstractPage {
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P TESTE", "CRIADA EM CATEGORIA PAGE",
-				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Rua Teste", "123",
+				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Monteiro", "PB", "Rua Teste", "123",
 				"Centro", "casa");
 	}
 

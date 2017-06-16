@@ -80,7 +80,7 @@ public class CrudInstituicaoCaridadeTest {
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES","ONG DE ALIMENTOS" ,"823.862.380-40",
-				"(83) 99812-2196", "zefao2000@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+				"(83) 99812-2196", "zefao2000@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro", "casa");
 
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage
 				.foiCadastradoComSucessoInstituicaoCaridade("82386238040");
@@ -99,7 +99,7 @@ public class CrudInstituicaoCaridadeTest {
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.01","ONG DE ALIMENTOS" ,"32.125.616/0001-85",
-				"(83) 99812-2196", "zefaomsminfo@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+				"(83) 99812-2196", "zefaomsminfo@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro", "casa");
 
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("32125616000185");
 		
@@ -109,7 +109,7 @@ public class CrudInstituicaoCaridadeTest {
 		try {
 			Thread.sleep(1000l);
 			createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.01","ONG DE ALIMENTOS", "99.625.494/0001-67",
-					"(83) 99812-2196", "zefaomsminfo@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+					"(83) 99812-2196", "zefaomsminfo@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro", "casa");
 			
 			Thread.sleep(700l);
 
@@ -136,7 +136,7 @@ public class CrudInstituicaoCaridadeTest {
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.02","ONG DE ALIMENTOS2","43.122.425/0001-86",
-				"(83) 99812-2196", "zefaomsminfo2@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+				"(83) 99812-2196", "zefaomsminfo2@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro", "casa");
 
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("43122425000186");
 		
@@ -146,7 +146,7 @@ public class CrudInstituicaoCaridadeTest {
 			Thread.sleep(1000l);
 
 			createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES MSM INF.02","ONG DE ALIMENTOS2", "43.122.425/0001-86",
-					"(83) 99812-2196", "zefaomsminfo2@teste.com", "58500-000", "Rua Sete de setembro", "123", "Centro", "casa");
+					"(83) 99812-2196", "zefaomsminfo2@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro", "casa");
 			
 			Thread.sleep(700l);
 
@@ -172,7 +172,7 @@ public class CrudInstituicaoCaridadeTest {
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ","ONG DE ALIMENTOS123",
-				"32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro",
+				"32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro",
 				"123", "Centro", "casa");
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage
 				.foiCadastradoComSucessoInstituicaoCaridade("32521763000174");
@@ -184,14 +184,15 @@ public class CrudInstituicaoCaridadeTest {
 
 	/**
 	 * Tenta adicionar uma instituição sem preecher os campos obrigatórios.
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void adicionarInstituicaoCaridadeSemCamposObgs() {
+	public void adicionarInstituicaoCaridadeSemCamposObgs() throws InterruptedException {
 		instituicaoCaridadePage.visita();
 
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
-		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("","", "", "", "", "", "", "", "", "");
-
+		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("","", "", "", "", "", "", "", "", "", "", "");
+		Thread.sleep(1000l);
 		boolean houveErroCamposObgsNaoInformados = createInstituicaoCaridadePage.houveUmErroTodosCamposObgs();
 
 		assertTrue("A operação devia ter exibido as mensagens informando que são campos obg.",
@@ -208,7 +209,7 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage.visita();
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV01","TESTE DESCRICAO",
-				"123.343.000-20", "(83) 99812-8196", "zefao2001123@yyr.com", "58500-000", "Rua Sete de setembro", "123", "Centro",
+				"123.343.000-20", "(83) 99812-8196", "zefao2001123@yyr.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro",
 				"casa");
 
 		boolean documentoCpfInvalido = createInstituicaoCaridadePage.houveUmErroCampoDocumentoInvalido();
@@ -227,7 +228,7 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage.visita();
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV01","TESTE DESCRICAO",
-				"415.158.917-12", "(83) 99812-8196", "zefao2001", "58500-000", "Rua Sete de setembro", "123", "Centro",
+				"415.158.917-12", "(83) 99812-8196", "zefao2001", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123", "Centro",
 				"casa");
 
 		boolean emailInvalido = createInstituicaoCaridadePage.houveUmErroCampoEmailInvalido();
@@ -245,7 +246,7 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage.visita();
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV02","TESTE DESCRICAO",
-				"30.387.784/0001-02", "(83) 99812-8196", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro",
+				"30.387.784/0001-02", "(83) 99812-8196", "zefao2001@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro",
 				"123", "Centro", "casa");
 
 		boolean documentoCnpjInvalido = createInstituicaoCaridadePage.houveUmErroCampoDocumentoInvalido();
@@ -264,7 +265,7 @@ public class CrudInstituicaoCaridadeTest {
 		instituicaoCaridadePage.visita();
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ INV02","TESTE DESCRICAO",
-				"557.438.467-15", "(83) 9981", "zefao2001@teste.com", "58500-000", "Rua Sete de setembro", "123",
+				"557.438.467-15", "(83) 9981", "zefao2001@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro", "123",
 				"Centro", "casa");
 
 		boolean telefoneInvalido = createInstituicaoCaridadePage.houveUmErroCampoTelefoneInvalido();
@@ -284,24 +285,24 @@ public class CrudInstituicaoCaridadeTest {
 
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ EDIT01","TESTE DESCRICAO",
-				"97.587.963/0001-75", "(83) 9981-0010", "zefao2001edit@teste.com", "58500-000", "Rua Sete de setembro",
+				"14268852000179", "(83) 9981-0010", "zefao2001edit@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro",
 				"123", "Centro", "casa");
 
-		boolean foiCadastradoComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("97587963000175");
+		boolean foiCadastradoComSucesso = instituicaoCaridadePage.foiCadastradoComSucessoInstituicaoCaridade("14268852000179");
 
-		EditatInstituicaoCaridadePage editInstituicaoCaridadePage = instituicaoCaridadePage.edit("97587963000175");
+		EditatInstituicaoCaridadePage editInstituicaoCaridadePage = instituicaoCaridadePage.edit("14268852000179");
 		
 		editInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2",
-				"", "(83) 9981-0011", "zefao2002edit@teste.com", "69800-000", "Rua Francisco Coelho",
+				"", "(83) 9981-0011", "zefao2002edit@teste.com", "69800-000", "Humaitá", "AM", "Rua Francisco Coelho",
 				"1709", "Nova Humaitá", "casa");
 		
 
 		
-		DetalhesInstituicaoCaridadePage detailInstituicaoCaridadePage = instituicaoCaridadePage.detail("97587963000175");
+		DetalhesInstituicaoCaridadePage detailInstituicaoCaridadePage = instituicaoCaridadePage.detail("14268852000179");
 		
 		boolean foiEditadoComSucesso = detailInstituicaoCaridadePage.validateFields(
-				"INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2", "97.587.963/0001-75", "(83) 9981-0011",
-				"zefao2002edit@teste.com", "69800-000", "Rua Francisco Coelho", "1709", "Nova Humaitá", "casa");
+				"INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2", "14268852000179", "(83) 9981-0011",
+				"zefao2002edit@teste.com", "69800-000", "Humaitá", "AM", "Rua Francisco Coelho", "1709", "Nova Humaitá", "casa");
 
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
 				foiCadastradoComSucesso && foiEditadoComSucesso);

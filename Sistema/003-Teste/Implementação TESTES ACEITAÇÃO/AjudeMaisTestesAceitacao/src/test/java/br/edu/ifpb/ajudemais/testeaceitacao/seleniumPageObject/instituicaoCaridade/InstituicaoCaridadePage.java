@@ -94,7 +94,7 @@ public class InstituicaoCaridadePage extends AbstractPage {
 	 * Adiciona ou edita uma instituição de caridade
 	 */
 	public void addOrEditInstituicaoCaridade(String nome, String descricao,String documento, String telefone, String email, String cep,
-			String logradouro, String numeroEndereco, String bairro, String complemento) {
+			String cidade, String uf, String logradouro, String numeroEndereco, String bairro, String complemento) {
 
 		
 		try {
@@ -108,8 +108,8 @@ public class InstituicaoCaridadePage extends AbstractPage {
 			$("#email").setValue(email);
 			
 			$("#zipCode").setValue(cep);
-			$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[1]/div[6]/div[1]/div/div[1]/span/button")).click();
-			Thread.sleep(1000l);
+			$("#localidade").setValue(cidade);
+			$("#uf").setValue(uf);
 			$("#bairro").setValue(bairro);
 			$("#complemento").setValue(complemento);
 			$("#logradouro").setValue(logradouro);

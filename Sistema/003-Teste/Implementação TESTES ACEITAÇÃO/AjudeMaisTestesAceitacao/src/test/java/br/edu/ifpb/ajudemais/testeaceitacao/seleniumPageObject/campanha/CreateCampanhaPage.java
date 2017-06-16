@@ -110,8 +110,7 @@ public class CreateCampanhaPage extends CampanhaPage{
 	
 				
 		return (houveUmErroCampoObgNome() && houveUmErroCampoObgDescricao() 
-				&& houveUmErroCampoObgTermino() && houveUmErroCampoObgItemDoavel() 
-				&& houveUmErroCampoObgQuantidade() && houveUmErroCampoObgUnidMedida());
+				&& houveUmErroCampoObgTermino()	&& houveUmErroCampoObgQuantidade() && houveUmErroCampoObgUnidMedida());
 	}
 
 }

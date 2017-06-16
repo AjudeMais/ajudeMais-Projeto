@@ -26,10 +26,20 @@ import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.campanha.Campanha
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.campanha.CreateCampanhaPage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.campanha.DetalhesCampanhaPage;
 import br.edu.ifpb.ajudemais.testeaceitacao.seleniumPageObject.campanha.EditaCampanhaPage;
+/**
+ * Classe que realiza os testes de campanha
+ * @author elson
+ *
+ */
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CampanhaTest {
-	
+	/**
+	 * 
+	 */
 	private WebDriver driver;
+	/**
+	 * 
+	 */
 	private CampanhaPage campanhaPage;
 	
 	/**
@@ -75,27 +85,9 @@ public class CampanhaTest {
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		String nome = "Campanha solidaria";
 		
-		criarCampanhaPage.adicionarOuEditarCampanha(nome, "uma campanha para arrecadar alimentos", "17/11/2017", true, "Alimentos", 2000d, "Quilograma");
+		criarCampanhaPage.adicionarOuEditarCampanha(nome, "uma campanha para arrecadar alimentos", "17/11/2017", true, "Leite", 2000d, "Litro");
 		Thread.sleep(2000);
 		
-		boolean campanhaCadastradaComSucesso = campanhaPage.foiCadastradaComSucessoCampanha(nome);
-		assertTrue("A campanha deveria ter sido cadastrada com sucesso", campanhaCadastradaComSucesso);
-	}
-	/**
-	 * adiciona uma campanha
-	 * 
-	 * @throws InterruptedException
-	 * @throws ParseException 
-	 */
-	@Test
-	public void adicionarCampanhaCriandoItemDoavelOk() throws InterruptedException, ParseException {
-		campanhaPage.visita();
-
-		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		String nome = "Criança feliz";
-		criarCampanhaPage.adicionarCampanhaCriandoItemDoavel(nome, "arrecadar brinquedos", "08/10/2017", 
-				"Brinquedo", "Qualquer tipo de brinquedo", true, 300d, "Unidade");
-		Thread.sleep(2000);
 		boolean campanhaCadastradaComSucesso = campanhaPage.foiCadastradaComSucessoCampanha(nome);
 		assertTrue("A campanha deveria ter sido cadastrada com sucesso", campanhaCadastradaComSucesso);
 	}
@@ -165,7 +157,7 @@ public class CampanhaTest {
 
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
 		
-		criarCampanhaPage.adicionarOuEditarCampanha("", "", "", true, "", 0d, "");
+		criarCampanhaPage.adicionarOuEditarCampanha("", "", "", true, "Leite", 0d, "Selecione");
 
 		boolean houveErroCamposObgNaoInformados = criarCampanhaPage.houveUmErroTodosCamposObgs();
 
@@ -181,19 +173,18 @@ public class CampanhaTest {
 	public void editarCampanha() {
 		campanhaPage.visita();
 
-		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		criarCampanhaPage.adicionarOuEditarCampanha("Campanha Teste", "Leva cobertores aos necessitados", "22/09/2017", true, "Cobertores", 1200d, "Unidade");
-		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("CAmpanha Teste");
-
 		try {
+			CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
+			criarCampanhaPage.adicionarOuEditarCampanha("Campaha Teste", "Leva cobertores aos necessitados", "22/09/2017", true, "Cobertores", 1200d, "Unidade");
+			Thread.sleep(1000l);
+			boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Campanha solidaria");
 			Thread.sleep(1000l);
 			EditaCampanhaPage editarCampanhaPage = campanhaPage.edit("Campanha Teste");
-			editarCampanhaPage.adicionarOuEditarCampanha("CAMPANHA Teste editada", "DESCRIÇÃO DA CAMPANHA EDITADA", "28/10/2017", false, "", 5000d, "");
 			Thread.sleep(1000l);
-			boolean foiEditadoComSucesso = campanhaPage.foiEditadoComSucessoCampanha("CAMPANHA Teste editada");
-
-			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-					foiCadastradoComSucesso && foiEditadoComSucesso);
+			editarCampanhaPage.editarCampanha("Natal feliz editada", "Descrição da campanha", "25/11/2017");
+			boolean foiEditadoComSucesso = campanhaPage.foiEditadoComSucessoCampanha("Natal feliz editada");
+			Thread.sleep(1000l);
+			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",foiCadastradoComSucesso && foiEditadoComSucesso);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -22,11 +22,11 @@ public class MensageiroPage extends AbstractPage {
 	/**
 	 * 
 	 */
-	private static final String USERNAME_INSTIUTICAO = "76914318301";
+	private static final String USERNAME_INSTIUTICAO = "42199149196";
 	/**
 	 * 
 	 */
-	private static final String PASSWORD_INSTIUTICAO = "76914318301";
+	private static final String PASSWORD_INSTIUTICAO = "42199149196";
 
 
 	/**
@@ -53,10 +53,8 @@ public class MensageiroPage extends AbstractPage {
 
 		fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 
-		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
 		try {
 			Thread.sleep(1000);
-
 			boolean houveLoginInvalido = loginPage.houveLoginInvalido("Nome de usuário ou senha inválido");
 
 			if (houveLoginInvalido) {
@@ -70,14 +68,13 @@ public class MensageiroPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
-			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[4]/a")).click();
+			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[7]/a")).click();
 
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[5]/a")).click();
 	}
 
 	/**
@@ -88,8 +85,8 @@ public class MensageiroPage extends AbstractPage {
 
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
-		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P2 TESTE", "CRIADA E2M CATEGORIA PAGE",
-				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123454@teste.com", "58500-000", "Rua Teste", "123",
+		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÂO P2 TESTE", "DESCRIÇÃO DA INSTITUIÇÃO",
+				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123454@teste.com", "58500-000", "Monteiro", "PB", "Rua Teste", "123",
 				"Centro", "casa");
 	}
 
@@ -142,15 +139,12 @@ public class MensageiroPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
-	public boolean erroAssociarMensageiroIgual() {
-
-		if ($(By.xpath("//*[@id=\"loading-bar-container\"]/div")).getText()
-				.equals("Este mensageiro já esta associado a esta instituição.")) {
-			return true;
-		}
-		return false;
+	public boolean erroAssociarMensageiroIgual(String msg) {
+		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div")).should(appears);
+		boolean igual = driver.getPageSource().contains(msg);		
+		return igual;
 	}
-
+	
 	/**
 	 * 
 	 * @param nome

@@ -88,8 +88,8 @@ public class DoacaoPage extends AbstractPage {
 
 		CriarInstituicaoCaridadePage createInstituicaoCaridadePage = instituicaoCaridadePage.novo();
 
-		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÃO P TESTE", "CRIADA EM CATEGORIA PAGE",
-				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Rua Teste", "123",
+		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTIUTIÇÃO PARA TESTE", "INSTITUIÇÃO PARA TESTE",
+				USERNAME_INSTIUTICAO, "(83) 99812-2196", "testecat123@teste.com", "58500-000", "Monteiro", "PB", "Rua Teste", "123",
 				"Centro", "casa");
 	}
 	
