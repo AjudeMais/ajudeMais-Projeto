@@ -91,10 +91,16 @@
 
             modalInstance.result.then(function (result) {
                 if (result) {
-                    categoriaService.remove(categoria.id, function () {
+                    categoriaService.remove(categoria.id, function (response) {
+
                         toastr.success("removido com sucesso", "Item");
                         var index = vm.categorias.indexOf(categoria);
                         vm.categorias.splice(index, 1);
+
+                    }, function (response) {
+                        var msgError = response.msg;
+                        toastr.warning(msgError);
+
                     });
                 }
             });

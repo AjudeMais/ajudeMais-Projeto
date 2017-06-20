@@ -40,8 +40,8 @@ import org.hibernate.validator.constraints.NotBlank;
 			+ "c.instituicaoCaridade.endereco.localidade like :localidade "
 			+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true"),
 	
-	@NamedQuery(name = "Campanha.filterCountCampanhasMetaCategoriaId", query = "SELECT c FROM Campanha c JOIN c.metas m WHERE "
-			+ "m.categoria.id = :idCategoria and c.instituicaoCaridade = :idInstituicao")})
+	@NamedQuery(name = "Campanha.filterCountCampanhasMetaCategoriaId", query = "SELECT count(c) FROM Campanha c JOIN c.metas m WHERE "
+			+ "m.categoria.id = :idCategoria and c.instituicaoCaridade.id = :idInstituicao")})
 public class Campanha {
 
 	/**

@@ -4,5 +4,16 @@
 	<conta id="1" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
 	<intituicao_caridade id="1" nome="Instituicao XPTO" descricao="Ajude gente" telefone="9999999" documento="19016014350" endereco_id="1" conta_id="1" />
 	
+	<categoria id="1" ativo="TRUE" nome="brinquedos" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
+	<categoria id="2" ativo="TRUE" nome="Roupas" descricao="roupas em geral" instituicao_caridade_id="1"/>
+	
+	
 	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
+	
+	<meta id="1" quantidade="2" unidade_medida="UNIDADE" campanha_id="1" categoria_id="1"/>
+	<meta id="2" quantidade="2" unidade_medida="UNIDADE" campanha_id="1" categoria_id="2"/>
+
+	<campanha_metas campanha_id="1" metas_id="1"/>
+	<campanha_metas campanha_id="1" metas_id="2"/>
+	
 </dataset>

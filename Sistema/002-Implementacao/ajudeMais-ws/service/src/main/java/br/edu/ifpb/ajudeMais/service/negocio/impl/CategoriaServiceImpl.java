@@ -121,7 +121,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 		Long countDoacoes = donativoRepository.countByCategoriaAndCategoriaInstituicaoCaridadeId(categoria,categoria.getInstituicaoCaridade().getId());
 		Long countCampanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(categoria.getId(),categoria.getInstituicaoCaridade().getId());
 		
-		if (countDoacoes>0 && countCampanhas>0) {
+		if (countDoacoes<1 && countCampanhas<1) {
 			categoriaRepository.delete(categoria);
 		}else{
 			throw new InvalidRemoveException("O item não pode ser removido, ele está sendo utilizado.");
