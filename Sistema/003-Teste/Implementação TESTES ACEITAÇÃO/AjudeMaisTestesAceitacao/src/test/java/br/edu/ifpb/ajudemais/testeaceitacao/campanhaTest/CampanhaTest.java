@@ -72,6 +72,7 @@ public class CampanhaTest {
 		driver.close();
 	}
 	
+	
 	/**
 	 * adiciona uma campanha
 	 * 
@@ -91,6 +92,8 @@ public class CampanhaTest {
 		boolean campanhaCadastradaComSucesso = campanhaPage.foiCadastradaComSucessoCampanha(nome);
 		assertTrue("A campanha deveria ter sido cadastrada com sucesso", campanhaCadastradaComSucesso);
 	}
+	
+	
 	/**
 	 * tenta adicionar uma campanha sem preencher o campo nome
 	 * @throws ParseException 
