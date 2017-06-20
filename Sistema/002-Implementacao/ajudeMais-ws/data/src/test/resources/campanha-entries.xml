@@ -8,7 +8,7 @@
 	<categoria id="2" ativo="TRUE" nome="Roupas" descricao="roupas em geral" instituicao_caridade_id="1"/>
 	
 	
-	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="1"/>
+	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="1" notificada="FALSE"/>
 	
 	<meta id="1" quantidade="2" unidade_medida="UNIDADE" campanha_id="1" categoria_id="1"/>
 	<meta id="2" quantidade="2" unidade_medida="UNIDADE" campanha_id="1" categoria_id="2"/>

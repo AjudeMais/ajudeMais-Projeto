@@ -90,16 +90,18 @@ public class Campanha {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private InstituicaoCaridade instituicaoCaridade;
 
-	
 	/**
 	 * 
 	 */
 	@NotNull(message = "Ao menos uma meta deve ser adicionado a campanha")
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Meta> metas;
-	
 
-	
+	/**
+	 * 
+	 */
+	private boolean notificada;
+
 	/**
 	 * @return o atributo id
 	 */
@@ -189,7 +191,6 @@ public class Campanha {
 		this.instituicaoCaridade = instituicaoCaridade;
 	}
 
-	
 	/**
 	 * @return o atributo status
 	 */
@@ -201,6 +202,21 @@ public class Campanha {
 			}
 		}
 		return status;
+	}
+
+	/**
+	 * @return o atributo notificada
+	 */
+	public boolean isNotificada() {
+		return notificada;
+	}
+
+	/**
+	 * @param o
+	 *            parametro notificada é setado em notificada
+	 */
+	public void setNotificada(boolean notificada) {
+		this.notificada = notificada;
 	}
 
 	/**
@@ -219,13 +235,16 @@ public class Campanha {
 	}
 
 	/**
-	 * @param metas the metas to set
+	 * @param metas
+	 *            the metas to set
 	 */
 	public void setMetas(List<Meta> metas) {
 		this.metas = metas;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -234,6 +253,4 @@ public class Campanha {
 				+ ", status=" + status + ", dataFim=" + dataFim + ", instituicaoCaridade=" + instituicaoCaridade
 				+ ", metas=" + metas + "]";
 	}
-	
-
 }

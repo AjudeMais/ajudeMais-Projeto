@@ -5,6 +5,14 @@ import android.content.Intent;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import br.edu.ifpb.ajudemais.activities.MainActivity;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateLocationDoadorTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 
@@ -19,13 +27,40 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
  */
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
+    private SharedPrefManager sharedPrefManager;
+
+    private LoadingDoadorTask loadingDoadorTask;
+
+    private UpdateDoadorTask updateDoadorTask;
     /**
      *
      */
     @Override
     public void onTokenRefresh() {
+        sharedPrefManager = SharedPrefManager.getInstance(getApplicationContext());
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         storageToken(refreshedToken);
+        updateDoador();
+    }
+
+    /**
+     *
+     */
+    private void updateDoador() {
+        Conta conta = sharedPrefManager.getUser();
+        if(conta != null) {
+            loadingDoadorTask = new LoadingDoadorTask(getApplicationContext(), conta.getUsername());
+            loadingDoadorTask.delegate = new AsyncResponse<Doador>() {
+                @Override
+                public void processFinish(Doador output) {
+                    updateDoadorTask = new UpdateDoadorTask(getApplicationContext(), output);
+                    updateDoadorTask.setProgressAtivo(false);
+                    updateDoadorTask.execute();
+                }
+            };
+
+            loadingDoadorTask.execute();
+        }
     }
 
     /**
@@ -36,7 +71,5 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void storageToken(String token) {
         SharedPrefManager.getInstance(getApplicationContext()).storageFcmToken(token);
     }
-
-
 
 }
