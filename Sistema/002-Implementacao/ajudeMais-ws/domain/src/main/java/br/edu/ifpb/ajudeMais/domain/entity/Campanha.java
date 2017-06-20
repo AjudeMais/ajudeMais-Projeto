@@ -38,7 +38,10 @@ import org.hibernate.validator.constraints.NotBlank;
 @NamedQueries({
 	@NamedQuery(name = "Campanha.filterByInstituicaoLocal", query = "SELECT c FROM Campanha c WHERE "
 			+ "c.instituicaoCaridade.endereco.localidade like :localidade "
-			+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true"), })
+			+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true"),
+	
+	@NamedQuery(name = "Campanha.filterCountCampanhasMetaWithCategoriaId", query = "SELECT c FROM Campanha c WHERE JOIN c.metas m"
+			+ "m.categoria.id = :idCategoria and c.instituicaoCaridade = :idInstituicao")})
 public class Campanha {
 
 	/**
@@ -105,8 +108,7 @@ public class Campanha {
 	}
 
 	/**
-	 * @param o
-	 *            parametro id é setado em id
+	 * @param o parametro id é setado em id
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -232,8 +234,6 @@ public class Campanha {
 				+ ", status=" + status + ", dataFim=" + dataFim + ", instituicaoCaridade=" + instituicaoCaridade
 				+ ", metas=" + metas + "]";
 	}
-	
-	
 	
 
 }

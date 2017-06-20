@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -13,7 +12,6 @@ import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
-import br.edu.ifpb.ajudeMais.service.event.donativo.notification.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -29,7 +27,6 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
- *         <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
 @Service
@@ -37,13 +34,13 @@ public class DonativoServiceImpl implements DonativoService {
 
 	@Autowired
 	private DonativoRepository donativoRepository;
-
+	
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-
+	
 	/**
 	 * 
 	 */
@@ -52,6 +49,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 		Donativo donativoSaved = donativoRepository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+
 		return donativoSaved;
 	}
 
@@ -106,7 +104,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
-
+	
 	/**
 	 * Busca donativos de acordo com id do doador.
 	 */
@@ -121,50 +119,5 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
-	}
-
-	/**
-	 * 
-	 * <p>
-	 * lança envento de notificação para estado de doação.
-	 * </p>
-	 * 
-	 * @param donativo
-	 */
-	private void notify(Donativo donativo) {
-
-		donativo.getEstadosDaDoacao().forEach(est -> {
-			if (est.getAtivo()) {
-				switch (est.getEstadoDoacao()) {
-				case DISPONIBILIZADO:
-					publisher.publishEvent(new DoacaoNotificationEvent(getNotificaveis(donativo), donativo,
-							"Novo donativo disponibilizado"));
-					break;
-				case CANCELADO:
-					publisher.publishEvent(
-							new DoacaoNotificationEvent(getNotificaveis(donativo), donativo, "Doação foi cancelada"));
-					break;
-				default:
-					break;
-				}
-			}
-		});
-	}
-
-	/**
-	 * 
-	 * <p>
-	 * Obtém lista de doadores que serão notificados.
-	 * </p>
-	 * 
-	 * @param donativo
-	 * @return
-	 */
-	private List<String> getNotificaveis(Donativo donativo) {
-		List<String> notificaveis = new ArrayList<>();
-
-		// TODO na sprint de coleta
-
-		return notificaveis;
 	}
 }

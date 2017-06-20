@@ -211,10 +211,11 @@ public class CategoriaRestService {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<Categoria> delete(@PathVariable Long id) {
+	public ResponseEntity<Categoria> delete(@PathVariable Long id) throws AjudeMaisException {
 
 		Categoria categoriaEncontrada = categoriaService.findById(id);
 

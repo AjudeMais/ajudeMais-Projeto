@@ -48,5 +48,24 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @return
 	 */
 	List<Campanha> findByStatus(boolean status);
+	
+	/**
+	 * Conta quantos donativos com a categoria passada na instituição com id passado existem.
+	 * 
+	 * @param nome
+	 * @return
+	 */
+	Long findByMetasCategoria();
+	
+	/**
+	 * 
+	 * <p>
+	 * Conta campanhas que utilizam que tem metas com a categoria com id passado
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Long filterCountCampanhasMetaWithCategoriaId(@Param("idCategoria") Long id, @Param("idInstituicao") Long idInstituicao);
 
 }

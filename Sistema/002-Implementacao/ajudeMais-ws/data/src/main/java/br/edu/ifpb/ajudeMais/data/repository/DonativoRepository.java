@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
@@ -56,6 +57,14 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	List<Donativo> findByCategoriaInstituicaoCaridadeOrderByDataDesc(InstituicaoCaridade instituicaoCaridade);
 
+	/**
+	 * Conta quantos donativos com a categoria passada na instituição com id passado existem.
+	 * 
+	 * @param nome
+	 * @return
+	 */
+	Long countByCategoriaAndCategoriaInstituicaoCaridadeId(Categoria categoria, Long id);
+	
 	/**
 	 * <p>
 	 * Busca donativos e retorna lista ordenada por data de criação

@@ -144,18 +144,20 @@ public class CampanhaServiceTest {
 
 	/**
 	 * Teste para remoção de uma campanha.
+	 * @throws AjudeMaisException 
 	 */
 	@Test
-	public void removeCampanhaOk() {
+	public void removeCampanhaOk() throws AjudeMaisException {
 		mockCampanhaService.remover(campanha);
 		verify(mockCampanhaService).remover(campanha);
 	}
 
 	/**
 	 * Teste para remoção de uma campanha nula.
+	 * @throws AjudeMaisException 
 	 */
 	@Test
-	public void removeCampanhaNull() {
+	public void removeCampanhaNull() throws AjudeMaisException {
 		mockCampanhaService.remover(null);
 	}
 

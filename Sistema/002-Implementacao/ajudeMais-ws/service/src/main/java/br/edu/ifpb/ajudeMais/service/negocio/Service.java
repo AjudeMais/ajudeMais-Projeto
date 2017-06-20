@@ -98,5 +98,5 @@ public interface Service<T, K> {
 	 * 
 	 * @param entity
 	 */
-	void remover(@NotNull T entity);
+	void remover(@NotNull T entity) throws AjudeMaisException;
 }

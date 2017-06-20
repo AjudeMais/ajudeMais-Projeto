@@ -19,10 +19,13 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.CategoriaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.exceptions.InvalidRemoveException;
 import br.edu.ifpb.ajudeMais.service.negocio.CategoriaService;
 
 /**
@@ -49,6 +52,16 @@ public class CategoriaServiceImpl implements CategoriaService {
 	 */
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private CampanhaRepository campanhaRepository;
+	
+	@Autowired
+	private DonativoRepository donativoRepository;
+	
 
 	/**
 	 * salva uma categoria no BD
@@ -99,12 +112,20 @@ public class CategoriaServiceImpl implements CategoriaService {
 	/**
 	 * 
 	 * remove uma categoria previamente cadastrada
+	 * @throws InvalidRemoveException 
 	 * 
 	 */
 	@Override
 	@Transactional
-	public void remover(Categoria categoria) {
-		categoriaRepository.delete(categoria);
+	public void remover(Categoria categoria) throws InvalidRemoveException {
+		Long countDoacoes = donativoRepository.countByCategoriaAndCategoriaInstituicaoCaridadeId(categoria,categoria.getInstituicaoCaridade().getId());
+		Long countCampanhas = campanhaRepository.filterCountCampanhasMetaWithCategoriaId(categoria.getId(),categoria.getInstituicaoCaridade().getId());
+		
+		if (countDoacoes>0 && countCampanhas>0) {
+			categoriaRepository.delete(categoria);
+		}else{
+			throw new InvalidRemoveException("O item não pode ser removido, ele está sendo utilizado.");
+		}
 	}
 
 	/**
@@ -134,4 +155,6 @@ public class CategoriaServiceImpl implements CategoriaService {
 	public List<Categoria> findByInstituicaoCaridadeAndNome(InstituicaoCaridade instituicaoCaridade, String nome) {
 		return categoriaRepository.findByInstituicaoCaridadeAndNomeIgnoreCaseContaining(instituicaoCaridade, nome);
 	}
+	
+
 }
