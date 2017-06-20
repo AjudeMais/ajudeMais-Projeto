@@ -74,9 +74,12 @@ public class CampanhaServiceImpl implements CampanhaService {
 	public Campanha save(Campanha campanha) throws AjudeMaisException {
 
 		Campanha campanhaSaved = campanhaRepository.save(campanha);
-		if (campanha.isStatus()) {
+		if (campanha.isStatus() && !campanha.isNotificada()) {
 			List<String> notificaveis = getNotificaveis(campanha);
 			publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+			campanhaSaved.setNotificada(true);
+			this.update(campanhaSaved);
+			
 		}
 
 		return campanhaSaved;
@@ -93,9 +96,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 	@Transactional
 	public Campanha update(Campanha campanha) throws AjudeMaisException {
 		Campanha campanhaSaved = campanhaRepository.save(campanha);
-		if (campanha.isStatus()) {
+		if (campanha.isStatus() && !campanha.isNotificada()) {
 			List<String> notificaveis = getNotificaveis(campanha);
 			publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
+			campanhaSaved.setNotificada(true);
+			this.update(campanhaSaved);
 		}
 
 		return campanhaSaved;

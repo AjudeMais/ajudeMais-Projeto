@@ -3,6 +3,7 @@ package br.edu.ifpb.ajudemais.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 /**
  * <p>
  * <b>{@link Campanha}</b>
@@ -15,7 +16,7 @@ import java.util.List;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
-public class Campanha implements Serializable{
+public class Campanha implements Serializable {
 
     private Long id;
 
@@ -53,6 +54,19 @@ public class Campanha implements Serializable{
      *
      */
     private List<Meta> metas;
+
+    /**
+     *
+     */
+    private boolean notificada;
+
+    public boolean isNotificada() {
+        return notificada;
+    }
+
+    public void setNotificada(boolean notificada) {
+        this.notificada = notificada;
+    }
 
     public String getNome() {
         return nome;

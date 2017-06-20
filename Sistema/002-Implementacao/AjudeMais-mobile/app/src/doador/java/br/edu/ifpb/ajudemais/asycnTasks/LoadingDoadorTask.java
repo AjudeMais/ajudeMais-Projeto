@@ -67,7 +67,7 @@ public class LoadingDoadorTask extends AsyncTask<Void, Void, Doador> {
 
     @Override
     protected void onPostExecute(Doador doador) {
-        if (doador != null && message == null) {
+        if (message == null) {
             delegate.processFinish(doador);
         }else
             android.widget.Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
