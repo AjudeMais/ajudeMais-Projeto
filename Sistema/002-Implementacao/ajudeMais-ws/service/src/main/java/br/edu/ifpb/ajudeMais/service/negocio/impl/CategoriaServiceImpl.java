@@ -119,7 +119,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 	@Transactional
 	public void remover(Categoria categoria) throws InvalidRemoveException {
 		Long countDoacoes = donativoRepository.countByCategoriaAndCategoriaInstituicaoCaridadeId(categoria,categoria.getInstituicaoCaridade().getId());
-		Long countCampanhas = campanhaRepository.filterCountCampanhasMetaWithCategoriaId(categoria.getId(),categoria.getInstituicaoCaridade().getId());
+		Long countCampanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(categoria.getId(),categoria.getInstituicaoCaridade().getId());
 		
 		if (countDoacoes>0 && countCampanhas>0) {
 			categoriaRepository.delete(categoria);
