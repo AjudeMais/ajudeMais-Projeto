@@ -34,6 +34,7 @@ import br.edu.ifpb.ajudeMais.api.dto.MessageErrorDTO;
 import br.edu.ifpb.ajudeMais.api.rest.DoadorRestService;
 import br.edu.ifpb.ajudeMais.service.exceptions.ImageErrorException;
 import br.edu.ifpb.ajudeMais.service.exceptions.InvalidAttributeException;
+import br.edu.ifpb.ajudeMais.service.exceptions.InvalidRemoveException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
 
 /**
@@ -148,5 +149,22 @@ public class RestExceptionHandler {
 	public ResponseEntity<MessageErrorDTO> handleImageError(ImageErrorException e) {
 		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
 	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Tratamento para exceção {@link ImageErrorException}
+	 * </p>
+	 * 
+	 * @param e
+	 * 
+	 * @return
+	 */
+	@ExceptionHandler(InvalidRemoveException.class)
+	@ResponseBody
+	public ResponseEntity<MessageErrorDTO> handleInvalidRemoveExceptionError(InvalidRemoveException e) {
+		return new ResponseEntity<MessageErrorDTO>(new MessageErrorDTO(e.getMessage()), HttpStatus.BAD_REQUEST);
+	}
+
 
 }

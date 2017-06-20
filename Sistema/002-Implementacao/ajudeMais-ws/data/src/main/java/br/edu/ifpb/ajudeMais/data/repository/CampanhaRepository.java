@@ -48,5 +48,18 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @return
 	 */
 	List<Campanha> findByStatus(boolean status);
+	
+
+	
+	/**
+	 * 
+	 * <p>
+	 * Conta campanhas que utilizam que tem metas com a categoria com id passado
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Long filterCountCampanhasMetaCategoriaId(@Param("idCategoria") Long idCategoria, @Param("idInstituicao") Long idInstituicao);
 
 }

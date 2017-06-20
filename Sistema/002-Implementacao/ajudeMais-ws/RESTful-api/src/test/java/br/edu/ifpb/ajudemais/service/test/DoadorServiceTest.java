@@ -175,18 +175,20 @@ public class DoadorServiceTest {
 
 	/**
 	 * Teste para remoção de um doador.
+	 * @throws AjudeMaisException 
 	 */
 	@Test
-	public void removeDoadorOk() {
+	public void removeDoadorOk() throws AjudeMaisException {
 		mockDoadorService.remover(doador);
 		verify(mockDoadorService).remover(doador);
 	}
 
 	/**
 	 * Testa remoção de um Doador nulo.
+	 * @throws AjudeMaisException 
 	 */
 	@Test(expected = InvalidDataAccessApiUsageException.class)
-	public void removeDoadorNull() {
+	public void removeDoadorNull() throws AjudeMaisException {
 		doadorService.remover(null);
 	}
 

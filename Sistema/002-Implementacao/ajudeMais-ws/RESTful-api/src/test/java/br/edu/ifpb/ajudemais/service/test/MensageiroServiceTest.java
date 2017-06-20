@@ -153,18 +153,20 @@ public class MensageiroServiceTest {
 
 	/**
 	 * Teste para remoção de um mensageiro.
+	 * @throws AjudeMaisException 
 	 */
 	@Test
-	public void removeMensageiroOk() {
+	public void removeMensageiroOk() throws AjudeMaisException {
 		mockMensageiroService.remover(mensageiro);
 		verify(mockMensageiroService).remover(mensageiro);
 	}
 
 	/**
 	 * testa a remoção de um mensageiro null
+	 * @throws AjudeMaisException 
 	 */
 	@Test(expected = InvalidDataAccessApiUsageException.class)
-	public void removeMensageiroNull() {
+	public void removeMensageiroNull() throws AjudeMaisException {
 		mensageiroService.remover(null);
 
 	}

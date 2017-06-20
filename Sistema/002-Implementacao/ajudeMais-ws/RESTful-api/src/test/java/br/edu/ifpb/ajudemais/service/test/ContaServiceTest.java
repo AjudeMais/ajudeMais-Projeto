@@ -202,18 +202,20 @@ public class ContaServiceTest {
 
 	/**
 	 * Teste para remoção de uma Conta.
+	 * @throws AjudeMaisException 
 	 */
 	@Test
-	public void removeContaOk() {
+	public void removeContaOk() throws AjudeMaisException {
 		mockContaService.remover(conta);
 		verify(mockContaService).remover(conta);
 	}
 
 	/**
 	 * Testa remoção de uma conta nulo.
+	 * @throws AjudeMaisException 
 	 */
 	@Test(expected = InvalidDataAccessApiUsageException.class)
-	public void removeContaNull() {
+	public void removeContaNull() throws AjudeMaisException {
 		contaService.remover(null);
 	}
 

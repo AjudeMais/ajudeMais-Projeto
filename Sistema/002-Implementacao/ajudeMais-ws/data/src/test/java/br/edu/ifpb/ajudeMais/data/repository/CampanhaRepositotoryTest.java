@@ -1,6 +1,8 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
@@ -114,6 +116,43 @@ public class CampanhaRepositotoryTest {
 	public void findByStatusFalseTest() {
 		List<Campanha> campanhas = campanhaRepository.findByStatus(false);
 		assertThat(campanhas.isEmpty());
+	}
+
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste se a quantidade de campanhas da instituição com uma meta com a categoria com id passado é igual a 1;
+	 * </p>
+	 */
+	@Test
+	public void filterCountCampanhasMetaCategoriaIdTest() {
+		Long campanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(1l, 1l);
+		assertEquals(campanhas.longValue(), 1);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste se a quantidade de campanhas da instituição com uma meta com a categoria com id passado é igual não é igual a 0;
+	 * </p>
+	 */
+	@Test
+	public void filterCountCampanhasMetaCategoriaIdInvalidValueTest() {
+		Long campanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(2l, 1l);
+		assertNotEquals(campanhas.longValue(), 0);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Teste se a quantidade de campanhas da instituição com id inválido é igual a 0;
+	 * </p>
+	 */
+	@Test
+	public void filterCountCampanhasMetaCategoriaIdInvalidIdInvalidTest() {
+		Long campanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(1l, 4l);
+		assertEquals(campanhas.longValue(), 0);
 	}
 
 }

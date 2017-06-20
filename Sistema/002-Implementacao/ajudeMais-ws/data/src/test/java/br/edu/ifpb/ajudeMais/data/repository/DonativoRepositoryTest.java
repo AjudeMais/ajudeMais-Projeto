@@ -20,6 +20,7 @@ import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 
+import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 
@@ -89,6 +90,17 @@ public class DonativoRepositoryTest {
 		instituicaoCaridade.setId(1l);
 		List<Donativo> donativos = donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicaoCaridade);
 		assertThat(!donativos.isEmpty());
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void findByCategoriaAndCategoriaInstituicaoCaridadeIdTest() {
+		Categoria categoria = new Categoria();
+		categoria.setId(1l);
+		Long count = donativoRepository.countByCategoriaAndCategoriaInstituicaoCaridadeId(categoria, 1l);
+		assertThat(count>0);
 	}
 	
 	/**

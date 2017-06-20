@@ -51,7 +51,6 @@
                 callback(response.data);
             }, function (response) {
                 callbackError(response);
-
             });
         }
 
@@ -83,10 +82,12 @@
          * @param callback
          * @private
          */
-        function _remove(id, callback) {
+        function _remove(id, callback, callbackError) {
             $http.delete(Api + "/categoria/" + id).then(function (response) {
                 callback(response.data);
-            })
+            }, function (response) {
+                callbackError(response.data);
+            });
         }
 
         /**

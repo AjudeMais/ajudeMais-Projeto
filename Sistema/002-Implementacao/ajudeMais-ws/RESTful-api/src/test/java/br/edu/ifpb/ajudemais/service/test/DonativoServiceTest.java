@@ -141,10 +141,11 @@ public class DonativoServiceTest {
 	
 	/**
 	 * teste para remover um donativo nulo
+	 * @throws AjudeMaisException 
 	 * 
 	 */
 	@Test(expected = InvalidDataAccessApiUsageException.class)
-	public void removeDonativoNull() {
+	public void removeDonativoNull() throws AjudeMaisException {
 		donativoService.remover(null);
 
 	}

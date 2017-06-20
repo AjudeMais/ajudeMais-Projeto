@@ -203,10 +203,11 @@ public class CampanhaRestService {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws AjudeMaisException 
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-	public ResponseEntity<Campanha> delete(@PathVariable Long id) {
+	public ResponseEntity<Campanha> delete(@PathVariable Long id) throws AjudeMaisException {
 		Campanha campanhaEncontrada = campanhaService.findById(id);
 		if (campanhaEncontrada == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

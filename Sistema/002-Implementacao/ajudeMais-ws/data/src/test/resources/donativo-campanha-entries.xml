@@ -5,8 +5,8 @@
 	<conta id="2" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
 	<intituicao_caridade id="2" nome="Instituicao XPTO" descricao="Ajude gente" telefone="9999999" documento="16925680945" endereco_id="2" conta_id="2" />
 	
-	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2"/>
-	<campanha id="2" status="TRUE" nome="campanha para brinquedos2" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2"/>
+	<campanha id="1" status="TRUE" nome="campanha para brinquedos" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2" notificada="FALSE"/>
+	<campanha id="2" status="TRUE" nome="campanha para brinquedos2" data_inicio="2017-05-30 18:33:10.972" data_fim="2017-06-05 00:00:00" descricao="brinquedos em geral" instituicao_caridade_id="2" notificada="FALSE"/>
 	
 
 	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" />
