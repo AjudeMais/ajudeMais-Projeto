@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -30,6 +32,7 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -159,6 +162,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
+        else if (v.getId() == R.id.btnFacebook) {
+            if (verifyExistentLogin()) {
+            }
+        }
     }
 
 
@@ -190,6 +197,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.execute();
     }
 
+
+    private boolean verifyExistentLogin() {
+        DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
+        Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
+        if (doador != null) {
+            redirectMainActivity(doador.getConta());
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Redireciona para main actiivity
