@@ -67,6 +67,15 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	}
 
 	/**
+	 * Busca DonativoCampanha com base no id do donativo.
+	 */
+	@Override
+	public DonativoCampanha findByDonativoId(Long id) {
+		DonativoCampanha donativo = donativoCampanhaRespository.findOneByDonativoId(id);
+		return donativo;
+	}
+	
+	/**
 	 * Busca todos os donativos doados para um campanha com o estado passsado.
 	 */
 	@Override

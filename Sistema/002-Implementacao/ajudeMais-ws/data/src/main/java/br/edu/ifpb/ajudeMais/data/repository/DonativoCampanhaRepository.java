@@ -40,6 +40,14 @@ public interface DonativoCampanhaRepository extends JpaRepository<DonativoCampan
 	 */
 	List<DonativoCampanha> findByCampanhaId(Long id);
 	
+	
+	/**
+	 * Busca os donativosCampanha com base no donativo id passado.
+	 * @param id
+	 * @return
+	 */
+	DonativoCampanha findOneByDonativoId(Long id);
+	
 	/**
 	 * 
 	 * <p>
