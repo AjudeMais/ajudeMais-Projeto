@@ -178,16 +178,19 @@ public class CampanhaTest {
 
 		try {
 			CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-			criarCampanhaPage.adicionarOuEditarCampanha("Campaha Teste", "Leva cobertores aos necessitados", "22/09/2017", true, "Cobertores", 1200d, "Unidade");
+			criarCampanhaPage.adicionarOuEditarCampanha("Teste4", "Leva cobertores aos necessitados", "22/09/2017", true, "Cobertores", 1200d, "Unidade");
 			Thread.sleep(1000l);
-			boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Campanha solidaria");
-			Thread.sleep(1000l);
-			EditaCampanhaPage editarCampanhaPage = campanhaPage.edit("Campanha Teste");
-			Thread.sleep(1000l);
+			
+			boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Teste4");
+			
+			EditaCampanhaPage editarCampanhaPage = campanhaPage.edit("Teste4");
+			
 			editarCampanhaPage.editarCampanha("Natal feliz editada", "Descrição da campanha", "25/11/2017");
+			
 			boolean foiEditadoComSucesso = campanhaPage.foiEditadoComSucessoCampanha("Natal feliz editada");
+			
 			Thread.sleep(1000l);
-			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",foiCadastradoComSucesso && foiEditadoComSucesso);
+			assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",foiEditadoComSucesso && foiCadastradoComSucesso);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -226,13 +229,15 @@ public class CampanhaTest {
 		campanhaPage.visita();
 		
 		CreateCampanhaPage criarCampanhaPage = campanhaPage.novo();
-		criarCampanhaPage.adicionarOuEditarCampanha("Natal feliz", "Leva carinho aos necessitados", "25/12/2017", true, "Roupas", 2000d, "Unidade");
+		criarCampanhaPage.adicionarOuEditarCampanha("Natal feliz2", "Leva carinho aos necessitados", "25/12/2017", true, "Roupas", 2000d, "Unidade");
 		boolean foiCadastradoComSucesso = campanhaPage.foiCadastradaComSucessoCampanha("Natal feliz");
 		
-		DetalhesCampanhaPage detalhe = campanhaPage.detail("Natal feliz");
-		detalhe.detail("Natal feliz");
+		DetalhesCampanhaPage detalhe = campanhaPage.detail("Natal feliz2");
+		
+		boolean validateFieldsDetail = detalhe.validateFields("Natal feliz2", "Leva carinho aos necessitados", "Ativo",  "25/12/2017");
+
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-				foiCadastradoComSucesso);
+				foiCadastradoComSucesso && validateFieldsDetail);
 
 		
 	}

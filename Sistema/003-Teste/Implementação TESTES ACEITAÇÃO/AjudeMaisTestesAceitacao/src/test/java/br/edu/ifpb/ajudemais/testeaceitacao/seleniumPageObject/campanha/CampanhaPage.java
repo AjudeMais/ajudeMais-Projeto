@@ -171,13 +171,18 @@ public class CampanhaPage extends AbstractPage {
 
 		$("#tDateEnd").setValue(termino);
 				
-		validaEadicionarMeta(nome, descricao, unidMedida, String.valueOf(qtd));
+		validaEadicionarMeta(itemDoavel, descricao, unidMedida, String.valueOf(qtd));
 		
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[3]/input")).click();
 	}
 	
 	
 	public void editarCampanha(String nome, String descricao, String termino){
+		$("#nome").setValue(nome);
+
+		$("#descricao").setValue(descricao);
+		$("#tDateEnd").setValue(termino);
+
 		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/form/div[3]/input")).click();
 	}
 	
