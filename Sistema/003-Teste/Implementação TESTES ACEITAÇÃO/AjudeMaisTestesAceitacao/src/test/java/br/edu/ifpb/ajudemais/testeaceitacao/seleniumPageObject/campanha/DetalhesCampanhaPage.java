@@ -18,7 +18,7 @@ public class DetalhesCampanhaPage extends CampanhaPage {
 	 * @param ativo
 	 * @return
 	 */
-	public boolean validateFields(String nome, String descricao, boolean status, String termino) {
+	public boolean validateFields(String nome, String descricao, String status, String termino) {
 
 		boolean validateNome = $(By
 				.xpath("//*[@id=\"content-wrapper\"]/div/div[3]/ui-view/div/div/div[1]/div[2]/div/div/table/tbody/tr[1]/td"))

@@ -68,14 +68,10 @@ public class MensageiroPage extends AbstractPage {
 				fazlogin(USERNAME_INSTIUTICAO, PASSWORD_INSTIUTICAO);
 			}
 
-<<<<<<< HEAD
-			$(By.xpath("//*[@id=\"sidebar-wrapper\"]/ul/li[7]/a")).click();
-=======
+
 			$("#op_mensageiros").click();
->>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -143,12 +139,6 @@ public class MensageiroPage extends AbstractPage {
 	 * @param nome
 	 * @return
 	 */
-<<<<<<< HEAD
-	public boolean erroAssociarMensageiroIgual(String msg) {
-		$(By.xpath("//*[@id=\"content-wrapper\"]/div/div[1]/div")).should(appears);
-		boolean igual = driver.getPageSource().contains(msg);		
-		return igual;
-=======
 	public boolean erroAssociarMensageiroIgual() {
 
 		if ($(By.xpath("//*[@id=\"toast-container\"]/div")).getText()
@@ -156,7 +146,6 @@ public class MensageiroPage extends AbstractPage {
 			return true;
 		}
 		return false;
->>>>>>> 7946d0ccb4ce119710b99a4225fc01ba33e27917
 	}
 	
 	/**

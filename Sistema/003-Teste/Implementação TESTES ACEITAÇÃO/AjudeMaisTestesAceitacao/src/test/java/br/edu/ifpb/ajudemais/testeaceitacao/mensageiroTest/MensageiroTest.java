@@ -95,7 +95,7 @@ public class MensageiroTest {
 		String email = "mensageiroTeste@gmail.com";
 		associar.associarMensageiro(email);
 
-		boolean mensageiroNaoAssociado = mensageiroPage.erroAssociarMensageiroIgual(email);
+		boolean mensageiroNaoAssociado = mensageiroPage.erroAssociarMensageiroIgual();
 		assertTrue("Deveria ter exibido mensagem de erro", mensageiroNaoAssociado);
 	}
 	/**

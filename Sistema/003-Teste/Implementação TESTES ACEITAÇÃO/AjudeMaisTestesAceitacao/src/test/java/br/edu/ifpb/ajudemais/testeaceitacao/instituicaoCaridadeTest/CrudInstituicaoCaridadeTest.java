@@ -174,6 +174,7 @@ public class CrudInstituicaoCaridadeTest {
 		createInstituicaoCaridadePage.addOrEditInstituicaoCaridade("INSTITUIÇÔES DOS ZEFÕES COM CNPJ","ONG DE ALIMENTOS123",
 				"32.521.763/0001-74", "(83) 99812-2196", "zefao2001@teste.com", "58500-000", "Monteiro", "PB", "Rua Sete de setembro",
 				"123", "Centro", "casa");
+		
 		boolean instituicaoCadastradaComSucesso = instituicaoCaridadePage
 				.foiCadastradoComSucessoInstituicaoCaridade("32521763000174");
 
@@ -301,11 +302,11 @@ public class CrudInstituicaoCaridadeTest {
 		DetalhesInstituicaoCaridadePage detailInstituicaoCaridadePage = instituicaoCaridadePage.detail("14268852000179");
 		
 		boolean foiEditadoComSucesso = detailInstituicaoCaridadePage.validateFields(
-				"INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2", "14268852000179", "(83) 9981-0011",
+				"INSTITUIÇÔES DAS ZEFAS COM CNPJ EDIT01(TRUE)","TESTE DESCRICAO2", "14.268.852/0001-79", "(83) 9981-0011",
 				"zefao2002edit@teste.com", "69800-000", "Humaitá", "AM", "Rua Francisco Coelho", "1709", "Nova Humaitá", "casa");
 
 		assertTrue("Uma mensagem informando que o campo estava inválido deveria ter sido mostrada",
-				foiCadastradoComSucesso && foiEditadoComSucesso);
+				foiEditadoComSucesso && foiCadastradoComSucesso);
 
 	}
 }
