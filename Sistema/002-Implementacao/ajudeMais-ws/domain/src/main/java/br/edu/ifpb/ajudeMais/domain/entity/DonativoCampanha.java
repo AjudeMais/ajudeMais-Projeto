@@ -14,6 +14,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  * 
@@ -56,9 +57,11 @@ public class DonativoCampanha implements Serializable {
 	/**
 	 * 
 	 */
+	@NotNull(message = "A campanha referente a doação deve ser informada")
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Campanha campanha;
 	
+	@NotNull(message = "O donativo deve ser informada")
 	@OneToOne(cascade = CascadeType.ALL)
 	private Donativo donativo;
 

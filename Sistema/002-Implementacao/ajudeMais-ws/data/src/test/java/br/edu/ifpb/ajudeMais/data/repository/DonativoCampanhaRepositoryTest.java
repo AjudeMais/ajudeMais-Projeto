@@ -103,4 +103,31 @@ public class DonativoCampanhaRepositoryTest {
 		assertEquals(new Long(1), qtdDonativos);
 	}
 	
+	/**
+	 * Testa que a consulta retorna um objeto do tipo Campanha donativo.
+	 */
+	@Test
+	public void findOneByDonativoIdTest() {
+		DonativoCampanha donativoCampanha = donativoRepository.findOneByDonativoId(5l);
+		assertThat(donativoCampanha != null);
+	}
+	
+	/**
+	 * Testa que a consulta retorna um objeto do tipo Campanha donativo com donativo com nome igual ao verificado.
+	 */
+	@Test
+	public void findOneByDonativoIdTestEqualNameDonativo() {
+		DonativoCampanha donativoCampanha = donativoRepository.findOneByDonativoId(5l);
+		assertEquals(donativoCampanha.getDonativo().getNome(),"Camisa the flash");
+	}
+	
+	
+	/**
+	 * Testa que a consulta retorna um objeto do tipo Campanha donativo com valor null.
+	 */
+	@Test
+	public void findOneByDonativoIdTestwithInvalidId() {
+		DonativoCampanha donativoCampanha = donativoRepository.findOneByDonativoId(10l);
+		assertEquals(donativoCampanha,null);
+	}
 }
