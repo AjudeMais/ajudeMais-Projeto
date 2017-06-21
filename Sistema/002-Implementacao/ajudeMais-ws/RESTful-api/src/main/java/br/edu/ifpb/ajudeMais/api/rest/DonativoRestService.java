@@ -92,7 +92,7 @@ public class DonativoRestService {
 	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
-	@RequestMapping(method = RequestMethod.POST, value = "/filter/donativocampanha/{id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/donativocampanha/{id}")
 	public ResponseEntity<DonativoCampanha> findByDonativoId(@PathVariable Long id) throws AjudeMaisException {
 		DonativoCampanha donativoCampanha = donativoCampanhaService.findByDonativoId(id);
 		return new ResponseEntity<>(donativoCampanha, HttpStatus.OK);
