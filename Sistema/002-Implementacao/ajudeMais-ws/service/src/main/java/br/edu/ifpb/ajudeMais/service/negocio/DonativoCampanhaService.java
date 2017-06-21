@@ -53,6 +53,14 @@ public interface DonativoCampanhaService {
 	 * @return
 	 */
 	List<DonativoCampanha> findByCampanhaId(Long id);
+	
+	/**
+	 * Busca DonativoCampanha com base no id do donativo.
+	 * @param id
+	 * @return
+	 */
+	public DonativoCampanha findByDonativoId(Long id);
+	
 
 
 	/**

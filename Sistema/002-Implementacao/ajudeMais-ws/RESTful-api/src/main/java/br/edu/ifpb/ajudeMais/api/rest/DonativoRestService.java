@@ -56,6 +56,12 @@ public class DonativoRestService {
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
 
+	/**
+	 * Salva donativo avulso
+	 * @param donativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Donativo> save(@RequestBody Donativo donativo) throws AjudeMaisException {
@@ -74,6 +80,22 @@ public class DonativoRestService {
 	public ResponseEntity<DonativoCampanha> saveWithCampanha(@RequestBody DonativoCampanha donativo) throws AjudeMaisException {
 		DonativoCampanha donativoSalvo = donativoCampanhaService.save(donativo);
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
+	}
+	
+	/**
+	 * GET /filter/donativocampanha/{id} : Endpoint para buscar DonativoCampanha pelo id Donativo
+	 * 
+	 * doados por doador
+	 * Busca DonativoCamapnha com base no id do  donativo passado.
+	 * @param donativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasRole('DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/donativocampanha/{id}")
+	public ResponseEntity<DonativoCampanha> findByDonativoId(@PathVariable Long id) throws AjudeMaisException {
+		DonativoCampanha donativoCampanha = donativoCampanhaService.findByDonativoId(id);
+		return new ResponseEntity<>(donativoCampanha, HttpStatus.OK);
 	}
 
 	

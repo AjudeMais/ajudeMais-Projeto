@@ -204,6 +204,7 @@
     <string name="no_coletada">Aguadando um mensageiro aceitar coletar doação</string>
     <string name="imagens_lb">Imagens: </string>
     <string name="doado_to">Doado para instituição:</string>
+    <string name="doado_to_campanha">Doado para:</string>
     <string name="lb_imag_donativo">Imagem do donativo</string>
     <string name="cancel_doacao">Você deseja realmente cancelar esta doação?</string>
     <string name="dialog_message">Ao cancelar uma doação, não será mais possível alterá-la</string>

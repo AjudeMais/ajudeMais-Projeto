@@ -19,9 +19,11 @@ import java.util.Date;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
+import br.edu.ifpb.ajudemais.asycnTasks.GetDonativoCampanhaByDonativoIdTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateEstadoDonativoTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
@@ -49,6 +51,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private TextView stateDoacao;
     private EstadoDoacao estadoDoacao;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
+    private GetDonativoCampanhaByDonativoIdTask getDonativoCampanhaTask;
     private Button btnCancelDoacao;
     private Button btnListDisp;
 
@@ -69,25 +72,32 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
 
     /**
-     *
      * @param view
      * @param savedInstanceState
      */
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
+
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
+        executeGetDonativoCampanhaTask(donativo.getId());
+
         stateDoacao = (TextView) getView().findViewById(R.id.tv_donative_estado_lb);
         btnCancelDoacao = (Button) getView().findViewById(R.id.btnCancelaDoacao);
         btnCancelDoacao.setOnClickListener(this);
         descricaoDonativo.setText(donativo.getDescricao());
-        nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
+
+        if (donativo.getDescricao() != null && donativo.getDescricao().length() > 0) {
+            descricaoDonativo.setVisibility(View.VISIBLE);
+        }
 
         btnListDisp = (Button) view.findViewById(R.id.btn_lista_disponibilidade);
         btnListDisp.setOnClickListener(this);
         setAtrAddressIntoCard(donativo.getEndereco());
         validateAndSetStateDoacao();
+
 
     }
 
@@ -154,6 +164,28 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         };
         updateEstadoDonativoTask.execute();
     }
+
+
+    /**
+     * Executa Asycn task para atualizar o estado do donativo;
+     */
+    private void executeGetDonativoCampanhaTask(final Long idDonativo) {
+        getDonativoCampanhaTask = new GetDonativoCampanhaByDonativoIdTask(getContext(), idDonativo);
+        getDonativoCampanhaTask.setProgressAtivo(false);
+        getDonativoCampanhaTask.delegate = new AsyncResponse<DonativoCampanha>() {
+            @Override
+            public void processFinish(DonativoCampanha output) {
+                if (output != null) {
+                    nomeInstituicao.setText(getString(R.string.doado_to_campanha) + " " + output.getCampanha().getNome());
+                }else {
+                    nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
+
+                }
+            }
+        };
+        getDonativoCampanhaTask.execute();
+    }
+
 
     /**
      * Confirme dialog para cancelar uma doação.
