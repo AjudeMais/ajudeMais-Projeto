@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
@@ -10,9 +11,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -30,6 +33,7 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -91,6 +95,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         btnFacebook.registerCallback(callbackManager, this);
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+            DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
+            Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
+            if (doador != null) {
+                redirectMainActivity(doador.getConta());
+            }
+        }
     }
 
     /**
@@ -125,10 +137,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * Método que obtem os dados de um usuário do facebook após uma solicitação bem sucedida
      * de login. A partir deste resultado, encaminha o user para a tela principal da aplicação
      *
-     * @param loginResult Resultado da solicitação de login
-     * @param context     Contexto da aplicação
      */
-    private void goToMainActivity(LoginResult loginResult, Context context) {
+    private void goToMainActivity() {
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
