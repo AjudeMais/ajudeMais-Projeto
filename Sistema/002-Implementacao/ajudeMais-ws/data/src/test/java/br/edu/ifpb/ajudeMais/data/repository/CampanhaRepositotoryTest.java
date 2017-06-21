@@ -76,7 +76,7 @@ public class CampanhaRepositotoryTest {
 	public void findByInstituicaoTest() {
 		InstituicaoCaridade instituicaoCaridade = new InstituicaoCaridade();
 		instituicaoCaridade.setId(1l);
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeOrderByDataCriacaoDesc(instituicaoCaridade);
 
 		assertThat(!campanhas.isEmpty());
 	}
@@ -89,7 +89,7 @@ public class CampanhaRepositotoryTest {
 	 */
 	@Test
 	public void filterByInstituicaoLocalTest() {
-		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal("Ouro Velho", "PB");
+		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocalOrderByDataCriacaoDesc("Ouro Velho", "PB");
 
 		assertThat(!campanhas.isEmpty());
 	}

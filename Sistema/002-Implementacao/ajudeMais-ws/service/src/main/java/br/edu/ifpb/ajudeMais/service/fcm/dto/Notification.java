@@ -22,6 +22,8 @@ public class Notification {
 
 	private String icon = "ic_notification";
 
+	private String color = "#12a7b5";
+
 	private String title;
 
 	private String body;
@@ -102,6 +104,21 @@ public class Notification {
 	 */
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	/**
+	 * @return o atributo color
+	 */
+	public String getColor() {
+		return color;
+	}
+
+	/**
+	 * @param o
+	 *            parametro color é setado em color
+	 */
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 }

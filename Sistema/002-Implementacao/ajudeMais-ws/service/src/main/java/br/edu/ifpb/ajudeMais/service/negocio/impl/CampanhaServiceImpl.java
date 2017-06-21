@@ -115,7 +115,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);
 		}
-		return campanhaRepository.findAll();
+		return campanhaRepository.findAllByOrderByDataCriacaoDesc();
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public List<Campanha> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeOrderByDataCriacaoDesc(instituicaoCaridade);
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);
 		}
@@ -156,7 +156,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 				latLng.getLongitude());
-		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocal(endereco.getLocalidade(),
+		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocalOrderByDataCriacaoDesc(endereco.getLocalidade(),
 				endereco.getUf());
 
 		for (Campanha campanha : campanhas) {

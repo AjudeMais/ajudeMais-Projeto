@@ -24,7 +24,7 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @param instituicaoCaridade
 	 * @return
 	 */
-	List<Campanha> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+	List<Campanha> findByInstituicaoCaridadeOrderByDataCriacaoDesc(InstituicaoCaridade instituicaoCaridade);
 
 	/**
 	 * 
@@ -36,7 +36,8 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @param uf
 	 * @return
 	 */
-	List<Campanha> filterByInstituicaoLocal(@Param("localidade") String localidade, @Param("uf") String uf);
+	List<Campanha> filterByInstituicaoLocalOrderByDataCriacaoDesc(@Param("localidade") String localidade,
+			@Param("uf") String uf);
 
 	/**
 	 * 
@@ -48,9 +49,7 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @return
 	 */
 	List<Campanha> findByStatus(boolean status);
-	
 
-	
 	/**
 	 * 
 	 * <p>
@@ -60,6 +59,17 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @param id
 	 * @return
 	 */
-	Long filterCountCampanhasMetaCategoriaId(@Param("idCategoria") Long idCategoria, @Param("idInstituicao") Long idInstituicao);
+	Long filterCountCampanhasMetaCategoriaId(@Param("idCategoria") Long idCategoria,
+			@Param("idInstituicao") Long idInstituicao);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca todas as campanhas ordenando por data de criação.
+	 * </p>
+	 * 
+	 * @return
+	 */
+	List<Campanha> findAllByOrderByDataCriacaoDesc();
 
 }
