@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudemais.fcm;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -66,13 +67,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         long[] v = {500, 500};
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setContentIntent(pendingIntent);
-        mBuilder.setSmallIcon(R.drawable.ic_notification).setLights(Color.GREEN, 300, 300);
+        mBuilder.setSmallIcon(R.drawable.ic_notification);
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.mipmap.ic_launcher_doador));
         mBuilder.setWhen(System.currentTimeMillis());
         mBuilder.setContentTitle(remoteMessage.getNotification().getTitle());
         mBuilder.setContentText(remoteMessage.getNotification().getBody());
         mBuilder.setVibrate(v);
         mBuilder.setSound(uri);
+        mBuilder.setAutoCancel(true);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 

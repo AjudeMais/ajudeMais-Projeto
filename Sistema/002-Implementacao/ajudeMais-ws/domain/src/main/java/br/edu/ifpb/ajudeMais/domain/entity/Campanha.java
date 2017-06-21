@@ -17,7 +17,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * 
@@ -35,13 +38,12 @@ import org.hibernate.validator.constraints.NotBlank;
  *
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name = "Campanha.filterByInstituicaoLocal", query = "SELECT c FROM Campanha c WHERE "
-			+ "c.instituicaoCaridade.endereco.localidade like :localidade "
-			+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true"),
-	
-	@NamedQuery(name = "Campanha.filterCountCampanhasMetaCategoriaId", query = "SELECT count(c) FROM Campanha c JOIN c.metas m WHERE "
-			+ "m.categoria.id = :idCategoria and c.instituicaoCaridade.id = :idInstituicao")})
+@NamedQueries({ @NamedQuery(name = "Campanha.filterByInstituicaoLocalOrderByDataCriacaoDesc", query = "SELECT c FROM Campanha c WHERE "
+		+ "c.instituicaoCaridade.endereco.localidade like :localidade "
+		+ "and c.instituicaoCaridade.endereco.uf like :uf and c.status is true ORDER BY dataCriacao DESC"),
+
+		@NamedQuery(name = "Campanha.filterCountCampanhasMetaCategoriaId", query = "SELECT count(c) FROM Campanha c JOIN c.metas m WHERE "
+				+ "m.categoria.id = :idCategoria and c.instituicaoCaridade.id = :idInstituicao") })
 public class Campanha {
 
 	/**
@@ -84,6 +86,11 @@ public class Campanha {
 	@Column(name = "data_fim")
 	private Date dataFim;
 
+	@JsonIgnore
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "data_criacao")
+	private Date dataCriacao = new Date();
+
 	/**
 	 * 
 	 */
@@ -110,7 +117,8 @@ public class Campanha {
 	}
 
 	/**
-	 * @param o parametro id é setado em id
+	 * @param o
+	 *            parametro id é setado em id
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -235,6 +243,21 @@ public class Campanha {
 	}
 
 	/**
+	 * @return o atributo dataCriacao
+	 */
+	public Date getDataCriacao() {
+		return dataCriacao;
+	}
+
+	/**
+	 * @param o
+	 *            parametro dataCriacao é setado em dataCriacao
+	 */
+	public void setDataCriacao(Date dataCriacao) {
+		this.dataCriacao = dataCriacao;
+	}
+
+	/**
 	 * @param metas
 	 *            the metas to set
 	 */
@@ -242,6 +265,7 @@ public class Campanha {
 		this.metas = metas;
 	}
 
+	
 	/*
 	 * (non-Javadoc)
 	 * 
