@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -94,6 +95,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         btnFacebook.registerCallback(callbackManager, this);
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+            DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
+            Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
+            if (doador != null) {
+                redirectMainActivity(doador.getConta());
+            }
+        }
     }
 
     /**
@@ -128,10 +137,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * Método que obtem os dados de um usuário do facebook após uma solicitação bem sucedida
      * de login. A partir deste resultado, encaminha o user para a tela principal da aplicação
      *
-     * @param loginResult Resultado da solicitação de login
-     * @param context     Contexto da aplicação
      */
-    private void goToMainActivity(LoginResult loginResult, Context context) {
+    private void goToMainActivity() {
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -161,10 +168,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }
-        else if (v.getId() == R.id.btnFacebook) {
-            if (verifyExistentLogin()) {
-            }
         }
     }
 
@@ -197,16 +200,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.execute();
     }
 
-
-    private boolean verifyExistentLogin() {
-        DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
-        Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
-        if (doador != null) {
-            redirectMainActivity(doador.getConta());
-            return true;
-        }
-        return false;
-    }
 
     /**
      * Redireciona para main actiivity
