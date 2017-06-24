@@ -97,43 +97,7 @@ public class MensageiroRepositoryTest {
 
 	}
 
-	/**
-	 * 
-	 * <p>
-	 * Filtra mensageiro pela localização
-	 * </p>
-	 */
-	@Test
-	public void filtersMensageiroCloserTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "centro", "Ouro velho",
-				"PB");
-		assertTrue(mensageiros.size() > 0);
-	}
-
-	/**
-	 * 
-	 * <p>
-	 * Filtra mensageiro pela localização, passando apenas localidade
-	 * </p>
-	 */
-	@Test
-	public void filtersMensageiroCloserValidOnlyAddressTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser("Rua ai", "", "", "");
-		assertFalse(mensageiros.size() > 0);
-	}
-
-	/**
-	 * 
-	 * <p>
-	 * Filtra mensageiro pela localização passando paramentros nulos
-	 * </p>
-	 */
-	@Test
-	public void filtersMensageiroCloserNullParamsTest() {
-		List<Object[]> mensageiros = mensageiroRepository.filtersMensageiroCloser(null, null, null, null);
-		assertFalse(mensageiros.size() > 0);
-	}
-
+	
 	/**
 	 * 
 	 * <p>

@@ -172,7 +172,7 @@ public class MesageiroServiceImpl implements MensageiroService {
 	 * 
 	 */
 	public List<Object[]> filtersMensageiroCloser(String logradouro, String bairro, String localidade, String uf) {
-		return mensageiroRepository.filtersMensageiroCloser(logradouro, bairro, localidade, uf);
+		return null;
 
 	}
 

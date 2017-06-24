@@ -17,8 +17,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,8 +42,6 @@ import org.hibernate.validator.constraints.br.CPF;
  */
 
 @Entity
-@NamedQueries({@NamedQuery(name = "Mensageiro.filtersMensageiroCloser", 
-query = "SELECT m,e FROM Mensageiro m JOIN FETCH m.enderecos e WHERE e.logradouro like :logradouro and e.bairro like :bairro and e.localidade like :localidade and e.uf like :uf")})
 public class Mensageiro {
 
 	/**
