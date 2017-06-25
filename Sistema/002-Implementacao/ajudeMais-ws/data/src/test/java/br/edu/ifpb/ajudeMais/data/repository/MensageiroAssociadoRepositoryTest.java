@@ -141,6 +141,57 @@ public class MensageiroAssociadoRepositoryTest {
 	/**
 	 * 
 	 * <p>
+	 * Filtra mensageiro pela localização
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToBairroWithEqualValueTest() {
+		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
+				"PB", 1l);
+		assertTrue(result.size() == 2);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToBairroTest() {
+		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
+				"PB", 1l);
+		assertTrue(result.size() == 2);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização, passando apenas localidade
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToBairroValidOnlyAddressTest() {
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("", "", "", 1l);
+		assertFalse(mensageiros.size() > 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização passando paramentros nulos
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToBairroNullParamsTest() {
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(null, null, null, null);
+		assertFalse(mensageiros.size() > 0);
+	}
+
+	
+	/**
+	 * 
+	 * <p>
 	 * Exercita método de busca de mensgeiro associado, filtrando por mensageiro
 	 * e instituição.
 	 * </p>

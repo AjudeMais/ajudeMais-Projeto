@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
@@ -47,6 +48,36 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	/**
 	 * 
 	 * <p>
+	 * Filtra um mensageiro por sua localização considerando bairro, cidade e
+	 * estado.
+	 * </p>
+	 * 
+	 * @param bairro
+	 * @param localidade
+	 * @param idInstituicao
+	 * @param uf
+	 * @return
+	 */
+	List<Object[]> filterMensageirosCloserToBairro(@Param("bairro") String bairro,
+			@Param("localidade") String localidade, @Param("uf") String uf, @Param("idInstituicao") Long idInstituicao);
+
+	/**
+	 * 
+	 * <p>
+	 * Filtra um mensageiro por sua localização, considerando cidade e estado.
+	 * </p>
+	 * 
+	 * @param localidade
+	 * @param idInstituicao
+	 * @param uf
+	 * @return
+	 */
+	List<Object[]> filterMensageirosCloserToCidade(@Param("localidade") String localidade, @Param("uf") String uf,
+			@Param("idInstituicao") Long idInstituicao);
+
+	/**
+	 * 
+	 * <p>
 	 * 
 	 * Busca mensageiros associados pela insituição, filtrando por sua conta.
 	 * </p>
@@ -65,6 +96,7 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 *            a ser busacado
 	 * @return um optional contento o resultado da query.
 	 */
-	Optional<MensageiroAssociado> findByMensageiroAndInstituicaoCaridade(Mensageiro mensageiro, InstituicaoCaridade instituicao);
+	Optional<MensageiroAssociado> findByMensageiroAndInstituicaoCaridade(Mensageiro mensageiro,
+			InstituicaoCaridade instituicao);
 
 }

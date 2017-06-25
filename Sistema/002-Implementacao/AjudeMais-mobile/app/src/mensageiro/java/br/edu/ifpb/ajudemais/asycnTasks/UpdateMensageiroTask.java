@@ -35,6 +35,7 @@ public class UpdateMensageiroTask extends AsyncTask<Void, Void, Mensageiro> {
     private ProgressDialog progressDialog;
     private Context context;
     public AsyncResponse<Mensageiro> delegate = null;
+    private boolean progressAtivo = true;
 
 
     public UpdateMensageiroTask(Context context, Mensageiro mensageiro) {
@@ -45,8 +46,10 @@ public class UpdateMensageiroTask extends AsyncTask<Void, Void, Mensageiro> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = new ProgressDialog(context);
-        progressDialog.showProgressDialog();
+        if (progressAtivo) {
+            progressDialog = new ProgressDialog(context);
+            progressDialog.showProgressDialog();
+        }
 
     }
 
@@ -70,6 +73,10 @@ public class UpdateMensageiroTask extends AsyncTask<Void, Void, Mensageiro> {
             toast.setGravity(Gravity.BOTTOM, 0, 0);
             toast.show();
         }
+    }
+
+    public void setProgressAtivo(boolean progressAtivo) {
+        this.progressAtivo = progressAtivo;
     }
 }
 

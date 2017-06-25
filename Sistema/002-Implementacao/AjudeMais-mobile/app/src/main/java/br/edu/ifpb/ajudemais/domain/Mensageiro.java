@@ -22,33 +22,32 @@ public class Mensageiro implements Serializable {
     private String nome;
     private String cpf;
     private String telefone;
-    private String tokenFCM;
+    private FcmToken tokenFCM;
     private Conta conta;
     private Imagem foto;
     private List<Endereco> enderecos;
 
-    public Mensageiro(){
+    public Mensageiro() {
 
     }
 
     /**
-     *
      * @param nome
      * @param cpf
      * @param telefone
      * @param conta
      */
-    public Mensageiro(String nome, String cpf, String telefone, Conta conta) {
+    public Mensageiro(String nome, String cpf, String telefone, Conta conta, FcmToken tokenFCM) {
         this.nome = nome;
         this.cpf = cpf;
         this.telefone = telefone;
         this.conta = conta;
+        this.tokenFCM = tokenFCM;
 
         enderecos = new ArrayList<>();
     }
 
     /**
-     *
      * @return Long
      */
     public Long getId() {
@@ -56,7 +55,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param id
      */
     public void setId(Long id) {
@@ -64,7 +62,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @return String
      */
     public String getNome() {
@@ -72,7 +69,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param nome
      */
     public void setNome(String nome) {
@@ -80,7 +76,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @return String
      */
     public String getCpf() {
@@ -88,7 +83,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param cpf
      */
     public void setCpf(String cpf) {
@@ -96,7 +90,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @return String
      */
     public String getTelefone() {
@@ -104,31 +97,21 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param telefone
      */
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
-    /**
-     *
-     * @return String
-     */
-    public String getTokenFCM() {
+    public FcmToken getTokenFCM() {
         return tokenFCM;
     }
 
-    /**
-     *
-     * @param tokenFCM
-     */
-    public void setTokenFCM(String tokenFCM) {
+    public void setTokenFCM(FcmToken tokenFCM) {
         this.tokenFCM = tokenFCM;
     }
 
     /**
-     *
      * @return Conta
      */
     public Conta getConta() {
@@ -136,7 +119,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param conta
      */
     public void setConta(Conta conta) {
@@ -144,7 +126,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @return Imagem
      */
     public Imagem getFoto() {
@@ -152,7 +133,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param foto
      */
     public void setFoto(Imagem foto) {
@@ -160,7 +140,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @return
      */
     public List<Endereco> getEnderecos() {
@@ -168,7 +147,6 @@ public class Mensageiro implements Serializable {
     }
 
     /**
-     *
      * @param enderecos
      */
     public void setEnderecos(List<Endereco> enderecos) {

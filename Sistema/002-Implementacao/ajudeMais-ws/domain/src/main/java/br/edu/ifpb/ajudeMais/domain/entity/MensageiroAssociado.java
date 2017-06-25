@@ -23,6 +23,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,6 +49,12 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "mensageiro_associado")
+@NamedQueries({@NamedQuery(name = "MensageiroAssociado.filterMensageirosCloserToBairro", 
+query = "SELECT ms.mensageiro,e FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.bairro like :bairro and e.localidade like :localidade"
+		+ " and e.uf like :uf and ms.instituicaoCaridade.id = :idInstituicao and ms.status is true"),
+		@NamedQuery(name = "MensageiroAssociado.filterMensageirosCloserToCidade", 
+		query = "SELECT ms.mensageiro,e FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.localidade like :localidade"
+		+ " and e.uf like :uf and ms.instituicaoCaridade.id = :idInstituicao and ms.status is true")}		)
 public class MensageiroAssociado {
 
 	@Id

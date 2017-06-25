@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 
@@ -37,21 +36,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
  */
 public interface MensageiroRepository extends JpaRepository<Mensageiro, Long> {
 
-	/**
-	 * 
-	 * <p>
-	 * Filtra um mensageiro por sua localização
-	 * </p>
-	 * 
-	 * @param logradouro
-	 * @param bairro
-	 * @param localidade
-	 * @param uf
-	 * @return
-	 */
-	List<Object[]> filtersMensageiroCloser(@Param("logradouro") String logradouro, @Param("bairro") String bairro,
-			@Param("localidade") String localidade, @Param("uf") String uf);
-
+	
 	/**
 	 * 
 	 * <p>
