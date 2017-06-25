@@ -25,6 +25,7 @@ import br.edu.ifpb.ajudemais.asycnTasks.CreateMensageiroTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.FcmToken;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
@@ -55,6 +56,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
     private TextInputLayout ltedtUserName;
     private CreateMensageiroTask createMensageiroTask;
     private UpdateMensageiroTask updateMensageiroTask;
+    private SharedPrefManager sharedPrefManager;
 
 
     @Order(7)
@@ -121,6 +123,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
 
     @Override
     public void init() {
+        sharedPrefManager = new SharedPrefManager(this);
         initProperties();
         mensageiroEdit = (Mensageiro) getIntent().getSerializableExtra("Mensageiro");
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -226,12 +229,14 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
         } else {
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_MENSAGEIRO");
+            FcmToken fcmToken = new FcmToken(sharedPrefManager.getFcmToken());
             Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
                     edtCpf.getText().toString().trim(),
                     edtPhone.getText().toString().trim(),
                     new Conta(edtUserName.getText().toString().trim(),
                             edtPassword.getText().toString().trim(), true,
-                            edtEmail.getText().toString().trim(), grupos));
+                            edtEmail.getText().toString().trim(), grupos),
+                    fcmToken);
 
             executeCreateMensageiroTask(mensageiro);
         }
@@ -244,7 +249,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
      * @param mensageiro
      */
     private void executeCreateMensageiroTask(Mensageiro mensageiro) {
-        updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+        createMensageiroTask = new CreateMensageiroTask(this, mensageiro);
 
         createMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
             @Override

@@ -16,10 +16,10 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
@@ -66,7 +66,6 @@ public class Mensageiro {
 	@Column(unique = true)
 	private String cpf;
 
-	
 	/**
 	 * 
 	 */
@@ -76,7 +75,8 @@ public class Mensageiro {
 	/**
 	 * 
 	 */
-	private String tokenFCM;
+	@OneToOne(cascade = CascadeType.ALL)
+	private FcmToken tokenFCM;
 
 	/**
 	 * 
@@ -88,7 +88,7 @@ public class Mensageiro {
 	 * 
 	 */
 	@LazyCollection(LazyCollectionOption.TRUE)
-	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval=true)
+	@OneToMany(cascade = { CascadeType.ALL }, orphanRemoval = true)
 	@JoinColumn(name = "mensageiro_id")
 	private List<Endereco> enderecos;
 
@@ -143,7 +143,6 @@ public class Mensageiro {
 		this.cpf = cpf;
 	}
 
-
 	/**
 	 * @return the telefone
 	 */
@@ -160,17 +159,17 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @return the tokenFCM
+	 * @return o atributo tokenFCM
 	 */
-	public String getTokenFCM() {
+	public FcmToken getTokenFCM() {
 		return tokenFCM;
 	}
 
 	/**
-	 * @param tokenFCM
-	 *            the tokenFCM to set
+	 * @param o
+	 *            parametro tokenFCM é setado em tokenFCM
 	 */
-	public void setTokenFCM(String tokenFCM) {
+	public void setTokenFCM(FcmToken tokenFCM) {
 		this.tokenFCM = tokenFCM;
 	}
 
@@ -212,13 +211,16 @@ public class Mensageiro {
 	}
 
 	/**
-	 * @param endereco the endereco to set
+	 * @param endereco
+	 *            the endereco to set
 	 */
 	public void setEnderecos(List<Endereco> enderecos) {
 		this.enderecos = enderecos;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

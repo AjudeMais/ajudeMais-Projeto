@@ -1,32 +1,22 @@
 package br.edu.ifpb.ajudemais.fcm;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
-
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.CampanhaActivity;
 import br.edu.ifpb.ajudemais.activities.MainActivity;
-import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
-import br.edu.ifpb.ajudemais.asyncTasks.GetCampanhaByIdTask;
-import br.edu.ifpb.ajudemais.domain.Campanha;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private Campanha campanha;
     private Intent resultIntent;
 
 
@@ -44,13 +34,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         switch (tipoAs) {
             case "CAMPANHA":
-                executeLoadingCampanhaByIdTask(id, remoteMessage);
+
                 break;
             case "DOACAO":
 
                 break;
             default:
-
+                executeToDo(remoteMessage);
                 break;
         }
     }
@@ -84,20 +74,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     /**
      * Recupera campanha de notificação.
      *
-     * @param campanhaId
      * @param remoteMessage
      */
-    private void executeLoadingCampanhaByIdTask(Long campanhaId, final RemoteMessage remoteMessage) {
-        GetCampanhaByIdTask getCampanhaByIdTask = new GetCampanhaByIdTask(getApplicationContext(), campanhaId);
-        getCampanhaByIdTask.delegate = new AsyncResponse<Campanha>() {
-            @Override
-            public void processFinish(Campanha output) {
-                campanha = output;
-                resultIntent = new Intent(getBaseContext(), CampanhaActivity.class);
-                resultIntent.putExtra("campanha", campanha);
-                notifyComponent(remoteMessage);
-            }
-        };
-        getCampanhaByIdTask.execute();
+    private void executeToDo(final RemoteMessage remoteMessage) {
+        resultIntent = new Intent(getBaseContext(), MainActivity.class);
+        //resultIntent.putExtra("campanha", campanha);
+        notifyComponent(remoteMessage);
     }
 }

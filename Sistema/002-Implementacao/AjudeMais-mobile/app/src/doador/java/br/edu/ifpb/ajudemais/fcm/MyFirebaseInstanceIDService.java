@@ -1,18 +1,13 @@
 package br.edu.ifpb.ajudemais.fcm;
 
-import android.content.Intent;
-
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import br.edu.ifpb.ajudemais.activities.MainActivity;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
-import br.edu.ifpb.ajudemais.asycnTasks.UpdateLocationDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.dto.LatLng;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 
