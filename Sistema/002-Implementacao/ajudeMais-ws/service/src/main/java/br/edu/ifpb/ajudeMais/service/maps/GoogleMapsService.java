@@ -36,6 +36,6 @@ public interface GoogleMapsService{
 	
 	Endereco converteLatitudeAndLongitudeInAddress(double latitude, double logitude) throws AjudeMaisException;
 	
-	DistanceMatrix findDistanceBetweenAddress(String origem, String[] destinations) throws Exception;
+	DistanceMatrix findByDistanceBetweenAddress(String origem, String[] destinations) throws Exception;
 
 }

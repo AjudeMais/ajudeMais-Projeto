@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
@@ -43,8 +44,8 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
  * </pre
  *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
- *
  */
+
 @Service
 public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoService {
 
@@ -108,4 +109,35 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		return mensageiroAssociadoRepository.findByInstituicaoCaridadeConta(conta);
 	}
 
+	
+
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
+	 * insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return List<Mensageiro>
+	 */
+	@Override
+	public List<Object[]> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) {
+		return mensageiroAssociadoRepository.filterMensageirosCloserToBairro(endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo considerando mensageiros da cidade com base no enderenco passado e no id da instituição
+	 * insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return List<Mensageiro>
+	 */
+	@Override
+	public List<Object[]> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao) {
+		return mensageiroAssociadoRepository.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+	}
 }

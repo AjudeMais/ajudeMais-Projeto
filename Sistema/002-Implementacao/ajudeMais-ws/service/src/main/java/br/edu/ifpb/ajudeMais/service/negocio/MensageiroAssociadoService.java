@@ -18,6 +18,7 @@ package br.edu.ifpb.ajudeMais.service.negocio;
 import java.util.List;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
@@ -52,5 +53,29 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	 * @return
 	 */
 	List<MensageiroAssociado> findByInstituicaoConta(Conta conta);
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
+	 * insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return
+	 */
+	List<Object[]> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao);
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo considerando mensageiros da cidade com base no enderenco passado e no id da instituição
+	 * insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return
+	 */
+	List<Object[]> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao);
 
 }

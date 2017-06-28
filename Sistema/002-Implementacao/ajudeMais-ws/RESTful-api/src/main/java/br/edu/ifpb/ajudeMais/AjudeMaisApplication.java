@@ -12,10 +12,12 @@
 package br.edu.ifpb.ajudeMais;
 
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+
 
 /**
  * 
@@ -39,6 +41,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 public class AjudeMaisApplication extends SpringBootServletInitializer {
 
+
 	
 	/**
 	 * Passa app para Servelet do Spring boot.
@@ -47,6 +50,7 @@ public class AjudeMaisApplication extends SpringBootServletInitializer {
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(AjudeMaisApplication.class);
+        
 	}
 
 	/**
@@ -57,8 +61,10 @@ public class AjudeMaisApplication extends SpringBootServletInitializer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		
 		SpringApplication.run(AjudeMaisApplication.class, args);
 	}
+	
 	
 
 }

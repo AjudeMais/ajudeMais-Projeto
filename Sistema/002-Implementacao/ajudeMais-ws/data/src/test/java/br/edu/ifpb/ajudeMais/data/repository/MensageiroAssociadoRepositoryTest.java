@@ -148,7 +148,6 @@ public class MensageiroAssociadoRepositoryTest {
 	public void filterMensageirosCloserToCidadeWithEqualValueTest() {
 		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
 				"PB", 1l);
-		
 		assertTrue(result.size() == 2);
 	}
 	
