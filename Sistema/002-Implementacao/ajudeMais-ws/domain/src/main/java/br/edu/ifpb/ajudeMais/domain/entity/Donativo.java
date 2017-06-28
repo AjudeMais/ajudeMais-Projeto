@@ -100,7 +100,6 @@ public class Donativo implements Serializable {
 	@NotNull
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private Categoria categoria;
-	
 
 	/**
 	 * 
@@ -108,6 +107,9 @@ public class Donativo implements Serializable {
 	@JsonIgnore
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date data = new Date();
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
+	private Mensageiro mensageiro;
 
 	/**
 	 * @return the id
@@ -182,6 +184,21 @@ public class Donativo implements Serializable {
 	 */
 	public void setEstadosDaDoacao(List<EstadoDoacao> estadosDaDoacao) {
 		this.estadosDaDoacao = estadosDaDoacao;
+	}
+
+	/**
+	 * @return o atributo mensageiro
+	 */
+	public Mensageiro getMensageiro() {
+		return mensageiro;
+	}
+
+	/**
+	 * @param o
+	 *            parametro mensageiro é setado em mensageiro
+	 */
+	public void setMensageiro(Mensageiro mensageiro) {
+		this.mensageiro = mensageiro;
 	}
 
 	/**
@@ -273,7 +290,6 @@ public class Donativo implements Serializable {
 	public void setData(Date data) {
 		this.data = data;
 	}
-	
 
 	/*
 	 * (non-Javadoc)
