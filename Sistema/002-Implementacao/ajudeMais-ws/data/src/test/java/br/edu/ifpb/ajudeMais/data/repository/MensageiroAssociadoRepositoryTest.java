@@ -145,9 +145,10 @@ public class MensageiroAssociadoRepositoryTest {
 	 * </p>
 	 */
 	@Test
-	public void filterMensageirosCloserToBairroWithEqualValueTest() {
+	public void filterMensageirosCloserToCidadeWithEqualValueTest() {
 		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
 				"PB", 1l);
+		
 		assertTrue(result.size() == 2);
 	}
 	
@@ -184,6 +185,57 @@ public class MensageiroAssociadoRepositoryTest {
 	 */
 	@Test
 	public void filterMensageirosCloserToBairroNullParamsTest() {
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(null, null, null, null);
+		assertFalse(mensageiros.size() > 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToBairroWithEqualValueTest() {
+		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
+				"PB", 1l);
+		
+		assertTrue(result.size() == 2);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToCidadeTest() {
+		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
+				"PB", 1l);
+		assertTrue(result.size() == 2);
+	}
+	
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização, passando apenas localidade
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToCidadeValidOnlyAddressTest() {
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("", "", "", 1l);
+		assertFalse(mensageiros.size() > 0);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Filtra mensageiro pela localização passando paramentros nulos
+	 * </p>
+	 */
+	@Test
+	public void filterMensageirosCloserToCidadeNullParamsTest() {
 		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(null, null, null, null);
 		assertFalse(mensageiros.size() > 0);
 	}

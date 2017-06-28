@@ -5,6 +5,8 @@
 	
 	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" mensageiro_id="1"/>
 	<endereco id="2" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" mensageiro_id="80"/>
+	<endereco id="3" logradouro= "Rua ai" numero="10" bairro="centro" cep="58500000" localidade="Monteiro" uf="PB" mensageiro_id="1"/>
+	<endereco id="4" logradouro= "Rua ai" numero="10" bairro="centro" cep="58500000" localidade="Monteiro" uf="PB" mensageiro_id="80"/>
 	
 	<conta id="1" username="joao" senha="senhafraca" email="jao@mail.com" ativo="TRUE"/>
 	<conta id="2" username="joao2" senha="senhafraca" email="jao2@mail.com" ativo="TRUE"/>
