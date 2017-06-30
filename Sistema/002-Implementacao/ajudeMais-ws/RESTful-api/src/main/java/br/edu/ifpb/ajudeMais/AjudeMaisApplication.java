@@ -13,10 +13,20 @@ package br.edu.ifpb.ajudeMais;
 
 
 
+import java.util.List;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
+import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 
 /**
@@ -41,6 +51,8 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 @SpringBootApplication
 public class AjudeMaisApplication extends SpringBootServletInitializer {
 
+	@Autowired
+	private MensageiroAssociadoService googleMapsService;
 
 	
 	/**
@@ -49,8 +61,24 @@ public class AjudeMaisApplication extends SpringBootServletInitializer {
 	 */
 	@Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		
         return application.sources(AjudeMaisApplication.class);
         
+	}
+	
+	@PostConstruct
+	private void teste(){
+		System.out.println("_____________________EXECUTOU____________________________");
+		Endereco endereco = new Endereco();
+		endereco.setBairro("Centro");
+		endereco.setLocalidade("Monteiro");
+		endereco.setUf("PB");
+		try {
+			List<Mensageiro> mensageiros = this.googleMapsService.filterMensageirosCloser(endereco, 6900l);
+			System.out.println(mensageiros);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

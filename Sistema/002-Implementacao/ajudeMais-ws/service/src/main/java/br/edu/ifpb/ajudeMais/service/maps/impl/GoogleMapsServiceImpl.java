@@ -17,9 +17,9 @@ package br.edu.ifpb.ajudeMais.service.maps.impl;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +34,6 @@ import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.google.maps.model.Unit;
 
-import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
@@ -63,8 +62,6 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 
 	private GeoApiContext apiContext;
 
-	@Autowired
-	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
 	private Endereco endereco;
 	private static final String MAP_ROUTE = "route";
@@ -82,13 +79,23 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 	 * @return
 	 * @throws Exception
 	 */
-	public DistanceMatrix findByDistanceBetweenAddress(String origem, String[] destinations) throws Exception {
-		apiContext = new GeoApiContext().setApiKey(key);
-		DistanceMatrix matrix = DistanceMatrixApi.newRequest(apiContext).origins(origem).destinations(destinations)
-				.mode(TravelMode.DRIVING).language("pt-BR").units(Unit.METRIC).await();
+	public DistanceMatrix findByDistanceBetweenAddress(String origem, String[] destinations) throws AjudeMaisException {
+		
+		try {
+			apiContext = new GeoApiContext().setApiKey(key);
+			DistanceMatrix matrix = DistanceMatrixApi.newRequest(apiContext).origins(origem).destinations(destinations)
+					.mode(TravelMode.DRIVING).language("pt-BR").units(Unit.METRIC).await();
+			
+			return matrix;
 
-		return matrix;
-
+		} catch (ApiException e) {
+			throw new AjudeMaisException(e.getMessage());
+		} catch (InterruptedException e) {
+			throw new AjudeMaisException("Sem conexão com a internet.");
+		} catch (IOException e) {
+			throw new AjudeMaisException(e.getMessage());
+		}
+		
 	}
 
 	/**
@@ -123,6 +130,39 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 	}
 
 	/**
+	 * Recebe um endereço e valida via Google Maps. do tipo Endereço.
+	 * 
+	 * @param endereco
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	public Boolean validateAddress(Endereco endereco) throws AjudeMaisException {
+
+		apiContext = new GeoApiContext().setApiKey(key);
+
+		try {
+			GeocodingResult[] results;
+			
+			results = GeocodingApi.newRequest(apiContext).address(endereco.getLogradouro() + "," + endereco.getBairro()
+					+ "," + endereco.getLocalidade() + "," + endereco.getUf()).language("pt-BR").await();
+
+			if (setResultEnderecoGoogleMaps(results) != null) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} catch (ApiException e) {
+			throw new AjudeMaisException(e.getMessage());
+		} catch (InterruptedException e) {
+			throw new AjudeMaisException("Sem conexão com a internet.");
+		} catch (IOException e) {
+			throw new AjudeMaisException(e.getMessage());
+		}
+
+	}
+
+	/**
 	 * Recebe o resultado da consulta do google e converte em um objeto Endereço
 	 * 
 	 * @param results
@@ -134,7 +174,6 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		for (AddressComponent addressComponent : results[0].addressComponents) {
 
 			if (addressComponent.types[0].toString().trim().equals(MAP_ROUTE)) {
-
 				endereco.setLogradouro(addressComponent.longName);
 			}
 			if (addressComponent.types[0].toString().trim().equals(MAP_POLITICAL)) {
@@ -151,84 +190,39 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 
 			if (addressComponent.types[0].toString().trim().equals(MAP_POSTAL_CODE)) {
 				endereco.setCep(addressComponent.longName);
-
 			}
 		}
 
 		return endereco;
 	}
 
-	/**
-	 * Filtra mensageiros que possuem endereços no mesmo bairro ou cidade do
-	 * endereço passado.
-	 * 
-	 * @param endereco
-	 * @param idInstitucao
-	 * @return
-	 * @throws NaoExisteMensageiro
-	 */
-	public List<Object[]> filterMensageiroToArea(Endereco endereco, Long idInstitucao) throws AjudeMaisException {
-		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(
-				endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstitucao);
-
-		if (selectedMensageiros.isEmpty()) {
-			selectedMensageiros = mensageiroAssociadoRepository
-					.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstitucao);
-		}
-		return selectedMensageiros;
-	}
 
 	/**
 	 * Verificar qual o mensageiro cadastrado mais próximo do endereço passado.
 	 * 
 	 * @param endereco
 	 * @return
-	 * @throws Exception
+	 * @throws AjudeMaisException
 	 */
-	public Mensageiro verificaMensageiroMaisProximo(Endereco endereco, Long idInstituicao) throws Exception {
-		List<Object[]> selectedMensageiros = filterMensageiroToArea(endereco, idInstituicao);
+	public List<Mensageiro> validateAddressMensageiros(List<Object[]> selectedMensageiros) throws AjudeMaisException {
 
-		Mensageiro mensageiroMaisProximo = null;
-		long menorDistacia = 0;
+		List<Mensageiro> mensageirosAptos = new ArrayList<>();
 
-		if (selectedMensageiros != null) {
-			String[] mensageiroAddress = converteArrayListAddressInArray(selectedMensageiros);
+		if (selectedMensageiros != null && !selectedMensageiros.isEmpty()) {
+			
+			for(int i = 0 ; i<selectedMensageiros.size();i++){
+				if(validateAddress(((Endereco)selectedMensageiros.get(i)[1]))){
+					mensageirosAptos.add((Mensageiro) selectedMensageiros.get(i)[0]);
+				}
+			}
+			return mensageirosAptos;
 
-			DistanceMatrix matrix = findByDistanceBetweenAddress(endereco.getLogradouro() + ","
-					+ endereco.getBairro() + "," + endereco.getLocalidade() + "," + endereco.getUf(), mensageiroAddress);
-
-//			for (int i = 0; i <= matrix.rows.length; i++) {
-//				System.out.println("Rua:" + matrix.rows[0].elements[i] + ", Distancia: "
-//						+ matrix.rows[0].elements[i].distance.inMeters);
-//
-//				if (menorDistacia > matrix.rows[0].elements[i].distance.inMeters || menorDistacia == 0) {
-//					menorDistacia = matrix.rows[0].elements[i].distance.inMeters;
-//					mensageiroMaisProximo = mensageirosSelecionados.get(i);
-//
-//				}
-//			}
-
-		}
-
-		return mensageiroMaisProximo;
-	}
-	
-	/**
-	 * Converte os endereços do mensageiro em array simples para consulta de distância.
-	 */
-	private String[] converteArrayListAddressInArray(List<Object[]> selectedMensageiros){
-		String[] mensageirosAddres = new String[selectedMensageiros.size()];
-
-		for (int i = 0; i < selectedMensageiros.size(); i++) {
-			Endereco enderecoSelect = ((Endereco)selectedMensageiros.get(i)[1]);
-			mensageirosAddres[i] = enderecoSelect.getLogradouro() + ","
-					+ enderecoSelect.getBairro() + ","
-					+ enderecoSelect.getLocalidade() + ","
-					+ enderecoSelect.getUf();
-		}
 		
-		return mensageirosAddres;
+		}else{
+			return mensageirosAptos;
+		}
+
 	}
 
-
+	
 }

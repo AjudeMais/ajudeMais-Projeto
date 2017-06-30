@@ -13,6 +13,7 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -22,10 +23,14 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
+import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
  * 
@@ -48,7 +53,11 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	@Autowired
 	DonativoCampanhaRepository donativoCampanhaRespository;
 	
-	
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssociadoService;
 
 	/**
 	 *           
@@ -92,7 +101,32 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
+		publisher.publishEvent(new DoacaoNotificationEvent(getNotificaveis(donativoSaved.getDonativo()), donativoSaved.getDonativo(), donativoSaved.getDonativo().getDescricao()));
 		return donativoSaved;
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de mensageiros que serão notificados.
+	 * </p>
+	 * 
+	 * @param campanha
+	 * @return
+	 * @throws AjudeMaisException 
+	 */
+	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
+		
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
+				donativo.getCategoria().getInstituicaoCaridade().getId());
+
+		List<String> notificaveis = new ArrayList<>();
+
+		mensageiros.forEach(m -> {
+			notificaveis.add(m.getTokenFCM().getToken());
+		});
+
+		return notificaveis;
 	}
 
 	

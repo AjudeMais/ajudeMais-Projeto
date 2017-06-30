@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,9 +12,12 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
  * 
@@ -32,15 +36,24 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 @Service
 public class DonativoServiceImpl implements DonativoService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
-	
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssociadoService;
+
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	/**
 	 * 
 	 */
@@ -49,6 +62,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 		Donativo donativoSaved = donativoRepository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+		publisher.publishEvent(new DoacaoNotificationEvent(getNotificaveis(donativoSaved), donativoSaved, donativoSaved.getDescricao()));
 
 		return donativoSaved;
 	}
@@ -104,7 +118,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
-	
+
 	/**
 	 * Busca donativos de acordo com id do doador.
 	 */
@@ -120,4 +134,29 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de mensageiros que serão notificados.
+	 * </p>
+	 * 
+	 * @param campanha
+	 * @return
+	 * @throws AjudeMaisException 
+	 */
+	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
+		
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
+				donativo.getCategoria().getInstituicaoCaridade().getId());
+
+		List<String> notificaveis = new ArrayList<>();
+
+		mensageiros.forEach(m -> {
+			notificaveis.add(m.getTokenFCM().getToken());
+		});
+
+		return notificaveis;
+	}
+
 }

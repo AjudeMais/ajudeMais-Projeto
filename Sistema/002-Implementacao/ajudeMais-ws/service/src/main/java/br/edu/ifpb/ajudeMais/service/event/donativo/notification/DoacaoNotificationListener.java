@@ -40,7 +40,7 @@ public class DoacaoNotificationListener {
 		Notification notification = new Notification("default", event.getDonativo().getNome(),
 				event.getDescricao());
 		Push push = new Push("high", notification, event.getNotificaveis());
-		push.setData(new Data(TipoNotificacao.DOADAO.toString(), event.getDonativo().getId()));
+		push.setData(new Data(TipoNotificacao.DOACAO.toString(), event.getDonativo().getId()));
 		fcmService.sendNotification(push);
 
 	}

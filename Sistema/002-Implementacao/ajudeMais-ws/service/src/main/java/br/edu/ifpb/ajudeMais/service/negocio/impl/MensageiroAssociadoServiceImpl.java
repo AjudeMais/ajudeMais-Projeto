@@ -24,9 +24,11 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.exceptions.UniqueConstraintAlreadyException;
+import br.edu.ifpb.ajudeMais.service.maps.GoogleMapsService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
@@ -54,6 +56,12 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private GoogleMapsService googleMapsService;
 
 	/**
 	 * Salva um mensageiro considerando restrições de email.
@@ -109,35 +117,54 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		return mensageiroAssociadoRepository.findByInstituicaoCaridadeConta(conta);
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com
+	 * base no enderenco passado e no id da instituição insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return List<Mensageiro>
+	 * @throws Exception 
+	 */
+	@Override
+	public List<Mensageiro> filterMensageirosCloser(Endereco endereco, Long idInstituicao) throws AjudeMaisException {
+
+		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(
+				endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+
+		if (selectedMensageiros != null && selectedMensageiros.isEmpty()) {
+			selectedMensageiros = mensageiroAssociadoRepository
+					.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+		}
+		
+		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
+
+		return mensageiros;
+	}
 	
 
 	/**
-	 * 
 	 * <p>
-	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
-	 * insituição.
+	 * Busca endereço com id recupera na consulta e substitui o id pelo objeto endereço
 	 * </p>
-	 * 
-	 * @param conta
-	 * @return List<Mensageiro>
+	 * @param filters
+	 * @return
 	 */
-	@Override
-	public List<Object[]> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) {
-		return mensageiroAssociadoRepository.filterMensageirosCloserToBairro(endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+	private List<Object[]> setEnderecoInList(List<Object[]> filters) {
+
+		for (int i = 0; i < filters.size(); i++) {
+			List<Endereco> enderecos = ((Mensageiro) filters.get(i)[0]).getEnderecos();
+			for (Endereco e : enderecos) {
+				if (e.getId().equals(filters.get(i)[1])) {
+					filters.get(i)[1] = e;
+				}
+			}
+		}
+
+		return filters;
 	}
 
-	/**
-	 * 
-	 * <p>
-	 * Busca mensageiro Mais proximo considerando mensageiros da cidade com base no enderenco passado e no id da instituição
-	 * insituição.
-	 * </p>
-	 * 
-	 * @param conta
-	 * @return List<Mensageiro>
-	 */
-	@Override
-	public List<Object[]> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao) {
-		return mensageiroAssociadoRepository.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
-	}
+	
 }

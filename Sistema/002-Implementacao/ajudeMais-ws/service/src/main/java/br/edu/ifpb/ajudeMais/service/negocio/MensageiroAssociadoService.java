@@ -22,6 +22,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 
 /**
  * 
@@ -57,25 +58,16 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	/**
 	 * 
 	 * <p>
-	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro ou da cidade com base no enderenco passado e no id da instituição
 	 * insituição.
 	 * </p>
 	 * 
 	 * @param conta
 	 * @return
+	 * @throws AjudeMaisException 
+	 * @throws Exception 
 	 */
-	List<Object[]> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao);
+	List<Mensageiro> filterMensageirosCloser(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
 	
-	/**
-	 * 
-	 * <p>
-	 * Busca mensageiro Mais proximo considerando mensageiros da cidade com base no enderenco passado e no id da instituição
-	 * insituição.
-	 * </p>
-	 * 
-	 * @param conta
-	 * @return
-	 */
-	List<Object[]> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao);
-
+	
 }
