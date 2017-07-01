@@ -108,7 +108,7 @@ public class DonativoCampanhaServiceTest {
 	 * </p>
 	 * @throws Exception
 	 */
-	@Test(expected = TransactionSystemException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveWithCampanhaNull() throws Exception {
 		DonativoCampanha donativo = donativoCampanha;
 		donativo.setCampanha(null);

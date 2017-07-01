@@ -28,11 +28,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.TransactionSystemException;
 
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
+import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
+import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -108,7 +111,7 @@ public class DonativoServiceTest {
 	 * 
 	 * @throws AjudeMaisException
 	 */
-	@Test(expected = TransactionSystemException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveDonativoWithNameNull() throws AjudeMaisException {
 		donativo.setNome(null);
 		donativoService.save(donativo);
@@ -120,7 +123,7 @@ public class DonativoServiceTest {
 	 * 
 	 * @throws AjudeMaisException
 	 */
-	@Test(expected = TransactionSystemException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveDonativoWithDescricaoNull() throws AjudeMaisException {
 		donativo.setDescricao(null);
 		donativoService.save(donativo);
@@ -132,7 +135,7 @@ public class DonativoServiceTest {
 	 * 
 	 * @throws AjudeMaisException
 	 */
-	@Test(expected = TransactionSystemException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveDonativoWithQuantidadeNull() throws AjudeMaisException {
 		donativo.setQuantidade(null);
 		donativoService.save(donativo);
@@ -262,6 +265,8 @@ public class DonativoServiceTest {
 		donativo.setDescricao("Algumas roupas velhas, porém, em bom estado");
 		donativo.setQuantidade(10);
 		
+		
+		
 		return donativo;
 		
 	}
@@ -280,7 +285,25 @@ public class DonativoServiceTest {
 		donativo.setDescricao("Algumas roupas velhas, porém, em bom estado");
 		donativo.setQuantidade(10);
 		
+		Endereco endereco = new Endereco();
+		endereco.setBairro("Centro");
+		endereco.setCep("58500000");
+		endereco.setLocalidade("Monteiro");
+		endereco.setUf("PB");
+		endereco.setLogradouro("Rua Leopoldino José Da Silva");
+		donativo.setEndereco(endereco);
 		donativo.setDoador(doador);
+		
+		InstituicaoCaridade instituicaoCaridade = new InstituicaoCaridade();
+		instituicaoCaridade.setId(1l);
+		instituicaoCaridade.setConta(new Conta());
+		instituicaoCaridade.setNome("TESTE");
+		
+		Categoria categoria = new Categoria();
+		categoria.setAtivo(true);
+		categoria.setInstituicaoCaridade(instituicaoCaridade);
+		
+		donativo.setCategoria(categoria);
 		
 		return donativo;
 	}

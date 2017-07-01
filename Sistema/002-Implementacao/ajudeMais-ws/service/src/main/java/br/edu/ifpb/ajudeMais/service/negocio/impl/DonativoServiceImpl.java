@@ -60,9 +60,16 @@ public class DonativoServiceImpl implements DonativoService {
 	@Transactional
 	@Override
 	public Donativo save(Donativo entity) throws AjudeMaisException {
+
 		Donativo donativoSaved = donativoRepository.save(entity);
+
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
-		publisher.publishEvent(new DoacaoNotificationEvent(getNotificaveis(donativoSaved), donativoSaved, donativoSaved.getDescricao()));
+		
+		List<String> notificaveis = getNotificaveis(donativoSaved);
+
+		System.out.println(notificaveis);
+
+		publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
 
 		return donativoSaved;
 	}
@@ -146,10 +153,11 @@ public class DonativoServiceImpl implements DonativoService {
 	 * @throws AjudeMaisException 
 	 */
 	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
-		
+
+		System.out.println(donativo);
 		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
 				donativo.getCategoria().getInstituicaoCaridade().getId());
-
+		
 		List<String> notificaveis = new ArrayList<>();
 
 		mensageiros.forEach(m -> {
