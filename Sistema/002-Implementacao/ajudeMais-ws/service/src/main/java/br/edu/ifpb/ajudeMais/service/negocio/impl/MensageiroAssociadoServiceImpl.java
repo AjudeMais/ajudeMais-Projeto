@@ -130,11 +130,10 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	@Override
 	public List<Mensageiro> filterMensageirosCloser(Endereco endereco, Long idInstituicao) throws AjudeMaisException {
-
-		System.out.println("---------------------------------"+endereco);
 		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(
 				endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
 
+		
 		if (selectedMensageiros != null && selectedMensageiros.isEmpty()) {
 			selectedMensageiros = mensageiroAssociadoRepository
 					.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
@@ -155,7 +154,9 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	private List<Object[]> setEnderecoInList(List<Object[]> filters) {
 
+		
 		for (int i = 0; i < filters.size(); i++) {
+			
 			List<Endereco> enderecos = ((Mensageiro) filters.get(i)[0]).getEnderecos();
 			for (Endereco e : enderecos) {
 				if (e.getId().equals(filters.get(i)[1])) {

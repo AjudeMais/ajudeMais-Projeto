@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -32,9 +33,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String idAs = remoteMessage.getData().get("id");
         Long id = Long.parseLong(idAs);
 
+
         switch (tipoAs) {
             case "CAMPANHA":
-
+                notifyComponent(remoteMessage);
                 break;
             case "DOACAO":
 

@@ -73,6 +73,11 @@ public class Donativo implements Serializable{
     private Categoria categoria;
 
     /**
+     *
+     */
+    private Mensageiro mensageiro;
+
+    /**
      * @return the id
      */
     public Long getId() {
@@ -209,6 +214,22 @@ public class Donativo implements Serializable{
      */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Mensageiro getMensageiro() {
+        return mensageiro;
+    }
+
+    /**
+     *
+     * @param mensageiro
+     */
+    public void setMensageiro(Mensageiro mensageiro) {
+        this.mensageiro = mensageiro;
     }
 
     @Override

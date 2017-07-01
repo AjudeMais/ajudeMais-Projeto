@@ -20,7 +20,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.TransactionSystemException;
 
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;

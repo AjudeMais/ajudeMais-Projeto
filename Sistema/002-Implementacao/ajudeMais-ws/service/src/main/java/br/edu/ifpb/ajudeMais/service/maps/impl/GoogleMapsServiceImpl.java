@@ -209,8 +209,8 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		List<Mensageiro> mensageirosAptos = new ArrayList<>();
 
 		if (selectedMensageiros != null && !selectedMensageiros.isEmpty()) {
-			
 			for(int i = 0 ; i<selectedMensageiros.size();i++){
+
 				if(validateAddress(((Endereco)selectedMensageiros.get(i)[1]))){
 					mensageirosAptos.add((Mensageiro) selectedMensageiros.get(i)[0]);
 				}

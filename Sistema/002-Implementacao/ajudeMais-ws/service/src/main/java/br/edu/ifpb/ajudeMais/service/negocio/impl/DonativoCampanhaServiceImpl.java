@@ -116,14 +116,23 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	 * @throws AjudeMaisException 
 	 */
 	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
-		
+
 		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
 				donativo.getCategoria().getInstituicaoCaridade().getId());
 
 		List<String> notificaveis = new ArrayList<>();
 
 		mensageiros.forEach(m -> {
-			notificaveis.add(m.getTokenFCM().getToken());
+			boolean isValid = true;
+			
+			for(String n : notificaveis){
+				if(n.equals(m.getTokenFCM().getToken()))
+					isValid = false;
+			}
+		
+			if (isValid) {
+				notificaveis.add(m.getTokenFCM().getToken());
+			}
 		});
 
 		return notificaveis;

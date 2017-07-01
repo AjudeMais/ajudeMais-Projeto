@@ -63,11 +63,9 @@ public class DonativoServiceImpl implements DonativoService {
 
 		Donativo donativoSaved = donativoRepository.save(entity);
 
-		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+		//publisher.publishEvent(new DonativoEditEvent(donativoSaved));
 		
 		List<String> notificaveis = getNotificaveis(donativoSaved);
-
-		System.out.println(notificaveis);
 
 		publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
 
@@ -154,14 +152,22 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
 
-		System.out.println(donativo);
 		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
 				donativo.getCategoria().getInstituicaoCaridade().getId());
-		
+
 		List<String> notificaveis = new ArrayList<>();
 
 		mensageiros.forEach(m -> {
-			notificaveis.add(m.getTokenFCM().getToken());
+			boolean isValid = true;
+			
+			for(String n : notificaveis){
+				if(n.equals(m.getTokenFCM().getToken()))
+					isValid = false;
+			}
+		
+			if (isValid) {
+				notificaveis.add(m.getTokenFCM().getToken());
+			}
 		});
 
 		return notificaveis;
