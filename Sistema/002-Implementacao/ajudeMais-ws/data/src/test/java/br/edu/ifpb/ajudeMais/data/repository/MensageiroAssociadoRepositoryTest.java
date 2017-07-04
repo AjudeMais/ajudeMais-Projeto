@@ -210,7 +210,7 @@ public class MensageiroAssociadoRepositoryTest {
 	 */
 	@Test
 	public void filterMensageirosCloserToCidadeTest() {
-		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("centro", "Ouro velho",
+		List<Object[]> result = mensageiroAssociadoRepository.filterMensageirosCloserToCidade("Ouro velho",
 				"PB", 1l);
 		assertTrue(result.size() == 2);
 	}
@@ -223,7 +223,7 @@ public class MensageiroAssociadoRepositoryTest {
 	 */
 	@Test
 	public void filterMensageirosCloserToCidadeValidOnlyAddressTest() {
-		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro("", "", "", 1l);
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToCidade("", "", 1l);
 		assertFalse(mensageiros.size() > 0);
 	}
 
@@ -235,7 +235,7 @@ public class MensageiroAssociadoRepositoryTest {
 	 */
 	@Test
 	public void filterMensageirosCloserToCidadeNullParamsTest() {
-		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(null, null, null, null);
+		List<Object[]> mensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToCidade(null, null, null);
 		assertFalse(mensageiros.size() > 0);
 	}
 
