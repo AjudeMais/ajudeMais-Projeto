@@ -114,7 +114,7 @@ public class MySolicitacoesActivity extends BaseActivity implements RecyclerItem
     }
 
     private void loadSolicitacoesColetaTask() {
-
+        // TODO: 04/07/17
     }
 
     /**
