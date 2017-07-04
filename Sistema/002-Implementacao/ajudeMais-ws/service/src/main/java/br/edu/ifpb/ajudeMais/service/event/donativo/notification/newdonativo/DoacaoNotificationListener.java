@@ -1,4 +1,19 @@
-package br.edu.ifpb.ajudeMais.service.event.donativo.notification;
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
+package br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
