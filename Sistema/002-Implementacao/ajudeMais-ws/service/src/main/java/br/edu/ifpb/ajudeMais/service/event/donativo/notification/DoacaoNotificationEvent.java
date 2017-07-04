@@ -57,7 +57,7 @@ public class DoacaoNotificationEvent {
 
 	/**
 	 * @param o
-	 *            parametro donativo é setado em donativo
+	 * parametro donativo é setado em donativo
 	 */
 	public void setDonativo(Donativo donativo) {
 		this.donativo = donativo;

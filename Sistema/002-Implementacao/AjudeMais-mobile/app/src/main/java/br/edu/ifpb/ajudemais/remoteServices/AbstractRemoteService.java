@@ -24,7 +24,7 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  */
 public abstract class AbstractRemoteService {
 
-    protected static final String API = "http://177.22.248.10:8080";
+    protected static final String API = "http://192.168.229.120:8080";
 
     protected RestTemplate restTemplate;
 

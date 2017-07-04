@@ -63,10 +63,10 @@ public class DonativoServiceImpl implements DonativoService {
 
 		Donativo donativoSaved = donativoRepository.save(entity);
 
-		//publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
 		
 		List<String> notificaveis = getNotificaveis(donativoSaved);
-
+		
 		publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
 
 		return donativoSaved;
