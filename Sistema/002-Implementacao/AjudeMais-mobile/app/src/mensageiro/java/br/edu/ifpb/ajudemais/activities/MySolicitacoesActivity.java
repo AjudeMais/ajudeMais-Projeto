@@ -113,9 +113,14 @@ public class MySolicitacoesActivity extends BaseActivity implements RecyclerItem
         // none
     }
 
+    private void loadSolicitacoesColetaTask() {
+
+    }
+
     /**
      * Metodo responsável por navegar entre as telas de todas as solicitações e de uma solicitação específica
      */
     private void goToDetailSolicitacaoActivity() {
+        Intent intent = new Intent(getApplicationContext(), DetailSolicitacaoActivity.class);
     }
 }
