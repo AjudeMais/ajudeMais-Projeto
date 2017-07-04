@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudeMais.service.event.donativo.notification;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import br.edu.ifpb.ajudeMais.domain.enumerations.TipoNotificacao;
 import br.edu.ifpb.ajudeMais.service.fcm.FcmService;
@@ -24,6 +25,7 @@ import br.edu.ifpb.ajudeMais.service.fcm.dto.Push;
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
+@Component
 public class DoacaoNotificationListener {
 
 	/**
@@ -39,12 +41,10 @@ public class DoacaoNotificationListener {
 	public void campanhaSaved(DoacaoNotificationEvent event) {
 		Notification notification = new Notification("default", event.getDonativo().getNome(),
 				event.getDescricao());
-		System.out.println(event.getNotificaveis());
 
 		Push push = new Push("high", notification, event.getNotificaveis());
 		push.setData(new Data(TipoNotificacao.DOACAO.toString(), event.getDonativo().getId()));
 		fcmService.sendNotification(push);
-		System.out.println("NOTIFICADO............");
 
 	}
 
