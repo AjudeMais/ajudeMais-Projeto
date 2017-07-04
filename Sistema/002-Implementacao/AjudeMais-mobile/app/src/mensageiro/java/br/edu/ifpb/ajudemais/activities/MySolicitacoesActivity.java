@@ -97,7 +97,6 @@ public class MySolicitacoesActivity extends BaseActivity implements RecyclerItem
                 startActivity(intent);
                 finish();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -105,11 +104,18 @@ public class MySolicitacoesActivity extends BaseActivity implements RecyclerItem
 
     @Override
     public void onItemClick(View childView, int position) {
-        // TODO: 03/07/17
+        this.position = position;
+        goToDetailSolicitacaoActivity();
     }
 
     @Override
     public void onItemLongPress(View childView, int position) {
+        // none
+    }
 
+    /**
+     * Metodo responsável por navegar entre as telas de todas as solicitações e de uma solicitação específica
+     */
+    private void goToDetailSolicitacaoActivity() {
     }
 }
