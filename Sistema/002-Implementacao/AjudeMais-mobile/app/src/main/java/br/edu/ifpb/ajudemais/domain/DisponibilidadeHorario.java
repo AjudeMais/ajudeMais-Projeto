@@ -39,6 +39,12 @@ public class DisponibilidadeHorario implements Serializable {
     private Date horaFim;
 
     /**
+     *
+     */
+    private Boolean ativo;
+
+
+    /**
      * @return the id
      */
     public Long getId() {
@@ -80,4 +86,19 @@ public class DisponibilidadeHorario implements Serializable {
         this.horaFim = horaFim;
     }
 
+    /**
+     *
+     * @return
+     */
+    public Boolean getAtivo() {
+        return ativo;
+    }
+
+    /**
+     *
+     * @param ativo
+     */
+    public void setAtivo(Boolean ativo) {
+        this.ativo = ativo;
+    }
 }

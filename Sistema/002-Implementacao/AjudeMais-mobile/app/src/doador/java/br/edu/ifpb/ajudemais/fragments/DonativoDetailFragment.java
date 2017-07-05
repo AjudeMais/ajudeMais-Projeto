@@ -111,7 +111,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
             if (estado.getAtivo() != null && estado.getAtivo()) {
 
                 estadosDonativoUtil.setCustomLabelEstadoDoacao(stateDoacao,estado.getEstadoDoacao());
-              
+
                 if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     btnCancelDoacao.setVisibility(View.GONE);
                 }
