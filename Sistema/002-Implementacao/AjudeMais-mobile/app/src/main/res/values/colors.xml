@@ -14,7 +14,12 @@
     <color name="btnTransparente">#f7f6f6</color>
 
 
-    <color name="colorStateDisponibilizado">#fbff00</color>
+    <color name="colorStateDisponibilizado">#f9f168</color>
     <color name="colorStateCancelaodo">#E37B7E</color>
+    <color name="colorStateNaoAceito">#f4ae5e</color>
+    <color name="colorStateAceito">#789ee1</color>
+    <color name="colorStateRecolhido">#ee76fd</color>
+    <color name="colorStateRecebido">#93ed69</color>
+    <color name="colorStateEntregue">#7fec97</color>
 
 </resources>

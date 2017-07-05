@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
@@ -31,43 +34,35 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
  * </p>
  *
  * <p>
- * Contém métodos utilitários para utilização 
+ * Contém métodos utilitários para utilização
  * </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
+@Component
 public class DonativoColetaUtil {
 
-
+	@Autowired
 	private MensageiroAssociadoService mensageiroAssociadoService;
-	
+
+
+
 	/**
+	 * Método auxiliar para atualizar estado de uma doação no caso de nenhum
+	 * mensageiro ser encontrado.
 	 * 
-	 */
-	public DonativoColetaUtil(MensageiroAssociadoService mensageiroAssociadoService) {
-		this.mensageiroAssociadoService = mensageiroAssociadoService;
-	}
-	
-	public DonativoColetaUtil(){}
-	
-	/**
-	 * Método auxiliar para atualizar estado de uma doação no caso de nenhum mensageiro ser encontrado.
 	 * @param donativo
 	 * @return
 	 */
-	public Donativo updateEstadoDoacao(Donativo donativo){
+	public Donativo updateEstadoDoacao(Donativo donativo) {
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
-		estadoDoacao.setAtivo(true);
+		estadoDoacao.setAtivo(new Boolean(true));
 		estadoDoacao.setData(new Date());
 		estadoDoacao.setEstadoDoacao(Estado.NAOACEITO);
-		
-		donativo.getEstadosDaDoacao().forEach(estado-> {
-			if (estadoDoacao.getAtivo()) {
-				estadoDoacao.setAtivo(false);
-			}
-		});
-		
 		donativo.getEstadosDaDoacao().add(estadoDoacao);
+		if (donativo.getEstadosDaDoacao().get(0).getAtivo()) {
+			donativo.getEstadosDaDoacao().get(0).setAtivo(false);
+		}
 		return donativo;
 	}
 
@@ -79,7 +74,7 @@ public class DonativoColetaUtil {
 	 * 
 	 * @param campanha
 	 * @return
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	public List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
 
@@ -90,12 +85,12 @@ public class DonativoColetaUtil {
 
 		mensageiros.forEach(m -> {
 			boolean isValid = true;
-			
-			for(String n : notificaveis){
-				if(n.equals(m.getTokenFCM().getToken()))
+
+			for (String n : notificaveis) {
+				if (n.equals(m.getTokenFCM().getToken()))
 					isValid = false;
 			}
-		
+
 			if (isValid) {
 				notificaveis.add(m.getTokenFCM().getToken());
 			}

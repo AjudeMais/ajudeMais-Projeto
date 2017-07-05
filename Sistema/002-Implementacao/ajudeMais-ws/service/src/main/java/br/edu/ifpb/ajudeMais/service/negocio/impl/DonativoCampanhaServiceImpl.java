@@ -29,7 +29,6 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.D
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
-import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 
 /**
@@ -60,12 +59,6 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	private DonativoService donativoService;
 	
 	/**
-	 * 
-	 */
-	@Autowired
-	private MensageiroAssociadoService mensageiroAssociadoService;
-
-	/**
 	 *           
 	 */
 	@Autowired
@@ -74,6 +67,7 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	/**
 	 * 
 	 */
+	@Autowired
 	private DonativoColetaUtil coletaUtil;
 
 	
@@ -110,8 +104,6 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	@Override
 	@Transactional
 	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
-		coletaUtil = new DonativoColetaUtil(mensageiroAssociadoService);
-
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
 		
@@ -127,6 +119,8 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 
 			donativoSaved.setDonativo(
 					coletaUtil.updateEstadoDoacao(donativoSaved.getDonativo()));
+			
+			
 			donativoService.update(donativoSaved.getDonativo());
 		}
 		return donativoSaved;

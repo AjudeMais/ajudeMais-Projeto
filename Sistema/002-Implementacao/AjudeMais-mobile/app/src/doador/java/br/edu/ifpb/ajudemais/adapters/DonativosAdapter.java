@@ -78,9 +78,12 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
                 } else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_disponibilizado);
                     holder.estadoDoacao.setTextColor(Color.parseColor("#665e5e"));
+                }else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.NAOACEITO.name())) {
+                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_nao_aceito);
+                    holder.estadoDoacao.setTextColor(Color.WHITE);
                 }
 
-                holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name());
+                holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name().equals("NAOACEITO") ? "NÃO ACEITO" : estadoDoacao.getEstadoDoacao().name());
             }
         }
     }

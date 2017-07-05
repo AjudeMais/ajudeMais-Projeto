@@ -16,7 +16,6 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.Doa
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
-import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 
 /**
@@ -42,12 +41,7 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private DonativoRepository donativoRepository;
 
-	/**
-	 * 
-	 */
-	@Autowired
-	private MensageiroAssociadoService mensageiroAssociadoService;
-
+	
 	/**
 	 *           
 	 */
@@ -55,6 +49,10 @@ public class DonativoServiceImpl implements DonativoService {
 	private ApplicationEventPublisher publisher;
 	
 	
+	/**
+	 * 
+	 */
+	@Autowired
 	private DonativoColetaUtil coletaUtil;
 
 	/**
@@ -65,7 +63,6 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 
 		Donativo donativoSaved = donativoRepository.save(entity);
-		coletaUtil = new DonativoColetaUtil(mensageiroAssociadoService);
 
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
 		
