@@ -65,6 +65,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         mBuilder.setVibrate(v);
         mBuilder.setSound(uri);
         mBuilder.setAutoCancel(true);
+        mBuilder.a
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
