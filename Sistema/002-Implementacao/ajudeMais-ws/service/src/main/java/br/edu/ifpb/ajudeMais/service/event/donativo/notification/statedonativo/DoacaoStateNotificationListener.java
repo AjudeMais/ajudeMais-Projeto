@@ -15,6 +15,7 @@
  */
 package br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -53,8 +54,7 @@ public class DoacaoStateNotificationListener {
 	public void campanhaSaved(DoacaoStateNotificationEvent event) {
 		Notification notification = new Notification("default", event.getDonativo().getNome(),
 				event.getMensageChangeState());
-
-		Push push = new Push(event.getNotificavel(), "high", notification);
+		Push push = new Push("high", notification, event.getNotificaveis());
 		push.setData(new Data(TipoNotificacao.DOACAO.toString(), event.getDonativo().getId()));
 		fcmService.sendNotification(push);
 
