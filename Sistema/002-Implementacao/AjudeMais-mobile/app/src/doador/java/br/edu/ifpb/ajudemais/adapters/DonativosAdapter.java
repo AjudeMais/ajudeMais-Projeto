@@ -18,6 +18,7 @@ import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
 
 /**
  * <p>
@@ -35,11 +36,13 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     private List<DoacaoAdapterDto> donativos;
     private Context context;
     private AndroidUtil androidUtil;
+    private EstadosDonativoUtil estadosDonativoUtil;
 
     public DonativosAdapter(List<DoacaoAdapterDto> donativos, Context context) {
         this.context = context;
         this.donativos = donativos;
         this.androidUtil = new AndroidUtil(context);
+        this.estadosDonativoUtil = new EstadosDonativoUtil();
 
     }
 
@@ -71,18 +74,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
         for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()) {
             if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()) {
-                if (estadoDoacao.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
-                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_cancelado);
-                    holder.estadoDoacao.setTextColor(Color.WHITE);
-
-                } else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
-                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_disponibilizado);
-                    holder.estadoDoacao.setTextColor(Color.parseColor("#665e5e"));
-                }else if (estadoDoacao.getEstadoDoacao().name().equals(Estado.NAOACEITO.name())) {
-                    holder.estadoDoacao.setBackgroundResource(R.drawable.screen_border_nao_aceito);
-                    holder.estadoDoacao.setTextColor(Color.WHITE);
-                }
-
+                estadosDonativoUtil.setCustomLabelEstadoDoacao(holder.estadoDoacao, estadoDoacao.getEstadoDoacao());
                 holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name().equals("NAOACEITO") ? "NÃO ACEITO" : estadoDoacao.getEstadoDoacao().name());
             }
         }

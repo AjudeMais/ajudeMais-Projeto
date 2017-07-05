@@ -2,7 +2,7 @@
 /**
  * 
  * <p>
- * <b> DonativoCampanhaServiceImpl.java </b>
+ * <b>{@link DonativoServiceImpl} </b>
  * </p>
  *
  * <p>
@@ -119,7 +119,6 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 
 			donativoSaved.setDonativo(
 					coletaUtil.updateEstadoDoacao(donativoSaved.getDonativo()));
-			
 			
 			donativoService.update(donativoSaved.getDonativo());
 		}

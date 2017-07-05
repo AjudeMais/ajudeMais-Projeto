@@ -28,6 +28,7 @@ import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
+import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
 
 /**
  * <p>
@@ -54,6 +55,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private GetDonativoCampanhaByDonativoIdTask getDonativoCampanhaTask;
     private Button btnCancelDoacao;
     private Button btnListDisp;
+    private EstadosDonativoUtil estadosDonativoUtil;
 
     /**
      *
@@ -78,7 +80,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        estadosDonativoUtil = new EstadosDonativoUtil();
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
 
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
@@ -108,15 +110,8 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
             if (estado.getAtivo() != null && estado.getAtivo()) {
 
-                if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
-                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
-                    stateDoacao.setTextColor(Color.WHITE);
-
-                } else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
-                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_disponibilizado));
-                    stateDoacao.setTextColor(Color.parseColor("#665e5e"));
-                }
-
+                estadosDonativoUtil.setCustomLabelEstadoDoacao(stateDoacao,estado.getEstadoDoacao());
+              
                 if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     btnCancelDoacao.setVisibility(View.GONE);
                 }
