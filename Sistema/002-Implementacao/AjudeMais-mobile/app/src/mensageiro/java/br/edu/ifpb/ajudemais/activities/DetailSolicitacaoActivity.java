@@ -10,7 +10,7 @@ import org.w3c.dom.Text;
 
 import br.edu.ifpb.ajudemais.R;
 
-public class DetailSolicitacaoActivity extends BaseActivity {
+public class DetailSolicitacaoActivity extends AbstractActivity {
 
     private Toolbar mToolbar;
     private ImageView imgDonativo;
