@@ -48,7 +48,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activities.MySolicitacoesActivity"></activity>
+        <activity android:name=".activities.MySolicitacoesActivity" />
+        <activity android:name=".activities.DetailSolicitacaoActivity"></activity>
     </application>
 
 </manifest>
