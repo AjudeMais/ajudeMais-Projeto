@@ -7,7 +7,7 @@ package br.edu.ifpb.ajudeMais.domain.enumerations;
  */
 public enum TipoNotificacao {
 
-	CAMPANHA, DOADAO;
+	CAMPANHA, DOACAO;
 
 
 }

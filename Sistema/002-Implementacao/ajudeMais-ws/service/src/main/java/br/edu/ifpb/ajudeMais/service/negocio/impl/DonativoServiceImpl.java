@@ -12,8 +12,12 @@ import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
+import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 
 /**
  * 
@@ -32,27 +36,56 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 @Service
 public class DonativoServiceImpl implements DonativoService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
-	
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssociadoService;
+
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
+	
+	private DonativoColetaUtil coletaUtil;
+
 	/**
 	 * 
 	 */
 	@Transactional
 	@Override
 	public Donativo save(Donativo entity) throws AjudeMaisException {
+
 		Donativo donativoSaved = donativoRepository.save(entity);
+		coletaUtil = new DonativoColetaUtil(mensageiroAssociadoService);
+
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
+		
+		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved);
+		
+		if (notificaveis != null && !notificaveis.isEmpty()) {
+			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+		}else{
+			publisher.publishEvent(
+					new DoacaoStateNotificationEvent(donativoSaved.getDoador().getTokenFCM().getToken(), donativoSaved, 
+							"Nenhum mensageiro disponível para coleta em sua localidade"));
+		
+			donativoSaved = coletaUtil.updateEstadoDoacao(donativoSaved);
+			update(donativoSaved);
+		}
 
 		return donativoSaved;
 	}
-
+	
+	
 	/**
 	 * 
 	 */
@@ -104,7 +137,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByDoadorNome(String nomeDoador) {
 		return donativoRepository.findByDoadorNome(nomeDoador);
 	}
-	
+
 	/**
 	 * Busca donativos de acordo com id do doador.
 	 */
@@ -120,4 +153,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
+
+	
+
 }

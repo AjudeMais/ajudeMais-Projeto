@@ -1,7 +1,23 @@
-package br.edu.ifpb.ajudeMais.service.event.donativo.notification;
+/**
+ * <p>
+ * Ajude Mais - Módulo Web Service
+ * </p>
+ * 
+ * <p>
+ * Sistema para potencializar o processo de doação.
+ * </p>
+ * 
+ * <a href="https://github.com/AjudeMais/AjudeMais">Ajude Mais</a>
+ * <a href="https://franckaj.github.io">Franck Aragão"></a>
+ * 
+ * AJUDE MAIS - 2017®
+ * 
+ */
+package br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 
 import br.edu.ifpb.ajudeMais.domain.enumerations.TipoNotificacao;
 import br.edu.ifpb.ajudeMais.service.fcm.FcmService;
@@ -24,6 +40,7 @@ import br.edu.ifpb.ajudeMais.service.fcm.dto.Push;
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
  */
+@Component
 public class DoacaoNotificationListener {
 
 	/**
@@ -40,9 +57,8 @@ public class DoacaoNotificationListener {
 		Notification notification = new Notification("default", event.getDonativo().getNome(),
 				event.getDescricao());
 		Push push = new Push("high", notification, event.getNotificaveis());
-		push.setData(new Data(TipoNotificacao.DOADAO.toString(), event.getDonativo().getId()));
+		push.setData(new Data(TipoNotificacao.DOACAO.toString(), event.getDonativo().getId()));
 		fcmService.sendNotification(push);
-
 	}
 
 }

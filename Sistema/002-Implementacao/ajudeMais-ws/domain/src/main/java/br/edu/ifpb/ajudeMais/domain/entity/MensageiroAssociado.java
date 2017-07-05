@@ -50,11 +50,11 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "mensageiro_associado")
 @NamedQueries({@NamedQuery(name = "MensageiroAssociado.filterMensageirosCloserToBairro", 
-query = "SELECT ms.mensageiro,e FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.bairro like :bairro and e.localidade like :localidade"
-		+ " and e.uf like :uf and ms.instituicaoCaridade.id = :idInstituicao and ms.status is true GROUP BY e.id "),
+query = "SELECT DISTINCT ms.mensageiro,e.id FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.bairro like :bairro and e.localidade like :localidade"
+		+ " and e.uf like :uf and ms.instituicaoCaridade.id = :idInstituicao and ms.status is true"),
 		
 		@NamedQuery(name = "MensageiroAssociado.filterMensageirosCloserToCidade", 
-		query = "SELECT ms.mensageiro,e.id FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.localidade like :localidade"
+		query = "SELECT DISTINCT ms.mensageiro,e.id FROM MensageiroAssociado ms JOIN FETCH ms.mensageiro.enderecos e WHERE e.localidade like :localidade"
 		+ " and e.uf like :uf and ms.instituicaoCaridade.id = :idInstituicao and ms.status is true")}		)
 public class MensageiroAssociado {
 

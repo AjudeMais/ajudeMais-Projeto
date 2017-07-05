@@ -20,7 +20,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.TransactionSystemException;
 
 import br.edu.ifpb.ajudeMais.AjudeMaisApplication;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
@@ -108,7 +107,7 @@ public class DonativoCampanhaServiceTest {
 	 * </p>
 	 * @throws Exception
 	 */
-	@Test(expected = TransactionSystemException.class)
+	@Test(expected = NullPointerException.class)
 	public void saveWithCampanhaNull() throws Exception {
 		DonativoCampanha donativo = donativoCampanha;
 		donativo.setCampanha(null);

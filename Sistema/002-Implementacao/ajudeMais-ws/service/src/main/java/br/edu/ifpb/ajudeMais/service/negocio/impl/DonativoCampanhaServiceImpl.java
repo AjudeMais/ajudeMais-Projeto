@@ -24,8 +24,13 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
+import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
+import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 
 /**
  * 
@@ -40,7 +45,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 @Service
-public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
+public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 
 	/**
 	 * 
@@ -48,14 +53,29 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	@Autowired
 	DonativoCampanhaRepository donativoCampanhaRespository;
 	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoService donativoService;
 	
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssociadoService;
 
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
+	/**
+	 * 
+	 */
+	private DonativoColetaUtil coletaUtil;
+
 	
 	/**
 	 * Busca todos os donativos doados para um campanha com base em seu ID.
@@ -74,7 +94,7 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 		DonativoCampanha donativo = donativoCampanhaRespository.findOneByDonativoId(id);
 		return donativo;
 	}
-	
+
 	/**
 	 * Busca todos os donativos doados para um campanha com o estado passsado.
 	 */
@@ -90,10 +110,26 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService{
 	@Override
 	@Transactional
 	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
+		coletaUtil = new DonativoColetaUtil(mensageiroAssociadoService);
+
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
+		
+		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved.getDonativo());
+
+		if (notificaveis != null && !notificaveis.isEmpty()) {
+			publisher.publishEvent(
+					new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(), donativoSaved.getDonativo().getDescricao()));
+		} else {
+			publisher.publishEvent(new DoacaoStateNotificationEvent
+					(donativoSaved.getDonativo().getDoador().getTokenFCM().getToken(),
+					donativoSaved.getDonativo(), "Nenhum mensageiro disponível para coleta em sua localidade"));
+
+			donativoSaved.setDonativo(
+					coletaUtil.updateEstadoDoacao(donativoSaved.getDonativo()));
+			donativoService.update(donativoSaved.getDonativo());
+		}
 		return donativoSaved;
 	}
 
-	
 }
