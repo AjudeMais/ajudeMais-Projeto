@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -12,12 +11,13 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
-import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
+import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 
 /**
  * 
@@ -53,6 +53,9 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	
+	private DonativoColetaUtil coletaUtil;
 
 	/**
 	 * 
@@ -62,16 +65,27 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 
 		Donativo donativoSaved = donativoRepository.save(entity);
+		coletaUtil = new DonativoColetaUtil(mensageiroAssociadoService);
 
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
 		
-		List<String> notificaveis = getNotificaveis(donativoSaved);
+		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved);
 		
-		publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+		if (notificaveis != null && !notificaveis.isEmpty()) {
+			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+		}else{
+			publisher.publishEvent(
+					new DoacaoStateNotificationEvent(donativoSaved.getDoador().getTokenFCM().getToken(), donativoSaved, 
+							"Nenhum mensageiro disponível para coleta em sua localidade"));
+		
+			donativoSaved = coletaUtil.updateEstadoDoacao(donativoSaved);
+			update(donativoSaved);
+		}
 
 		return donativoSaved;
 	}
-
+	
+	
 	/**
 	 * 
 	 */
@@ -140,37 +154,6 @@ public class DonativoServiceImpl implements DonativoService {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
 
-	/**
-	 * 
-	 * <p>
-	 * Obtém lista de mensageiros que serão notificados.
-	 * </p>
-	 * 
-	 * @param campanha
-	 * @return
-	 * @throws AjudeMaisException 
-	 */
-	private List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
-
-		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
-				donativo.getCategoria().getInstituicaoCaridade().getId());
-
-		List<String> notificaveis = new ArrayList<>();
-
-		mensageiros.forEach(m -> {
-			boolean isValid = true;
-			
-			for(String n : notificaveis){
-				if(n.equals(m.getTokenFCM().getToken()))
-					isValid = false;
-			}
-		
-			if (isValid) {
-				notificaveis.add(m.getTokenFCM().getToken());
-			}
-		});
-
-		return notificaveis;
-	}
+	
 
 }

@@ -11,9 +11,7 @@ package br.edu.ifpb.ajudemais.enumarations;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
 public enum Estado {
 
-    DISPONIBILIZADO, ACEITO, CANCELADO, RECOLHIDO, RECEBIDO, ENTREGUE
+    DISPONIBILIZADO, ACEITO, CANCELADO, NAOACEITO ,RECOLHIDO, RECEBIDO, ENTREGUE
 }

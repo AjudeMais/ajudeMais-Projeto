@@ -56,11 +56,9 @@ public class DoacaoNotificationListener {
 	public void campanhaSaved(DoacaoNotificationEvent event) {
 		Notification notification = new Notification("default", event.getDonativo().getNome(),
 				event.getDescricao());
-
 		Push push = new Push("high", notification, event.getNotificaveis());
 		push.setData(new Data(TipoNotificacao.DOACAO.toString(), event.getDonativo().getId()));
 		fcmService.sendNotification(push);
-
 	}
 
 }

@@ -15,6 +15,8 @@
  */
 package br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 
@@ -32,21 +34,25 @@ import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
  */
 public class DoacaoStateNotificationEvent {
 
-	private String notificavel;
+	private List<String> notificaveis;
 
 	private Donativo donativo;
 
 	private String mensageChangeState;
 
+	/**
+	 * 
+	 * @param notificavel
+	 * @param donativo
+	 * @param mensageChangeState
+	 */
 	public DoacaoStateNotificationEvent(String notificavel, Donativo donativo, String mensageChangeState) {
-		this.notificavel = notificavel;
+		this.notificaveis = new ArrayList<>();
+		notificaveis.add(notificavel);
 		this.donativo = donativo;
 		this.mensageChangeState = mensageChangeState;
 	}
 
-	
-
-	
 	/**
 	 * @return the mensageChangeState
 	 */
@@ -54,31 +60,27 @@ public class DoacaoStateNotificationEvent {
 		return mensageChangeState;
 	}
 
-
-
-
 	/**
-	 * @param mensageChangeState the mensageChangeState to set
+	 * @param mensageChangeState
+	 *            the mensageChangeState to set
 	 */
 	public void setMensageChangeState(String mensageChangeState) {
 		this.mensageChangeState = mensageChangeState;
 	}
 
-
-
-
 	/**
 	 * @return the notificavel
 	 */
-	public String getNotificavel() {
-		return notificavel;
+	public List<String> getNotificaveis() {
+		return notificaveis;
 	}
 
 	/**
-	 * @param notificavel the notificavel to set
+	 * @param notificavel
+	 *            the notificavel to set
 	 */
-	public void setNotificavel(String notificavel) {
-		this.notificavel = notificavel;
+	public void setNotificaveis(List<String> notificaveis) {
+		this.notificaveis = notificaveis;
 	}
 
 	/**
@@ -89,8 +91,7 @@ public class DoacaoStateNotificationEvent {
 	}
 
 	/**
-	 * @param o
-	 * parametro donativo é setado em donativo
+	 * @param o parametro donativo é setado em donativo
 	 */
 	public void setDonativo(Donativo donativo) {
 		this.donativo = donativo;
@@ -101,6 +102,7 @@ public class DoacaoStateNotificationEvent {
 	 * @return
 	 */
 	public boolean isNotificavel() {
-		return notificavel != null;
+		return !notificaveis.isEmpty();
+
 	}
 }
