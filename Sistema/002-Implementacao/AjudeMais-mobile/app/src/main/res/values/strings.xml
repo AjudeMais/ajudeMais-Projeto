@@ -223,5 +223,6 @@
     <string name="aceitarColeta">ACEITAR</string>
     <string name="recusarColeta">RECUSAR</string>
     <string name="detalhesColeta">Detalhes da coleta</string>
+    <string name="agedamento_coleta">Agendamento Coleta</string>
 
 </resources>

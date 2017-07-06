@@ -3,14 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="3dp"
-    android:background="@color/colorFont">
+    android:layout_marginTop="3dp">
 
     <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorFont"
         android:descendantFocusability="beforeDescendants"
         android:fillViewport="true"
         android:focusable="true"
@@ -59,11 +57,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:layout_weight="1"
-                        android:visibility="gone"
                         android:text="12 peças masculinas para doar"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:textColor="@color/textSecond"
                         android:textSize="@dimen/fontDefaultMain"
+                        android:visibility="gone"
                         tools:ignore="HardcodedText,InefficientWeight,RtlHardcoded" />
 
 
@@ -292,13 +290,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvInformationAgenda"
                 android:layout_marginBottom="7dp"
-                android:layout_marginTop="7dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
-                android:textColor="@color/textSecond"
+                android:layout_marginTop="7dp"
                 android:background="@color/btnTransparente"
                 android:text="@string/visualizarDisponibilizades"
-                android:textSize="@dimen/fontDefaultMain" />
+                android:textColor="@color/textSecond"
+                android:textSize="@dimen/fontDefaultMain"
+                />
 
             <Button
                 android:id="@+id/btnCancelaDoacao"
@@ -311,6 +310,69 @@
                 android:text="@string/btnCancelDoacao"
                 android:textColor="@color/colorFont"
                 android:textSize="@dimen/fontLogin" />
+
+            <android.support.v7.widget.CardView
+                android:id="@+id/componentMensageiro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:layout_below="@+id/tvInformationAgenda">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/nav_header_height"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin"
+                   >
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/photoProfile"
+                        android:layout_width="66dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:contentDescription="@string/profileDescription"
+                        android:src="@drawable/ic_account"
+                        app:civ_border_color="@color/colorPrimaryDark" />
+
+
+                    <TextView
+                        android:id="@+id/tvTellphone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/userMailTemp"
+                        android:textAlignment="viewStart"
+                        android:layout_below="@+id/tvNomeMsg"
+                        android:layout_alignStart="@+id/tvNomeMsg" />
+
+                    <TextView
+                        android:id="@+id/tvNomeMsg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@+id/photoProfile"
+                        android:paddingTop="17dp"
+                        android:text="@string/userNameTemp"
+                        android:textAlignment="viewStart"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvAgendamentoColeta"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="viewStart"
+                        android:layout_below="@+id/tvTellphone"
+                        android:layout_alignStart="@+id/tvTellphone" />
+
+
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
 
 
         </RelativeLayout>
