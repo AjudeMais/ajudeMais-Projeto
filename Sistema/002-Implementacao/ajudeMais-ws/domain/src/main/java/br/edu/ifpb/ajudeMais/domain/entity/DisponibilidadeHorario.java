@@ -11,8 +11,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * 
- * 
  * <p>
  * <b> DisponibilidadeHorario</b>
  * </p>
@@ -22,7 +20,6 @@ import javax.persistence.TemporalType;
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
- *
  */
 @Entity
 public class DisponibilidadeHorario implements Serializable {
@@ -50,6 +47,8 @@ public class DisponibilidadeHorario implements Serializable {
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date horaFim;
+	
+	private Boolean ativo;
 
 	/**
 	 * @return the id
@@ -91,6 +90,31 @@ public class DisponibilidadeHorario implements Serializable {
 	 */
 	public void setHoraFim(Date horaFim) {
 		this.horaFim = horaFim;
+	}
+	
+	
+
+	/**
+	 * @return the ativo
+	 */
+	public Boolean getAtivo() {
+		return ativo;
+	}
+
+	/**
+	 * @param ativo the ativo to set
+	 */
+	public void setAtivo(Boolean ativo) {
+		this.ativo = ativo;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "DisponibilidadeHorario [id=" + id + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", ativo="
+				+ ativo + "]";
 	}
 
 	/* (non-Javadoc)

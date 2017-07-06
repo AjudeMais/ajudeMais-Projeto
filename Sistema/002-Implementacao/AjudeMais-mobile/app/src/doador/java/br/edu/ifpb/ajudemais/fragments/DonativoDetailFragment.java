@@ -2,7 +2,7 @@ package br.edu.ifpb.ajudemais.fragments;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Date;
@@ -22,12 +23,17 @@ import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.GetDonativoCampanhaByDonativoIdTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateEstadoDonativoTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
+import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.ConvertsDate;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
+import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
 
 /**
  * <p>
@@ -50,10 +56,18 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private TextView nomeInstituicao;
     private TextView stateDoacao;
     private EstadoDoacao estadoDoacao;
+    private TextView informationAgenda;
+    private TextView agendamentoColeta;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
     private GetDonativoCampanhaByDonativoIdTask getDonativoCampanhaTask;
     private Button btnCancelDoacao;
     private Button btnListDisp;
+    private EstadosDonativoUtil estadosDonativoUtil;
+    private CardView cardViewMensageiro;
+    private TextView nomeMensageiro;
+    private TextView telefoneMensageiro;
+    private ImageView imageMensageiro;
+    private GetImageTask getImageTask;
 
     /**
      *
@@ -78,16 +92,23 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        estadosDonativoUtil = new EstadosDonativoUtil();
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
 
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
         executeGetDonativoCampanhaTask(donativo.getId());
 
+        cardViewMensageiro = (CardView) getView().findViewById(R.id.componentMensageiro);
+        agendamentoColeta = (TextView) getView().findViewById(R.id.tvAgendamentoColeta);
+        informationAgenda = (TextView) getView().findViewById(R.id.tvInformationAgenda);
         stateDoacao = (TextView) getView().findViewById(R.id.tv_donative_estado_lb);
         btnCancelDoacao = (Button) getView().findViewById(R.id.btnCancelaDoacao);
         btnCancelDoacao.setOnClickListener(this);
         descricaoDonativo.setText(donativo.getDescricao());
+        nomeMensageiro = (TextView) getView().findViewById(R.id.tvNomeMsg);
+        telefoneMensageiro = (TextView) getView().findViewById(R.id.tvTellphone);
+
+        imageMensageiro = (ImageView) getView().findViewById(R.id.photoProfile);
 
         if (donativo.getDescricao() != null && donativo.getDescricao().length() > 0) {
             descricaoDonativo.setVisibility(View.VISIBLE);
@@ -97,8 +118,51 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         btnListDisp.setOnClickListener(this);
         setAtrAddressIntoCard(donativo.getEndereco());
         validateAndSetStateDoacao();
+        setAndValidateHorarioAtivo();
+        setInformationMensageiro();
+    }
 
 
+    private void setInformationMensageiro() {
+        for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
+            if ((dh.getAtivo()!= null && dh.getAtivo() && donativo.getMensageiro() != null)  ) {
+                btnListDisp.setVisibility(View.GONE);
+                cardViewMensageiro.setVisibility(View.VISIBLE);
+                nomeMensageiro.setText(donativo.getMensageiro().getNome());
+                telefoneMensageiro.setText(donativo.getMensageiro().getTelefone());
+                if (donativo.getMensageiro().getFoto() != null) {
+                    getImageTask = new GetImageTask(getContext(), donativo.getMensageiro().getFoto().getNome());
+                    getImageTask.setProgressAtivo(false);
+                    getImageTask.delegate = new AsyncResponse<byte[]>() {
+                        @Override
+                        public void processFinish(byte[] output) {
+                            AndroidUtil androidUtil = new AndroidUtil(getContext());
+                            Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
+                            imageMensageiro.setImageBitmap(bitmap);
+                        }
+                    };
+                    getImageTask.execute();
+                }
+            }
+        }
+    }
+
+    /**
+     * Verifica se existe horário ativo.
+     */
+    private void setAndValidateHorarioAtivo() {
+        informationAgenda.setText(getString(R.string.agedamento_coleta));
+
+        for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
+            if (dh.getAtivo() != null && dh.getAtivo()) {
+                agendamentoColeta.setVisibility(View.VISIBLE);
+                btnListDisp.setVisibility(View.GONE);
+                agendamentoColeta.setText(ConvertsDate.getInstance().
+                        convertDateToStringFormat(dh.getHoraInicio()) + " das " +
+                        ConvertsDate.getInstance().convertHourToString(dh.getHoraInicio()) + "h às " +
+                        ConvertsDate.getInstance().convertHourToString(dh.getHoraFim()));
+            }
+        }
     }
 
     /**
@@ -106,19 +170,13 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
      */
     private void validateAndSetStateDoacao() {
         for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-            if (estado.getAtivo() != null && estado.getAtivo()) {
+            if (estado.getAtivo() != null && estado.getAtivo() ) {
 
-                if (estado.getEstadoDoacao().name().equals(Estado.CANCELADO.name())) {
-                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_cancelado));
-                    stateDoacao.setTextColor(Color.WHITE);
-
-                } else if (estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
-                    stateDoacao.setBackground(getContext().getDrawable(R.drawable.screen_border_disponibilizado));
-                    stateDoacao.setTextColor(Color.parseColor("#665e5e"));
-                }
+                estadosDonativoUtil.setCustomLabelEstadoDoacao(stateDoacao, estado.getEstadoDoacao());
 
                 if (!estado.getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
                     btnCancelDoacao.setVisibility(View.GONE);
+
                 }
                 stateDoacao.setText(estado.getEstadoDoacao().name());
                 this.estadoDoacao = estado;
@@ -177,7 +235,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
             public void processFinish(DonativoCampanha output) {
                 if (output != null) {
                     nomeInstituicao.setText(getString(R.string.doado_to_campanha) + " " + output.getCampanha().getNome());
-                }else {
+                } else {
                     nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
 
                 }

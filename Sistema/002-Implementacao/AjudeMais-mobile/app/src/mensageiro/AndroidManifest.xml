@@ -49,7 +49,8 @@
         </service>
 
         <activity android:name=".activities.MySolicitacoesActivity" />
-        <activity android:name=".activities.DetailSolicitacaoActivity"></activity>
+        <activity android:name=".activities.DetailSolicitacaoActivity" />
+        <activity android:name=".activities.AgendaColetaActivity"></activity>
     </application>
 
 </manifest>
