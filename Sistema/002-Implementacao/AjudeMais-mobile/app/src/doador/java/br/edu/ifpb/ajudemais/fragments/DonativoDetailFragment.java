@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +31,13 @@ import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
+import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.ConvertsDate;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
+
+import static br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission.MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION;
 
 /**
  * <p>
@@ -68,6 +72,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private TextView telefoneMensageiro;
     private ImageView imageMensageiro;
     private GetImageTask getImageTask;
+    private CallPhoneDevicePermission callPhoneDevicePermission;
 
     /**
      *
@@ -93,6 +98,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         estadosDonativoUtil = new EstadosDonativoUtil();
+        callPhoneDevicePermission = new CallPhoneDevicePermission(getContext());
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
 
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
@@ -125,11 +131,12 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
     private void setInformationMensageiro() {
         for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
-            if ((dh.getAtivo()!= null && dh.getAtivo() && donativo.getMensageiro() != null)  ) {
+            if ((dh.getAtivo()!= null && dh.getAtivo()) && donativo.getMensageiro() != null) {
                 btnListDisp.setVisibility(View.GONE);
                 cardViewMensageiro.setVisibility(View.VISIBLE);
                 nomeMensageiro.setText(donativo.getMensageiro().getNome());
                 telefoneMensageiro.setText(donativo.getMensageiro().getTelefone());
+
                 if (donativo.getMensageiro().getFoto() != null) {
                     getImageTask = new GetImageTask(getContext(), donativo.getMensageiro().getFoto().getNome());
                     getImageTask.setProgressAtivo(false);
@@ -143,18 +150,54 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                     };
                     getImageTask.execute();
                 }
+
+                cardViewMensageiro.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialogCallMensageiro();
+                    }
+                });
+
+
             }
         }
+    }
+
+    /**
+     * Cria dialog para perguntar doador se deseja ligar para mensageiro
+     */
+    private void dialogCallMensageiro(){
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setTitle(getString(R.string.call_mensageiro))
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+                            callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
+                        }
+                    }
+                })
+
+                .setNegativeButton(R.string.no,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
 
     /**
      * Verifica se existe horário ativo.
      */
     private void setAndValidateHorarioAtivo() {
-        informationAgenda.setText(getString(R.string.agedamento_coleta));
 
         for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
-            if (dh.getAtivo() != null && dh.getAtivo()) {
+            if ((dh.getAtivo() != null && dh.getAtivo())&& donativo.getMensageiro() != null) {
+                informationAgenda.setText(getString(R.string.agedamento_coleta));
                 agendamentoColeta.setVisibility(View.VISIBLE);
                 btnListDisp.setVisibility(View.GONE);
                 agendamentoColeta.setText(ConvertsDate.getInstance().
@@ -313,6 +356,23 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.e("AJUDEMAIS", "EXECUTOU5676;..............");
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
+                Log.e("AJUDEMAIS", "EXECUTOU;..............");
+                if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+                    callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
+                }
+                break;
+            }
+        }
     }
 }
 

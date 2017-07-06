@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,6 +18,9 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.fragments.DonativoDetailFragment;
+import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
+
+import static br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission.MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION;
 
 /**
  * <p>
@@ -39,6 +43,7 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
     private GetImageTask getImageTask;
     private ImageView imageHeader;
     private ProgressBar progressBar;
+    private CallPhoneDevicePermission callPhoneDevicePermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,7 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void init() {
         initProperties();
+        callPhoneDevicePermission = new CallPhoneDevicePermission(this);
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -154,4 +160,24 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
+                if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+                    callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
+                }
+                break;
+            }
+        }
+    }
+
 }
