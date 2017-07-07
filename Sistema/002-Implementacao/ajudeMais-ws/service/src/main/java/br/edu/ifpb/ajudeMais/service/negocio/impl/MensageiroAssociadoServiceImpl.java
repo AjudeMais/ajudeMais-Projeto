@@ -129,15 +129,24 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 * @throws Exception 
 	 */
 	@Override
-	public List<Mensageiro> filterMensageirosCloser(Endereco endereco, Long idInstituicao) throws AjudeMaisException {
+	public List<Mensageiro> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) throws AjudeMaisException {
 		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(
 				endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
 
+		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
+
+		return mensageiros;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public List<Mensageiro> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao)
+			throws AjudeMaisException {
 		
-		if (selectedMensageiros != null && selectedMensageiros.isEmpty()) {
-			selectedMensageiros = mensageiroAssociadoRepository
+		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository
 					.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
-		}
 		
 		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
 
@@ -168,5 +177,4 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		return filters;
 	}
 
-	
 }

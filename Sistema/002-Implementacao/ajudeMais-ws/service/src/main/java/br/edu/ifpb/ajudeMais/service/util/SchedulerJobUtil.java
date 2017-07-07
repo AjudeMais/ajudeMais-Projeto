@@ -9,9 +9,25 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.stereotype.Component;
 
+import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
+import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.config.QuartzConfig;
-import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
+import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
 
+/**
+ * 
+ * <p>
+ * {@link SchedulerJobUtil}
+ * </p>
+ * 
+ * <p>
+ * Classe utilitária para definição de operações relacionadas a agendamento de
+ * jobs.
+ * </p>
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
+ */
 @Component
 public class SchedulerJobUtil {
 
@@ -24,16 +40,17 @@ public class SchedulerJobUtil {
 	 * @param triggerName
 	 * @param jobClass
 	 */
-	public void createJob(String jobName, String triggerName, Class jobClass) {
-		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(NotificationJob.class);
-		jdfb.setBeanName(jobName);
+	@SuppressWarnings("rawtypes")
+	public void createJob(JobName jobName, TriggerName triggerName, Long dataId, Class jobClass) {
+		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(NotificationBairroJob.class);
+		jdfb.setBeanName(jobName.name());
 		jdfb.afterPropertiesSet();
 
-		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 5000L, 2);
-		stfb.setBeanName(triggerName);
+		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 5000L, 0);
+		stfb.setBeanName(triggerName.name());
 		stfb.afterPropertiesSet();
 
-		jdfb.getJobDataMap().put("id", 10);
+		jdfb.getJobDataMap().put("id", dataId);
 		try {
 			schedFactory.getScheduler().scheduleJob(jdfb.getObject(), stfb.getObject());
 		} catch (SchedulerException e) {
@@ -46,9 +63,9 @@ public class SchedulerJobUtil {
 	 * @param jobName
 	 * @param triggerName
 	 */
-	public void removeJob(String jobName, String triggerName) {
-		TriggerKey tkey = new TriggerKey(triggerName);
-		JobKey jkey = new JobKey(jobName);
+	public void removeJob(JobName jobName, TriggerName triggerName) {
+		TriggerKey tkey = new TriggerKey(triggerName.name());
+		JobKey jkey = new JobKey(jobName.name());
 		try {
 			schedFactory.getScheduler().unscheduleJob(tkey);
 			schedFactory.getScheduler().deleteJob(jkey);

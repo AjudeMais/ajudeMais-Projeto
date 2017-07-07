@@ -11,17 +11,10 @@
  */
 package br.edu.ifpb.ajudeMais;
 
-import javax.annotation.PostConstruct;
-
-import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
-
-import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
-import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
  * 
@@ -45,9 +38,6 @@ import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 @SpringBootApplication
 public class AjudeMaisApplication extends SpringBootServletInitializer {
 
-	@Autowired
-	private SchedulerJobUtil schedulerUtil;
-
 	/**
 	 * Passa app para Servelet do Spring boot.
 	 * 
@@ -69,10 +59,5 @@ public class AjudeMaisApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 
 		SpringApplication.run(AjudeMaisApplication.class, args);
-	}
-
-	@PostConstruct
-	public void init() throws SchedulerException, InterruptedException {
-		schedulerUtil.createJob("notificationJobBean", "notificationTrigger", NotificationJob.class);
 	}
 }

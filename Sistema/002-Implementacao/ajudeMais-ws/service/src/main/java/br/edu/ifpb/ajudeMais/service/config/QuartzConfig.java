@@ -39,6 +39,15 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 @Configuration
 public class QuartzConfig {
 
+	/**
+	 * 
+	 * <p>
+	 * Cria bean para que seja possível a injeção nos Jobs do quartz.
+	 * </p>
+	 * 
+	 * @param applicationContext
+	 * @return
+	 */
 	@Bean
 	public JobFactory jobFactory(ApplicationContext applicationContext) {
 		AutowiringSpringBeanJobFactory jobFactory = new AutowiringSpringBeanJobFactory();
@@ -46,6 +55,16 @@ public class QuartzConfig {
 		return jobFactory;
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Cria um bean para Job Factory do quartz.
+	 * </p>
+	 * 
+	 * @param jobFactory
+	 * @return
+	 * @throws IOException
+	 */
 	@Bean
 	public SchedulerFactoryBean schedulerFactoryBean(JobFactory jobFactory) throws IOException {
 		SchedulerFactoryBean factory = new SchedulerFactoryBean();
@@ -57,6 +76,15 @@ public class QuartzConfig {
 		return factory;
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Cria bean para configurações adicionadas ao quartz.properties.
+	 * </p>
+	 * 
+	 * @return
+	 * @throws IOException
+	 */
 	@Bean
 	public Properties quartzProperties() throws IOException {
 		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
@@ -79,7 +107,7 @@ public class QuartzConfig {
 	public static SimpleTriggerFactoryBean createTrigger(JobDetail jobDetail, long pollFrequencyMs, int repeat) {
 		SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
 		factoryBean.setJobDetail(jobDetail);
-		factoryBean.setStartDelay(0L);
+		factoryBean.setStartDelay(pollFrequencyMs);
 		factoryBean.setRepeatInterval(pollFrequencyMs);
 		factoryBean.setRepeatCount(repeat);
 		factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
@@ -105,6 +133,15 @@ public class QuartzConfig {
 		return factoryBean;
 	}
 
+	/**
+	 * 
+	 * <p>
+	 * Cria bean para {@link JobDetail}
+	 * </p>
+	 * 
+	 * @param jobClass
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public static JobDetailFactoryBean createJobDetail(Class jobClass) {
 		JobDetailFactoryBean factoryBean = new JobDetailFactoryBean();

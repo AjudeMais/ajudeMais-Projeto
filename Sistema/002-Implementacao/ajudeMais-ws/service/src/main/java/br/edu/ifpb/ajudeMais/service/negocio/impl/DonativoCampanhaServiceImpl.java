@@ -23,13 +23,17 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
+import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
+import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
+import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
  * 
@@ -41,7 +45,8 @@ import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
  * Serviços para donativos relacionados a uma campanha.
  * </p>
  * 
- * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a></br>
+ * 		   <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 @Service
 public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
@@ -69,6 +74,12 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	 */
 	@Autowired
 	private DonativoColetaUtil coletaUtil;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private SchedulerJobUtil schedulerJobUtil;
 
 	
 	/**
@@ -107,11 +118,14 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
 		
-		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved.getDonativo());
+		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved.getDonativo());
 
 		if (notificaveis != null && !notificaveis.isEmpty()) {
 			publisher.publishEvent(
 					new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(), donativoSaved.getDonativo().getDescricao()));
+			
+			schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(), NotificationBairroJob.class);
+			
 		} else {
 			publisher.publishEvent(new DoacaoStateNotificationEvent
 					(donativoSaved.getDonativo().getDoador().getTokenFCM().getToken(),
