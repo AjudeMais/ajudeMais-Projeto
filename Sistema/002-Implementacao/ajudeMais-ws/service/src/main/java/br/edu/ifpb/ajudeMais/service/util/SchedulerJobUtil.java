@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.config.QuartzConfig;
-import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
+import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 
 /**
  * 
@@ -21,8 +21,8 @@ import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
  * </p>
  * 
  * <p>
- * Classe utilitária para definição de operações relacionadas a agendamento de
- * jobs.
+ * Classe utilitária para operações relacionadas a agendamento de jobs usando
+ * Quartz scheduler.
  * </p>
  *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
@@ -31,26 +31,39 @@ import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
 @Component
 public class SchedulerJobUtil {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private SchedulerFactoryBean schedFactory;
 
 	/**
 	 * 
+	 * <p>
+	 * Cria um agendamento para um Qartz Job específico.
+	 * </p>
+	 * 
 	 * @param jobName
+	 *            nome do job a ser criado.
 	 * @param triggerName
+	 *            nome do trigger responsável por start do job.
+	 * @param dataId
+	 *            ID de entidade que deve ser passado para o Job
 	 * @param jobClass
+	 *            implementação do Job.
 	 */
 	@SuppressWarnings("rawtypes")
 	public void createJob(JobName jobName, TriggerName triggerName, Long dataId, Class jobClass) {
-		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(NotificationBairroJob.class);
-		jdfb.setBeanName(jobName.name());
+		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(NotificationJob.class);
+		jdfb.setBeanName(jobName.toString());
 		jdfb.afterPropertiesSet();
 
-		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 5000L, 0);
-		stfb.setBeanName(triggerName.name());
+		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 10000L, 1);
+		stfb.setBeanName(triggerName.toString());
 		stfb.afterPropertiesSet();
 
 		jdfb.getJobDataMap().put("id", dataId);
+
 		try {
 			schedFactory.getScheduler().scheduleJob(jdfb.getObject(), stfb.getObject());
 		} catch (SchedulerException e) {
@@ -60,8 +73,15 @@ public class SchedulerJobUtil {
 
 	/**
 	 * 
+	 * <p>
+	 * Remove um Job que esteja em execução passando nome do job e trigger
+	 * responsável pela iniciação do mesmo.
+	 * </p>
+	 * 
 	 * @param jobName
+	 *            nome do Job a ser removido.
 	 * @param triggerName
+	 *            nome do trigger responsável pela iniciação do Job.
 	 */
 	public void removeJob(JobName jobName, TriggerName triggerName) {
 		TriggerKey tkey = new TriggerKey(triggerName.name());

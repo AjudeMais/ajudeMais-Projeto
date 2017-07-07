@@ -291,16 +291,16 @@ public class Donativo implements Serializable {
 		this.data = data;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "Donativo [id=" + id + ", quantidade=" + quantidade + ", nome=" + nome + ", descricao=" + descricao
-				+ ", estadosDaDoacao=" + estadosDaDoacao + ", horariosDisponiveis=" + horariosDisponiveis + ", doador="
-				+ doador + ", endereco=" + endereco + ", fotosDonativo=" + fotosDonativo + ", categoria=" + categoria
-				+ ", data=" + data + ", mensageiro=" + mensageiro + "]";
+				+ ", doador=" + doador + ", endereco=" + endereco + ", categoria=" + categoria + ", mensageiro="
+				+ mensageiro + "]";
 	}
 
-	
 }

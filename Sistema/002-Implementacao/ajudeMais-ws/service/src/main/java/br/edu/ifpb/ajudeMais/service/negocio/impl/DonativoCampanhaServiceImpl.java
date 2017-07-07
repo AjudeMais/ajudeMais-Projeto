@@ -17,6 +17,8 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,9 @@ import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
-import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
-import br.edu.ifpb.ajudeMais.service.job.NotificationBairroJob;
+import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
-import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
@@ -46,7 +46,7 @@ import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
  * </p>
  * 
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a></br>
- * 		   <a href="https://github.com/FranckAJ">Franck Aragão</a>
+ *         <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */
 @Service
 public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
@@ -56,13 +56,7 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	 */
 	@Autowired
 	DonativoCampanhaRepository donativoCampanhaRespository;
-	
-	/**
-	 * 
-	 */
-	@Autowired
-	private DonativoService donativoService;
-	
+
 	/**
 	 *           
 	 */
@@ -74,14 +68,18 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	 */
 	@Autowired
 	private DonativoColetaUtil coletaUtil;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private SchedulerJobUtil schedulerJobUtil;
-
 	
+	/**
+	 * 
+	 */
+	Logger LOGGER = LoggerFactory.getLogger(DonativoCampanhaServiceImpl.class);
+
 	/**
 	 * Busca todos os donativos doados para um campanha com base em seu ID.
 	 */
@@ -117,25 +115,18 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
-		
+
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved.getDonativo());
 
+		LOGGER.info(notificaveis.toString());
+		
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(
-					new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(), donativoSaved.getDonativo().getDescricao()));
-			
-			schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(), NotificationBairroJob.class);
-			
-		} else {
-			publisher.publishEvent(new DoacaoStateNotificationEvent
-					(donativoSaved.getDonativo().getDoador().getTokenFCM().getToken(),
-					donativoSaved.getDonativo(), "Nenhum mensageiro disponível para coleta em sua localidade"));
-
-			donativoSaved.setDonativo(
-					coletaUtil.updateEstadoDoacao(donativoSaved.getDonativo()));
-			
-			donativoService.update(donativoSaved.getDonativo());
+			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(),
+					donativoSaved.getDonativo().getDescricao()));
 		}
+		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getDonativo().getId(),
+				NotificationJob.class);
+
 		return donativoSaved;
 	}
 

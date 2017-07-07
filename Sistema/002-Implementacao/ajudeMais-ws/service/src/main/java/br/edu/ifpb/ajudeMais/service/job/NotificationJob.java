@@ -16,7 +16,6 @@ import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
-import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
@@ -25,7 +24,7 @@ import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 /**
  * 
  * <p>
- * {@link NotificationBairroJob}
+ * {@link NotificationJob}
  * </p>
  * 
  * <p>
@@ -40,12 +39,12 @@ import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
  */
 
 @Component
-public class NotificationBairroJob implements Job {
+public class NotificationJob implements Job {
 
 	/**
 	 * 
 	 */
-	Logger LOGGER = LoggerFactory.getLogger(NotificationBairroJob.class);
+	Logger LOGGER = LoggerFactory.getLogger(NotificationJob.class);
 
 	/**
 	 * 
@@ -64,35 +63,34 @@ public class NotificationBairroJob implements Job {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private SchedulerJobUtil schedulerJobUtil;
-	
 
 	/**
 	 * 
 	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOGGER.info("Executou Job de notificação por bairro");
-		
+		LOGGER.info("Executou Job de notificação...");
+
 		Long id = context.getJobDetail().getJobDataMap().getLongValue("id");
 		Donativo donativo = this.donativoService.findById(id);
 		
-		if(donativo!= null && donativo.getMensageiro() != null) {
-			schedulerJobUtil.removeJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION);
-		} else if(donativo!= null){
+		if (donativo != null && donativo.getMensageiro() == null) {
 			notifyToCidade(donativo);
+		}else {
+			schedulerJobUtil.removeJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION);
 		}
 	}
-
 
 	/**
 	 * 
 	 * </p>
+	 * 
 	 * @param donativo
 	 */
 	private void notifyToCidade(Donativo donativo) {
@@ -105,24 +103,7 @@ public class NotificationBairroJob implements Job {
 		}
 
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo,
-					donativo.getDescricao()));
-
-			schedulerJobUtil.createJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId(),
-					NotificationCidadeJob.class);
-
-		} else {
-			publisher.publishEvent(
-					new DoacaoStateNotificationEvent(donativo.getDoador().getTokenFCM().getToken(),
-							donativo, "Nenhum mensageiro disponível para coleta em sua localidade"));
-
-			donativo = coletaUtil.updateEstadoDoacao(donativo);
-
-			try {
-				donativoService.update(donativo);
-			} catch (AjudeMaisException e) {
-				LOGGER.error(e.getMessage());
-			}
+			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, donativo.getDescricao()));
 		}
 	}
 }
