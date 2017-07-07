@@ -27,6 +27,10 @@
                     case 'RECOLHIDO':
                         out = 'label label-primary';
                         break;
+
+                    case 'NAOACEITO':
+                        out = 'label label-state-not-accepted';
+                        break;
                 }
 
                 return out;

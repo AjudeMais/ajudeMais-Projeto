@@ -18,6 +18,8 @@
         var donativoDetailparam = JSON.parse($stateParams.donativoDetail);
         vm.images = [];
         vm.estado;
+        vm.imageMsg;
+        vm.mockImage = 'content/img/mock-user.png';
 
         if (donativoDetailparam) {
             vm.donativo = donativoDetailparam;
@@ -28,13 +30,19 @@
                 }
             });
 
+            if (vm.donativo.mensageiro) {
+                getImageMsg();
+            }
         }
 
         function getImages() {
             vm.donativo.fotosDonativo.forEach(function (image) {
                 _getImage(image);
             })
+        }
 
+        function getImageMsg() {
+            _getImageMsg(vm.donativo.mensageiro.foto);
         }
 
         /**
@@ -53,11 +61,43 @@
         };
 
         /**
+         * Recupera imagem mensageiro
+         * @param imageName
+         */
+        function _getImageMsg(image) {
+            if (image) {
+                imageService.getImage(image.nome).then(function (response) {
+                    vm.imageMsg = _arrayBufferToBase64(response.data);
+                });
+            }
+        };
+
+        /**
          *
          */
         vm.previus = function () {
             $state.go('home.donativo.list');
         };
+
+        vm.getEtadosDonativo = function (estados) {
+            var estadoAtivo;
+            estados.forEach(function (estado) {
+                if (estado.ativo) {
+                    estadoAtivo = estado;
+                }
+            });
+            return estadoAtivo.estadoDoacao;
+        }
+
+        vm.getHorarioAcceptedToColeta = function (horarios) {
+            var selectedHorario;
+            horarios.forEach(function (horario) {
+                if (horario.ativo) {
+                    selectedHorario = horario;
+                }
+            });
+            return selectedHorario;
+        }
 
         /**
          * Necessário para converter array de bytes para base64.
