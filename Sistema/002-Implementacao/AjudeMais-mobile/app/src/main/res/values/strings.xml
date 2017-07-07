@@ -224,5 +224,6 @@
     <string name="recusarColeta">RECUSAR</string>
     <string name="detalhesColeta">Detalhes da coleta</string>
     <string name="agedamento_coleta">Agendamento Coleta</string>
+    <string name="call_mensageiro">Deseja ligar para voluntário?</string>
 
 </resources>

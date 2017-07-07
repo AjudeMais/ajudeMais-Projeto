@@ -48,9 +48,7 @@ public class CallPhoneDevicePermission {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(((Activity)context),
                         Manifest.permission.CALL_PHONE)) {
 
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
+
                     ActivityCompat.requestPermissions(((Activity)context),
                             new String[]{Manifest.permission.CALL_PHONE},
                             MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION);

@@ -2301,6 +2301,14 @@ table.text-center, table.text-center td, table.text-center th {
     background-color: #00a65a !important;
 }
 
+/**
+Cria nova label para estado não aceito
+ */
+.label-state-not-accepted {
+    background-color: #f4ae5e !important;
+    color: #ffffff !important;
+}
+
 .bg-navy {
     background-color: #001f3f !important;
 }
