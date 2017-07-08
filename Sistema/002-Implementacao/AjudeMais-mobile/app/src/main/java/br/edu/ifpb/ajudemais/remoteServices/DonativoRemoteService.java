@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
  * <p>
@@ -106,6 +107,18 @@ public class DonativoRemoteService extends AbstractRemoteService {
         ResponseEntity<DonativoCampanha> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/donativocampanha/{id}", DonativoCampanha.class, idDonativo);
 
         return responseEntity.getBody();
+    }
+
+    /**
+     * Busca os donativos com base na localização
+     *
+     * @param latLng
+     * @return
+     */
+    public List<Donativo> findByDoadorLocal(LatLng latLng) {
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.postForEntity(API + "/donativo/filter/local",
+                latLng, Donativo[].class);
+        return Arrays.asList(responseEntity.getBody());
     }
 }
 
