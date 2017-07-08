@@ -203,7 +203,7 @@ public class DonativoRestService {
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
 		if (instituicaoOp.isPresent()) {
-			List<Donativo> donativos = donativoService.filterDonativoByEstadoAndInstituicao(instituicaoOp.get().getId(),  Estado.NAOACEITO);
+			List<Donativo> donativos = donativoService.filterDonativoByEstadoAndInstituicao(instituicaoOp.get().getId(),  Estado.getByEstado(estado));
 			return new ResponseEntity<>(donativos, HttpStatus.OK);
 
 		} else {

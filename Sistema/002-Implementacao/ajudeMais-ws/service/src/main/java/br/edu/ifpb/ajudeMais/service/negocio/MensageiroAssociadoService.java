@@ -58,7 +58,7 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	/**
 	 * 
 	 * <p>
-	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro ou da cidade com base no enderenco passado e no id da instituição
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
 	 * insituição.
 	 * </p>
 	 * 
@@ -67,7 +67,21 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	 * @throws AjudeMaisException 
 	 * @throws Exception 
 	 */
-	List<Mensageiro> filterMensageirosCloser(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
+	List<Mensageiro> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
+	
+	/**
+	 * 
+	 * <p>
+	 * Busca mensageiro Mais proximo, considerando mensageiros da cidade com base no enderenco passado e no id da instituição
+	 * insituição.
+	 * </p>
+	 * 
+	 * @param conta
+	 * @return
+	 * @throws AjudeMaisException 
+	 * @throws Exception 
+	 */
+	List<Mensageiro> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
 	
 	
 }

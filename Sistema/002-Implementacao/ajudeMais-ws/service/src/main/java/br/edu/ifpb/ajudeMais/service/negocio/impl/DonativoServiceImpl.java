@@ -12,12 +12,15 @@ import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
+import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
+import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
-import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
+import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
  * 
@@ -30,7 +33,8 @@ import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
  *
  * </p>
  * 
- * @author <a href="https://github.com/amslv">Ana Silva</a>
+ * @author <a href="https://github.com/amslv">Ana Silva</a></br>
+ *         <a href="https://github.com/FranckAJ">Franck Aragão</a>
  *
  */
 @Service
@@ -42,19 +46,23 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private DonativoRepository donativoRepository;
 
-	
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private DonativoColetaUtil coletaUtil;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private SchedulerJobUtil schedulerJobUtil;
 
 	/**
 	 * 
@@ -66,24 +74,20 @@ public class DonativoServiceImpl implements DonativoService {
 		Donativo donativoSaved = donativoRepository.save(entity);
 
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
-		
-		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved);
-		
+
+		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved);
+
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
-		}else{
 			publisher.publishEvent(
-					new DoacaoStateNotificationEvent(donativoSaved.getDoador().getTokenFCM().getToken(), donativoSaved, 
-							"Nenhum mensageiro disponível para coleta em sua localidade"));
-		
-			donativoSaved = coletaUtil.updateEstadoDoacao(donativoSaved);
-			update(donativoSaved);
+					new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+
 		}
+		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(),
+				NotificationJob.class);
 
 		return donativoSaved;
 	}
-	
-	
+
 	/**
 	 * 
 	 */
