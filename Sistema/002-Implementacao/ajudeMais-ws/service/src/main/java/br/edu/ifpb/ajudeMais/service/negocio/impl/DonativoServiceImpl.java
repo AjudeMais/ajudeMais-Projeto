@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
@@ -149,6 +150,19 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public List<Donativo> findByCategoriaInstituicaoCaridade(InstituicaoCaridade instituicao) {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
+	}
+
+
+	/**
+	 * <p>
+	 * Busca donativos com estado passado e id da instituicao passada
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */ 
+	@Override
+	public List<Donativo> filterDonativoByEstadoAndInstituicao(Long idInstitucao, Estado estado) {
+		return donativoRepository.filterDonativoByEstadoAndInstituicao(idInstitucao, estado);
 	}
 
 	

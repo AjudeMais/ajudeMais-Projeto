@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,8 +30,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
+
  *
  */
+@NamedQueries({
+	@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
+			+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true") })
 @Entity
 public class Donativo implements Serializable {
 

@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 
 /**
  * 
@@ -111,5 +113,25 @@ public class DonativoRepositoryTest {
 		List<Donativo> donativos = donativoRepository.findAllByOrderByDataDesc();
 		assertThat(donativos.get(0).getId() == 2l);
 	}
+	
+	/**
+	 * Testa se existe um donativo vinculada a instituição com id que possui o estado NAOACEITO
+	 */
+	@Test
+	public void filterDonativoByEstadoAndInstituicaoTest() {
+		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.NAOACEITO);
+		assertEquals(1, donativos.size());
+	}
+	
+	/**
+	 * Testa se lista estará null se não existi donativos com estado aceito vinculados a instituição com id 1.
+	 */
+	@Test
+	public void filterDonativoByEstadoAndInstituicaoNullTest() {
+		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.ACEITO);
+		assertThat(donativos.isEmpty());
+	}
+	
+	
 
 }
