@@ -20,6 +20,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
@@ -55,6 +56,7 @@ public class DonativoRestService {
 
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
+
 
 	/**
 	 * Salva donativo avulso
@@ -186,5 +188,28 @@ public class DonativoRestService {
 		List<DonativoCampanha> donativos = donativoCampanhaService.filterDonativoByEstadoAfterAceito(id);
 
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
+	}
+	
+	/**
+	 * /filter/estado/ : Busca todos os donativos com estado passado vinculados a instituição com id passado.
+	 * 
+	 * @return donativos
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/estado")
+	public ResponseEntity<List<Donativo>> filterDonativoByEstadoAndInstituicao(@RequestParam("estado") String estado) {
+		
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
+
+		if (instituicaoOp.isPresent()) {
+			List<Donativo> donativos = donativoService.filterDonativoByEstadoAndInstituicao(instituicaoOp.get().getId(),  Estado.getByEstado(estado));
+			return new ResponseEntity<>(donativos, HttpStatus.OK);
+
+		} else {
+			return new ResponseEntity<List<Donativo>>(HttpStatus.FORBIDDEN);
+		}
+		
+		
 	}
 }

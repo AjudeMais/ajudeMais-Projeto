@@ -20,6 +20,7 @@
         function ($rootScope, $location, $http, authenticationService) {
 
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
+
                 authenticationService.logged(function (logged) {
                     if (logged) {
                         if ($location.path() === '/login') {
@@ -32,6 +33,9 @@
                         }
                     }
                 });
+
+
+
 
             });
         }

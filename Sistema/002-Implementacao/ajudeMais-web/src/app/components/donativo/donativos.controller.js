@@ -25,7 +25,6 @@
              */
             vm.getDonativos = function () {
                 donativoService.getByInstituicao().then(function (response) {
-                    console.log(response.data, "<>");
                     vm.donativos = response.data;
                 });
             }

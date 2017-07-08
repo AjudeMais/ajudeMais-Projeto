@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,8 +47,6 @@ public class DonativoColetaUtil {
 	@Autowired
 	private MensageiroAssociadoService mensageiroAssociadoService;
 
-
-
 	/**
 	 * Método auxiliar para atualizar estado de uma doação no caso de nenhum
 	 * mensageiro ser encontrado.
@@ -54,6 +54,7 @@ public class DonativoColetaUtil {
 	 * @param donativo
 	 * @return
 	 */
+	@Transactional
 	public Donativo updateEstadoDoacao(Donativo donativo) {
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
 		estadoDoacao.setAtivo(new Boolean(true));
@@ -69,18 +70,49 @@ public class DonativoColetaUtil {
 	/**
 	 * 
 	 * <p>
-	 * Obtém lista de mensageiros que serão notificados.
+	 * Obtém lista de mensageiros por bairro que serão notificados.
 	 * </p>
 	 * 
 	 * @param campanha
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	public List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
+	public List<String> getNotificaveisToBairro(Donativo donativo) throws AjudeMaisException {
 
-		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
-				donativo.getCategoria().getInstituicaoCaridade().getId());
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToBairro(
+				donativo.getEndereco(), donativo.getCategoria().getInstituicaoCaridade().getId());
 
+		return getTokensNotificaveis(mensageiros);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de mensageiros por cidade que serão notificados.
+	 * </p>
+	 * 
+	 * @param campanha
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	public List<String> getNotificaveisToCidade(Donativo donativo) throws AjudeMaisException {
+
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToBairro(
+				donativo.getEndereco(), donativo.getCategoria().getInstituicaoCaridade().getId());
+
+		return getTokensNotificaveis(mensageiros);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de tokens dos mensageiros que serão notificados;
+	 * </p>
+	 * 
+	 * @param mensageiros
+	 * @return
+	 */
+	private List<String> getTokensNotificaveis(List<Mensageiro> mensageiros) {
 		List<String> notificaveis = new ArrayList<>();
 
 		mensageiros.forEach(m -> {

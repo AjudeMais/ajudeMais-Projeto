@@ -33,7 +33,7 @@
                         </table>
                     </div>
                 </div>
-                <div>
+                <div ng-show="vm.donativo.fotosDonativo && vm.donativo.fotosDonativo.size()>0">
                     <span class="am-image-donor-header"><b>Imagens do Item</b></span>
                     <div class="am-image-donor-grid" ng-repeat="image in vm.images">
                         <div class="col-sm-2">
@@ -44,11 +44,12 @@
                 </div>
             </div>
         </div>
-        <div class="box box-primary">
+        <div class="box box-primary"
+             ng-show="!vm.donativo.mensageiro">
             <div class="box-header">
                 <h2 class="box-title">Horários de coleta</h2>
             </div>
-            <div class="row">
+            <div class="row box-topic">
                 <div class="col-md-12">
                     <div class="table-responsive">
                         <table class="table">
@@ -68,10 +69,52 @@
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
+        <div class="box box-primary" ng-show="vm.donativo.mensageiro">
+            <div class="box-header">
+                <h2 class="box-title">Agendamento da coleta</h2>
+            </div>
+            <div class="row box-topic">
+                <div class="col-md-12">
+                    <div class="user-block">
+                        <img class="img-responsive img-circle" ng-show="vm.donativo.mensageiro.foto && vm.imageMsg"
+                             data-ng-src="data:{{vm.donativo.mensageiro.foto.contentType}};base64,{{vm.imageMsg}}">
+                        <img class="img-responsive img-circle" ng-show="!vm.donativo.mensageiro.foto"
+                             ng-src="{{vm.mockImage}}">
 
+                        <span class="username">
+                        {{vm.donativo.mensageiro.nome}}
+                    </span>
+                        <span class="description">{{vm.donativo.mensageiro.telefone}} - {{vm.donativo.mensageiro.conta.email}}</span>
+                        <span class="description">{{vm.mensageiroAss.mensageiro.telefone}}</span>
+                    </div>
+                    <div class="table-responsive box-topic">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th width="50%">Início</th>
+                                <th width="50%">Fim</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+
+                                <td>{{vm.getHorarioAcceptedToColeta(vm.donativo.horariosDisponiveis).horaInicio | date:
+                                    "dd/MM/yyyy HH:mm"}}
+                                </td>
+                                <td>{{vm.getHorarioAcceptedToColeta(vm.donativo.horariosDisponiveis).horaFim | date:
+                                    "dd/MM/yyyy HH:mm"}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="box box-primary">
             <div class="box-header">
                 <h2 class="box-title">Endereço de Coleta</h2>
@@ -122,7 +165,7 @@
             <div class="box-header">
                 <h2 class="box-title">Doador</h2>
             </div>
-            <div class="row">
+            <div class="row box-topic">
                 <div class="col-md-12">
                     <div class="table-responsive am-no-border-table">
 
