@@ -299,8 +299,8 @@ public class Donativo implements Serializable {
 	@Override
 	public String toString() {
 		return "Donativo [id=" + id + ", quantidade=" + quantidade + ", nome=" + nome + ", descricao=" + descricao
-				+ ", doador=" + doador + ", endereco=" + endereco + ", categoria=" + categoria + ", mensageiro="
-				+ mensageiro + "]";
+				+ ", doador=" + doador + ", endereco=" + endereco + ", categoria=" + categoria + ", data=" + data
+				+ ", mensageiro=" + mensageiro + "]";
 	}
 
 }

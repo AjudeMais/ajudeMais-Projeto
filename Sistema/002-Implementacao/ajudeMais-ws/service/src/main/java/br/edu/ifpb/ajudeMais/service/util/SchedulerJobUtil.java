@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.config.QuartzConfig;
-import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 
 /**
  * 
@@ -54,14 +53,14 @@ public class SchedulerJobUtil {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void createJob(JobName jobName, TriggerName triggerName, Long dataId, Class jobClass) {
-		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(NotificationJob.class);
-		jdfb.setBeanName(jobName.toString());
+		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(jobClass);
+		jdfb.setBeanName(jobName.name()+"_"+ dataId);
 		jdfb.afterPropertiesSet();
 
-		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 10000L, 1);
-		stfb.setBeanName(triggerName.toString());
+		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 10000L, 0);
+		stfb.setBeanName(triggerName.name()+"_"+ dataId);
 		stfb.afterPropertiesSet();
-
+		
 		jdfb.getJobDataMap().put("id", dataId);
 
 		try {
@@ -83,9 +82,9 @@ public class SchedulerJobUtil {
 	 * @param triggerName
 	 *            nome do trigger responsável pela iniciação do Job.
 	 */
-	public void removeJob(JobName jobName, TriggerName triggerName) {
-		TriggerKey tkey = new TriggerKey(triggerName.name());
-		JobKey jkey = new JobKey(jobName.name());
+	public void removeJob(JobName jobName, TriggerName triggerName, Long dataId) {
+		TriggerKey tkey = new TriggerKey(triggerName.name()+"_"+ dataId);
+		JobKey jkey = new JobKey(jobName.name()+"_"+ dataId);
 		try {
 			schedFactory.getScheduler().unscheduleJob(tkey);
 			schedFactory.getScheduler().deleteJob(jkey);

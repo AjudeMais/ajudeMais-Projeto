@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +54,7 @@ public class DonativoColetaUtil {
 	 * @param donativo
 	 * @return
 	 */
+	@Transactional
 	public Donativo updateEstadoDoacao(Donativo donativo) {
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
 		estadoDoacao.setAtivo(new Boolean(true));
