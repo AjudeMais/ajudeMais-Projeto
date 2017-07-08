@@ -113,7 +113,11 @@ public class ContaRestService {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	
+	/**
+	 * GET /conta/find/grupo : recupera a lista de Grupo ao qual o usuário pertence.
+	 *
+	 * @return ResponseEntity 200 (ok) ou 400 (Bad Request)
+	 */
 	@GetMapping(path = "/find/grupo")
 	public ResponseEntity<List<String>> getGrupoCurrentUser() {
 		Conta conta = authService.getCurrentUser();
