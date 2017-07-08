@@ -16,7 +16,8 @@
     function accountService($http, Api) {
 
         var service = {
-            changePassword: _changePassword
+            changePassword: _changePassword,
+            findByGrupoCurrentUser:_findByGrupoCurrentUser,
         };
         return service;
 
@@ -33,6 +34,14 @@
                 callbackError(response);
 
             });
+        }
+
+        /**
+         *
+         * @private
+         */
+        function _findByGrupoCurrentUser() {
+            return $http.get(Api + "/conta/find/grupo");
         }
     };
 })();
