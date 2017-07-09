@@ -22,6 +22,7 @@ import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
@@ -47,7 +48,7 @@ public class DonativoRestService {
 
 	@Autowired
 	private DonativoService donativoService;
-	
+
 	@Autowired
 	private DonativoCampanhaService donativoCampanhaService;
 
@@ -83,7 +84,7 @@ public class DonativoRestService {
 		DonativoCampanha donativoSalvo = donativoCampanhaService.save(donativo);
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
 	}
-	
+
 	/**
 	 * GET /filter/donativocampanha/{id} : Endpoint para buscar DonativoCampanha pelo id Donativo
 	 * 
@@ -100,7 +101,7 @@ public class DonativoRestService {
 		return new ResponseEntity<>(donativoCampanha, HttpStatus.OK);
 	}
 
-	
+
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {
@@ -184,12 +185,12 @@ public class DonativoRestService {
 	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/campanha/estado/{id}")
 	public ResponseEntity<List<DonativoCampanha>> filterDonativoByEstadoAfterAceito(@PathVariable Long id) {
-		
+
 		List<DonativoCampanha> donativos = donativoCampanhaService.filterDonativoByEstadoAfterAceito(id);
 
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * /filter/estado/ : Busca todos os donativos com estado passado vinculados a instituição com id passado.
 	 * 
@@ -198,7 +199,7 @@ public class DonativoRestService {
 	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/estado")
 	public ResponseEntity<List<Donativo>> filterDonativoByEstadoAndInstituicao(@RequestParam("estado") String estado) {
-		
+
 		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
@@ -209,7 +210,19 @@ public class DonativoRestService {
 		} else {
 			return new ResponseEntity<List<Donativo>>(HttpStatus.FORBIDDEN);
 		}
-		
-		
+	}
+
+	/**
+	 * /filter/local/ : Busca todos os donativos com base na localização
+	 * 
+	 * @return solicitacoesColeta
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.POST, value = "/filter/local")
+	public ResponseEntity<List<Donativo>> filterDonativoByDoadorLocal(@RequestBody LatLng latLng)
+			throws AjudeMaisException {
+		List<Donativo> solicitacoesColeta = donativoService.filterByDoadorLocal(latLng);
+		return new ResponseEntity<List<Donativo>>(solicitacoesColeta, HttpStatus.OK);
+
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
@@ -18,6 +19,8 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
+import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
 import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
@@ -51,6 +54,12 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private GoogleMapsServiceImpl googleMapsResponse;
 
 	/**
 	 * 
@@ -169,6 +178,20 @@ public class DonativoServiceImpl implements DonativoService {
 		return donativoRepository.filterDonativoByEstadoAndInstituicao(idInstitucao, estado);
 	}
 
-	
+	/**
+	 * <p>
+	 * Busca donativos com base na localização
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */
+	@Override
+	public List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException {
+		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+				latLng.getLongitude());
+		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(),
+				endereco.getUf());
+		return donativos;
+	}
 
 }

@@ -85,4 +85,13 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */ 
 	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao, @Param("estado") Estado estado);
 
+	
+	/**
+	 * <p>
+	 * Busca donativos com base na localização
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */
+	List<Donativo> filterDonativoByLocal(@Param("localidade") String localidade, @Param("uf") String uf);
 }
