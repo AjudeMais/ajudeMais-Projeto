@@ -196,12 +196,10 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
     private void executeLoadingSolicitacoesTask() {
         mainSearchSolicitacoesFragmentTask = new MainSearchSolicitacoesFragmentTask(getContext());
         mainSearchSolicitacoesFragmentTask.delegate = new AsyncResponse<List<Donativo>>() {
-
             @Override
             public void processFinish(List<Donativo> output) {
                 if (output.size() < 1) {
                     showListEmpty();
-
                 } else {
                     donativos = output;
                     showListDonativos();
@@ -212,7 +210,6 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
                 }
             }
         };
-
         mainSearchSolicitacoesFragmentTask.execute();
     }
 
