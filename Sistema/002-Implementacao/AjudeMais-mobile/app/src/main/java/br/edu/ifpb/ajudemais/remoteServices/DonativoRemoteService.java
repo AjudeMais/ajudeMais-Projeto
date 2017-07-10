@@ -90,10 +90,21 @@ public class DonativoRemoteService extends AbstractRemoteService {
      * @param IdDoador
      * @return
      */
-    public List<Donativo> findByDoadorId(Long IdDoador) {
+    public List<Donativo> findByDonativosToDoadorId(Long IdDoador) {
         ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/{id}", Donativo[].class, IdDoador);
 
         return Arrays.asList(responseEntity.getBody());
+    }
+
+    /**
+     * Busca donativo pelo id.
+     *
+     * @param id
+     * @return
+     */
+    public Donativo findByDonativoId(Long id) {
+        ResponseEntity<Donativo> responseEntity = restTemplate.getForEntity(API + "/filter/donativo/{id}", Donativo.class, id);
+        return responseEntity.getBody();
     }
 
     /**

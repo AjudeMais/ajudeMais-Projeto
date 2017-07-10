@@ -61,7 +61,7 @@ public class LoadingDoacoesTask extends AsyncTask<Void, Void, List<DoacaoAdapter
 
             Doador doador = doadorRemoteService.getDoador(username);
 
-            List<Donativo> donativos = donativoRemoteService.findByDoadorId(doador.getId());
+            List<Donativo> donativos = donativoRemoteService.findByDonativosToDoadorId(doador.getId());
 
             for (Donativo donativo : donativos) {
                 DoacaoAdapterDto doacaoAdapterDto = new DoacaoAdapterDto();

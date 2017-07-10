@@ -88,17 +88,29 @@ public class DonativoRestService {
 	/**
 	 * GET /filter/donativocampanha/{id} : Endpoint para buscar DonativoCampanha pelo id Donativo
 	 * 
-	 * doados por doador
-	 * Busca DonativoCamapnha com base no id do  donativo passado.
 	 * @param donativo
 	 * @return
 	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/donativocampanha/{id}")
-	public ResponseEntity<DonativoCampanha> findByDonativoId(@PathVariable Long id) throws AjudeMaisException {
+	public ResponseEntity<DonativoCampanha> findByDonativoCampanhaId(@PathVariable Long id) throws AjudeMaisException {
 		DonativoCampanha donativoCampanha = donativoCampanhaService.findByDonativoId(id);
 		return new ResponseEntity<>(donativoCampanha, HttpStatus.OK);
+	}
+	
+	
+	/**
+	 * GET /filter/donativo/{id} : Endpoint para buscar Donativo pelo id Donativo
+	 * @param donativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasRole('DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/donativo/{id}")
+	public ResponseEntity<Donativo> findByDonativoId(@PathVariable Long id) throws AjudeMaisException {
+		Donativo donativo = donativoService.findById(id);
+		return new ResponseEntity<>(donativo, HttpStatus.OK);
 	}
 
 
@@ -135,14 +147,13 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos doados
-	 * por doador
+	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos de um doador com id passado
 	 * 
 	 * @return donativos
 	 */
 	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/{id}")
-	public ResponseEntity<List<Donativo>> findByDoadorId(@PathVariable Long id) {
+	public ResponseEntity<List<Donativo>> findByDonativoToDoadorId(@PathVariable Long id) {
 		List<Donativo> donativos = donativoService.findByDoadorId(id);
 		return new ResponseEntity<>(donativos, HttpStatus.OK);
 	}
