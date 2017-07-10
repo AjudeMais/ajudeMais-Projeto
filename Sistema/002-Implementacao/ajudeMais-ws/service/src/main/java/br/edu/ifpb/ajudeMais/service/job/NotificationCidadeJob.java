@@ -83,7 +83,7 @@ public class NotificationCidadeJob implements Job {
 					donativo, "Nenhum mensageiro disponível para coleta em sua localidade"));
 
 			donativo = coletaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
-
+			LOGGER.info(donativo.toString());
 			try {
 				donativoService.update(donativo);
 			} catch (AjudeMaisException e) {

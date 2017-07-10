@@ -1,5 +1,7 @@
 package br.edu.ifpb.ajudeMais.service.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,11 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.D
  */
 @Component
 public class NotificationUtil {
+	
+	/**
+	 * 
+	 */
+	Logger LOGGER = LoggerFactory.getLogger(NotificationUtil.class);
 
 	/**
 	 *           
@@ -43,8 +50,10 @@ public class NotificationUtil {
 	 */
 	public EstadoDoacao notifyDonativo(Donativo donativo) {
 		EstadoDoacao estadoDoaco = this.getEstadoDoacaoAtivo(donativo);
-
-		if (!estadoDoaco.getNotificado()) {
+		
+		LOGGER.info(estadoDoaco.toString());
+		
+		if ((estadoDoaco.getNotificado() != null) && (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
 			case CANCELADO:
 				publisher.publishEvent(

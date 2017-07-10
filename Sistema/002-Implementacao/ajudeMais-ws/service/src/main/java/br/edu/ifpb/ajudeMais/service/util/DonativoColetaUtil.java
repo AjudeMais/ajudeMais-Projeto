@@ -64,6 +64,11 @@ public class DonativoColetaUtil {
 	 */
 	@Transactional
 	public Donativo addEstadoDoacao(Donativo donativo, Estado estado, boolean notificado) {
+		donativo.getEstadosDaDoacao().forEach(e -> {
+			if (e.getAtivo()) {
+				e.setAtivo(false);
+			}
+		});
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
 		estadoDoacao.setAtivo(new Boolean(true));
 		estadoDoacao.setData(new Date());
@@ -71,11 +76,6 @@ public class DonativoColetaUtil {
 		estadoDoacao.setEstadoDoacao(estado);
 		donativo.getEstadosDaDoacao().add(estadoDoacao);
 		
-		donativo.getEstadosDaDoacao().forEach(e -> {
-			if (e.getAtivo()) {
-				e.setAtivo(false);
-			}
-		});
 		return donativo;
 	}
 
