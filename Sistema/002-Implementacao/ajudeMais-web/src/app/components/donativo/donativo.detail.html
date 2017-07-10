@@ -27,7 +27,7 @@
                             <tr>
                                 <th>Estado</th>
                                 <td>
-                                    <span class="{{vm.estado.estadoDoacao | status}}">{{vm.estado.estadoDoacao}}</span>
+                                    <span class="{{vm.estado.estadoDoacao | status}}">{{vm.estado.estadoDoacao == 'NAO_ACEITO' ? 'NÃO ACEITO' : vm.estado.estadoDoacao}}</span>
                                 </td>
                             </tr>
                         </table>
