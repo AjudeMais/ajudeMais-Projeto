@@ -35,16 +35,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
-
  *
+ * 
  */
 @NamedQueries({
-	@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
-			+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
-	
-	@NamedQuery(name = "Donativo.filterDonativoByLocal", query = "SELECT d FROM Donativo d"
-			+ " WHERE d.endereco.localidade like :localidade"
-			+ " AND d.endereco.uf like :uf") })
+		@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
+				+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
+
+		@NamedQuery(name = "Donativo.filterDonativoByLocal", query = "SELECT d FROM Donativo d"
+				+ " WHERE d.endereco.localidade like :localidade" + " AND d.endereco.uf like :uf") })
 @Entity
 public class Donativo implements Serializable {
 
@@ -79,16 +78,16 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT) 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@Column(name = "estados_doacao")
 	private List<EstadoDoacao> estadosDaDoacao;
 
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT) 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<DisponibilidadeHorario> horariosDisponiveis;
 
 	/**
@@ -108,8 +107,8 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Fetch(FetchMode.SUBSELECT) 
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Imagem> fotosDonativo;
 
 	/**
@@ -317,8 +316,9 @@ public class Donativo implements Serializable {
 	@Override
 	public String toString() {
 		return "Donativo [id=" + id + ", quantidade=" + quantidade + ", nome=" + nome + ", descricao=" + descricao
-				+ ", doador=" + doador + ", endereco=" + endereco + ", categoria=" + categoria + ", data=" + data
-				+ ", mensageiro=" + mensageiro + "]";
+				+ ", estadosDaDoacao=" + estadosDaDoacao + ", horariosDisponiveis=" + horariosDisponiveis + ", doador="
+				+ doador + ", endereco=" + endereco + ", fotosDonativo=" + fotosDonativo + ", categoria=" + categoria
+				+ ", data=" + data + ", mensageiro=" + mensageiro + "]";
 	}
 
 }
