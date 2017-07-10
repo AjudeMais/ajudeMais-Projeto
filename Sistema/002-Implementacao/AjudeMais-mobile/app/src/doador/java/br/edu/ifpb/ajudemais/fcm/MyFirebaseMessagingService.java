@@ -45,8 +45,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 executeLoadingCampanhaByIdTask(id, remoteMessage);
                 break;
             case "DOACAO":
-                Log.e("ID:", idAs+"=========================");
-                executeLoadingCampanhaByIdTask(id, remoteMessage);
+                executeLoadingDonativoByIdTask(id, remoteMessage);
                 break;
             default:
 
