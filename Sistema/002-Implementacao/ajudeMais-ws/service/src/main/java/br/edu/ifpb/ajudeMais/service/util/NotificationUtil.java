@@ -51,8 +51,6 @@ public class NotificationUtil {
 	public EstadoDoacao notifyDonativo(Donativo donativo) {
 		EstadoDoacao estadoDoaco = this.getEstadoDoacaoAtivo(donativo);
 		
-		LOGGER.info(estadoDoaco.toString());
-		
 		if ((estadoDoaco.getNotificado() != null) && (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
 			case CANCELADO:

@@ -118,8 +118,6 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved.getDonativo());
 
-		LOGGER.info(notificaveis.toString());
-		
 		if (notificaveis != null && !notificaveis.isEmpty()) {
 			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(),
 					donativoSaved.getDonativo().getDescricao()));

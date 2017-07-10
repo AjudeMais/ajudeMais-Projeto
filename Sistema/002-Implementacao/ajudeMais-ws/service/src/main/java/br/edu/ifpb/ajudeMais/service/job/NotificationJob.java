@@ -78,9 +78,16 @@ public class NotificationJob implements Job {
 		LOGGER.info("Executou Job de notificação...");
 		Long id = context.getJobDetail().getJobDataMap().getLongValue("id");
 		Donativo donativo = this.donativoService.findById(id);
+		List<String> notificaveis = new ArrayList<>();
 
 		if (donativo != null && donativo.getMensageiro() == null) {
-			notifyToCidade(donativo);
+			try {
+				notificaveis = coletaUtil.getNotificaveisToBairro(donativo);
+			} catch (AjudeMaisException e) {
+				LOGGER.error("Ocorreu um erro ao recuperar notificaveis : " + e.getLocalizedMessage());
+			}
+			notifyToCidade(donativo, notificaveis);
+
 		} else {
 			schedulerJobUtil.removeJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativo.getId());
 		}
@@ -90,20 +97,33 @@ public class NotificationJob implements Job {
 	 * 
 	 * @param donativo
 	 */
-	private void notifyToCidade(Donativo donativo) {
+	private void notifyToCidade(Donativo donativo, List<String> notificaveisBairro) {
 		List<String> notificaveis = new ArrayList<>();
 
 		try {
 			notificaveis = coletaUtil.getNotificaveisToCidade(donativo);
+			notificaveis = this.getNotificaveisCidade(notificaveisBairro, notificaveis);
 		} catch (AjudeMaisException e) {
 			LOGGER.error(e.getMessage());
 		}
-		LOGGER.info(notificaveis.toString());
 		if (notificaveis != null && !notificaveis.isEmpty()) {
 			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, donativo.getDescricao()));
 		}
 
 		schedulerJobUtil.createJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId(),
 				NotificationCidadeJob.class);
+	}
+
+	/**
+	 * Método auxiliar para descartar mensageiros que foram notificados na busca
+	 * por bairro. Lista usada para notificar mensageiros na busca por cidade.
+	 */
+	private List<String> getNotificaveisCidade(List<String> notificaveisBairro, List<String> notificaveisCidade) {
+		List<String> notificaveis = new ArrayList<>();
+		notificaveis = notificaveisCidade;
+		notificaveis.removeAll(notificaveisBairro);
+
+		return notificaveis;
+
 	}
 }
