@@ -75,7 +75,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
         for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()) {
             if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()) {
                 estadosDonativoUtil.setCustomLabelEstadoDoacao(holder.estadoDoacao, estadoDoacao.getEstadoDoacao());
-                holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name().equals("NAOACEITO") ? "NÃO ACEITO" : estadoDoacao.getEstadoDoacao().name());
+                holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name().equals("NAO_ACEITO") ? "NÃO ACEITO" : estadoDoacao.getEstadoDoacao().name());
             }
         }
     }
