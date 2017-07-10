@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
+import br.edu.ifpb.ajudemais.dto.LatLng;
 
 /**
  * <p>
@@ -89,10 +90,21 @@ public class DonativoRemoteService extends AbstractRemoteService {
      * @param IdDoador
      * @return
      */
-    public List<Donativo> findByDoadorId(Long IdDoador) {
+    public List<Donativo> findByDonativosToDoadorId(Long IdDoador) {
         ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/{id}", Donativo[].class, IdDoador);
 
         return Arrays.asList(responseEntity.getBody());
+    }
+
+    /**
+     * Busca donativo pelo id.
+     *
+     * @param id
+     * @return
+     */
+    public Donativo findByDonativoId(Long id) {
+        ResponseEntity<Donativo> responseEntity = restTemplate.getForEntity(API + "/filter/donativo/{id}", Donativo.class, id);
+        return responseEntity.getBody();
     }
 
     /**
@@ -106,6 +118,17 @@ public class DonativoRemoteService extends AbstractRemoteService {
         ResponseEntity<DonativoCampanha> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/donativocampanha/{id}", DonativoCampanha.class, idDonativo);
 
         return responseEntity.getBody();
+    }
+
+    /**
+     * Busca os donativos com base na localização
+     *
+     * @param latLng
+     * @return
+     */
+    public List<Donativo> findByDoadorLocal(LatLng latLng) {
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.postForEntity(API + "/donativo/filter/local", latLng, Donativo[].class);
+        return Arrays.asList(responseEntity.getBody());
     }
 }
 

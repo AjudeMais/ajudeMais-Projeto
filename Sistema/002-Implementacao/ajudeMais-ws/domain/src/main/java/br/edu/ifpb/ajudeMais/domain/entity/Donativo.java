@@ -7,14 +7,20 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,8 +34,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * </p>
  * 
  * @author <a href="https://github.com/amslv">Ana Silva</a>
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  *
+ * 
  */
+@NamedQueries({
+		@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
+				+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
+
+		@NamedQuery(name = "Donativo.filterDonativoByLocal", query = "SELECT d FROM Donativo d"
+				+ " WHERE d.endereco.localidade like :localidade" + " AND d.endereco.uf like :uf") })
 @Entity
 public class Donativo implements Serializable {
 
@@ -64,14 +78,16 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	@Column(name = "estados_doacao")
 	private List<EstadoDoacao> estadosDaDoacao;
 
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<DisponibilidadeHorario> horariosDisponiveis;
 
 	/**
@@ -91,7 +107,8 @@ public class Donativo implements Serializable {
 	/**
 	 * 
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private List<Imagem> fotosDonativo;
 
 	/**
@@ -291,7 +308,9 @@ public class Donativo implements Serializable {
 		this.data = data;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -302,5 +321,4 @@ public class Donativo implements Serializable {
 				+ ", data=" + data + ", mensageiro=" + mensageiro + "]";
 	}
 
-	
 }

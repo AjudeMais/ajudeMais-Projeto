@@ -28,24 +28,25 @@
 	<div class="item dropdown" uib-dropdown>
 		<a href="#" class="dropdown-toggle" uib-dropdown-toggle> <i
 			class="fa fa-bell fa-lg"></i>
-			 <span class="label label-warning number-notification">
-			 	2
+			 <span ng-show="donativosNtlist.length>0" class="label label-warning number-notification">
+			 	{{donativosNtlist.length}}
 			 </span>
 		</a>
 		<ul class="dropdown-menu dropdown-menu-right">
 			<li class="dropdown-header"><b>Notificações</b></li>
-			<div>
-				<ul class="list-group">
-				  <a class="list-group-item">
-				  	<span class="badge badge-default">Ninja Master</span>
-				  	Franck subiu de nível
+			<div >
+				<ul class="list-group" ng-repeat="donativo in donativosNtlist">
+				  <a ng-click="openDetailsDonativo(donativo)" class="list-group-item">
+				  	<span  class="badge {{donativo.estadoAtivo.estadoDoacao | status}}">{{donativo.estadoAtivo.estadoDoacao  == 'NAOACEITO' ? 'NÃO ACEITO' : donativo.estadoAtivo.estadoDoacao}}</span>
+					  {{donativo.nome}}
 				  </a>
-				  <a class="list-group-item">
-				  	<span class="badge badge-default">Supreme Master</span>
-				  	Franck subiu de nível
-				  </a>
+				</ul>
+				<ul ng-show="donativosNtlist.length === 0 || !donativosNtlist" class="list-group">
+					<a class="list-group-item">
+						Nenhuma notificação
+					</a>
 				</ul>
 			</div>
 		</ul>
-	</div>
+	</div notication-donativo>
 </div>

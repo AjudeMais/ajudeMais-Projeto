@@ -221,7 +221,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                     btnCancelDoacao.setVisibility(View.GONE);
 
                 }
-                stateDoacao.setText(estado.getEstadoDoacao().name());
+                stateDoacao.setText(estado.getEstadoDoacao().name() == "NAO_ACEITO"? "NÃO ACEITO": estado.getEstadoDoacao().name());
                 this.estadoDoacao = estado;
             }
         }

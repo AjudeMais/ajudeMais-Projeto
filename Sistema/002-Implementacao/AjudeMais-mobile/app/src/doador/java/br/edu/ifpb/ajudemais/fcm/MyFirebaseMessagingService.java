@@ -8,15 +8,19 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.CampanhaActivity;
+import br.edu.ifpb.ajudemais.activities.DonativoActivity;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetCampanhaByIdTask;
+import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
 import br.edu.ifpb.ajudemais.domain.Campanha;
+import br.edu.ifpb.ajudemais.domain.Donativo;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -41,7 +45,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 executeLoadingCampanhaByIdTask(id, remoteMessage);
                 break;
             case "DOACAO":
-
+                executeLoadingDonativoByIdTask(id, remoteMessage);
                 break;
             default:
 
@@ -93,5 +97,25 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
         };
         getCampanhaByIdTask.execute();
+    }
+
+
+    /**
+     * Recupera donativo da notificação.
+     *
+     * @param donativoId
+     * @param remoteMessage
+     */
+    private void executeLoadingDonativoByIdTask(Long donativoId, final RemoteMessage remoteMessage) {
+        GetDonativoByIdTask getDonativoByIdTask = new GetDonativoByIdTask(getApplicationContext(), donativoId);
+        getDonativoByIdTask.delegate = new AsyncResponse<Donativo>() {
+            @Override
+            public void processFinish(Donativo output) {
+                resultIntent = new Intent(getBaseContext(), DonativoActivity.class);
+                resultIntent.putExtra("donativo", output);
+                notifyComponent(remoteMessage);
+            }
+        };
+        getDonativoByIdTask.execute();
     }
 }

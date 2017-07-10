@@ -227,7 +227,8 @@ public class CampanhaServiceImpl implements CampanhaService {
 			Long qtdDonativos = donativoCampanhaRepository.filterCountByEstadoAndCategoriaAfterAceito(campanha.getId(),
 					m.getCategoria().getId());
 			if (qtdDonativos > 0) {
-				m.setPercentualAtingido((m.getQuantidade().floatValue() * 100) / qtdDonativos);
+				float percetual = (qtdDonativos* 100) / m.getQuantidade().floatValue();	
+				m.setPercentualAtingido(percetual);
 
 			} else {
 				m.setPercentualAtingido(0f);

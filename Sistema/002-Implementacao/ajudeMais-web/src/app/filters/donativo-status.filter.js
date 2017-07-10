@@ -28,7 +28,7 @@
                         out = 'label label-primary';
                         break;
 
-                    case 'NAOACEITO':
+                    case 'NAO_ACEITO':
                         out = 'label label-state-not-accepted';
                         break;
                 }

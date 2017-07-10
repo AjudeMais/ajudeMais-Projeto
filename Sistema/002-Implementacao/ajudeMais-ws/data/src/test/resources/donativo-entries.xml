@@ -3,6 +3,7 @@
 	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" />
 	
 	<estado_doacao id="1" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="DISPONIBILIZADO" />
+	<estado_doacao id="2" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="NAO_ACEITO" />
 
 	<conta id="1" username="zefao" email="zefao@mail.com" senha="zefao" ativo="true" />
 	
@@ -15,5 +16,10 @@
 	<donativo id="2" quantidade="3" nome="Briquedos Iron man" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-08"/>
 	
 	<donativo id="1" quantidade="3" nome="Briquedos Iron man 2" descricao="bonecos em bom estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-05"/>	
+	
+	<donativo id="3" quantidade="3" nome="The amazing Spider Man" descricao="bonecos em ótimo estado" doador_id="1" endereco_id="1" categoria_id="1" data="2017-06-06"/>	
+
+	<donativo_estados_da_doacao donativo_id="3" estados_da_doacao_id="2"/>
+	<donativo_estados_da_doacao donativo_id="1" estados_da_doacao_id="1"/>
 
 </dataset>

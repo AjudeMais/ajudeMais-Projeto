@@ -33,8 +33,8 @@
     <string name="msgEmailNotInformed">O e-mail deve ser informado.</string>
     <string name="msgEmailNotValid">E-mail inválido.</string>
     <string name="msgConfirmPasswordNotInformed">A confirmação da senha deve ser informada.</string>
-    <string name="msgPermitionUsingGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a permissão do uso de sua localização</string>
-    <string name="msgPermitionTurnOnGPs">Para carregar as campanhas e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
+    <string name="msgPermitionUsingGPs">Para carregar as donativos e instituições de acordo com sua localidade é necessário a permissão do uso de sua localização</string>
+    <string name="msgPermitionTurnOnGPs">Para carregar as donativos e instituições de acordo com sua localidade é necessário a ativação do GPS</string>
     <string name="permission">Permissão</string>
     <string name="permissionDenied">"Permissão para localização negada."</string>
     <string name="permissionDeniedAccessCamera">"Permissão para acesso a camêra negada."</string>
@@ -111,9 +111,9 @@
 
     <string name="mgsCepEmpty">Informe um cep</string>
     <string name="mgsNumeroEmpty">Informe um numero</string>
-    <string  name="mgsBairroEmpty">Informe um bairro</string>
-    <string  name="mgsLogradouroEmpty">Informe um logradouro</string>
-    <string  name="mgsUfEmpty">Informe a uf do estado</string>
+    <string name="mgsBairroEmpty">Informe um bairro</string>
+    <string name="mgsLogradouroEmpty">Informe um logradouro</string>
+    <string name="mgsUfEmpty">Informe a uf do estado</string>
     <string name="hitComplemento">Complemento</string>
     <string name="msgEmptyCep">CEP deve ser informado</string>
     <string name="msgEmptyLogradouro">Logradouro deve ser informado</string>

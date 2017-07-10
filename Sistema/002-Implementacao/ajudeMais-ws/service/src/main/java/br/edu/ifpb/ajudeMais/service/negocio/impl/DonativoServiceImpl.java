@@ -10,13 +10,23 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
+import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
+import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
-import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
+import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.EstadoDoacaoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
+import br.edu.ifpb.ajudeMais.service.util.NotificationUtil;
+import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
  * 
@@ -29,7 +39,8 @@ import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
  *
  * </p>
  * 
- * @author <a href="https://github.com/amslv">Ana Silva</a>
+ * @author <a href="https://github.com/amslv">Ana Silva</a></br>
+ *         <a href="https://github.com/FranckAJ">Franck Aragão</a>
  *
  */
 @Service
@@ -41,19 +52,41 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private DonativoRepository donativoRepository;
 
-	
 	/**
 	 *           
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
 	
-	
+	/**
+	 * 
+	 */
+	@Autowired
+	private GoogleMapsServiceImpl googleMapsResponse;
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private DonativoColetaUtil coletaUtil;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private SchedulerJobUtil schedulerJobUtil;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private NotificationUtil notificationUtil;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private EstadoDoacaoService estadoDoacaoService;
 
 	/**
 	 * 
@@ -65,24 +98,20 @@ public class DonativoServiceImpl implements DonativoService {
 		Donativo donativoSaved = donativoRepository.save(entity);
 
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
-		
-		List<String> notificaveis = coletaUtil.getNotificaveis(donativoSaved);
-		
+
+		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved);
+
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
-		}else{
 			publisher.publishEvent(
-					new DoacaoStateNotificationEvent(donativoSaved.getDoador().getTokenFCM().getToken(), donativoSaved, 
-							"Nenhum mensageiro disponível para coleta em sua localidade"));
-		
-			donativoSaved = coletaUtil.updateEstadoDoacao(donativoSaved);
-			update(donativoSaved);
+					new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+
 		}
+		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(),
+				NotificationJob.class);
 
 		return donativoSaved;
 	}
-	
-	
+
 	/**
 	 * 
 	 */
@@ -90,8 +119,11 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoRepository.save(entity);
+		
+		EstadoDoacao estadoDoacao = notificationUtil.notifyDonativo(entity);
+		estadoDoacaoService.update(estadoDoacao);
+		
 		return donativoUpdated;
-
 	}
 
 	/**
@@ -151,6 +183,33 @@ public class DonativoServiceImpl implements DonativoService {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
 
-	
+
+	/**
+	 * <p>
+	 * Busca donativos com estado passado e id da instituicao passada
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */ 
+	@Override
+	public List<Donativo> filterDonativoByEstadoAndInstituicao(Long idInstitucao, Estado estado) {
+		return donativoRepository.filterDonativoByEstadoAndInstituicao(idInstitucao, estado);
+	}
+
+	/**
+	 * <p>
+	 * Busca donativos com base na localização
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */
+	@Override
+	public List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException {
+		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
+				latLng.getLongitude());
+		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(),
+				endereco.getUf());
+		return donativos;
+	}
 
 }

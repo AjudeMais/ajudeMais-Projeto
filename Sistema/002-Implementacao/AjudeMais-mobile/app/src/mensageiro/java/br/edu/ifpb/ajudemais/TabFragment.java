@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
+import br.edu.ifpb.ajudemais.activities.MainTab03;
+import br.edu.ifpb.ajudemais.fragments.MainSearchSolicitacoesFragment;
 
 /**
  * <p>
@@ -25,7 +27,7 @@ public class TabFragment extends Fragment {
 
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
-    public static int int_items = 2 ;
+    public static int int_items = 3 ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,8 +76,9 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new MainTab01();
-                case 1 : return new MainTab02();
+                case 0 : return new MainSearchSolicitacoesFragment();
+                case 1 : return new MainTab01();
+                case 2 : return new MainTab02();
             }
             return null;
         }
@@ -100,8 +103,10 @@ public class TabFragment extends Fragment {
 
             switch (position){
                 case 0 :
-                    return "Próximas coletas";
-                case 1 :
+                    return "Solicitações";
+                case 1:
+                    return "Próximas Coletas";
+                case 2 :
                     return "Minhas Coletas";
             }
             return null;

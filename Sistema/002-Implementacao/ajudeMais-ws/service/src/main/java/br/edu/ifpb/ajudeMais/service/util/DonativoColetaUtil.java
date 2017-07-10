@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,42 +47,84 @@ public class DonativoColetaUtil {
 	@Autowired
 	private MensageiroAssociadoService mensageiroAssociadoService;
 
-
-
 	/**
-	 * Método auxiliar para atualizar estado de uma doação no caso de nenhum
-	 * mensageiro ser encontrado.
+	 * 
+	 * <p>
+	 * Método auxiliar para atualizar estado de uma doação.
+	 * </p>
 	 * 
 	 * @param donativo
+	 *            donativo a ser atualizado
+	 * @param estado
+	 *            estado a ser alterado no donativo
+	 * @param notificado
+	 *            true para estado notificado / false para estado não
+	 *            notificado.
 	 * @return
 	 */
-	public Donativo updateEstadoDoacao(Donativo donativo) {
+	@Transactional
+	public Donativo addEstadoDoacao(Donativo donativo, Estado estado, boolean notificado) {
+		donativo.getEstadosDaDoacao().forEach(e -> {
+			if (e.getAtivo()) {
+				e.setAtivo(false);
+			}
+		});
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
 		estadoDoacao.setAtivo(new Boolean(true));
 		estadoDoacao.setData(new Date());
-		estadoDoacao.setEstadoDoacao(Estado.NAOACEITO);
+		estadoDoacao.setNotificado(notificado);
+		estadoDoacao.setEstadoDoacao(estado);
 		donativo.getEstadosDaDoacao().add(estadoDoacao);
-		if (donativo.getEstadosDaDoacao().get(0).getAtivo()) {
-			donativo.getEstadosDaDoacao().get(0).setAtivo(false);
-		}
+		
 		return donativo;
 	}
 
 	/**
 	 * 
 	 * <p>
-	 * Obtém lista de mensageiros que serão notificados.
+	 * Obtém lista de mensageiros por bairro que serão notificados.
 	 * </p>
 	 * 
 	 * @param campanha
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	public List<String> getNotificaveis(Donativo donativo) throws AjudeMaisException {
+	public List<String> getNotificaveisToBairro(Donativo donativo) throws AjudeMaisException {
 
-		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloser(donativo.getEndereco(),
-				donativo.getCategoria().getInstituicaoCaridade().getId());
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToBairro(
+				donativo.getEndereco(), donativo.getCategoria().getInstituicaoCaridade().getId());
 
+		return getTokensNotificaveis(mensageiros);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de mensageiros por cidade que serão notificados.
+	 * </p>
+	 * 
+	 * @param campanha
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	public List<String> getNotificaveisToCidade(Donativo donativo) throws AjudeMaisException {
+
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToBairro(
+				donativo.getEndereco(), donativo.getCategoria().getInstituicaoCaridade().getId());
+
+		return getTokensNotificaveis(mensageiros);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Obtém lista de tokens dos mensageiros que serão notificados;
+	 * </p>
+	 * 
+	 * @param mensageiros
+	 * @return
+	 */
+	private List<String> getTokensNotificaveis(List<Mensageiro> mensageiros) {
 		List<String> notificaveis = new ArrayList<>();
 
 		mensageiros.forEach(m -> {

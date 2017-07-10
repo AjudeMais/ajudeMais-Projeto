@@ -3,10 +3,12 @@ package br.edu.ifpb.ajudeMais.data.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 
 /**
  * 
@@ -73,5 +75,23 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findAllByOrderByDataDesc();
+	
+	/**
+	 * <p>
+	 * Busca donativos com estado passado e id da instituicao passada
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */ 
+	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao, @Param("estado") Estado estado);
 
+	
+	/**
+	 * <p>
+	 * Busca donativos com base na localização
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */
+	List<Donativo> filterDonativoByLocal(@Param("localidade") String localidade, @Param("uf") String uf);
 }

@@ -20,7 +20,7 @@
     <string name="hitNewPasswordAlterar">Nova Senha</string>
 
     <string name="cancelOperation">"Operação cancelada"</string>
-    <string name="campanhas">CAMPANHAS</string>
+    <string name="donativos">CAMPANHAS</string>
     <string name="lista_de_itens_do_veis">Itens que podem ser doados</string>
     <string name="errorOnLogin">Falha ao tentar efetuar login</string>
 

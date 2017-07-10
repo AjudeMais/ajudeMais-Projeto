@@ -36,7 +36,7 @@ public class EstadosDonativoUtil {
             lbEstado.setBackgroundResource(R.drawable.screen_border_disponibilizado);
             lbEstado.setTextColor(Color.parseColor("#665e5e"));
 
-        } else if (estado.name().equals(Estado.NAOACEITO.name())) {
+        } else if (estado.name().equals(Estado.NAO_ACEITO.name())) {
             lbEstado.setBackgroundResource(R.drawable.screen_border_nao_aceito);
             lbEstado.setTextColor(Color.WHITE);
 
