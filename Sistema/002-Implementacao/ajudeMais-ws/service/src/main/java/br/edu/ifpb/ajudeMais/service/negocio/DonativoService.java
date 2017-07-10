@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 
 /**
  * 
@@ -70,4 +72,16 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @return lista de donativos
 	 */ 
 	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao, @Param("estado") Estado estado);
+
+	
+	/**
+	 * <p>
+	 * Busca donativos com base na localização do doador.
+	 * </p>
+	 * 
+	 * @param latLng
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException;
 }
