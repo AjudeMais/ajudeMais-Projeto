@@ -3,7 +3,7 @@
 	<endereco id="1" logradouro= "Rua ai" numero="10" bairro="centro" cep="58560000" localidade="Ouro velho" uf="PB" />
 	
 	<estado_doacao id="1" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="DISPONIBILIZADO" />
-	<estado_doacao id="2" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="NAOACEITO" />
+	<estado_doacao id="2" data="2017-06-05" notificado="FALSE" ativo="TRUE" estado_atual="NAO_ACEITO" />
 
 	<conta id="1" username="zefao" email="zefao@mail.com" senha="zefao" ativo="true" />
 	

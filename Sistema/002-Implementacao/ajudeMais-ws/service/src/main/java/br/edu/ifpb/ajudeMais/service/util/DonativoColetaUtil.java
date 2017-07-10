@@ -48,22 +48,34 @@ public class DonativoColetaUtil {
 	private MensageiroAssociadoService mensageiroAssociadoService;
 
 	/**
-	 * Método auxiliar para atualizar estado de uma doação no caso de nenhum
-	 * mensageiro ser encontrado.
+	 * 
+	 * <p>
+	 * Método auxiliar para atualizar estado de uma doação.
+	 * </p>
 	 * 
 	 * @param donativo
+	 *            donativo a ser atualizado
+	 * @param estado
+	 *            estado a ser alterado no donativo
+	 * @param notificado
+	 *            true para estado notificado / false para estado não
+	 *            notificado.
 	 * @return
 	 */
 	@Transactional
-	public Donativo updateEstadoDoacao(Donativo donativo) {
+	public Donativo addEstadoDoacao(Donativo donativo, Estado estado, boolean notificado) {
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
 		estadoDoacao.setAtivo(new Boolean(true));
 		estadoDoacao.setData(new Date());
-		estadoDoacao.setEstadoDoacao(Estado.NAOACEITO);
+		estadoDoacao.setNotificado(notificado);
+		estadoDoacao.setEstadoDoacao(estado);
 		donativo.getEstadosDaDoacao().add(estadoDoacao);
-		if (donativo.getEstadosDaDoacao().get(0).getAtivo()) {
-			donativo.getEstadosDaDoacao().get(0).setAtivo(false);
-		}
+		
+		donativo.getEstadosDaDoacao().forEach(e -> {
+			if (e.getAtivo()) {
+				e.setAtivo(false);
+			}
+		});
 		return donativo;
 	}
 

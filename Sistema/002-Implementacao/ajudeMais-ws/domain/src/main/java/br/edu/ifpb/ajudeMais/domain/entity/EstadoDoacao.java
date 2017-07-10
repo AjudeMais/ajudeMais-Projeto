@@ -54,7 +54,7 @@ public class EstadoDoacao implements Serializable {
 	/**
 	 * 
 	 */
-	private Boolean notificado;
+	private Boolean notificado = false;
 	
 	
 	private Boolean ativo;

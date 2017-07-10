@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
@@ -19,7 +20,9 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.Doa
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.EstadoDoacaoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
+import br.edu.ifpb.ajudeMais.service.util.NotificationUtil;
 import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
@@ -63,6 +66,18 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private SchedulerJobUtil schedulerJobUtil;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private NotificationUtil notificationUtil;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private EstadoDoacaoService estadoDoacaoService;
 
 	/**
 	 * 
@@ -95,8 +110,11 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoRepository.save(entity);
+		
+		EstadoDoacao estadoDoacao = notificationUtil.notifyDonativo(entity);
+		estadoDoacaoService.update(estadoDoacao);
+		
 		return donativoUpdated;
-
 	}
 
 	/**

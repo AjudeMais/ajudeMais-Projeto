@@ -119,7 +119,7 @@ public class DonativoRepositoryTest {
 	 */
 	@Test
 	public void filterDonativoByEstadoAndInstituicaoTest() {
-		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.NAOACEITO);
+		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.NAO_ACEITO);
 		assertEquals(1, donativos.size());
 	}
 	

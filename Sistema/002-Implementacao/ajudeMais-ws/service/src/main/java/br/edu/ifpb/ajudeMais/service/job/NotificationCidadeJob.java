@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
@@ -81,8 +82,7 @@ public class NotificationCidadeJob implements Job {
 			publisher.publishEvent(new DoacaoStateNotificationEvent(donativo.getDoador().getTokenFCM().getToken(),
 					donativo, "Nenhum mensageiro disponível para coleta em sua localidade"));
 
-			LOGGER.info(donativo.toString());
-			donativo = coletaUtil.updateEstadoDoacao(donativo);
+			donativo = coletaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
 
 			try {
 				donativoService.update(donativo);

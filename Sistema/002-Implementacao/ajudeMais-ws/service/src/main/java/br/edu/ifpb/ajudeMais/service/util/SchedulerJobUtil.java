@@ -39,7 +39,8 @@ public class SchedulerJobUtil {
 	/**
 	 * 
 	 * <p>
-	 * Cria um agendamento para um Qartz Job específico.
+	 * Cria um agendamento para um Qartz Job específico. Mudar segundo parametro
+	 * quando for colocar em produção.
 	 * </p>
 	 * 
 	 * @param jobName
@@ -54,13 +55,13 @@ public class SchedulerJobUtil {
 	@SuppressWarnings("rawtypes")
 	public void createJob(JobName jobName, TriggerName triggerName, Long dataId, Class jobClass) {
 		JobDetailFactoryBean jdfb = QuartzConfig.createJobDetail(jobClass);
-		jdfb.setBeanName(jobName.name()+"_"+ dataId);
+		jdfb.setBeanName(jobName.name() + "_" + dataId);
 		jdfb.afterPropertiesSet();
 
-		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 10000L, 0);
-		stfb.setBeanName(triggerName.name()+"_"+ dataId);
+		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 60000L, 0);
+		stfb.setBeanName(triggerName.name() + "_" + dataId);
 		stfb.afterPropertiesSet();
-		
+
 		jdfb.getJobDataMap().put("id", dataId);
 
 		try {
@@ -83,8 +84,8 @@ public class SchedulerJobUtil {
 	 *            nome do trigger responsável pela iniciação do Job.
 	 */
 	public void removeJob(JobName jobName, TriggerName triggerName, Long dataId) {
-		TriggerKey tkey = new TriggerKey(triggerName.name()+"_"+ dataId);
-		JobKey jkey = new JobKey(jobName.name()+"_"+ dataId);
+		TriggerKey tkey = new TriggerKey(triggerName.name() + "_" + dataId);
+		JobKey jkey = new JobKey(jobName.name() + "_" + dataId);
 		try {
 			schedFactory.getScheduler().unscheduleJob(tkey);
 			schedFactory.getScheduler().deleteJob(jkey);
