@@ -74,7 +74,7 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	 */
 	@Autowired
 	private SchedulerJobUtil schedulerJobUtil;
-	
+
 	/**
 	 * 
 	 */
@@ -115,17 +115,14 @@ public class DonativoCampanhaServiceImpl implements DonativoCampanhaService {
 	public DonativoCampanha save(DonativoCampanha entity) throws AjudeMaisException {
 		DonativoCampanha donativoSaved = donativoCampanhaRespository.save(entity);
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved.getDonativo()));
-
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved.getDonativo());
-
+		
 		if (notificaveis != null && !notificaveis.isEmpty()) {
 			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved.getDonativo(),
 					donativoSaved.getDonativo().getDescricao()));
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getDonativo().getId(),
 				NotificationJob.class);
-
 		return donativoSaved;
 	}
-
 }

@@ -57,7 +57,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	/**
 	 * 
 	 */
@@ -75,13 +75,13 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private SchedulerJobUtil schedulerJobUtil;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private NotificationUtil notificationUtil;
-	
+
 	/**
 	 * 
 	 */
@@ -96,7 +96,6 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo save(Donativo entity) throws AjudeMaisException {
 
 		Donativo donativoSaved = donativoRepository.save(entity);
-
 		publisher.publishEvent(new DonativoEditEvent(donativoSaved));
 
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved);
@@ -119,10 +118,10 @@ public class DonativoServiceImpl implements DonativoService {
 	@Override
 	public Donativo update(Donativo entity) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoRepository.save(entity);
-		
+
 		EstadoDoacao estadoDoacao = notificationUtil.notifyDonativo(entity);
 		estadoDoacaoService.update(estadoDoacao);
-		
+
 		return donativoUpdated;
 	}
 
@@ -183,14 +182,13 @@ public class DonativoServiceImpl implements DonativoService {
 		return donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicao);
 	}
 
-
 	/**
 	 * <p>
 	 * Busca donativos com estado passado e id da instituicao passada
 	 * </p>
 	 * 
 	 * @return lista de donativos
-	 */ 
+	 */
 	@Override
 	public List<Donativo> filterDonativoByEstadoAndInstituicao(Long idInstitucao, Estado estado) {
 		return donativoRepository.filterDonativoByEstadoAndInstituicao(idInstitucao, estado);
@@ -207,8 +205,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException {
 		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 				latLng.getLongitude());
-		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(),
-				endereco.getUf());
+		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(), endereco.getUf());
 		return donativos;
 	}
 
