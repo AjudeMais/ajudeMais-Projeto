@@ -31,7 +31,7 @@
                 };
 
                 var notification = function () {
-                    donativoService.getFilterDonativoByEstadoAndInstituicao("NAOACEITO").then(function (response) {
+                    donativoService.getFilterDonativoByEstadoAndInstituicao("NAO_ACEITO").then(function (response) {
                         listaDonativos = response.data;
 
                         if ($localStorage.listaClickedDonativo !== undefined) {
