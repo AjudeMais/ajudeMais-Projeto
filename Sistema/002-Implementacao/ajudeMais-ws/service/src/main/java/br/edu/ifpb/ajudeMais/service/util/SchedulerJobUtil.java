@@ -58,7 +58,7 @@ public class SchedulerJobUtil {
 		jdfb.setBeanName(jobName.name() + "_" + dataId);
 		jdfb.afterPropertiesSet();
 
-		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 10000L, 0);
+		SimpleTriggerFactoryBean stfb = QuartzConfig.createTrigger(jdfb.getObject(), 60000L, 0);
 		stfb.setBeanName(triggerName.name() + "_" + dataId);
 		stfb.afterPropertiesSet();
 

@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
+import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
@@ -29,8 +30,6 @@ import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
  * Classe utilizada para execução de job para notificação agendada de cidade.
  * </p>
  *
- * <pre>
- * </pre
  *
  * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  *
@@ -54,7 +53,7 @@ public class NotificationCidadeJob implements Job {
 	 * 
 	 */
 	@Autowired
-	private DonativoColetaUtil coletaUtil;
+	private DonativoColetaUtil donativoColetaUtil;
 
 	/**
 	 *           
@@ -77,20 +76,31 @@ public class NotificationCidadeJob implements Job {
 
 		Long id = context.getJobDetail().getJobDataMap().getLongValue("id");
 		Donativo donativo = this.donativoService.findById(id);
-		
+
 		if (donativo != null && donativo.getMensageiro() == null) {
 			publisher.publishEvent(new DoacaoStateNotificationEvent(donativo.getDoador().getTokenFCM().getToken(),
 					donativo, "Nenhum mensageiro disponível para coleta em sua localidade"));
 
-			donativo = coletaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
-			LOGGER.info(donativo.toString());
+			EstadoDoacao estadoAtual = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
+			updateEstadoDonativo(donativo, estadoAtual);
+		}
+
+		schedulerJobUtil.removeJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId());
+	}
+
+	/**
+	 * 
+	 * @param donativo
+	 * @param estado
+	 */
+	private void updateEstadoDonativo(Donativo donativo, EstadoDoacao estado) {
+		if (estado.equals(Estado.DISPONIBILIZADO)) {
+			donativo = donativoColetaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
 			try {
 				donativoService.update(donativo);
 			} catch (AjudeMaisException e) {
 				LOGGER.error(e.getMessage());
 			}
 		}
-		
-		schedulerJobUtil.removeJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId());
 	}
 }
