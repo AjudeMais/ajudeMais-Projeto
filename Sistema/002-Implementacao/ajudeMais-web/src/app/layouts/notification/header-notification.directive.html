@@ -33,11 +33,11 @@
 			 </span>
 		</a>
 		<ul class="dropdown-menu dropdown-menu-right">
-			<li class="dropdown-header"><b>Notificações</b></li>
+			<li class="dropdown-header"><b>Notificações de doações</b></li>
 			<div >
 				<ul class="list-group" ng-repeat="donativo in donativosNtlist">
 				  <a ng-click="openDetailsDonativo(donativo)" class="list-group-item">
-				  	<span  class="badge {{donativo.estadoAtivo.estadoDoacao | status}}">{{donativo.estadoAtivo.estadoDoacao  == 'NAOACEITO' ? 'NÃO ACEITO' : donativo.estadoAtivo.estadoDoacao}}</span>
+				  	<span  class="badge {{donativo.estadoAtivo.estadoDoacao | status}}">{{donativo.estadoAtivo.estadoDoacao  == 'NAO_ACEITO' ? 'NÃO ACEITO' : donativo.estadoAtivo.estadoDoacao}}</span>
 					  {{donativo.nome}}
 				  </a>
 				</ul>
