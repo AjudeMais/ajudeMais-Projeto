@@ -32,7 +32,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.e("AJUDEMAIS", "EXECUTOU...............................lllllll");
         getDataNotification(remoteMessage);
     }
 
@@ -119,7 +118,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void processFinish(Donativo output) {
                 Donativo donativo = output;
-                Log.e("AJUDEMAIS", donativo.toString());
                 resultIntent = new Intent(getApplicationContext(), DonativoActivity.class);
                 resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
