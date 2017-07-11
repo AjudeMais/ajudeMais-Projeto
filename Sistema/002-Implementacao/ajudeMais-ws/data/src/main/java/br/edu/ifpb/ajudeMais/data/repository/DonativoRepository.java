@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 
 /**
@@ -43,6 +44,18 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 
 	/**
 	 * 
+	 * <p>
+	 * Busca os donativos filtrando pelo mensageiro e ordenando por data de
+	 * criação.
+	 * </p>
+	 * 
+	 * @param mensageiro
+	 * @return
+	 */
+	List<Donativo> findByMensageiroOrderByDataDesc(Mensageiro mensageiro);
+	
+	/**
+	 * 
 	 * @param nome
 	 * @return
 	 */
@@ -60,13 +73,14 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	List<Donativo> findByCategoriaInstituicaoCaridadeOrderByDataDesc(InstituicaoCaridade instituicaoCaridade);
 
 	/**
-	 * Conta quantos donativos com a categoria passada na instituição com id passado existem.
+	 * Conta quantos donativos com a categoria passada na instituição com id
+	 * passado existem.
 	 * 
 	 * @param nome
 	 * @return
 	 */
 	Long countByCategoriaAndCategoriaInstituicaoCaridadeId(Categoria categoria, Long id);
-	
+
 	/**
 	 * <p>
 	 * Busca donativos e retorna lista ordenada por data de criação
@@ -75,17 +89,17 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findAllByOrderByDataDesc();
-	
+
 	/**
 	 * <p>
 	 * Busca donativos com estado passado e id da instituicao passada
 	 * </p>
 	 * 
 	 * @return lista de donativos
-	 */ 
-	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao, @Param("estado") Estado estado);
+	 */
+	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao,
+			@Param("estado") Estado estado);
 
-	
 	/**
 	 * <p>
 	 * Busca donativos com base na localização

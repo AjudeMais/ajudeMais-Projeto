@@ -20,12 +20,14 @@ import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.DonativoCampanha;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 
 /**
  * 
@@ -58,9 +60,12 @@ public class DonativoRestService {
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
 
+	@Autowired
+	private MensageiroService mensageiroService;
 
 	/**
 	 * Salva donativo avulso
+	 * 
 	 * @param donativo
 	 * @return
 	 * @throws AjudeMaisException
@@ -74,19 +79,22 @@ public class DonativoRestService {
 
 	/**
 	 * Salva Donativo de uma campanha
+	 * 
 	 * @param donativo
 	 * @return
 	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.POST, value = "/save/donativocampanha")
-	public ResponseEntity<DonativoCampanha> saveWithCampanha(@RequestBody DonativoCampanha donativo) throws AjudeMaisException {
+	public ResponseEntity<DonativoCampanha> saveWithCampanha(@RequestBody DonativoCampanha donativo)
+			throws AjudeMaisException {
 		DonativoCampanha donativoSalvo = donativoCampanhaService.save(donativo);
 		return new ResponseEntity<>(donativoSalvo, HttpStatus.CREATED);
 	}
 
 	/**
-	 * GET /filter/donativocampanha/{id} : Endpoint para buscar DonativoCampanha pelo id Donativo
+	 * GET /filter/donativocampanha/{id} : Endpoint para buscar DonativoCampanha
+	 * pelo id Donativo
 	 * 
 	 * @param donativo
 	 * @return
@@ -98,10 +106,11 @@ public class DonativoRestService {
 		DonativoCampanha donativoCampanha = donativoCampanhaService.findByDonativoId(id);
 		return new ResponseEntity<>(donativoCampanha, HttpStatus.OK);
 	}
-	
-	
+
 	/**
-	 * GET /filter/donativo/{id} : Endpoint para buscar Donativo pelo id Donativo
+	 * GET /filter/donativo/{id} : Endpoint para buscar Donativo pelo id
+	 * Donativo
+	 * 
 	 * @param donativo
 	 * @return
 	 * @throws AjudeMaisException
@@ -112,7 +121,6 @@ public class DonativoRestService {
 		Donativo donativo = donativoService.findById(id);
 		return new ResponseEntity<>(donativo, HttpStatus.OK);
 	}
-
 
 	@PreAuthorize("hasRole('DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
@@ -147,7 +155,8 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos de um doador com id passado
+	 * GET /donativo/filter/doadorId : Endpoint para buscar os donativos de um
+	 * doador com id passado
 	 * 
 	 * @return donativos
 	 */
@@ -171,11 +180,31 @@ public class DonativoRestService {
 	}
 
 	/**
+	 * 
+	 * <p>
+	 * GET /donativo/filter/mensageiro : Busca mensageiros filtrando por
+	 * mensageiro.
+	 * </p>
+	 * 
+	 * @param username do mensageiro
+	 * @return lista encontrada
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/mensageiro")
+	public ResponseEntity<List<Donativo>> findByMensageiro(@RequestParam("username") String username) {
+
+		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
+
+		List<Donativo> donativos = donativoService.findByMensageiro(mensageiro);
+		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
+	}
+
+	/**
 	 * GET /donativo/filter/instituicao : Busca donativos pela instituição.
 	 * 
 	 * @return donativos
 	 */
-	@PreAuthorize("hasAnyRole('INSTITUICAO, DOADOR')")
+	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/filter/instituicao")
 	public ResponseEntity<List<Donativo>> findByInstituicao() {
 		Conta conta = authService.getCurrentUser();
@@ -189,7 +218,8 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * /filter/campanha/estado/{id} : Busca todos os donativos de doados para a campanha com id passado que estão no estado depois de aceito.
+	 * /filter/campanha/estado/{id} : Busca todos os donativos de doados para a
+	 * campanha com id passado que estão no estado depois de aceito.
 	 * 
 	 * @return donativos
 	 */
@@ -203,7 +233,8 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * /filter/estado/ : Busca todos os donativos com estado passado vinculados a instituição com id passado.
+	 * /filter/estado/ : Busca todos os donativos com estado passado vinculados
+	 * a instituição com id passado.
 	 * 
 	 * @return donativos
 	 */
@@ -215,7 +246,8 @@ public class DonativoRestService {
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoRepository.findOneByConta(conta);
 
 		if (instituicaoOp.isPresent()) {
-			List<Donativo> donativos = donativoService.filterDonativoByEstadoAndInstituicao(instituicaoOp.get().getId(),  Estado.getByEstado(estado));
+			List<Donativo> donativos = donativoService.filterDonativoByEstadoAndInstituicao(instituicaoOp.get().getId(),
+					Estado.getByEstado(estado));
 			return new ResponseEntity<>(donativos, HttpStatus.OK);
 
 		} else {

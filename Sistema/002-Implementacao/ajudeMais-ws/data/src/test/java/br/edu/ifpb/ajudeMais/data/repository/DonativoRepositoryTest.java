@@ -24,6 +24,7 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import br.edu.ifpb.ajudeMais.domain.entity.Categoria;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 
 /**
@@ -55,7 +56,7 @@ public class DonativoRepositoryTest {
 	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
-	
+
 	/**
 	 * 
 	 */
@@ -64,7 +65,7 @@ public class DonativoRepositoryTest {
 		List<Donativo> donativos = donativoRepository.findByNome("Briquedos Iron man");
 		assertThat(!donativos.isEmpty());
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -73,7 +74,7 @@ public class DonativoRepositoryTest {
 		List<Donativo> donativos = donativoRepository.findByDoadorIdOrderByDataDesc(1l);
 		assertThat(!donativos.isEmpty());
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -82,7 +83,7 @@ public class DonativoRepositoryTest {
 		List<Donativo> donativos = donativoRepository.findByDoadorNome("Ze");
 		assertThat(!donativos.isEmpty());
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -90,10 +91,11 @@ public class DonativoRepositoryTest {
 	public void findByCategoriaInstituicaoCaridadeTest() {
 		InstituicaoCaridade instituicaoCaridade = new InstituicaoCaridade();
 		instituicaoCaridade.setId(1l);
-		List<Donativo> donativos = donativoRepository.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicaoCaridade);
+		List<Donativo> donativos = donativoRepository
+				.findByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicaoCaridade);
 		assertThat(!donativos.isEmpty());
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -102,9 +104,9 @@ public class DonativoRepositoryTest {
 		Categoria categoria = new Categoria();
 		categoria.setId(1l);
 		Long count = donativoRepository.countByCategoriaAndCategoriaInstituicaoCaridadeId(categoria, 1l);
-		assertThat(count>0);
+		assertThat(count > 0);
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -113,25 +115,70 @@ public class DonativoRepositoryTest {
 		List<Donativo> donativos = donativoRepository.findAllByOrderByDataDesc();
 		assertThat(donativos.get(0).getId() == 2l);
 	}
-	
+
 	/**
-	 * Testa se existe um donativo vinculada a instituição com id que possui o estado NAOACEITO
+	 * Testa se existe um donativo vinculada a instituição com id que possui o
+	 * estado NAOACEITO
 	 */
 	@Test
 	public void filterDonativoByEstadoAndInstituicaoTest() {
 		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.NAO_ACEITO);
 		assertEquals(1, donativos.size());
 	}
-	
+
 	/**
-	 * Testa se lista estará null se não existi donativos com estado aceito vinculados a instituição com id 1.
+	 * Testa se lista estará null se não existi donativos com estado aceito
+	 * vinculados a instituição com id 1.
 	 */
 	@Test
 	public void filterDonativoByEstadoAndInstituicaoNullTest() {
 		List<Donativo> donativos = donativoRepository.filterDonativoByEstadoAndInstituicao(1l, Estado.ACEITO);
 		assertThat(donativos.isEmpty());
 	}
-	
-	
+
+	/**
+	 * 
+	 * <p>
+	 * Testa método que busca donativos de um mensageiro. Deveria retornar true.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroOrderByDataDescTest() {
+		Mensageiro mensageiro = new Mensageiro();
+		mensageiro.setId(1l);
+		List<Donativo> donativos = donativoRepository.findByMensageiroOrderByDataDesc(mensageiro);
+		assertThat(!donativos.isEmpty());
+
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Testa método que busca donativos de um mensageiro. Deveria retornar
+	 * false, para mensageiro são existente.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroOrderByDataDescNullTest() {
+		List<Donativo> donativos = donativoRepository.findByMensageiroOrderByDataDesc(null);
+		assertThat(donativos.isEmpty());
+
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Testa método que busca donativos de um mensageiro. Deveria retornar
+	 * false, para mensageiro com ID inexistente.
+	 * </p>
+	 */
+	@Test
+	public void findByMensageiroOrderByDataDescNotExistTest() {
+		Mensageiro mensageiro = new Mensageiro();
+		mensageiro.setId(100l);
+		List<Donativo> donativos = donativoRepository.findByMensageiroOrderByDataDesc(null);
+		assertThat(donativos.isEmpty());
+
+	}
 
 }

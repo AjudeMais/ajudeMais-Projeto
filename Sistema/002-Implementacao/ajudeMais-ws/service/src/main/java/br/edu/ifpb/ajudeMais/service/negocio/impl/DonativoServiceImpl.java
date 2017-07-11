@@ -2,17 +2,17 @@ package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
@@ -207,6 +207,14 @@ public class DonativoServiceImpl implements DonativoService {
 				latLng.getLongitude());
 		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(), endereco.getUf());
 		return donativos;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public List<Donativo> findByMensageiro(Mensageiro mensageiro) {
+		return donativoRepository.findByMensageiroOrderByDataDesc(mensageiro);
 	}
 
 }
