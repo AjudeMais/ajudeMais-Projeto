@@ -75,8 +75,27 @@ public class DonativoColetaUtil {
 		estadoDoacao.setNotificado(notificado);
 		estadoDoacao.setEstadoDoacao(estado);
 		donativo.getEstadosDaDoacao().add(estadoDoacao);
-		
+
 		return donativo;
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Recupera estado da doação com estado ativo de um donativo.
+	 * </p>
+	 * 
+	 * @param donativo
+	 * @return
+	 */
+	public EstadoDoacao getEstadoDoacaoAtivo(Donativo donativo) {
+		EstadoDoacao estadoDoacao = null;
+		for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
+			if (estado.getAtivo()) {
+				estadoDoacao = estado;
+			}
+		}
+		return estadoDoacao;
 	}
 
 	/**

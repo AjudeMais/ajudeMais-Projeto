@@ -71,7 +71,7 @@ public class NotificationJob implements Job {
 	private SchedulerJobUtil schedulerJobUtil;
 
 	/**
-	 * 
+	 * Executa Job.
 	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -95,7 +95,15 @@ public class NotificationJob implements Job {
 
 	/**
 	 * 
+	 * <p>
+	 * Envia notificação para mensageiros considerando a cidade e ignorando os
+	 * notificados por bairro.
+	 * </p>
+	 * 
 	 * @param donativo
+	 *            donativo a ser notificado.
+	 * @param notificaveisBairro
+	 *            lista de notificaveis por bairro.
 	 */
 	private void notifyToCidade(Donativo donativo, List<String> notificaveisBairro) {
 		List<String> notificaveis = new ArrayList<>();
@@ -115,8 +123,17 @@ public class NotificationJob implements Job {
 	}
 
 	/**
+	 * 
+	 * <p>
 	 * Método auxiliar para descartar mensageiros que foram notificados na busca
 	 * por bairro. Lista usada para notificar mensageiros na busca por cidade.
+	 * </p>
+	 * 
+	 * @param notificaveisBairro
+	 *            lista de notificaveis por bairro
+	 * @param notificaveisCidadelista
+	 *            de notificaveis por cidade.
+	 * @return lista com notificaveis ignorando os já notificados no bairro.
 	 */
 	private List<String> getNotificaveisCidade(List<String> notificaveisBairro, List<String> notificaveisCidade) {
 		List<String> notificaveis = new ArrayList<>();

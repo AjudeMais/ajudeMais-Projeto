@@ -28,7 +28,7 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.D
  */
 @Component
 public class NotificationUtil {
-	
+
 	/**
 	 * 
 	 */
@@ -39,6 +39,12 @@ public class NotificationUtil {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoColetaUtil donativoColetaUtil;
 
 	/**
 	 * 
@@ -49,15 +55,16 @@ public class NotificationUtil {
 	 * @param donativo
 	 */
 	public EstadoDoacao notifyDonativo(Donativo donativo) {
-		EstadoDoacao estadoDoaco = this.getEstadoDoacaoAtivo(donativo);
-		
-		if ((estadoDoaco.getNotificado() != null) && (!estadoDoaco.getNotificado())) {
+		EstadoDoacao estadoDoaco = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
+		if ((estadoDoaco.getNotificado() == null) || (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
 			case CANCELADO:
-				publisher.publishEvent(
-						new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(), donativo,
-								"Doação foi cancelada pelo doador"));
-				estadoDoaco.setNotificado(true);
+				if (donativo.getMensageiro() != null) {
+					publisher.publishEvent(
+							new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(),
+									donativo, "Doação foi cancelada pelo doador"));
+					estadoDoaco.setNotificado(true);
+				}
 				break;
 
 			case ACEITO:
@@ -78,24 +85,5 @@ public class NotificationUtil {
 		}
 
 		return estadoDoaco;
-	}
-
-	/**
-	 * 
-	 * <p>
-	 * Recupera estado da doação com estado ativo de um donativo.
-	 * </p>
-	 * 
-	 * @param donativo
-	 * @return
-	 */
-	public EstadoDoacao getEstadoDoacaoAtivo(Donativo donativo) {
-		EstadoDoacao estadoDoacao = null;
-		for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-			if (estado.getAtivo()) {
-				estadoDoacao = estado;
-			}
-		}
-		return estadoDoacao;
 	}
 }
