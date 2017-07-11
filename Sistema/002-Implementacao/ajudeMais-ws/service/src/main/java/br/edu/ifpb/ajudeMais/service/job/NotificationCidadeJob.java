@@ -81,8 +81,7 @@ public class NotificationCidadeJob implements Job {
 			publisher.publishEvent(new DoacaoStateNotificationEvent(donativo.getDoador().getTokenFCM().getToken(),
 					donativo, "Nenhum mensageiro disponível para coleta em sua localidade"));
 
-			EstadoDoacao estadoAtual = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
-			updateEstadoDonativo(donativo, estadoAtual);
+			updateEstadoDonativo(donativo);
 		}
 
 		schedulerJobUtil.removeJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId());
@@ -93,9 +92,14 @@ public class NotificationCidadeJob implements Job {
 	 * @param donativo
 	 * @param estado
 	 */
-	private void updateEstadoDonativo(Donativo donativo, EstadoDoacao estado) {
-		if (estado.equals(Estado.DISPONIBILIZADO)) {
+	private void updateEstadoDonativo(Donativo donativo) {
+		EstadoDoacao estadoAtual = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
+		
+		LOGGER.info(estadoAtual.toString());
+		
+		if (estadoAtual.equals(Estado.DISPONIBILIZADO)) {
 			donativo = donativoColetaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
+			
 			try {
 				donativoService.update(donativo);
 			} catch (AjudeMaisException e) {

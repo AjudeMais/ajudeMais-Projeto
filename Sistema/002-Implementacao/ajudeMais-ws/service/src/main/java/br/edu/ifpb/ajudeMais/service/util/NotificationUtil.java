@@ -1,11 +1,15 @@
 package br.edu.ifpb.ajudeMais.service.util;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import br.edu.ifpb.ajudeMais.domain.entity.DisponibilidadeHorario;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
@@ -39,7 +43,7 @@ public class NotificationUtil {
 	 */
 	@Autowired
 	private ApplicationEventPublisher publisher;
-	
+
 	/**
 	 * 
 	 */
@@ -85,5 +89,31 @@ public class NotificationUtil {
 		}
 
 		return estadoDoaco;
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Verifica se horários de doação estão validos para notificação.
+	 * </p>
+	 * 
+	 * @param donativo
+	 * @return
+	 */
+	public boolean notificationDonativoValid(Donativo donativo) {
+
+		List<DisponibilidadeHorario> horarios = donativo.getHorariosDisponiveis();
+
+		for (DisponibilidadeHorario dispHorario : horarios) {
+
+			Calendar c = Calendar.getInstance();
+			c.setTime(dispHorario.getHoraFim());
+			c.add(Calendar.DATE, 1);
+			if (c.getTime().after(dispHorario.getHoraFim())) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

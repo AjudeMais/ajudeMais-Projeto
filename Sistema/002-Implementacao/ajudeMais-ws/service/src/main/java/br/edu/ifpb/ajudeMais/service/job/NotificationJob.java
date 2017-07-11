@@ -19,6 +19,7 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.Doa
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
+import br.edu.ifpb.ajudeMais.service.util.NotificationUtil;
 import br.edu.ifpb.ajudeMais.service.util.SchedulerJobUtil;
 
 /**
@@ -71,11 +72,18 @@ public class NotificationJob implements Job {
 	private SchedulerJobUtil schedulerJobUtil;
 
 	/**
+	 * 
+	 */
+	@Autowired
+	private NotificationUtil notificationUtil;
+
+	/**
 	 * Executa Job.
 	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOGGER.info("Executou Job de notificação...");
+
 		Long id = context.getJobDetail().getJobDataMap().getLongValue("id");
 		Donativo donativo = this.donativoService.findById(id);
 		List<String> notificaveis = new ArrayList<>();
@@ -107,19 +115,23 @@ public class NotificationJob implements Job {
 	 */
 	private void notifyToCidade(Donativo donativo, List<String> notificaveisBairro) {
 		List<String> notificaveis = new ArrayList<>();
+		boolean isNotificationValid = notificationUtil.notificationDonativoValid(donativo);
 
-		try {
-			notificaveis = coletaUtil.getNotificaveisToCidade(donativo);
-			notificaveis = this.getNotificaveisCidade(notificaveisBairro, notificaveis);
-		} catch (AjudeMaisException e) {
-			LOGGER.error(e.getMessage());
-		}
-		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, donativo.getDescricao()));
-		}
+		if (isNotificationValid) {
+			try {
+				notificaveis = coletaUtil.getNotificaveisToCidade(donativo);
+				notificaveis = this.getNotificaveisCidade(notificaveisBairro, notificaveis);
+			} catch (AjudeMaisException e) {
+				LOGGER.error(e.getMessage());
+			}
 
+			if (notificaveis != null && !notificaveis.isEmpty()) {
+				publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, donativo.getDescricao()));
+			}
+		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId(),
 				NotificationCidadeJob.class);
+
 	}
 
 	/**
