@@ -14,8 +14,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.activities.ApresentationActivity;
 import br.edu.ifpb.ajudemais.activities.CampanhaActivity;
 import br.edu.ifpb.ajudemais.activities.DonativoActivity;
+import br.edu.ifpb.ajudemais.activities.MainActivity;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetCampanhaByIdTask;
 import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
@@ -30,6 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
+        Log.e("AJUDEMAIS", "EXECUTOU...............................lllllll");
         getDataNotification(remoteMessage);
     }
 
@@ -40,6 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String idAs = remoteMessage.getData().get("id");
         Long id = Long.parseLong(idAs);
 
+
         switch (tipoAs) {
             case "CAMPANHA":
                 executeLoadingCampanhaByIdTask(id, remoteMessage);
@@ -48,7 +52,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 executeLoadingDonativoByIdTask(id, remoteMessage);
                 break;
             default:
-
                 break;
         }
     }
@@ -61,7 +64,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void notifyComponent(RemoteMessage remoteMessage) {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, resultIntent, 0);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         long[] v = {500, 500};
         Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         mBuilder.setContentIntent(pendingIntent);
@@ -91,7 +96,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             @Override
             public void processFinish(Campanha output) {
                 campanha = output;
-                resultIntent = new Intent(getBaseContext(), CampanhaActivity.class);
+                resultIntent = new Intent(getBaseContext(), ApresentationActivity.class);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 resultIntent.putExtra("campanha", campanha);
                 notifyComponent(remoteMessage);
             }
@@ -106,13 +113,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * @param donativoId
      * @param remoteMessage
      */
-    private void executeLoadingDonativoByIdTask(Long donativoId, final RemoteMessage remoteMessage) {
+    private void executeLoadingDonativoByIdTask(final Long donativoId, final RemoteMessage remoteMessage) {
         GetDonativoByIdTask getDonativoByIdTask = new GetDonativoByIdTask(getApplicationContext(), donativoId);
         getDonativoByIdTask.delegate = new AsyncResponse<Donativo>() {
             @Override
             public void processFinish(Donativo output) {
-                resultIntent = new Intent(getBaseContext(), DonativoActivity.class);
-                resultIntent.putExtra("donativo", output);
+                Donativo donativo = output;
+                Log.e("AJUDEMAIS", donativo.toString());
+                resultIntent = new Intent(getApplicationContext(), DonativoActivity.class);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                resultIntent.putExtra("Donativo", donativo);
                 notifyComponent(remoteMessage);
             }
         };

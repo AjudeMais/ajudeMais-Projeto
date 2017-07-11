@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -19,19 +20,15 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
-import br.edu.ifpb.ajudemais.asycnTasks.RealizarDoacaoTask;
-import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateLocationDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
-import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
+import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.domain.Donativo;
-import br.edu.ifpb.ajudemais.fragments.TabFragmentMain;
 import br.edu.ifpb.ajudemais.dto.LatLng;
+import br.edu.ifpb.ajudemais.fragments.TabFragmentMain;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 
 /**
@@ -130,6 +127,7 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     @Override
     public void init() {
         super.init();
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         componentLoading = (RelativeLayout) findViewById(R.id.loadingPanel);
         componentLoading.setVisibility(View.VISIBLE);
@@ -185,6 +183,8 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
             sharedPrefManager.storeLatLng(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
     }
+
+
 
     public void onResult(@NonNull LocationSettingsResult locationSettingsResult) {
         final Status status = locationSettingsResult.getStatus();

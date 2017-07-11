@@ -9,12 +9,17 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+
+import com.google.firebase.messaging.RemoteMessage;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.fragments.DonativoDetailFragment;
@@ -73,6 +78,9 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+        Log.e("TESTE ACTIVITY DONATIVO", donativo.toString());
+
+
         progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);

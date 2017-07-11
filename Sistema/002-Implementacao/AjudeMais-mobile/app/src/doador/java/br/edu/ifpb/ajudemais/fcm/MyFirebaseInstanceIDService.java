@@ -38,6 +38,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         updateDoador();
     }
 
+
+
     /**
      *
      */
@@ -66,5 +68,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private void storageToken(String token) {
         SharedPrefManager.getInstance(getApplicationContext()).storageFcmToken(token);
     }
+
 
 }

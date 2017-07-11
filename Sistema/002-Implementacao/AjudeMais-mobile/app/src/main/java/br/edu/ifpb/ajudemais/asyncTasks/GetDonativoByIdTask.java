@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.springframework.web.client.RestClientException;
@@ -56,9 +57,11 @@ public class GetDonativoByIdTask extends AsyncTask<Void, Void, Donativo>{
      */
     @Override
     protected void onPostExecute(Donativo donativo) {
-        if (donativo != null) {
+        if (message != null) {
             Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        } else {
+        }
+
+        if (donativo != null){
             delegate.processFinish(donativo);
         }
     }

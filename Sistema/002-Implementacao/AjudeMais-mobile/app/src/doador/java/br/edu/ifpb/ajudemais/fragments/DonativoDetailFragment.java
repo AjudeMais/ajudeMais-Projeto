@@ -362,11 +362,9 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.e("AJUDEMAIS", "EXECUTOU5676;..............");
 
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
-                Log.e("AJUDEMAIS", "EXECUTOU;..............");
                 if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
                     callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
                 }
