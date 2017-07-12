@@ -39,7 +39,7 @@ import javax.validation.constraints.NotNull;
 		@NamedQuery(name = "DonativoCampanha.filterCountByEstadoAndCategoriaAfterAceito", query = "SELECT COUNT(dc) FROM DonativoCampanha dc JOIN dc.donativo.estadosDaDoacao ed "
 				+ "WHERE dc.campanha.id = :idcampanha and dc.donativo.categoria.id = :idCategoria "
 				+ "and ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
-				+ "and  ed.estadoDoacao != 'ACEITO'  and ed.ativo is true") })
+				+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.ativo is true") })
 public class DonativoCampanha implements Serializable {
 
 	/**

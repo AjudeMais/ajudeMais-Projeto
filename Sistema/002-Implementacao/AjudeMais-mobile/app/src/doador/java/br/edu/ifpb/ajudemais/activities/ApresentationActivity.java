@@ -6,19 +6,21 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.LoginTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.util.NotificationRedirectUtil;
 
 /**
  * <p>
  * <b>ApresentationActivity</b>
  * </p>
  * <p>
- *     Activity para controlar tele inicial de carregamento do aplicativo.
+ * Activity para controlar tele inicial de carregamento do aplicativo.
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
@@ -27,19 +29,19 @@ public class ApresentationActivity extends BaseActivity {
 
 
     private LoginTask loginTask;
+    private NotificationRedirectUtil notificationRedirectUtil;
 
     /**
-     *
      * @param savedInstanceState
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apresentation);
-
+        notificationRedirectUtil = new NotificationRedirectUtil(this);
         init();
 
-        ProgressBar mBar= (ProgressBar) findViewById(R.id.progress_presentation);
+        ProgressBar mBar = (ProgressBar) findViewById(R.id.progress_presentation);
         mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
 
@@ -52,7 +54,6 @@ public class ApresentationActivity extends BaseActivity {
     }
 
     /**
-     *
      * @param menu
      * @return
      */
@@ -63,7 +64,6 @@ public class ApresentationActivity extends BaseActivity {
     }
 
     /**
-     *
      * @param item
      * @return
      */
@@ -77,13 +77,15 @@ public class ApresentationActivity extends BaseActivity {
     /**
      * Executa asycn Task para renovar login doador.
      */
-    private void executeLoginTask(){
+    private void executeLoginTask() {
         loginTask = new LoginTask(this);
 
         loginTask.delegate = new AsyncResponse<Conta>() {
             @Override
             public void processFinish(Conta conta) {
                 if (conta != null) {
+                    redirectNotification();
+
                     Intent intent = new Intent();
                     intent.setClass(ApresentationActivity.this, MainActivity.class);
                     intent.putExtra("Conta", conta);
@@ -106,5 +108,20 @@ public class ApresentationActivity extends BaseActivity {
     }
 
 
+    private void redirectNotification() {
+
+        Intent startingIntent = getIntent();
+        if (startingIntent != null) {
+            String tipoAs = startingIntent.getStringExtra("tipo");
+            String idStr = startingIntent.getStringExtra("id");
+
+            if (tipoAs != null && idStr != null) {
+                Long id = Long.parseLong(idStr);
+                notificationRedirectUtil.redirectNotification(id, tipoAs);
+            }
+        }
+    }
+
 
 }
+

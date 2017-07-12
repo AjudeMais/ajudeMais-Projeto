@@ -225,5 +225,9 @@
     <string name="detalhesColeta">Detalhes da coleta</string>
     <string name="agedamento_coleta">Agendamento Coleta</string>
     <string name="call_mensageiro">Deseja ligar para voluntário?</string>
+    <string name="btn_selecionar_horario">SELECIONAR</string>
+    <string name="horarioEscolhidoParaColeta">Horário escolhido</string>
+    <string name="mensageiro_information">Informações do Mensageiro</string>
+    <string name="btnColetar">CONFIRMAR</string>
 
 </resources>

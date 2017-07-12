@@ -1,11 +1,15 @@
 package br.edu.ifpb.ajudeMais.service.util;
 
+import java.util.Calendar;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
+import br.edu.ifpb.ajudeMais.domain.entity.DisponibilidadeHorario;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
@@ -28,7 +32,7 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.D
  */
 @Component
 public class NotificationUtil {
-	
+
 	/**
 	 * 
 	 */
@@ -42,6 +46,12 @@ public class NotificationUtil {
 
 	/**
 	 * 
+	 */
+	@Autowired
+	private DonativoColetaUtil donativoColetaUtil;
+
+	/**
+	 * 
 	 * <p>
 	 * Notifica estado de um donativo donativo, após sua transição de estado.
 	 * </p>
@@ -49,17 +59,16 @@ public class NotificationUtil {
 	 * @param donativo
 	 */
 	public EstadoDoacao notifyDonativo(Donativo donativo) {
-		EstadoDoacao estadoDoaco = this.getEstadoDoacaoAtivo(donativo);
-		
-		LOGGER.info(estadoDoaco.toString());
-		
-		if ((estadoDoaco.getNotificado() != null) && (!estadoDoaco.getNotificado())) {
+		EstadoDoacao estadoDoaco = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
+		if ((estadoDoaco.getNotificado() == null) || (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
 			case CANCELADO:
-				publisher.publishEvent(
-						new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(), donativo,
-								"Doação foi cancelada pelo doador"));
-				estadoDoaco.setNotificado(true);
+				if (donativo.getMensageiro() != null) {
+					publisher.publishEvent(
+							new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(),
+									donativo, "Doação foi cancelada pelo doador"));
+					estadoDoaco.setNotificado(true);
+				}
 				break;
 
 			case ACEITO:
@@ -85,19 +94,26 @@ public class NotificationUtil {
 	/**
 	 * 
 	 * <p>
-	 * Recupera estado da doação com estado ativo de um donativo.
+	 * Verifica se horários de doação estão validos para notificação.
 	 * </p>
 	 * 
 	 * @param donativo
 	 * @return
 	 */
-	public EstadoDoacao getEstadoDoacaoAtivo(Donativo donativo) {
-		EstadoDoacao estadoDoacao = null;
-		for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-			if (estado.getAtivo()) {
-				estadoDoacao = estado;
+	public boolean notificationDonativoValid(Donativo donativo) {
+
+		List<DisponibilidadeHorario> horarios = donativo.getHorariosDisponiveis();
+
+		for (DisponibilidadeHorario dispHorario : horarios) {
+
+			Calendar c = Calendar.getInstance();
+			c.setTime(dispHorario.getHoraFim());
+			c.add(Calendar.DATE, 1);
+			if (c.getTime().after(dispHorario.getHoraFim())) {
+				return true;
 			}
 		}
-		return estadoDoacao;
+
+		return false;
 	}
 }
