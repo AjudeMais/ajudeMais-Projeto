@@ -65,12 +65,11 @@
                     android:id="@+id/tv_data_coleta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="18"
                     android:paddingLeft="3dp"
                     android:text="02/07/2017"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/textSecond"
-                    android:textSize="@dimen/fontDefaultSubText"
+                    android:textSize="@dimen/fontDefaultSubText3"
                     card_view:ignore="HardcodedText,RtlHardcoded,RtlSymmetry" />
 
                 <RelativeLayout

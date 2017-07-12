@@ -56,9 +56,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
         for (DisponibilidadeHorario dh : donativos.get(position).getDonativo().getHorariosDisponiveis()) {
 
-            Log.e("DATA COLETA ", donativos.get(position).toString());
             if ((dh.getAtivo() != null && dh.getAtivo()) && donativos.get(position).getDonativo().getMensageiro() != null) {
-                Log.e("DATA COLETA ", "ENTROU AQUI...");
                 dataColeta = ConvertsDate.getInstance().
                         convertDateToStringFormat(dh.getHoraInicio()) + " das " +
                         ConvertsDate.getInstance().convertHourToString(dh.getHoraInicio()) + "h às " +
