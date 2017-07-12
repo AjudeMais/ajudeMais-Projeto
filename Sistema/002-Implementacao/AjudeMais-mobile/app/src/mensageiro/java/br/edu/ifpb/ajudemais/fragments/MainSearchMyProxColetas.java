@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,7 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 /**
  *
  */
-public class MainSearchMyColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainSearchMyProxColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
@@ -43,7 +42,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
 
-    public MainSearchMyColetas() {
+    public MainSearchMyProxColetas() {
     }
 
     /**

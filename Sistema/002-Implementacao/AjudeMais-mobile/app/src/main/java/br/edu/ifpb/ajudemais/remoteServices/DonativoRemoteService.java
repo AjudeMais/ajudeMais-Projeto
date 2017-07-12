@@ -12,6 +12,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.dto.LatLng;
+import br.edu.ifpb.ajudemais.enumarations.Estado;
 
 /**
  * <p>
@@ -92,6 +93,20 @@ public class DonativoRemoteService extends AbstractRemoteService {
      */
     public List<Donativo> findByMensageiro(String username) {
         ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/mensageiro?username={username}", Donativo[].class, username);
+
+        return Arrays.asList(responseEntity.getBody());
+    }
+
+    /**
+     * Busca donativos no WS filtrando por mensageiro e estado de um donativo.
+     *
+     * @param username
+     * @param estado
+     * @return
+     */
+    public List<Donativo> findByMensageiroAndEstado(String username, Estado estado) {
+
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/mensageiro?username={username}&estado={estado}", Donativo[].class, username, estado.name());
 
         return Arrays.asList(responseEntity.getBody());
     }

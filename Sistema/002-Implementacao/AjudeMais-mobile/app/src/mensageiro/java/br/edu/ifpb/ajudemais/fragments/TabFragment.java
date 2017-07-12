@@ -78,7 +78,7 @@ public class TabFragment extends Fragment {
         {
             switch (position){
                 case 0 : return new MainSearchSolicitacoesFragment();
-                case 1 : return new MainTab01();
+                case 1 : return new MainSearchMyProxColetas();
                 case 2 : return new MainSearchMyColetas();
             }
             return null;
@@ -104,7 +104,7 @@ public class TabFragment extends Fragment {
 
             switch (position){
                 case 0 :
-                    return "Solicitações";
+                    return "Novas Solicitações";
                 case 1:
                     return "Próximas Coletas";
                 case 2 :

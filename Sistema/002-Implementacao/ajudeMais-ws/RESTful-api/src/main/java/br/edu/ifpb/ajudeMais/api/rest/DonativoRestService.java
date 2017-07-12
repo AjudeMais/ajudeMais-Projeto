@@ -218,7 +218,6 @@ public class DonativoRestService {
 
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
 		List<Donativo> donativos = donativoService.findByMensageiro(mensageiro);
-		LOGGER.info(donativos.toString());
 		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
 	}
 
