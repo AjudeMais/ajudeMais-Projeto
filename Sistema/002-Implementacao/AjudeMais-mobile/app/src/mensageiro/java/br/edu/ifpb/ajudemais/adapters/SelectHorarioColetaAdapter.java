@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,8 @@ public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorar
      * @param position
      */
     @Override
-    public void onBindViewHolder(SelectHorarioColetaAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final SelectHorarioColetaAdapter.ViewHolder holder, int position) {
+        final DisponibilidadeHorario currentDisponibilidadeHorario = disponibilidadeHorarios.get(position);
 
         holder.dataDisponibilidade.setText(ConvertsDate.getInstance().
                 convertDateToStringFormat(disponibilidadeHorarios.get(position).getHoraInicio()));
@@ -68,6 +70,21 @@ public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorar
         holder.faixaDeHorarios.setText("disponibilidade das "+
                 ConvertsDate.getInstance().convertHourToString(disponibilidadeHorarios.get(position).getHoraInicio())+
                 "h às "+ConvertsDate.getInstance().convertHourToString(disponibilidadeHorarios.get(position).getHoraFim())+"h");
+
+
+
+        holder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.checkBox.setChecked(
+                        !holder.checkBox.isChecked());
+                if (holder.checkBox.isChecked()) {
+                    onItemCheckListener.onItemCheck(currentDisponibilidadeHorario);
+                } else {
+                    onItemCheckListener.onItemUncheck(currentDisponibilidadeHorario);
+                }
+            }
+        });
     }
 
     /**
@@ -94,15 +111,31 @@ public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorar
         TextView dataDisponibilidade;
         TextView faixaDeHorarios;
         CheckBox checkBox;
+        View itemView;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             dataDisponibilidade = (TextView) itemView.findViewById(R.id.tv_row_data);
             faixaDeHorarios = (TextView) itemView.findViewById(R.id.tv_row_campanha_termino_label);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkHorario);
+            checkBox.setClickable(false);
 
         }
 
+        public void setOnClickListener(View.OnClickListener onClickListener) {
+            itemView.setOnClickListener(onClickListener);
+        }
+
     }
+
+    interface OnItemCheckListener {
+        void onItemCheck(DisponibilidadeHorario disponibilidadeHorario);
+        void onItemUncheck(DisponibilidadeHorario DisponibilidadeHorario);
+    }
+
+    @NonNull
+    private OnItemCheckListener onItemCheckListener;
+
 }
 

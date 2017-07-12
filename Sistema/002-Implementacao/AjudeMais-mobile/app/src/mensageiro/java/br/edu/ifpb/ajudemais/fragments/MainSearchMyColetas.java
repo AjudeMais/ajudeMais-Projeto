@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
