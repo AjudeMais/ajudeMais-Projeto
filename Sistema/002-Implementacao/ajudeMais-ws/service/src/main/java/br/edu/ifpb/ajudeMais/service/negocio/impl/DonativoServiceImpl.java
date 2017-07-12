@@ -102,7 +102,7 @@ public class DonativoServiceImpl implements DonativoService {
 
 		if (notificaveis != null && !notificaveis.isEmpty()) {
 			publisher.publishEvent(
-					new DoacaoNotificationEvent(notificaveis, donativoSaved, donativoSaved.getDescricao()));
+					new DoacaoNotificationEvent(notificaveis, donativoSaved, "Novo donativo dispobilizado para coleta"));
 
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(),

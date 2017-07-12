@@ -239,5 +239,6 @@
     <string name="acepted_coleta">Coleta aceita com sucesso.</string>
     <string name="solicitacao_not_disponivel">Infelizemente o donativo não está Disponível para ser coletado</string>
     <string name="not_avaiable_coleta">Coleta não está mais disponível</string>
+    <string name="invalide_coleta">Solicitação indisponível</string>
 
 </resources>

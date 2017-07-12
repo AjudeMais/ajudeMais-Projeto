@@ -127,7 +127,7 @@ public class NotificationJob implements Job {
 			}
 
 			if (notificaveis != null && !notificaveis.isEmpty()) {
-				publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, donativo.getDescricao()));
+				publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, "Novo donativo dispobilizado para coleta"));
 			}
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId(),

@@ -67,6 +67,8 @@ public class NotificationRedirectUtil {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("Donativo", donativo);
+                intent.putExtra("notification",  new Boolean(true));
+
                 context.startActivity(intent);
             }
         };

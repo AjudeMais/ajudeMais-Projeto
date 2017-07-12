@@ -32,18 +32,34 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
     private GetImageTask getImageTask;
     private ImageView imageHeader;
     private ProgressBar progressBar;
+    private Boolean notification;
     private CallPhoneDevicePermission callPhoneDevicePermission;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_solicitacao);
-        init();
-        if (!isDestroyed()) {
-            DetailSolicitacoesFragment fragment = new DetailSolicitacoesFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.donativo_detail_fragment, fragment);
-            fragmentTransaction.commit();
+        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+
+        notification = (Boolean) getIntent().getSerializableExtra("notification");
+
+        if (donativo.getMensageiro() != null && notification != null) {
+            setContentView(R.layout.fragment_solicitacao_not_disponivel);
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
+            mToolbar.setTitle(getString(R.string.invalide_coleta));
+
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        } else {
+            setContentView(R.layout.activity_detail_solicitacao);
+            init();
+            if (!isDestroyed()) {
+                DetailSolicitacoesFragment fragment = new DetailSolicitacoesFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.donativo_detail_fragment, fragment);
+                fragmentTransaction.commit();
+            }
         }
     }
 
@@ -61,7 +77,6 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
 
 
         progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
@@ -75,7 +90,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
 
         if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().size() > 0) {
             executeLoadingPhotoTask(donativo.getFotosDonativo().get(0).getNome());
-        }else {
+        } else {
             progressBar.setVisibility(View.GONE);
             imageHeader.setVisibility(View.VISIBLE);
         }
@@ -84,7 +99,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         setActionCollapsingTootlbar();
     }
 
-    private void setActionCollapsingTootlbar(){
+    private void setActionCollapsingTootlbar() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -99,7 +114,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                 if (scrollRange + verticalOffset == 0) {
                     isShow = true;
                     imageHeader.setVisibility(View.GONE);
-                } else if(isShow) {
+                } else if (isShow) {
                     imageHeader.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
@@ -160,8 +175,8 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
-                if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION: {
+                if (callPhoneDevicePermission.isCallPhonePermissionGranted()) {
                     callPhoneDevicePermission.callPhone(donativo.getDoador().getTelefone());
                 }
                 break;

@@ -104,6 +104,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 resultIntent.putExtra("Donativo", donativo);
+                resultIntent.putExtra("notification",  new Boolean(true));
                 notifyComponent(remoteMessage);
             }
         };
