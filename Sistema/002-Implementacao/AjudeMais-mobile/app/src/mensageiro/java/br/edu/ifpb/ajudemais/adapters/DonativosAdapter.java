@@ -5,17 +5,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.domain.Campanha;
+import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
+import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
+import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.ConvertsDate;
+import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
 
 /**
  * Created by amsv on 08/07/17.
@@ -23,16 +28,20 @@ import br.edu.ifpb.ajudemais.domain.Donativo;
 
 public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.ViewHolder> {
 
-    private List<Donativo> donativos;
+    private List<DoacaoAdapterDto> donativos;
     private Context context;
+    private AndroidUtil androidUtil;
+    private EstadosDonativoUtil estadosDonativoUtil;
 
     /**
      * @param donativos
      * @param context
      */
-    public DonativosAdapter(List<Donativo> donativos, Context context) {
+    public DonativosAdapter(List<DoacaoAdapterDto> donativos, Context context) {
         this.donativos = donativos;
         this.context = context;
+        this.androidUtil = new AndroidUtil(context);
+        this.estadosDonativoUtil = new EstadosDonativoUtil();
 
     }
 
@@ -44,10 +53,31 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
     @Override
     public void onBindViewHolder(DonativosAdapter.ViewHolder holder, int position) {
-        holder.nomeDonativo.setText(donativos.get(position).getNome());
-        holder.descricaoDonativo.setText(donativos.get(position).getDescricao());
-        holder.quantidadeDonativo.setText(donativos.get(position).getQuantidade());
-        holder.nomeDoador.setText(donativos.get(position).getDoador().getNome());
+        holder.donativeName.setText(donativos.get(position).getDonativo().getNome());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("");
+        String dataColeta = "";
+        for (DisponibilidadeHorario dh : donativos.get(position).getDonativo().getHorariosDisponiveis()) {
+            if ((dh.getAtivo() != null && dh.getAtivo()) && donativos.get(position).getDonativo().getMensageiro() != null) {
+                dataColeta = ConvertsDate.getInstance().
+                        convertDateToStringFormat(dh.getHoraInicio()) + " das " +
+                        ConvertsDate.getInstance().convertHourToString(dh.getHoraInicio()) + "h às " +
+                        ConvertsDate.getInstance().convertHourToString(dh.getHoraFim());
+            }
+        }
+
+        holder.dataColeta.setText(dataColeta);
+
+        if (donativos.get(position).getPhoto() != null) {
+            holder.imageView.setImageBitmap(androidUtil.convertBytesInBitmap(donativos.get(position).getPhoto()));
+        }
+
+        for (EstadoDoacao estadoDoacao : donativos.get(position).getDonativo().getEstadosDaDoacao()) {
+            if (estadoDoacao.getAtivo() != null && estadoDoacao.getAtivo()) {
+                estadosDonativoUtil.setCustomLabelEstadoDoacao(holder.estadoDoacao, estadoDoacao.getEstadoDoacao());
+                holder.estadoDoacao.setText(estadoDoacao.getEstadoDoacao().name().equals("NAO_ACEITO") ? "NÃO ACEITO" : estadoDoacao.getEstadoDoacao().name());
+            }
+        }
     }
 
     /**
@@ -64,7 +94,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     /**
      * @param donativos
      */
-    public void setFilter(List<Donativo> donativos) {
+    public void setFilter(List<DoacaoAdapterDto> donativos) {
         this.donativos = donativos;
         notifyDataSetChanged();
     }
@@ -74,31 +104,23 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
      */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nomeDonativo;
-        TextView descricaoDonativo;
-        TextView quantidadeDonativo;
-        TextView nomeDoador;
-        /**
-         *
-         * @param itemView
-         */
+        TextView donativeName;
+        TextView dataColeta;
+        TextView estadoDoacao;
+        ImageView imageView;
+
         public ViewHolder(View itemView) {
             super(itemView);
-            nomeDonativo = (TextView) itemView.findViewById(R.id.tv_row_donativo_name);
-            descricaoDonativo = (TextView) itemView.findViewById(R.id.tv_row_donativo_descricao);
-            quantidadeDonativo = (TextView) itemView.findViewById(R.id.tv_row_donativo_quantidade);
-            nomeDoador = (TextView) itemView.findViewById(R.id.tv_row_doador_nome);
+            imageView = (ImageView) itemView.findViewById(R.id.imagem_donativo_coleta);
+            donativeName = (TextView) itemView.findViewById(R.id.tv_donativo_nome_coleta);
+            dataColeta = (TextView) itemView.findViewById(R.id.tv_data_coleta);
+            estadoDoacao = (TextView) itemView.findViewById(R.id.tv_donative_estado_coleta);
+
         }
 
-        /**
-         *
-         * @param donativo
-         */
         public void bind(Donativo donativo) {
-            nomeDonativo.setText(donativo.getNome());
-            descricaoDonativo.setText(donativo.getDescricao());
-            quantidadeDonativo.setText(donativo.getQuantidade());
-            nomeDoador.setText(donativo.getDoador().getNome());
+            donativeName.setText(donativo.getNome());
+            dataColeta.setText(donativo.getCategoria().getInstituicaoCaridade().getNome());
         }
     }
 }

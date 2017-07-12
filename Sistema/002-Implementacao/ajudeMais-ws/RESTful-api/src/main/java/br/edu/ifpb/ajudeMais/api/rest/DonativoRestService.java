@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +49,11 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 @RestController
 @RequestMapping(value = "/donativo")
 public class DonativoRestService {
+	
+	/**
+	 * 
+	 */
+	private Logger LOGGER = LoggerFactory.getLogger(DonativoRestService.class);
 
 	/**
 	 * 
@@ -209,8 +216,8 @@ public class DonativoRestService {
 	public ResponseEntity<List<Donativo>> findByMensageiro(@RequestParam("username") String username) {
 
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
-
 		List<Donativo> donativos = donativoService.findByMensageiro(mensageiro);
+		LOGGER.info(donativos.toString());
 		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
 	}
 
