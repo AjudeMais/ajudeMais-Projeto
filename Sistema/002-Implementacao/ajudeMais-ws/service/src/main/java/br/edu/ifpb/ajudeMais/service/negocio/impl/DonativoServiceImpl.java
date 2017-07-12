@@ -217,4 +217,11 @@ public class DonativoServiceImpl implements DonativoService {
 		return donativoRepository.findByMensageiroOrderByDataDesc(mensageiro);
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public List<Donativo> filterDonativoByMensageiroAndEstado(Mensageiro mensageiro, Estado estado) {
+		return donativoRepository.filterDonativoByMensageiroAndEstado(mensageiro.getId(), estado);
+	}
 }

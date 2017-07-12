@@ -53,7 +53,7 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	List<Donativo> findByMensageiroOrderByDataDesc(Mensageiro mensageiro);
-	
+
 	/**
 	 * 
 	 * @param nome
@@ -98,6 +98,16 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return lista de donativos
 	 */
 	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao,
+			@Param("estado") Estado estado);
+	
+	/**
+	 * <p>
+	 * Busca donativos filtrando por mensageiro e estado 
+	 * </p>
+	 * 
+	 * @return lista de donativos
+	 */
+	List<Donativo> filterDonativoByMensageiroAndEstado(@Param("idMensageiro") Long idMensageiro,
 			@Param("estado") Estado estado);
 
 	/**
