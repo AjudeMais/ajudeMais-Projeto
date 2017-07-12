@@ -116,11 +116,12 @@ public class NotificationJob implements Job {
 	private void notifyToCidade(Donativo donativo, List<String> notificaveisBairro) {
 		List<String> notificaveis = new ArrayList<>();
 		boolean isNotificationValid = notificationUtil.notificationDonativoValid(donativo);
-
+	
 		if (isNotificationValid) {
 			try {
 				notificaveis = coletaUtil.getNotificaveisToCidade(donativo);
 				notificaveis = this.getNotificaveisCidade(notificaveisBairro, notificaveis);
+				
 			} catch (AjudeMaisException e) {
 				LOGGER.error(e.getMessage());
 			}
@@ -150,8 +151,11 @@ public class NotificationJob implements Job {
 	private List<String> getNotificaveisCidade(List<String> notificaveisBairro, List<String> notificaveisCidade) {
 		List<String> notificaveis = new ArrayList<>();
 		notificaveis = notificaveisCidade;
-		notificaveis.removeAll(notificaveisBairro);
-
+		
+		if (!notificaveisBairro.isEmpty()) {
+			notificaveis.removeAll(notificaveisBairro);
+		}
+		
 		return notificaveis;
 
 	}

@@ -128,7 +128,7 @@ public class DonativoColetaUtil {
 	 */
 	public List<String> getNotificaveisToCidade(Donativo donativo) throws AjudeMaisException {
 
-		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToBairro(
+		List<Mensageiro> mensageiros = mensageiroAssociadoService.filterMensageirosCloserToCidade(
 				donativo.getEndereco(), donativo.getCategoria().getInstituicaoCaridade().getId());
 
 		return getTokensNotificaveis(mensageiros);

@@ -85,6 +85,19 @@ public class DonativoRemoteService extends AbstractRemoteService {
     }
 
     /**
+     * Busca donativos filtrando por mensageiro.
+     *
+     * @param username nome de usuário do mensageiro.
+     * @return lista de donativos.
+     */
+    public List<Donativo> findByMensageiro(String username) {
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/mensageiro?username={username}", Donativo[].class, username);
+
+        return Arrays.asList(responseEntity.getBody());
+    }
+
+
+    /**
      * Busca donativos com base no Id doador passado
      *
      * @param IdDoador

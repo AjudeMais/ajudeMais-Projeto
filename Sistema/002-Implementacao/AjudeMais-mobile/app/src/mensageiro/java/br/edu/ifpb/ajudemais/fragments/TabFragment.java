@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais;
+package br.edu.ifpb.ajudemais.fragments;
 
 
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.MainTab01;
 import br.edu.ifpb.ajudemais.activities.MainTab02;
 import br.edu.ifpb.ajudemais.activities.MainTab03;
@@ -78,7 +79,7 @@ public class TabFragment extends Fragment {
             switch (position){
                 case 0 : return new MainSearchSolicitacoesFragment();
                 case 1 : return new MainTab01();
-                case 2 : return new MainTab02();
+                case 2 : return new MainSearchMyColetas();
             }
             return null;
         }

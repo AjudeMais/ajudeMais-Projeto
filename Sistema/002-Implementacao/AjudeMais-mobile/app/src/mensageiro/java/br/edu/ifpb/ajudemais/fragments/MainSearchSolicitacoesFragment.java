@@ -21,7 +21,6 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
-import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.MainSearchSolicitacoesFragmentTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;

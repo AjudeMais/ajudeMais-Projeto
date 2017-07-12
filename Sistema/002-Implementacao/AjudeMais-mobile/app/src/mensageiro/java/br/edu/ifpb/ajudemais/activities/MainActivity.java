@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.TabFragment;
+import br.edu.ifpb.ajudemais.fragments.TabFragment;
 
 /**
  * <p>

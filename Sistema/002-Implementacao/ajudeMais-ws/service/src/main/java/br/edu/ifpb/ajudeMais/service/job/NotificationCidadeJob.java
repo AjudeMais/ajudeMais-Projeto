@@ -95,9 +95,7 @@ public class NotificationCidadeJob implements Job {
 	private void updateEstadoDonativo(Donativo donativo) {
 		EstadoDoacao estadoAtual = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
 		
-		LOGGER.info(estadoAtual.toString());
-		
-		if (estadoAtual.equals(Estado.DISPONIBILIZADO)) {
+		if (estadoAtual.getEstadoDoacao().equals(Estado.DISPONIBILIZADO)) {
 			donativo = donativoColetaUtil.addEstadoDoacao(donativo, Estado.NAO_ACEITO, true);
 			
 			try {

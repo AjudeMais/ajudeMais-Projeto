@@ -108,7 +108,7 @@ public class QuartzConfig {
 		SimpleTriggerFactoryBean factoryBean = new SimpleTriggerFactoryBean();
 		factoryBean.setJobDetail(jobDetail);
 		factoryBean.setStartDelay(pollFrequencyMs);
-		factoryBean.setRepeatInterval(pollFrequencyMs);
+		factoryBean.setRepeatInterval(1l);
 		factoryBean.setRepeatCount(repeat);
 		factoryBean.setMisfireInstruction(SimpleTrigger.MISFIRE_INSTRUCTION_RESCHEDULE_NEXT_WITH_REMAINING_COUNT);
 		return factoryBean;

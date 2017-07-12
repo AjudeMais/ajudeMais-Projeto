@@ -107,9 +107,8 @@ public class NotificationUtil {
 		for (DisponibilidadeHorario dispHorario : horarios) {
 
 			Calendar c = Calendar.getInstance();
-			c.setTime(dispHorario.getHoraFim());
 			c.add(Calendar.DATE, 1);
-			if (c.getTime().after(dispHorario.getHoraFim())) {
+			if (c.getTime().before(dispHorario.getHoraFim())) {
 				return true;
 			}
 		}

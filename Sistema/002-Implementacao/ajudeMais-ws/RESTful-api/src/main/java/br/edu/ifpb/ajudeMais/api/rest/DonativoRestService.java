@@ -40,7 +40,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
  * Classe define serviços disponibilizados de um Donativo.
  * </p>
  * 
- * @author Franck
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  *
  */
@@ -48,18 +48,33 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 @RequestMapping(value = "/donativo")
 public class DonativoRestService {
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DonativoService donativoService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private DonativoCampanhaService donativoCampanhaService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private AuthService authService;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private InstituicaoCaridadeRepository instituicaoRepository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private MensageiroService mensageiroService;
 
