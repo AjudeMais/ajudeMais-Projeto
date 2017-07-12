@@ -1,23 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/grp1">
-        <item
-            android:id="@+id/nav_minhas_doacoes"
-            android:icon="@mipmap/ic_doacoes"
-            android:title="Minhas Doações" />
-
-        <item
-            android:id="@+id/nav_campanhas"
-            android:icon="@mipmap/ic_campanhas"
-            android:title="Campanhas" />
-
-        <item
-            android:id="@+id/nav_instituicoes_caridade"
-            android:icon="@mipmap/ic_instituicoes"
-            android:title="Instituições de Caridade" />
-    </group>
-
     <group android:id="@+id/grp2">
 
         <item
