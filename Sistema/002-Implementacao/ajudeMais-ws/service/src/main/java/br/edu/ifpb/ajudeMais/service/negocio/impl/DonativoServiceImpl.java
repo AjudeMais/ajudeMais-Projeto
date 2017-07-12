@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,7 +215,9 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> findByMensageiro(Mensageiro mensageiro) {
-		return donativoRepository.findByMensageiroOrderByDataDesc(mensageiro);
+		List<Donativo> donativos = donativoRepository.findByMensageiroOrderByDataDesc(mensageiro);
+		donativos.sort(Comparator.comparing(Donativo::getHorarioAceito));
+		return donativos;
 	}
 
 	/**
@@ -222,6 +225,8 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> filterDonativoByMensageiroAndEstado(Mensageiro mensageiro, Estado estado) {
-		return donativoRepository.filterDonativoByMensageiroAndEstado(mensageiro.getId(), estado);
+		List<Donativo> donativos = donativoRepository.filterDonativoByMensageiroAndEstado(mensageiro.getId(), estado);
+		donativos.sort(Comparator.comparing(Donativo::getHorarioAceito));
+		return donativos;
 	}
 }

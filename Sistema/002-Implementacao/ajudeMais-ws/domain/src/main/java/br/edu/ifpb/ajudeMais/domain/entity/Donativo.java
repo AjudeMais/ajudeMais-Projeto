@@ -17,6 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
@@ -41,7 +42,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NamedQueries({
 		@NamedQuery(name = "Donativo.filterDonativoByMensageiroAndEstado", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.mensageiro.id = :idMensageiro and ed.estadoDoacao like :estado"),
-		
+
 		@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
 
@@ -130,6 +131,10 @@ public class Donativo implements Serializable {
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.DETACH })
 	private Mensageiro mensageiro;
+
+	@Transient
+	@JsonIgnore
+	private Date horarioAceito;
 
 	/**
 	 * @return the id
@@ -301,6 +306,39 @@ public class Donativo implements Serializable {
 	 */
 	public Date getData() {
 		return data;
+	}
+	
+	/**
+	 * @return o atributo horarioAceito
+	 */
+	public Date getHorarioAceito() {
+		if(this.getDisponibilidadeAtiva() != null) 
+			return this.getDisponibilidadeAtiva().getHoraInicio();
+		return new Date();
+	}
+
+	/**
+	 * @param o parametro horarioAceito é setado em  horarioAceito
+	 */
+	public void setHorarioAceito(Date horarioAceito) {
+		this.horarioAceito = horarioAceito;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@JsonIgnore
+	@Transient
+	public DisponibilidadeHorario getDisponibilidadeAtiva() {
+		if (this.horariosDisponiveis != null || !this.horariosDisponiveis.isEmpty()) {
+			for (DisponibilidadeHorario disp : this.horariosDisponiveis) {
+				if (disp.getAtivo() != null && disp.getAtivo()) {
+					return disp;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
