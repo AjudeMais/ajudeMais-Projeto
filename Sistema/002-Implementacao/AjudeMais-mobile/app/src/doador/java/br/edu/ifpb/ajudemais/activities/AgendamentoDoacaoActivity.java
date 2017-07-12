@@ -7,7 +7,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +18,6 @@ import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.domain.Campanha;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
-import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 

@@ -1,4 +1,4 @@
-package br.edu.ifpb.ajudemais.asycnTasks;
+package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
