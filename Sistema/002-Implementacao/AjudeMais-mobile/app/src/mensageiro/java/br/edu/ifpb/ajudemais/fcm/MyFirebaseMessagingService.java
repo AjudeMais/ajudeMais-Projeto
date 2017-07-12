@@ -14,7 +14,11 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.activities.MainActivity;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
+import br.edu.ifpb.ajudemais.domain.Donativo;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
@@ -39,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 notifyComponent(remoteMessage);
                 break;
             case "DOACAO":
-
+                executeLoadingDonativoByIdTask(id, remoteMessage);
                 break;
             default:
                 executeToDo(remoteMessage);
@@ -82,5 +86,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         resultIntent = new Intent(getBaseContext(), MainActivity.class);
         //resultIntent.putExtra("campanha", campanha);
         notifyComponent(remoteMessage);
+    }
+
+    /**
+     * Recupera donativo da notificação.
+     *
+     * @param donativoId
+     * @param remoteMessage
+     */
+    private void executeLoadingDonativoByIdTask(final Long donativoId, final RemoteMessage remoteMessage) {
+        GetDonativoByIdTask getDonativoByIdTask = new GetDonativoByIdTask(getApplicationContext(), donativoId);
+        getDonativoByIdTask.delegate = new AsyncResponse<Donativo>() {
+            @Override
+            public void processFinish(Donativo output) {
+                Donativo donativo = output;
+                resultIntent = new Intent(getApplicationContext(), DetailSolicitacaoActivity.class);
+                resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                resultIntent.putExtra("Donativo", donativo);
+                notifyComponent(remoteMessage);
+            }
+        };
+        getDonativoByIdTask.execute();
     }
 }

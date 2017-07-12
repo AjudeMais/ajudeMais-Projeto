@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,18 +17,18 @@ import br.edu.ifpb.ajudemais.utils.ConvertsDate;
 
 /**
  * <p>
- * <b>{@link br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario}</b>
+ * <b>{@link SelectHorarioColetaAdapter}</b>
  * </p>
  * <p>
  * <p>
- * Adapter para lidar com listas de datas para coletas.
+ * Adapter para select Lista de horários
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 
 
-public class DisponibilidadeHorarioAdapter extends RecyclerView.Adapter<DisponibilidadeHorarioAdapter.ViewHolder>{
+public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorarioColetaAdapter.ViewHolder>{
 
     private List<DisponibilidadeHorario> disponibilidadeHorarios;
     private Context context;
@@ -37,7 +38,7 @@ public class DisponibilidadeHorarioAdapter extends RecyclerView.Adapter<Disponib
      * @param disponibilidadeHorarios
      * @param context
      */
-    public DisponibilidadeHorarioAdapter(List<DisponibilidadeHorario> disponibilidadeHorarios, Context context) {
+    public SelectHorarioColetaAdapter(List<DisponibilidadeHorario> disponibilidadeHorarios, Context context) {
         this.disponibilidadeHorarios = disponibilidadeHorarios;
         this.context = context;
 
@@ -49,9 +50,9 @@ public class DisponibilidadeHorarioAdapter extends RecyclerView.Adapter<Disponib
      * @return
      */
     @Override
-    public DisponibilidadeHorarioAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_disponibildade_coleta, parent, false);
-        return new DisponibilidadeHorarioAdapter.ViewHolder(view);
+    public SelectHorarioColetaAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_horario_coleta, parent, false);
+        return new SelectHorarioColetaAdapter.ViewHolder(view);
     }
 
     /**
@@ -59,7 +60,7 @@ public class DisponibilidadeHorarioAdapter extends RecyclerView.Adapter<Disponib
      * @param position
      */
     @Override
-    public void onBindViewHolder(DisponibilidadeHorarioAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(SelectHorarioColetaAdapter.ViewHolder holder, int position) {
 
         holder.dataDisponibilidade.setText(ConvertsDate.getInstance().
                 convertDateToStringFormat(disponibilidadeHorarios.get(position).getHoraInicio()));
@@ -92,12 +93,16 @@ public class DisponibilidadeHorarioAdapter extends RecyclerView.Adapter<Disponib
 
         TextView dataDisponibilidade;
         TextView faixaDeHorarios;
+        CheckBox checkBox;
 
         public ViewHolder(View itemView) {
             super(itemView);
             dataDisponibilidade = (TextView) itemView.findViewById(R.id.tv_row_data);
             faixaDeHorarios = (TextView) itemView.findViewById(R.id.tv_row_campanha_termino_label);
+            checkBox = (CheckBox) itemView.findViewById(R.id.checkHorario);
+
         }
 
     }
 }
+

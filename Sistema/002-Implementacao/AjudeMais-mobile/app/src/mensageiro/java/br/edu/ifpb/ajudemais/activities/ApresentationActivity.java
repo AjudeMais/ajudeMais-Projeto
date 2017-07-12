@@ -11,6 +11,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.LoginTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.util.NotificationRedirectUtil;
 
 
 /**
@@ -28,6 +29,7 @@ import br.edu.ifpb.ajudemais.domain.Conta;
 public class ApresentationActivity extends AppCompatActivity {
 
     private LoginTask loginTask;
+    private NotificationRedirectUtil notificationRedirectUtil;
 
     /**
      *
@@ -37,6 +39,8 @@ public class ApresentationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apresentation);
+        notificationRedirectUtil = new NotificationRedirectUtil(this);
+
         ProgressBar mBar= (ProgressBar) findViewById(R.id.progress_presentation);
         mBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
@@ -54,6 +58,8 @@ public class ApresentationActivity extends AppCompatActivity {
             @Override
             public void processFinish(Conta conta) {
                 if (conta != null) {
+                    redirectNotification();
+
                     Intent intent = new Intent();
                     intent.setClass(ApresentationActivity.this, MainActivity.class);
                     intent.putExtra("Conta", conta);
@@ -96,6 +102,21 @@ public class ApresentationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         return id == R.id.action_about || super.onOptionsItemSelected(item);
+    }
+
+
+    private void redirectNotification() {
+
+        Intent startingIntent = getIntent();
+        if (startingIntent != null) {
+            String tipoAs = startingIntent.getStringExtra("tipo");
+            String idStr = startingIntent.getStringExtra("id");
+
+            if (tipoAs != null && idStr != null) {
+                Long id = Long.parseLong(idStr);
+                notificationRedirectUtil.redirectNotification(id, tipoAs);
+            }
+        }
     }
 
 }
