@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
     private SelectHorarioColetaAdapter selectHorarioColetaAdapter;
     private List<DisponibilidadeHorario> currentSelectedHorarios;
     private LoadingMensageiroTask loadingMensageiroTask;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,14 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_list);
         btnConfirm = (Button) findViewById(R.id.btn_confirm);
         btnConfirm.setOnClickListener(this);
+
+        mToolbar = (Toolbar) findViewById(R.id.nav_action);
+        mToolbar.setTitle(getString(R.string.SelectHorarioColeta));
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         RecyclerView.LayoutManager layout = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(layout);
@@ -128,9 +138,10 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
                         donativo.getHorariosDisponiveis().get(i).setAtivo(true);
                     }
                 }
+                validateAndSetStateDoacao();
+                executeLoadingMensageiroAndUpdateDonativoTasks(donativo);
             }
-            validateAndSetStateDoacao();
-            executeLoadingMensageiroAndUpdateDonativoTasks(donativo);
+
         }
     }
 
