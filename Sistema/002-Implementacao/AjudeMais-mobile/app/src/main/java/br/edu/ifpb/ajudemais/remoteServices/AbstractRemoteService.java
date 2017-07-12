@@ -26,7 +26,6 @@ public abstract class AbstractRemoteService {
 
     protected static final String API = "http://192.168.237.115:8080";
 
-
     protected RestTemplate restTemplate;
 
     protected Context context;
