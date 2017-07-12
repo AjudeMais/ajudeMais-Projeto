@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,6 @@ import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.ConvertsDate;
 import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
-
-/**
- * Created by amsv on 08/07/17.
- */
 
 public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.ViewHolder> {
 
@@ -47,7 +44,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
     @Override
     public DonativosAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main_search_solicitacao, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_main_search_my_coletas, parent, false);
         return new ViewHolder(view);
     }
 
@@ -55,10 +52,13 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     public void onBindViewHolder(DonativosAdapter.ViewHolder holder, int position) {
         holder.donativeName.setText(donativos.get(position).getDonativo().getNome());
 
-        SimpleDateFormat sdf = new SimpleDateFormat("");
-        String dataColeta = "";
+        String dataColeta = "Data não disponível";
+
         for (DisponibilidadeHorario dh : donativos.get(position).getDonativo().getHorariosDisponiveis()) {
+
+            Log.e("DATA COLETA ", donativos.get(position).toString());
             if ((dh.getAtivo() != null && dh.getAtivo()) && donativos.get(position).getDonativo().getMensageiro() != null) {
+                Log.e("DATA COLETA ", "ENTROU AQUI...");
                 dataColeta = ConvertsDate.getInstance().
                         convertDateToStringFormat(dh.getHoraInicio()) + " das " +
                         ConvertsDate.getInstance().convertHourToString(dh.getHoraInicio()) + "h às " +
@@ -120,7 +120,6 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
 
         public void bind(Donativo donativo) {
             donativeName.setText(donativo.getNome());
-            dataColeta.setText(donativo.getCategoria().getInstituicaoCaridade().getNome());
         }
     }
 }

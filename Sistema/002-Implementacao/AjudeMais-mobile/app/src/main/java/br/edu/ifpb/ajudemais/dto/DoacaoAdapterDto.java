@@ -21,7 +21,6 @@ public class DoacaoAdapterDto {
     private byte[] photo;
 
     /**
-     *
      * @return
      */
     public Donativo getDonativo() {
@@ -29,7 +28,6 @@ public class DoacaoAdapterDto {
     }
 
     /**
-     *
      * @param donativo
      */
     public void setDonativo(Donativo donativo) {
@@ -37,7 +35,6 @@ public class DoacaoAdapterDto {
     }
 
     /**
-     *
      * @return
      */
     public byte[] getPhoto() {
@@ -45,10 +42,16 @@ public class DoacaoAdapterDto {
     }
 
     /**
-     *
      * @param photo
      */
     public void setPhoto(byte[] photo) {
         this.photo = photo;
+    }
+
+    @Override
+    public String toString() {
+        return "DoacaoAdapterDto{" +
+                "donativo=" + donativo +
+                '}';
     }
 }
