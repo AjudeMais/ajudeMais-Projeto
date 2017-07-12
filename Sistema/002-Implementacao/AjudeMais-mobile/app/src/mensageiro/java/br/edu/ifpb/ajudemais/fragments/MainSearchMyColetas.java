@@ -18,6 +18,7 @@ import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
@@ -30,7 +31,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
     private static View view;
-    private List<Donativo> donativos;
+    private List<DoacaoAdapterDto> donativos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
     private LoadingDonativoByMensageiroTask loadingDonativoByMensageiroTask;
@@ -122,10 +123,10 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
         sharedPrefManager = SharedPrefManager.getInstance(getContext());
         String username = sharedPrefManager.getUser().getUsername();
         loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
-        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<Donativo>>() {
+        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
 
             @Override
-            public void processFinish(List<Donativo> output) {
+            public void processFinish(List<DoacaoAdapterDto> output) {
                 if (output.size() < 1) {
                     showListEmpty();
 

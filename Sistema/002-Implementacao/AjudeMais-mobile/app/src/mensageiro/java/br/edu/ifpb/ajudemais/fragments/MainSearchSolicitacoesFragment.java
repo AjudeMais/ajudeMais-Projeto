@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudemais.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,11 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.MainSearchSolicitacoesFragmentTask;
-import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
@@ -33,7 +31,7 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
     private static View view;
-    private List<Donativo> donativos;
+    private List<DoacaoAdapterDto> donativos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
     private MainSearchSolicitacoesFragmentTask mainSearchSolicitacoesFragmentTask;
@@ -106,25 +104,14 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        final List<Donativo> filteredModelList = filter(donativos, newText);
 
-        if (filteredModelList.size() < 1) {
-            showListEmpty();
-        } else {
-            showListDonativos();
-            donativosAdapter.setFilter(filteredModelList);
-
-        }
         return true;
     }
 
 
     @Override
     public void onItemClick(View childView, int position) {
-        Donativo donativo = donativos.get(position);
-        Intent intent = new Intent(getContext(), DetailSolicitacaoActivity.class);
-        intent.putExtra("donativo", donativo);
-        startActivity(intent);
+
     }
 
     @Override
@@ -194,23 +181,7 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
     }
 
     private void executeLoadingSolicitacoesTask() {
-        mainSearchSolicitacoesFragmentTask = new MainSearchSolicitacoesFragmentTask(getContext());
-        mainSearchSolicitacoesFragmentTask.delegate = new AsyncResponse<List<Donativo>>() {
-            @Override
-            public void processFinish(List<Donativo> output) {
-                if (output.size() < 1) {
-                    showListEmpty();
-                } else {
-                    donativos = output;
-                    showListDonativos();
-                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
-//                    recyclerView.setAdapter(donativosAdapter);
-//                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
-//                    searchView.setOnQueryTextListener(MainSearchSolicitacoesFragment.this);
-                }
-            }
-        };
-        mainSearchSolicitacoesFragmentTask.execute();
+
     }
 
     private void setVisibleNoConnection() {
