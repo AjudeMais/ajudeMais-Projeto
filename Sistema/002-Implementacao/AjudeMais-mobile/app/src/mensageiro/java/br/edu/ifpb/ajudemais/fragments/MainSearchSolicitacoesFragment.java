@@ -204,9 +204,9 @@ public class MainSearchSolicitacoesFragment extends Fragment implements Recycler
                     donativos = output;
                     showListDonativos();
                     donativosAdapter = new DonativosAdapter(donativos, getActivity());
-                    recyclerView.setAdapter(donativosAdapter);
-                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
-                    searchView.setOnQueryTextListener(MainSearchSolicitacoesFragment.this);
+//                    recyclerView.setAdapter(donativosAdapter);
+//                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+//                    searchView.setOnQueryTextListener(MainSearchSolicitacoesFragment.this);
                 }
             }
         };

@@ -234,5 +234,7 @@
     <string name="call_doador">Deseja ligar para Doador?</string>
     <string name="confirm_coleta">CONFIRMAR</string>
     <string name="SelectHorarioColeta">Selecione um Horário</string>
+    <string name="unique_horario_select">Somente uma disponibilidade deve ser escolhida</string>
+    <string name="horario_not_informed">Uma Disponibilidade para coletar deve ser escolhida</string>
 
 </resources>

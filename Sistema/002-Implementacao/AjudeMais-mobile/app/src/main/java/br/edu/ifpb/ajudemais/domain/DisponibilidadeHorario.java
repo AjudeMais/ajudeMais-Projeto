@@ -101,4 +101,14 @@ public class DisponibilidadeHorario implements Serializable {
     public void setAtivo(Boolean ativo) {
         this.ativo = ativo;
     }
+
+    @Override
+    public String toString() {
+        return "DisponibilidadeHorario{" +
+                "id=" + id +
+                ", horaInicio=" + horaInicio +
+                ", horaFim=" + horaFim +
+                ", ativo=" + ativo +
+                '}';
+    }
 }

@@ -137,7 +137,7 @@ public class DonativoRestService {
 		return new ResponseEntity<>(donativo, HttpStatus.OK);
 	}
 
-	@PreAuthorize("hasRole('DOADOR')")
+	@PreAuthorize("hasAnyRole('MENSAGEIRO, DOADOR')")
 	@RequestMapping(method = RequestMethod.PUT)
 	public ResponseEntity<Donativo> update(@RequestBody Donativo donativo) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoService.update(donativo);

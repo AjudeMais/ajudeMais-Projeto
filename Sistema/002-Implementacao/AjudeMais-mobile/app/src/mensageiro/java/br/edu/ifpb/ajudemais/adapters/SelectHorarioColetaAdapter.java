@@ -34,14 +34,23 @@ public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorar
     private List<DisponibilidadeHorario> disponibilidadeHorarios;
     private Context context;
 
+    public interface OnItemCheckListener {
+        void onItemCheck(DisponibilidadeHorario disponibilidadeHorario);
+        void onItemUncheck(DisponibilidadeHorario DisponibilidadeHorario);
+    }
+
+    @NonNull
+    private OnItemCheckListener onItemCheckListener;
+
     /**
      * Construtor default
      * @param disponibilidadeHorarios
      * @param context
      */
-    public SelectHorarioColetaAdapter(List<DisponibilidadeHorario> disponibilidadeHorarios, Context context) {
+    public SelectHorarioColetaAdapter(List<DisponibilidadeHorario> disponibilidadeHorarios, Context context,@NonNull OnItemCheckListener onItemCheckListener) {
         this.disponibilidadeHorarios = disponibilidadeHorarios;
         this.context = context;
+        this.onItemCheckListener = onItemCheckListener;
 
     }
 
@@ -129,13 +138,6 @@ public class SelectHorarioColetaAdapter extends RecyclerView.Adapter<SelectHorar
 
     }
 
-    interface OnItemCheckListener {
-        void onItemCheck(DisponibilidadeHorario disponibilidadeHorario);
-        void onItemUncheck(DisponibilidadeHorario DisponibilidadeHorario);
-    }
-
-    @NonNull
-    private OnItemCheckListener onItemCheckListener;
 
 }
 
