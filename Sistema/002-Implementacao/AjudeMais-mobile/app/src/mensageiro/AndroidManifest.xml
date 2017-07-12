@@ -50,9 +50,14 @@
 
         <activity android:name=".activities.MySolicitacoesActivity" />
         <activity android:name=".activities.DetailSolicitacaoActivity" />
+
+        <activity android:name=".activities.AgendaColetaActivity" />
+        <activity android:name=".activities.ConfirmacaoColetaActivity"></activity>
+
         <activity android:name=".activities.ConfirmacaoColetaActivity" />
         <activity android:name=".activities.SelectHorarioColetaActivity"
             android:label="@string/SelectHorarioColeta" />
+
     </application>
 
 </manifest>

@@ -338,7 +338,7 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
 
     /**
      * @param item
-     * @return
+      @return
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
