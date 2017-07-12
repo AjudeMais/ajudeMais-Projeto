@@ -229,5 +229,10 @@
     <string name="horarioEscolhidoParaColeta">Horário escolhido</string>
     <string name="mensageiro_information">Informações do Mensageiro</string>
     <string name="btnColetar">CONFIRMAR</string>
+    <string name="doador_information">Informações do doador</string>
+    <string name="rejeita_coleta">REJEITAR</string>
+    <string name="call_doador">Deseja ligar para Doador?</string>
+    <string name="confirm_coleta">CONFIRMAR</string>
+    <string name="SelectHorarioColeta">Selecione um Horário</string>
 
 </resources>
