@@ -14,12 +14,15 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.adapters.SelectHorarioColetaAdapter;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.UpdateEstadoDonativoTask;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
+import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 public class SelectHorarioColetaActivity extends BaseActivity implements View.OnClickListener{
@@ -30,7 +33,7 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
     private SelectHorarioColetaAdapter selectHorarioColetaAdapter;
     private List<DisponibilidadeHorario> currentSelectedHorarios;
-
+    private LoadingMensageiroTask loadingMensageiroTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
 
     @Override
     public void init() {
+        initProperties();
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view_list);
         btnConfirm = (Button) findViewById(R.id.btn_confirm);
         btnConfirm.setOnClickListener(this);
@@ -69,9 +73,9 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
      * Valida o estado da doação e seta o estado na label.
      */
     private void validateAndSetStateDoacao() {
-        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-            if (estado.getAtivo() != null && estado.getAtivo()) {
-                estado.setAtivo(false);
+        for(int i = 0 ; i<donativo.getEstadosDaDoacao().size();i++){
+            if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
+                donativo.getEstadosDaDoacao().get(i).setAtivo(false);
             }
         }
 
@@ -81,8 +85,6 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
         estadoDoacao.setData(new Date());
 
         donativo.getEstadosDaDoacao().add(estadoDoacao);
-
-        Log.e("AJUDEMAISLIST VLSTATE", donativo.getEstadosDaDoacao().toString());
     }
 
     /**
@@ -93,10 +95,28 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
         updateEstadoDonativoTask.delegate = new AsyncResponse<Donativo>() {
             @Override
             public void processFinish(Donativo output) {
+                Intent intent = new Intent(SelectHorarioColetaActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                CustomToast.getInstance(SelectHorarioColetaActivity.this).createSuperToastSimpleCustomSuperToast(getString(R.string.acepted_coleta));
 
             }
         };
         updateEstadoDonativoTask.execute();
+    }
+    /**
+     * Executa Asycn task para recuperar mensageiro logado;
+     */
+    private void executeLoadingMensageiroAndUpdateDonativoTasks(final Donativo donativo) {
+        loadingMensageiroTask = new LoadingMensageiroTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
+        loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                donativo.setMensageiro(output);
+                executeUpdateDonativoTask(donativo);
+            }
+        };
+        loadingMensageiroTask.execute();
     }
 
     @Override
@@ -108,8 +128,9 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
                         donativo.getHorariosDisponiveis().get(i).setAtivo(true);
                     }
                 }
-                executeUpdateDonativoTask(donativo);
             }
+            validateAndSetStateDoacao();
+            executeLoadingMensageiroAndUpdateDonativoTasks(donativo);
         }
     }
 
