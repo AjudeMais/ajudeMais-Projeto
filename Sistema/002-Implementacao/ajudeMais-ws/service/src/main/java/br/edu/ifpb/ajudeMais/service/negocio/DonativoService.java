@@ -87,6 +87,20 @@ public interface DonativoService extends Service<Donativo, Long> {
 	List<Donativo> findByMensageiro(Mensageiro mensageiro);
 
 	/**
+	 * 
+	 * <p>
+	 * Busca donativos filtrando por mensageiro e estado passado por paramêtro.
+	 * </p>
+	 * 
+	 * @param mensageiro
+	 *            mensageiro a ser filtrado
+	 * @param estado
+	 *            estado a ser filtrado
+	 * @return lista resultante a consulta.
+	 */
+	List<Donativo> filterDonativoByMensageiroAndEstado(Mensageiro mensageiro, Estado estado);
+
+	/**
 	 * <p>
 	 * Busca donativos com base na localização do doador.
 	 * </p>

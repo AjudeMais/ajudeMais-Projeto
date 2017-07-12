@@ -49,7 +49,7 @@ import br.edu.ifpb.ajudeMais.service.negocio.MensageiroService;
 @RestController
 @RequestMapping(value = "/donativo")
 public class DonativoRestService {
-	
+
 	/**
 	 * 
 	 */
@@ -208,7 +208,8 @@ public class DonativoRestService {
 	 * mensageiro.
 	 * </p>
 	 * 
-	 * @param username do mensageiro
+	 * @param username
+	 *            do mensageiro
 	 * @return lista encontrada
 	 */
 	@PreAuthorize("hasRole('MENSAGEIRO')")
@@ -217,6 +218,31 @@ public class DonativoRestService {
 
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
 		List<Donativo> donativos = donativoService.findByMensageiro(mensageiro);
+		LOGGER.info(donativos.toString());
+		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /donativo/filter/mensageiroEstado : Busca mensageiros filtrando por
+	 * mensageiro e estado.
+	 * </p>
+	 * 
+	 * @param username
+	 *            do mensageiro
+	 * @param estado
+	 *            estado do donativo.
+	 * @return lista encontrada
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/mensageiroEstado")
+	public ResponseEntity<List<Donativo>> findByMensageiroAndEstado(@RequestParam("username") String username,
+			@RequestParam("estado") String estado) {
+
+		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
+		List<Donativo> donativos = donativoService.filterDonativoByMensageiroAndEstado(mensageiro,
+				Estado.getByEstado(estado));
 		LOGGER.info(donativos.toString());
 		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
 	}

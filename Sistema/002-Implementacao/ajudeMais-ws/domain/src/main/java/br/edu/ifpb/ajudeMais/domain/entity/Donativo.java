@@ -39,6 +39,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 
  */
 @NamedQueries({
+		@NamedQuery(name = "Donativo.filterDonativoByMensageiroAndEstado", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
+				+ "WHERE d.mensageiro.id = :idMensageiro and ed.estadoDoacao like :estado"),
+		
 		@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
 
