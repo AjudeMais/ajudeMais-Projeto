@@ -222,6 +222,9 @@
     <string name="mysolicitacoes">Minhas Solicitações de Coleta</string>
     <string name="aceitarColeta">ACEITAR</string>
     <string name="recusarColeta">RECUSAR</string>
+    <string name="recolherColeta">COLETA REALIZADA</string>
+    <string name="emped_coleta">COLETA NÃO REALIZADA</string>
+    <string name="confirm_entrega">CONFIRMAR ENTREGA</string>
     <string name="detalhesColeta">Detalhes da coleta</string>
     <string name="agedamento_coleta">Agendamento Coleta</string>
     <string name="call_mensageiro">Deseja ligar para voluntário?</string>
@@ -232,11 +235,17 @@
     <string name="doador_information">Informações do doador</string>
     <string name="rejeita_coleta">REJEITAR</string>
     <string name="call_doador">Deseja ligar para Doador?</string>
+    <string name="confirm_recolhimento">Deseja recolher este donativo?</string>
+    <string name="confirm_n_recolhimento_dialog">Deseja cancelar coleta?</string>
+    <string name="confirm_entrega_dialog">Deseja registrar entrega?</string>
     <string name="confirm_coleta">CONFIRMAR</string>
     <string name="SelectHorarioColeta">Selecione um Horário</string>
     <string name="unique_horario_select">Somente uma disponibilidade deve ser escolhida</string>
     <string name="horario_not_informed">Uma Disponibilidade para coletar deve ser escolhida</string>
     <string name="acepted_coleta">Coleta aceita com sucesso.</string>
+    <string name="coleta_recolhida">Donativo coletado com sucesso.</string>
+    <string name="coleta_cancelada">Coleta cancelado com sucesso.</string>
+    <string name="coleta_entregue">Coleta entregue.</string>
     <string name="solicitacao_not_disponivel">Infelizemente o donativo não está Disponível para ser coletado</string>
     <string name="not_avaiable_coleta">Coleta não está mais disponível</string>
     <string name="invalide_coleta">Solicitação indisponível</string>

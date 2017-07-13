@@ -351,6 +351,51 @@
                 android:textColor="@color/colorFont"
                 android:textSize="@dimen/fontDefaultMain" />
 
+            <Button
+                android:id="@+id/btn_recolher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_rejeitar"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:background="@color/colorPrimary"
+                android:text="@string/recolherColeta"
+                android:textColor="@color/colorFont"
+                android:textSize="@dimen/fontDefaultMain" />
+
+            <Button
+                android:id="@+id/btn_n_recolher"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_recolher"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:background="@color/colorAccent"
+                android:text="@string/emped_coleta"
+                android:textColor="@color/colorFont"
+                android:textSize="@dimen/fontDefaultMain" />
+
+            <Button
+                android:id="@+id/btn_confirm_entrega"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_n_recolher"
+                android:layout_marginBottom="7dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="7dp"
+                android:visibility="gone"
+                android:background="@color/colorPrimary"
+                android:text="@string/confirm_entrega"
+                android:textColor="@color/colorFont"
+                android:textSize="@dimen/fontDefaultMain" />
+
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

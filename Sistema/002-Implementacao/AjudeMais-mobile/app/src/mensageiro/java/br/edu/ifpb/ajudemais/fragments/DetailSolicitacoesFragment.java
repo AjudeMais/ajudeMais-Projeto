@@ -16,16 +16,22 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Date;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.MainActivity;
 import br.edu.ifpb.ajudemais.activities.SelectHorarioColetaActivity;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UpdateEstadoDonativoTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
+import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
+import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 import br.edu.ifpb.ajudemais.utils.EstadosDonativoUtil;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission.MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION;
@@ -62,7 +68,11 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
     private CallPhoneDevicePermission callPhoneDevicePermission;
     private Button btnAceito;
     private Button btnRejeitado;
+    private Button btnRecolher;
+    private Button btnNoRecolhido;
+    private Button btnConfirmEntrega;
     private TextView tvQuantidade;
+    private UpdateEstadoDonativoTask updateEstadoDonativoTask;
 
     /**
      *
@@ -107,15 +117,23 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
         btnListDisp = (Button) view.findViewById(R.id.btn_lista_disponibilidade);
         btnAceito = (Button) view.findViewById(R.id.btn_aceitar);
         btnRejeitado = (Button) view.findViewById(R.id.btn_rejeitar);
+        btnRecolher = (Button) view.findViewById(R.id.btn_recolher);
+        btnNoRecolhido = (Button) view.findViewById(R.id.btn_n_recolher);
+        btnConfirmEntrega = (Button) view.findViewById(R.id.btn_confirm_entrega);
+
         tvQuantidade = (TextView) view.findViewById(R.id.tv_quantidade);
-        tvQuantidade.setText("Quantidade: "+Float.toString(donativo.getQuantidade()));
+        tvQuantidade.setText("Quantidade: " + Float.toString(donativo.getQuantidade()));
 
         btnListDisp.setOnClickListener(this);
         btnAceito.setOnClickListener(this);
         btnRejeitado.setOnClickListener(this);
+        btnRecolher.setOnClickListener(this);
+        btnNoRecolhido.setOnClickListener(this);
+        btnConfirmEntrega.setOnClickListener(this);
 
         setAtrAddressIntoCard(donativo.getEndereco());
         setInformationDoador();
+        setVisibleBtns(donativo);
     }
 
 
@@ -202,6 +220,12 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
             startActivity(intent);
         } else if (v.getId() == R.id.btn_lista_disponibilidade) {
             showDialogListDisponibilidade();
+        } else if (v.getId() == R.id.btn_recolher) {
+            showDialogBtns(1, getString(R.string.confirm_recolhimento));
+        } else if (v.getId() == R.id.btn_n_recolher) {
+            showDialogBtns(2, getString(R.string.confirm_n_recolhimento_dialog));
+        } else if (v.getId() == R.id.btn_confirm_entrega) {
+            showDialogBtns(3, getString(R.string.confirm_entrega_dialog));
         }
     }
 
@@ -234,10 +258,76 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
         alertDialogAndroid.show();
     }
 
+    /**
+     * Dialog para confirmação de donativo não recolhido
+     */
+    private void showDialogBtns(final int option, String dialogTitle) {
+        AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setTitle(dialogTitle)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
+                            if (donativo.getEstadosDaDoacao().get(i).getAtivo()) {
+                                donativo.getEstadosDaDoacao().get(i).setAtivo(false);
+                            }
+                        }
+                        EstadoDoacao estadoDoacao = new EstadoDoacao();
+                        estadoDoacao.setAtivo(true);
+                        estadoDoacao.setData(new Date());
+                        switch (option) {
+                            case 1:
+                                estadoDoacao.setEstadoDoacao(Estado.RECOLHIDO);
+                                donativo.getEstadosDaDoacao().add(estadoDoacao);
+                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_recolhida));
+                                break;
+                            case 2:
+                                estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+                                donativo.getEstadosDaDoacao().add(estadoDoacao);
+                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
+                                break;
+                            case 3:
+                                estadoDoacao.setEstadoDoacao(Estado.RECEBIDO);
+                                donativo.getEstadosDaDoacao().add(estadoDoacao);
+                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_entregue));
+                                break;
+                        }
+                    }
+                })
+
+                .setNegativeButton(R.string.no,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+    }
+
+    /**
+     * Executa Asycn task para atualizar o estado do donativo;
+     */
+    private void executeUpdateDonativoTask(final Donativo donativo, final String msg) {
+        updateEstadoDonativoTask = new UpdateEstadoDonativoTask(getContext(), donativo);
+        updateEstadoDonativoTask.delegate = new AsyncResponse<Donativo>() {
+            @Override
+            public void processFinish(Donativo output) {
+                Intent intent = new Intent(getContext(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(msg);
+
+            }
+        };
+        updateEstadoDonativoTask.execute();
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
 
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION: {
@@ -247,5 +337,39 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
                 break;
             }
         }
+    }
+
+    /**
+     *
+     */
+    private void setVisibleBtns(Donativo donativo) {
+        EstadoDoacao estadoDoacao = this.getEstadoDoacaoAtivo(donativo);
+
+        if (donativo.getMensageiro() != null) {
+            btnAceito.setVisibility(view.GONE);
+            btnRejeitado.setVisibility(view.GONE);
+
+            if (estadoDoacao != null && estadoDoacao.getEstadoDoacao().equals(Estado.ACEITO)) {
+                btnRecolher.setVisibility(view.VISIBLE);
+                btnNoRecolhido.setVisibility(view.VISIBLE);
+
+            } else if (estadoDoacao != null && estadoDoacao.getEstadoDoacao().equals(Estado.RECOLHIDO)) {
+                btnConfirmEntrega.setVisibility(view.VISIBLE);
+            }
+        }
+    }
+
+    /**
+     * @param donativo
+     * @return
+     */
+    private EstadoDoacao getEstadoDoacaoAtivo(Donativo donativo) {
+        EstadoDoacao estadoDoacao = null;
+        for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
+            if (estado.getAtivo()) {
+                estadoDoacao = estado;
+            }
+        }
+        return estadoDoacao;
     }
 }
