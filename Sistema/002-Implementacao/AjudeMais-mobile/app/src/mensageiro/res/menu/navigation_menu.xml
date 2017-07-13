@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/grp1">
-        <item
-            android:id="@+id/nav_minhas_coletas"
-            android:icon="@mipmap/ic_coletas"
-            android:title="@string/minhas_coletas" />
 
         <item
             android:id="@+id/nav_my_addresses"

@@ -238,6 +238,7 @@ public class DonativoRestService {
 	public ResponseEntity<List<Donativo>> findByMensageiroAndEstado(@RequestParam("username") String username,
 			@RequestParam("estado") String estado) {
 
+		LOGGER.info(estado);
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
 		List<Donativo> donativos = donativoService.filterDonativoByMensageiroAndEstado(mensageiro,
 				Estado.getByEstado(estado));

@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,7 +22,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
-import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroEstadoTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
@@ -29,7 +33,7 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 /**
  *
  */
-public class MainSearchMyProxColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainSearchMyProxColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
@@ -37,7 +41,7 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
     private List<DoacaoAdapterDto> donativos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
-    private LoadingDonativoByMensageiroTask loadingDonativoByMensageiroTask;
+    private LoadingDonativoByMensageiroEstadoTask loadingDonativoByMensageiroEstadoTask;
     private RecyclerItemClickListener.OnItemClickListener clickListener;
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
@@ -142,29 +146,53 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
 
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
 
-    private void executeLoadingDonativosTask() {
-        sharedPrefManager = SharedPrefManager.getInstance(getContext());
-        String username = sharedPrefManager.getUser().getUsername();
-        loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
-        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<DoacaoAdapterDto> filteredModelList = filter(donativos, newText);
 
-            @Override
-            public void processFinish(List<DoacaoAdapterDto> output) {
-                if (output.size() < 1) {
-                    showListEmpty();
+        if (filteredModelList.size() < 1) {
+            showListEmpty();
+        } else {
+            showListDonativos();
+            donativosAdapter.setFilter(filteredModelList);
+        }
+        return true;
+    }
 
-                } else {
-                    donativos = output;
-                    showListDonativos();
-                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
-                    recyclerView.setAdapter(donativosAdapter);
-                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
-                }
-            }
-        };
+    /**
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 
-        loadingDonativoByMensageiroTask.execute();
+        inflater.inflate(R.menu.menu_search, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        searchView = (SearchView) MenuItemCompat.getActionView(item);
+
+        if (donativos != null) {
+            searchView.setOnQueryTextListener(MainSearchMyProxColetas.this);
+        }
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+                        donativosAdapter.setFilter(donativos);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+                        return true;
+                    }
+                });
+
     }
 
     /**
@@ -195,5 +223,29 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
         view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
         view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.VISIBLE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+    }
+
+    private void executeLoadingDonativosTask() {
+        sharedPrefManager = SharedPrefManager.getInstance(getContext());
+        String username = sharedPrefManager.getUser().getUsername();
+        loadingDonativoByMensageiroEstadoTask = new LoadingDonativoByMensageiroEstadoTask(getContext(), username);
+        loadingDonativoByMensageiroEstadoTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+
+            @Override
+            public void processFinish(List<DoacaoAdapterDto> output) {
+                if (output.size() < 1) {
+                    showListEmpty();
+
+                } else {
+                    donativos = output;
+                    showListDonativos();
+                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
+                    recyclerView.setAdapter(donativosAdapter);
+                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                }
+            }
+        };
+
+        loadingDonativoByMensageiroEstadoTask.execute();
     }
 }

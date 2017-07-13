@@ -105,8 +105,8 @@ public class DonativoRemoteService extends AbstractRemoteService {
      * @return
      */
     public List<Donativo> findByMensageiroAndEstado(String username, Estado estado) {
-
-        ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/mensageiro?username={username}&estado={estado}", Donativo[].class, username, estado.name());
+        String estadoString = estado.name();
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/mensageiroEstado?username={username}&estado={estadoString}", Donativo[].class, username, estadoString);
 
         return Arrays.asList(responseEntity.getBody());
     }
