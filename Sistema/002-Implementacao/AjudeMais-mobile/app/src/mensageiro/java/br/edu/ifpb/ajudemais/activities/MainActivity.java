@@ -1,6 +1,5 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,10 +25,6 @@ public class MainActivity extends DrawerMenuActivity {
 
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
-    private RelativeLayout componentLoading;
-    private FrameLayout componentView;
-    private RelativeLayout componentNoInternet;
-
 
     /**
      * @param savedInstanceState
@@ -43,10 +38,6 @@ public class MainActivity extends DrawerMenuActivity {
         setUpAccount();
         setUpToggle();
         setupNavDrawer();
-
-        componentLoading.setVisibility(View.VISIBLE);
-        componentView.setVisibility(View.GONE);
-
         mFragmentManager = getSupportFragmentManager();
         mFragmentTransaction = mFragmentManager.beginTransaction();
         mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
@@ -57,46 +48,14 @@ public class MainActivity extends DrawerMenuActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        new LoadingColetasTask().execute();
 
     }
 
     @Override
     public void init() {
+        initProperties();
         super.init();
-        componentLoading = (RelativeLayout) findViewById(R.id.loadingPanel);
-        componentLoading.setVisibility(View.VISIBLE);
-
-        componentView = (FrameLayout) findViewById(R.id.containerView);
-        componentView.setVisibility(View.GONE);
-
-        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
-        componentNoInternet.setVisibility(View.GONE);
-
-    }
-
-    private void showVisibleComponentNoInternet() {
-        componentNoInternet.setVisibility(View.VISIBLE);
-        componentLoading.setVisibility(View.GONE);
-        componentView.setVisibility(View.GONE);
     }
 
 
-    /**
-     * Classe auxiliar para acessar Serviços
-     */
-    private class LoadingColetasTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String message) {
-            findViewById(R.id.loadingPanel).setVisibility(View.GONE);
-            findViewById(R.id.containerView).setVisibility(View.VISIBLE);
-        }
-
-    }
 }

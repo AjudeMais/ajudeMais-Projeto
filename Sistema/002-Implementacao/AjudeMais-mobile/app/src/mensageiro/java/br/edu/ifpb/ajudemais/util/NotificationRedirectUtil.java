@@ -37,13 +37,13 @@ public class NotificationRedirectUtil {
      * @param id
      * @param tipoNotificacao
      */
-    public void redirectNotification(Long id, String tipoNotificacao) {
+    public void redirectNotification(Long id, String tipoNotificacao, String body) {
         if (id != null && tipoNotificacao != null) {
             switch (tipoNotificacao) {
                 case "CAMPANHA":
                     break;
                 case "DOACAO":
-                    executeLoadingDonativoByIdTask(id);
+                    executeLoadingDonativoByIdTask(id, body);
                     break;
                 default:
                     break;
@@ -57,7 +57,7 @@ public class NotificationRedirectUtil {
      *
      * @param donativoId
      */
-    private void executeLoadingDonativoByIdTask(final Long donativoId) {
+    private void executeLoadingDonativoByIdTask(final Long donativoId, final String body) {
         GetDonativoByIdTask getDonativoByIdTask = new GetDonativoByIdTask(context, donativoId);
         getDonativoByIdTask.delegate = new AsyncResponse<Donativo>() {
             @Override
@@ -67,8 +67,9 @@ public class NotificationRedirectUtil {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("Donativo", donativo);
-                intent.putExtra("notification",  new Boolean(true));
-
+                if (!body.equals("Doação foi cancelada pelo doador")){
+                    intent.putExtra("notification",  new Boolean(true));
+                }
                 context.startActivity(intent);
             }
         };

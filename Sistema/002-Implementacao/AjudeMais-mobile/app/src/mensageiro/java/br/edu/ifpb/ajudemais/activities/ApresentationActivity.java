@@ -4,9 +4,14 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.LoginTask;
@@ -111,10 +116,25 @@ public class ApresentationActivity extends AppCompatActivity {
         if (startingIntent != null) {
             String tipoAs = startingIntent.getStringExtra("tipo");
             String idStr = startingIntent.getStringExtra("id");
+            String body = "";
+
+            try {
+                String message = startingIntent.getExtras().getString("message");
+                Log.e("message", message+"-----------------------------------------");
+
+                if (message != null) {
+                    JSONObject obj = new JSONObject(message);
+                    body = obj.getString("body");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             if (tipoAs != null && idStr != null) {
                 Long id = Long.parseLong(idStr);
-                notificationRedirectUtil.redirectNotification(id, tipoAs);
+                Log.e("BODY", body+"-----------------------------------------");
+                notificationRedirectUtil.redirectNotification(id, tipoAs, body);
             }
         }
     }

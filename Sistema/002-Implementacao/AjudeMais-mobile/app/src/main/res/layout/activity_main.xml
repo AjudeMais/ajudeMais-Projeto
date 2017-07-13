@@ -29,16 +29,10 @@
                 android:layout_gravity="bottom|right"
                 android:layout_margin="16dp"
                 android:src="@drawable/ic_add"
-                app:layout_anchorGravity="bottom|right|end" />
+                app:layout_anchorGravity="bottom|right|end"
+                tools:ignore="RtlHardcoded" />
 
         </FrameLayout>
-
-        <include android:id="@+id/no_internet_fragment" layout="@layout/fragment_no_internet"/>
-
-        <RelativeLayout style="@style/GenericProgressBackground" android:id="@+id/loadingPanel" xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <ProgressBar style="@style/GenericProgressIndicator"/>
-        </RelativeLayout>
 
     </LinearLayout>
 

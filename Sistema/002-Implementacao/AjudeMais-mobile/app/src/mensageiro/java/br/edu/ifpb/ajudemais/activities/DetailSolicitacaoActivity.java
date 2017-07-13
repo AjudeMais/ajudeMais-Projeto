@@ -22,6 +22,7 @@ import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.fragments.DetailSolicitacoesFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission.MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION;
 
@@ -49,14 +50,13 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                 (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) ||
                         getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO)))) {
 
-            setContentView(R.layout.fragment_solicitacao_not_disponivel);
-            Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
-            mToolbar.setTitle(getString(R.string.invalide_coleta));
+                setContentView(R.layout.fragment_solicitacao_not_disponivel);
+                Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
+                mToolbar.setTitle(getString(R.string.invalide_coleta));
 
-            setSupportActionBar(mToolbar);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+                setSupportActionBar(mToolbar);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(true);
         } else {
             setContentView(R.layout.activity_detail_solicitacao);
             init();
@@ -69,9 +69,9 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         }
     }
 
-    private EstadoDoacao getEstadoAtivo(){
-        for (EstadoDoacao estadoDoacao : donativo.getEstadosDaDoacao()){
-            if (estadoDoacao.getAtivo()){
+    private EstadoDoacao getEstadoAtivo() {
+        for (EstadoDoacao estadoDoacao : donativo.getEstadosDaDoacao()) {
+            if (estadoDoacao.getAtivo()) {
                 return estadoDoacao;
             }
         }
@@ -92,7 +92,6 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
 
 
         progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
