@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +22,7 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
-import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroEstadoTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
@@ -42,7 +41,7 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
     private List<DoacaoAdapterDto> donativos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
-    private LoadingDonativoByMensageiroTask loadingDonativoByMensageiroTask;
+    private LoadingDonativoByMensageiroEstadoTask loadingDonativoByMensageiroEstadoTask;
     private RecyclerItemClickListener.OnItemClickListener clickListener;
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
@@ -229,8 +228,8 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
     private void executeLoadingDonativosTask() {
         sharedPrefManager = SharedPrefManager.getInstance(getContext());
         String username = sharedPrefManager.getUser().getUsername();
-        loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
-        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+        loadingDonativoByMensageiroEstadoTask = new LoadingDonativoByMensageiroEstadoTask(getContext(), username);
+        loadingDonativoByMensageiroEstadoTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
 
             @Override
             public void processFinish(List<DoacaoAdapterDto> output) {
@@ -247,6 +246,6 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
             }
         };
 
-        loadingDonativoByMensageiroTask.execute();
+        loadingDonativoByMensageiroEstadoTask.execute();
     }
 }
