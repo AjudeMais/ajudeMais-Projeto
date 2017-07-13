@@ -7,6 +7,7 @@ import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 /**
  * <p>
@@ -63,12 +64,17 @@ public class NotificationRedirectUtil {
             @Override
             public void processFinish(Donativo output) {
                 Donativo donativo = output;
+
                 Intent intent = new Intent(context, DetailSolicitacaoActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("Donativo", donativo);
-                intent.putExtra("notification", new Boolean(true));
+                if (donativo.getMensageiro() != null && (
+                        donativo.getMensageiro().getConta().getUsername().equals(SharedPrefManager.getInstance(context).getUser().getUsername()))){
 
+                }else {
+                    intent.putExtra("notification", new Boolean(true));
+                }
                 context.startActivity(intent);
             }
         };

@@ -16,7 +16,7 @@ import br.edu.ifpb.ajudemais.fragments.TabFragment;
  * </p>
  * <p>
  * <p>
- * Activity inicial para Mensageiro
+ * Activity inicial para Mensageiro nela existe três tabs para mensageiro gerenciar suas coletas
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
