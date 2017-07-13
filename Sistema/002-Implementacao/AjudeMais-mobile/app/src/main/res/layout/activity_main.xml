@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="br.edu.ifpb.ajudemais.activities.MainActivity">
 
     <LinearLayout
@@ -12,15 +12,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/navigation_action"
+        <include
+            layout="@layout/navigation_action"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <FrameLayout
-            android:orientation="vertical"
+            android:id="@+id/containerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/containerView">
+            android:orientation="vertical">
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fab"
@@ -34,6 +35,17 @@
 
         </FrameLayout>
 
+        <include
+            android:id="@+id/no_internet_fragment"
+            layout="@layout/fragment_no_internet" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/loadingPanel"
+            style="@style/GenericProgressBackground">
+
+            <ProgressBar style="@style/GenericProgressIndicator" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 
@@ -41,12 +53,11 @@
         android:id="@+id/menuNav"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:menu="@menu/navigation_menu"
+        android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
-        android:layout_gravity="start">
+        app:menu="@menu/navigation_menu">
 
     </android.support.design.widget.NavigationView>
-
 
 
 </android.support.v4.widget.DrawerLayout>

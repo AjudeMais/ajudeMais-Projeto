@@ -305,7 +305,9 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                     public void onClick(DialogInterface dialog, int which) {
                         for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
                             if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
-                                if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())) {
+                                if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())
+                                || donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
+
                                     donativo.getEstadosDaDoacao().get(i).setAtivo(false);
                                 }
 

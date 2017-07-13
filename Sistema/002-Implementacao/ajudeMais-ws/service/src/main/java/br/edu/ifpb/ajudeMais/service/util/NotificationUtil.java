@@ -66,7 +66,7 @@ public class NotificationUtil {
 				if (donativo.getMensageiro() != null) {
 					publisher.publishEvent(
 							new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(),
-									donativo, "Doação foi cancelada pelo doador"));
+									donativo, "Doação foi cancelada"));
 					estadoDoaco.setNotificado(true);
 				}
 				break;

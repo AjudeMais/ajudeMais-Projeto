@@ -41,6 +41,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
 
         notification = (Boolean) getIntent().getSerializableExtra("notification");
