@@ -25,7 +25,6 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
-import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoCampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
@@ -303,15 +302,15 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * /filter/local/ : Busca todos os donativos com base na localização
+	 * "/filter/closer/mensageiro/{id} : Busca todos os donativos com base na localização
 	 * 
 	 * @return solicitacoesColeta
 	 */
 	@PreAuthorize("hasRole('MENSAGEIRO')")
-	@RequestMapping(method = RequestMethod.POST, value = "/filter/local")
-	public ResponseEntity<List<Donativo>> filterDonativoByDoadorLocal(@RequestBody LatLng latLng)
+	@RequestMapping(method = RequestMethod.GET, value = "/filter/closer/mensageiro/{id}")
+	public ResponseEntity<List<Donativo>> filterByDonativosCloserMensageiroId(@PathVariable Long id)
 			throws AjudeMaisException {
-		List<Donativo> solicitacoesColeta = donativoService.filterByDoadorLocal(latLng);
+		List<Donativo> solicitacoesColeta = donativoService.filterByDonativosCloserMensageiroId(id);
 		return new ResponseEntity<List<Donativo>>(solicitacoesColeta, HttpStatus.OK);
 
 	}

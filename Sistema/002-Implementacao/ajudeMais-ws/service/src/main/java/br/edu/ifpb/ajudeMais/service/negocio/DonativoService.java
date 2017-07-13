@@ -9,7 +9,6 @@ import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
-import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
 
 /**
  * 
@@ -109,5 +108,5 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @return
 	 * @throws AjudeMaisException
 	 */
-	List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException;
+	List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException;
 }

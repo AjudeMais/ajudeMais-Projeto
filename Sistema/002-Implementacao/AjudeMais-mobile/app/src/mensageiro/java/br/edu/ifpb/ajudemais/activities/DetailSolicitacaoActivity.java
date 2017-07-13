@@ -18,6 +18,8 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
+import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.fragments.DetailSolicitacoesFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
 
@@ -42,7 +44,11 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
 
         notification = (Boolean) getIntent().getSerializableExtra("notification");
 
-        if (donativo.getMensageiro() != null && notification != null) {
+        if ((notification != null && getEstadoAtivo() != null)
+                && (donativo.getMensageiro() != null ||
+                (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) ||
+                        getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO)))) {
+
             setContentView(R.layout.fragment_solicitacao_not_disponivel);
             Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
             mToolbar.setTitle(getString(R.string.invalide_coleta));
@@ -61,6 +67,16 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                 fragmentTransaction.commit();
             }
         }
+    }
+
+    private EstadoDoacao getEstadoAtivo(){
+        for (EstadoDoacao estadoDoacao : donativo.getEstadosDaDoacao()){
+            if (estadoDoacao.getAtivo()){
+                return estadoDoacao;
+            }
+        }
+
+        return null;
     }
 
     @Override

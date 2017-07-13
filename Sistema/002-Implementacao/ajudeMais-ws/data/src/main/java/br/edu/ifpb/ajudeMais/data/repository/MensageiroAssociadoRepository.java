@@ -85,6 +85,18 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @param conta
 	 */
 	List<MensageiroAssociado> findByInstituicaoCaridadeConta(Conta conta);
+	
+	/**
+	 * 
+	 * <p>
+	 * 
+	 * Busca mensageiros associados pelo id do mensageiro.
+	 * </p>
+	 * 
+	 * @param conta
+	 */
+	List<MensageiroAssociado> findByMensageiroId(Long id);
+
 
 	/**
 	 * 

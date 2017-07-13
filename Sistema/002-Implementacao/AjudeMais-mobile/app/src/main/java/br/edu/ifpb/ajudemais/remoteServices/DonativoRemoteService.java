@@ -158,5 +158,18 @@ public class DonativoRemoteService extends AbstractRemoteService {
         ResponseEntity<Donativo[]> responseEntity = restTemplate.postForEntity(API + "/donativo/filter/local", latLng, Donativo[].class);
         return Arrays.asList(responseEntity.getBody());
     }
+
+
+    /**
+     * Busca donativos diponibilizados próximo do mensageiro com ID passado .
+     *
+     * @param id
+     * @return
+     */
+    public List<Donativo> filterByDonativosCloserMensageiroId(Long id) {
+        ResponseEntity<Donativo[]> responseEntity = restTemplate.getForEntity(API + "/donativo/filter/closer/mensageiro/{id}", Donativo[].class, id);
+        return Arrays.asList(responseEntity.getBody());
+    }
+
 }
 
