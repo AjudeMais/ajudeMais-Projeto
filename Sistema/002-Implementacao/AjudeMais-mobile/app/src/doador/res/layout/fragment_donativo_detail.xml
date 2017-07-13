@@ -288,7 +288,7 @@
                 android:id="@+id/btn_lista_disponibilidade"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvInformationAgenda"
+                android:layout_below="@+id/componentMensageiro"
                 android:layout_marginBottom="7dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginStart="5dp"
