@@ -116,25 +116,9 @@ public class ApresentationActivity extends AppCompatActivity {
         if (startingIntent != null) {
             String tipoAs = startingIntent.getStringExtra("tipo");
             String idStr = startingIntent.getStringExtra("id");
-            String body = "";
-
-            try {
-                String message = startingIntent.getExtras().getString("message");
-                Log.e("message", message+"-----------------------------------------");
-
-                if (message != null) {
-                    JSONObject obj = new JSONObject(message);
-                    body = obj.getString("body");
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
             if (tipoAs != null && idStr != null) {
                 Long id = Long.parseLong(idStr);
-                Log.e("BODY", body+"-----------------------------------------");
-                notificationRedirectUtil.redirectNotification(id, tipoAs, body);
+                notificationRedirectUtil.redirectNotification(id, tipoAs);
             }
         }
     }

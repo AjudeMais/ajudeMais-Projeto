@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.util;
 
 import android.content.Context;
 import android.content.Intent;
+
 import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
@@ -15,6 +16,7 @@ import br.edu.ifpb.ajudemais.domain.Donativo;
  * <p>
  * Auxiliar para criação de regras de redirecionamento em notificações
  * </p>
+ *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
 public class NotificationRedirectUtil {
@@ -25,25 +27,23 @@ public class NotificationRedirectUtil {
     private Context context;
 
     /**
-     *
      * @param context
      */
-    public NotificationRedirectUtil(Context context){
+    public NotificationRedirectUtil(Context context) {
         this.context = context;
     }
 
     /**
-     *
      * @param id
      * @param tipoNotificacao
      */
-    public void redirectNotification(Long id, String tipoNotificacao, String body) {
+    public void redirectNotification(Long id, String tipoNotificacao) {
         if (id != null && tipoNotificacao != null) {
             switch (tipoNotificacao) {
                 case "CAMPANHA":
                     break;
                 case "DOACAO":
-                    executeLoadingDonativoByIdTask(id, body);
+                    executeLoadingDonativoByIdTask(id);
                     break;
                 default:
                     break;
@@ -57,7 +57,7 @@ public class NotificationRedirectUtil {
      *
      * @param donativoId
      */
-    private void executeLoadingDonativoByIdTask(final Long donativoId, final String body) {
+    private void executeLoadingDonativoByIdTask(final Long donativoId) {
         GetDonativoByIdTask getDonativoByIdTask = new GetDonativoByIdTask(context, donativoId);
         getDonativoByIdTask.delegate = new AsyncResponse<Donativo>() {
             @Override
@@ -67,9 +67,8 @@ public class NotificationRedirectUtil {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.putExtra("Donativo", donativo);
-                if (!body.equals("Doação foi cancelada pelo doador")){
-                    intent.putExtra("notification",  new Boolean(true));
-                }
+                intent.putExtra("notification", new Boolean(true));
+
                 context.startActivity(intent);
             }
         };
