@@ -62,13 +62,13 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 
 	private GeoApiContext apiContext;
 
-
 	private Endereco endereco;
 	private static final String MAP_ROUTE = "route";
 	private static final String MAP_POLITICAL = "political";
 	private static final String MAP_ADMINISTRATIVE_AREA_LEVEL_2 = "administrative_area_level_2";
 	private static final String MAP_ADMINISTRATIVE_AREA_LEVEL_1 = "administrative_area_level_1";
 	private static final String MAP_POSTAL_CODE = "postal_code";
+	private static final String PT_BR = "pt-BR";
 
 	/**
 	 * Método que consulta distância entre um ponto de origem e varios outros
@@ -80,12 +80,12 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 	 * @throws Exception
 	 */
 	public DistanceMatrix findByDistanceBetweenAddress(String origem, String[] destinations) throws AjudeMaisException {
-		
+
 		try {
 			apiContext = new GeoApiContext().setApiKey(key);
 			DistanceMatrix matrix = DistanceMatrixApi.newRequest(apiContext).origins(origem).destinations(destinations)
-					.mode(TravelMode.DRIVING).language("pt-BR").units(Unit.METRIC).await();
-			
+					.mode(TravelMode.DRIVING).language(PT_BR).units(Unit.METRIC).await();
+
 			return matrix;
 
 		} catch (ApiException e) {
@@ -95,7 +95,7 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		} catch (IOException e) {
 			throw new AjudeMaisException(e.getMessage());
 		}
-		
+
 	}
 
 	/**
@@ -114,17 +114,15 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		try {
 			GeocodingResult[] results;
 
-			results = GeocodingApi.newRequest(apiContext).latlng(new LatLng(latitude, logitude)).language("pt-BR")
+			results = GeocodingApi.newRequest(apiContext).latlng(new LatLng(latitude, logitude)).language(PT_BR)
 					.await();
 
 			return setResultEnderecoGoogleMaps(results);
 
-		} catch (ApiException e) {
+		} catch (ApiException | IOException e) {
 			throw new AjudeMaisException(e.getMessage());
 		} catch (InterruptedException e) {
 			throw new AjudeMaisException("Sem conexão com a internet.");
-		} catch (IOException e) {
-			throw new AjudeMaisException(e.getMessage());
 		}
 
 	}
@@ -142,22 +140,16 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 
 		try {
 			GeocodingResult[] results;
-			
+
 			results = GeocodingApi.newRequest(apiContext).address(endereco.getLogradouro() + "," + endereco.getBairro()
-					+ "," + endereco.getLocalidade() + "," + endereco.getUf()).language("pt-BR").await();
+					+ "," + endereco.getLocalidade() + "," + endereco.getUf()).language(PT_BR).await();
 
-			if (setResultEnderecoGoogleMaps(results) != null) {
-				return true;
-			} else {
-				return false;
-			}
+			return setResultEnderecoGoogleMaps(results) != null;
 
-		} catch (ApiException e) {
+		} catch (ApiException | IOException e) {
 			throw new AjudeMaisException(e.getMessage());
 		} catch (InterruptedException e) {
 			throw new AjudeMaisException("Sem conexão com a internet.");
-		} catch (IOException e) {
-			throw new AjudeMaisException(e.getMessage());
 		}
 
 	}
@@ -196,7 +188,6 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		return endereco;
 	}
 
-
 	/**
 	 * Verificar qual o mensageiro cadastrado mais próximo do endereço passado.
 	 * 
@@ -209,20 +200,18 @@ public class GoogleMapsServiceImpl implements Serializable, GoogleMapsService {
 		List<Mensageiro> mensageirosAptos = new ArrayList<>();
 
 		if (selectedMensageiros != null && !selectedMensageiros.isEmpty()) {
-			for(int i = 0 ; i<selectedMensageiros.size();i++){
+			for (int i = 0; i < selectedMensageiros.size(); i++) {
 
-				if(validateAddress(((Endereco)selectedMensageiros.get(i)[1]))){
+				if (validateAddress((Endereco) selectedMensageiros.get(i)[1])) {
 					mensageirosAptos.add((Mensageiro) selectedMensageiros.get(i)[0]);
 				}
 			}
 			return mensageirosAptos;
 
-		
-		}else{
+		} else {
 			return mensageirosAptos;
 		}
 
 	}
 
-	
 }

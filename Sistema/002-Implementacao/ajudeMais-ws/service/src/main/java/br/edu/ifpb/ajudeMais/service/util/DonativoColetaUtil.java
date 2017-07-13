@@ -70,7 +70,7 @@ public class DonativoColetaUtil {
 			}
 		});
 		EstadoDoacao estadoDoacao = new EstadoDoacao();
-		estadoDoacao.setAtivo(new Boolean(true));
+		estadoDoacao.setAtivo(true);
 		estadoDoacao.setData(new Date());
 		estadoDoacao.setNotificado(notificado);
 		estadoDoacao.setEstadoDoacao(estado);

@@ -45,7 +45,7 @@ public class NotificationJob implements Job {
 	/**
 	 * 
 	 */
-	Logger LOGGER = LoggerFactory.getLogger(NotificationJob.class);
+	Logger logger = LoggerFactory.getLogger(NotificationJob.class);
 
 	/**
 	 * 
@@ -82,7 +82,7 @@ public class NotificationJob implements Job {
 	 */
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOGGER.info("Executou Job de notificação...");
+		logger.info("Executou Job de notificação...");
 
 		Long id = context.getJobDetail().getJobDataMap().getLongValue("id");
 		Donativo donativo = this.donativoService.findById(id);
@@ -91,10 +91,10 @@ public class NotificationJob implements Job {
 		if (donativo != null && donativo.getMensageiro() == null) {
 			try {
 				notificaveis = coletaUtil.getNotificaveisToBairro(donativo);
+				notifyToCidade(donativo, notificaveis);
 			} catch (AjudeMaisException e) {
-				LOGGER.error("Ocorreu um erro ao recuperar notificaveis : " + e.getLocalizedMessage());
+				logger.error("Ocorreu um erro ao recuperar notificaveis : " + e.getLocalizedMessage());
 			}
-			notifyToCidade(donativo, notificaveis);
 
 		} else {
 			schedulerJobUtil.removeJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativo.getId());
@@ -114,20 +114,20 @@ public class NotificationJob implements Job {
 	 *            lista de notificaveis por bairro.
 	 */
 	private void notifyToCidade(Donativo donativo, List<String> notificaveisBairro) {
-		List<String> notificaveis = new ArrayList<>();
+		List<String> notificaveiis = new ArrayList<>();
 		boolean isNotificationValid = notificationUtil.notificationDonativoValid(donativo);
-	
+
 		if (isNotificationValid) {
 			try {
-				notificaveis = coletaUtil.getNotificaveisToCidade(donativo);
-				notificaveis = this.getNotificaveisCidade(notificaveisBairro, notificaveis);
-				
-			} catch (AjudeMaisException e) {
-				LOGGER.error(e.getMessage());
-			}
+				notificaveiis = coletaUtil.getNotificaveisToCidade(donativo);
+				notificaveiis = this.getNotificaveisCidade(notificaveisBairro, notificaveiis);
 
-			if (notificaveis != null && !notificaveis.isEmpty()) {
-				publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo, "Novo donativo dispobilizado para coleta"));
+				if (notificaveiis != null && !notificaveiis.isEmpty()) {
+					publisher.publishEvent(new DoacaoNotificationEvent(notificaveiis, donativo,
+							"Novo donativo dispobilizado para coleta"));
+				}
+			} catch (AjudeMaisException e) {
+				logger.error(e.getMessage());
 			}
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION_CIDADE, TriggerName.NOTIFICATION_CIDADE, donativo.getId(),
@@ -149,14 +149,14 @@ public class NotificationJob implements Job {
 	 * @return lista com notificaveis ignorando os já notificados no bairro.
 	 */
 	private List<String> getNotificaveisCidade(List<String> notificaveisBairro, List<String> notificaveisCidade) {
-		List<String> notificaveis = new ArrayList<>();
-		notificaveis = notificaveisCidade;
-		
+		List<String> notificaveiss = new ArrayList<>();
+		notificaveiss = notificaveisCidade;
+
 		if (!notificaveisBairro.isEmpty()) {
-			notificaveis.removeAll(notificaveisBairro);
+			notificaveiss.removeAll(notificaveisBairro);
 		}
-		
-		return notificaveis;
+
+		return notificaveiss;
 
 	}
 }
