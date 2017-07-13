@@ -1,9 +1,11 @@
 package br.edu.ifpb.ajudemais.service.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -36,6 +38,8 @@ import br.edu.ifpb.ajudeMais.domain.entity.Doador;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 
@@ -252,6 +256,68 @@ public class DonativoServiceTest {
 		assertTrue(mockDonativos.size() > 0);
 	}
 	
+	/**
+	 * 
+	 * @throws AjudeMaisException
+	 */
+	@Test
+	public void findByCategoriaInstituicaoCaridadeOk() throws AjudeMaisException {
+		Donativo donativo = getDoadorWithDonativo();
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+		when(mockDonativoService.findByCategoriaInstituicaoCaridade(donativo.getCategoria().getInstituicaoCaridade())).thenReturn(donativos);
+		List<Donativo> mockedDonativos = mockDonativoService.findByCategoriaInstituicaoCaridade(donativo.getCategoria().getInstituicaoCaridade());
+		assertNotNull(mockedDonativos);
+	}
+	
+	/**
+	 * 
+	 * @throws AjudeMaisException
+	 */
+	@Test
+	public void findByMensageiroOk() throws AjudeMaisException {
+		Donativo donativo = getDoadorWithDonativo();
+		Mensageiro mensageiro = getMensageiro();
+		donativo.setMensageiro(mensageiro);
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+		when(mockDonativoService.findByMensageiro(mensageiro)).thenReturn(donativos);
+		List<Donativo> mockedDonativos = mockDonativoService.findByMensageiro(mensageiro);
+		assertNotNull(mockedDonativos);
+	}
+	
+	/**
+	 * 
+	 * @throws AjudeMaisException
+	 */
+	@Test
+	public void findByMensageiroNull() throws AjudeMaisException {
+		Donativo donativo = getDoadorWithDonativo();
+		Mensageiro mensageiro = getMensageiro();
+		donativo.setMensageiro(mensageiro);
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+		when(mockDonativoService.findByMensageiro(null)).thenReturn(null);
+		List<Donativo> mockedDonativos = mockDonativoService.findByMensageiro(mensageiro);
+		assertThat(mockedDonativos).isEmpty();;
+	}
+	
+	/**
+	 * 
+	 * @throws AjudeMaisException
+	 */
+	@Test
+	public void filterDonativoByMensageiroAndEstado() throws AjudeMaisException {
+		Donativo donativo = getDoadorWithDonativo();
+		Mensageiro mensageiro = getMensageiro();
+		donativo.setMensageiro(mensageiro);
+		List<Donativo> donativos = new ArrayList<>();
+		donativos.addAll(Arrays.asList(donativo));
+		when(mockDonativoService.filterDonativoByMensageiroAndEstado(mensageiro, Estado.DISPONIBILIZADO)).thenReturn(donativos);
+		List<Donativo> mockedDonativos = mockDonativoService.filterDonativoByMensageiroAndEstado(mensageiro, Estado.DISPONIBILIZADO);
+		assertNotNull(mockedDonativos);
+	}
+	
 
 	/**
 	 * Cria um donativo qualquer para ser utilizado durante os testes
@@ -306,5 +372,26 @@ public class DonativoServiceTest {
 		donativo.setCategoria(categoria);
 		
 		return donativo;
+	}
+	
+	private Mensageiro getMensageiro() {
+		Mensageiro mensageiro = new Mensageiro();
+		mensageiro.setId(2l);
+		mensageiro.setConta(new Conta());
+		mensageiro.setCpf("263.799.558-01");
+		mensageiro.setNome("Josué da Silva");
+		mensageiro.setTelefone("(83)99999-1232");
+		
+		Endereco endereco = new Endereco();
+		endereco.setBairro("Centro");
+		endereco.setCep("58500000");
+		endereco.setLocalidade("Monteiro");
+		endereco.setUf("PB");
+		endereco.setLogradouro("Rua Leopoldino José Da Silva");
+		List<Endereco> enderecos = new ArrayList<>();
+		enderecos.add(endereco);
+		mensageiro.setEnderecos(enderecos);
+		
+		return mensageiro;
 	}
 }
