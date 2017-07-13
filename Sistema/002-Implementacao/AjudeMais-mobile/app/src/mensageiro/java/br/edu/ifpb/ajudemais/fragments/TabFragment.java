@@ -12,10 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.activities.MainTab01;
-import br.edu.ifpb.ajudemais.activities.MainTab02;
-import br.edu.ifpb.ajudemais.activities.MainTab03;
-import br.edu.ifpb.ajudemais.fragments.MainSearchSolicitacoesFragment;
 
 /**
  * <p>
@@ -77,7 +73,7 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new MainSearchSolicitacoesFragment();
+                case 0 : return new MainSearchNewSolicitacoes();
                 case 1 : return new MainSearchMyProxColetas();
                 case 2 : return new MainSearchMyColetas();
             }

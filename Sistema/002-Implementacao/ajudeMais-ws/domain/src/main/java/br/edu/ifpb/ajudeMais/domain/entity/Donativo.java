@@ -46,8 +46,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 		@NamedQuery(name = "Donativo.filterDonativoByEstadoAndInstituicao", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true"),
 
-		@NamedQuery(name = "Donativo.filterDonativoByLocal", query = "SELECT d FROM Donativo d"
-				+ " WHERE d.endereco.localidade like :localidade" + " AND d.endereco.uf like :uf") })
+		@NamedQuery(name = "Donativo.filterDonativoByLocal", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
+				+ " WHERE d.endereco.localidade like :localidade and d.endereco.uf like :uf "
+				+ "and d.categoria.instituicaoCaridade.id = :idInstituicao and ed.estadoDoacao like :estado and ed.ativo is true") })
 @Entity
 public class Donativo implements Serializable {
 

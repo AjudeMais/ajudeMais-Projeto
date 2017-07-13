@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -9,11 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
+import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
-import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
+import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
 import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
@@ -21,8 +23,6 @@ import br.edu.ifpb.ajudeMais.service.event.donativo.DonativoEditEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
 import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
-import br.edu.ifpb.ajudeMais.service.maps.dto.LatLng;
-import br.edu.ifpb.ajudeMais.service.maps.impl.GoogleMapsServiceImpl;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.negocio.EstadoDoacaoService;
 import br.edu.ifpb.ajudeMais.service.util.DonativoColetaUtil;
@@ -59,11 +59,7 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
-	/**
-	 * 
-	 */
-	@Autowired
-	private GoogleMapsServiceImpl googleMapsResponse;
+
 
 	/**
 	 * 
@@ -88,6 +84,12 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private EstadoDoacaoService estadoDoacaoService;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
 	/**
 	 * 
@@ -203,11 +205,27 @@ public class DonativoServiceImpl implements DonativoService {
 	 * @return lista de donativos
 	 */
 	@Override
-	public List<Donativo> filterByDoadorLocal(LatLng latLng) throws AjudeMaisException {
-		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
-				latLng.getLongitude());
-		List<Donativo> donativos = donativoRepository.filterDonativoByLocal(endereco.getLocalidade(), endereco.getUf());
-		return donativos;
+	public List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException {
+		
+		List<Donativo> donativoFilted = new ArrayList<>();
+		
+		List<MensageiroAssociado> mensageiroAssociados = mensageiroAssociadoRepository.findByMensageiroId(idMensageiro);
+		
+		mensageiroAssociados.forEach(ma->{
+			
+			ma.getMensageiro().getEnderecos().forEach(e->{
+				
+				List<Donativo> donativos = donativoRepository.filterDonativoByLocal
+						(e.getLocalidade(), e.getUf(), ma.getInstituicaoCaridade().getId(), Estado.DISPONIBILIZADO);
+
+				donativos.removeAll(donativoFilted);
+				donativoFilted.addAll(donativos);
+				
+			});
+
+		});
+		
+		return donativoFilted;
 	}
 
 	/**

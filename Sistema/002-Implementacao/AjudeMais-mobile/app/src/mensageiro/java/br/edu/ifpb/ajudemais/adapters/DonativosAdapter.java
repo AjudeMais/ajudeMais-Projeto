@@ -52,7 +52,7 @@ public class DonativosAdapter extends RecyclerView.Adapter<DonativosAdapter.View
     public void onBindViewHolder(DonativosAdapter.ViewHolder holder, int position) {
         holder.donativeName.setText(donativos.get(position).getDonativo().getNome());
 
-        String dataColeta = "Data não disponível";
+        String dataColeta = donativos.get(position).getDonativo().getCategoria().getInstituicaoCaridade().getNome();
 
         for (DisponibilidadeHorario dh : donativos.get(position).getDonativo().getHorariosDisponiveis()) {
 
