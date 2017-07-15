@@ -8,8 +8,12 @@
             </a>
         </li>
 
-        <li class="sidebar-list" ui-sref-active="active"><a id="op_home" ui-sref="home">
-            <i class="menu-icon fa fa-home fa-fw"></i> Home</a>
+        <li class="sidebar-list" access-view="ROLE_ADMIN" ui-sref-active="active"><a id="op_dashboard_admin" ui-sref="home.dashboard.admin">
+            <i class="menu-icon fa fa-home fa-tachometer"></i> Dashboard</a>
+        </li>
+
+        <li class="sidebar-list" access-view="ROLE_INSTITUICAO" ui-sref-active="active"><a id="op_dashboard_instituicao" ui-sref="home.dashboard.instituicao">
+            <i class="menu-icon fa fa-home fa-tachometer"></i> Dashboard</a>
         </li>
 
         <li class="sidebar-list" access-view="ROLE_ADMIN"><a id="op_instituicoes" ui-sref="home.instituicao.list">
