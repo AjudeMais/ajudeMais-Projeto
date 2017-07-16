@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -22,8 +23,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
@@ -66,6 +69,10 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
 
+        if (savedInstanceState != null) {
+            mensageiro = (Mensageiro) savedInstanceState.getSerializable("Mensageiro");
+        }
+
         init();
 
         executeLoadingMensageiroTask();
@@ -91,28 +98,29 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
      */
     private void executeLoadingMensageiroTask() {
 
-        loadingMensageiroTask = new LoadingMensageiroTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
+        if (mensageiro == null) {
+            loadingMensageiroTask = new LoadingMensageiroTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
 
-        loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
-            @Override
-            public void processFinish(Mensageiro output) {
-                mensageiro = output;
-                collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
-                ProfileSettingsFragment fragment = new ProfileSettingsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("Mensageiro", mensageiro);
-                fragment.setArguments(bundle);
+            loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+                @Override
+                public void processFinish(Mensageiro output) {
+                    mensageiro = output;
+                    collapsingToolbarLayout.setTitle(mensageiro.getConta().getUsername());
+                    ProfileSettingsFragment fragment = new ProfileSettingsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Mensageiro", mensageiro);
+                    fragment.setArguments(bundle);
 
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.editprofile_fragment, fragment);
-                fragmentTransaction.commit();
-                nestedScrollView.setVisibility(View.VISIBLE);
-                fab.setEnabled(true);
-            }
-        };
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(R.id.editprofile_fragment, fragment);
+                    fragmentTransaction.commit();
+                    nestedScrollView.setVisibility(View.VISIBLE);
+                    fab.setEnabled(true);
+                }
+            };
 
-        loadingMensageiroTask.execute();
-
+            loadingMensageiroTask.execute();
+        }
     }
 
 
@@ -234,9 +242,10 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
 
     /**
      * Inicializa e executa AsycnTask para fazer upload de image do perfil do mensageiro.
+     *
      * @param imageBytes
      */
-    private void executeUploadImageTask(byte [] imageBytes){
+    private void executeUploadImageTask(byte[] imageBytes) {
         uploadImageTask = new UploadImageTask(this, imageBytes);
         uploadImageTask.delegate = new AsyncResponse<Imagem>() {
             @Override
@@ -314,5 +323,10 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable("Mensageiro", mensageiro);
 
+    }
 }

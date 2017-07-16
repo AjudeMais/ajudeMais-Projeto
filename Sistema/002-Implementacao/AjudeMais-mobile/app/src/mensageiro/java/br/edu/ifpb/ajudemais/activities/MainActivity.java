@@ -38,10 +38,12 @@ public class MainActivity extends DrawerMenuActivity {
         setUpAccount();
         setUpToggle();
         setupNavDrawer();
-        mFragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = mFragmentManager.beginTransaction();
-        mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
 
+        if (savedInstanceState == null) {
+            mFragmentManager = getSupportFragmentManager();
+            mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
+        }
 
     }
 
