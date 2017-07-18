@@ -73,9 +73,9 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new MainSearchNewSolicitacoes();
-                case 1 : return new MainSearchMyProxColetas();
-                case 2 : return new MainSearchMyColetas();
+                case 0 : return new MainSearchNewSolicitacoesFragment();
+                case 1 : return new MainSearchMyProxColetasFragment();
+                case 2 : return new MainSearchMyColetasFragment();
             }
             return null;
         }
@@ -100,11 +100,11 @@ public class TabFragment extends Fragment {
 
             switch (position){
                 case 0 :
-                    return "Novas Solicitações";
+                    return getString(R.string.new_solicitacoes);
                 case 1:
-                    return "Próximas Coletas";
+                    return getString(R.string.proximas_coletas);
                 case 2 :
-                    return "Minhas Coletas";
+                    return getString(R.string.my_coletas);
             }
             return null;
         }

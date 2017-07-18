@@ -17,24 +17,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
         <FrameLayout
             android:id="@+id/containerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
-                android:layout_margin="16dp"
-                android:src="@drawable/ic_add"
-                app:layout_anchorGravity="bottom|right|end"
-                tools:ignore="RtlHardcoded" />
 
         </FrameLayout>
 
+
+        <include
+            android:id="@+id/no_internet_fragment"
+            layout="@layout/fragment_no_internet" />
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/loadingPanel"
+            style="@style/GenericProgressBackground">
+
+            <ProgressBar style="@style/GenericProgressIndicator" />
+        </RelativeLayout>
 
     </LinearLayout>
 

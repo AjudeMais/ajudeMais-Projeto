@@ -3,7 +3,6 @@ package br.edu.ifpb.ajudemais.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -25,11 +24,11 @@ import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission
 
 /**
  * <p>
- * <b>br.edu.ifpb.ajudemais.activities</b>
+ * <b>{@link DrawerMenuActivity}</b>
  * </p>
  * <p>
  * <p>
- * Entidade que representa um foto.
+ * Activity para lidar com drawer menu de mensageiro
  * </p>
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
@@ -51,7 +50,6 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
     protected ImageView profilePhoto;
     protected RelativeLayout componentHeader;
     protected WriteStoreDevicePermission writeStoreDevicePermission;
-    private FloatingActionButton fab;
 
     /**
      * Set as informações do usuário logado no app
@@ -102,11 +100,6 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
                 intent.setClass(DrawerMenuActivity.this, MyEnderecosActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-
-            case R.id.nav_config:
-
-            case R.id.nav_notificacoes:
-                break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
                 capturePhotoUtils.deleteImageProfile();
@@ -197,15 +190,6 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
         componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
     }
 

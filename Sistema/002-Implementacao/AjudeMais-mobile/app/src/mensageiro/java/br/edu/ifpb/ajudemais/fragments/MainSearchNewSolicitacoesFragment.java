@@ -4,16 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,18 +18,28 @@ import java.util.List;
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.DetailSolicitacaoActivity;
 import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
-import br.edu.ifpb.ajudemais.asycnTasks.LoadingDonativoByMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingNewSolicitacoesTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Donativo;
+import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 
 /**
+ * <p>
+ * <b>{@link MainSearchNewSolicitacoesFragment}</b>
+ * </p>
+ * <p>
+ * <p>
+ * Fragement para exibir lista de solicitações de coletas do mensageiro com base em seus endereços cadastrados.
+ * </p>
  *
+ * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-public class MainSearchMyColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
+public class MainSearchNewSolicitacoesFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
@@ -42,13 +47,12 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
     private List<DoacaoAdapterDto> donativos;
     private SwipeRefreshLayout swipeRefreshLayout;
     private AndroidUtil androidUtil;
-    private LoadingDonativoByMensageiroTask loadingDonativoByMensageiroTask;
+    private LoadingNewSolicitacoesTask loadingNewSolicitacoesTask;
     private RecyclerItemClickListener.OnItemClickListener clickListener;
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
+    private LoadingMensageiroTask loadingMensageiroTask;
 
-    public MainSearchMyColetas() {
-    }
 
     /**
      * @param savedInstanceState
@@ -70,7 +74,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
         androidUtil = new AndroidUtil(getContext());
 
         if (androidUtil.isOnline()) {
-            executeLoadingDonativosTask();
+            executeLoadingMensageiroAndNewSolicitacoesTasks();
         } else {
             setVisibleNoConnection();
         }
@@ -86,8 +90,8 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_main_search_my_coletas, container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list_my_coletas);
+        view = inflater.inflate(R.layout.fragment_main_new_solicitacoes, container, false);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycle_view_list_my_solicitacoes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
@@ -96,7 +100,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
         swipeRefreshLayout.setOnRefreshListener(this);
 
         view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
+        view.findViewById(R.id.container_fragment_my_solicitacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
 
         return view;
@@ -105,7 +109,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
     @Override
     public void onRefresh() {
         if (androidUtil.isOnline()) {
-            executeLoadingDonativosTask();
+            executeLoadingMensageiroAndNewSolicitacoesTasks();
         } else {
             setVisibleNoConnection();
         }
@@ -139,6 +143,7 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
         Donativo donativo = donativos.get(position).getDonativo();
         Intent intent = new Intent(getContext(), DetailSolicitacaoActivity.class);
         intent.putExtra("Donativo", donativo);
+        intent.putExtra("notification",  new Boolean(true));
         startActivity(intent);
     }
 
@@ -147,96 +152,16 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
 
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        final List<DoacaoAdapterDto> filteredModelList = filter(donativos, newText);
-
-        if (filteredModelList.size() < 1) {
-            showListEmpty();
-        } else {
-            showListDonativos();
-            donativosAdapter.setFilter(filteredModelList);
-        }
-        return true;
-    }
-
-    /**
-     * @param menu
-     * @param inflater
-     */
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.menu_search, menu);
-
-        final MenuItem item = menu.findItem(R.id.action_search);
-        searchView = (SearchView) MenuItemCompat.getActionView(item);
-
-        if (donativos != null) {
-            searchView.setOnQueryTextListener(MainSearchMyColetas.this);
-        }
-        MenuItemCompat.setOnActionExpandListener(item,
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        donativosAdapter.setFilter(donativos);
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        return true;
-                    }
-                });
-
-    }
-
-    /**
-     * Auxiliar para mostrar fragmento para lista vazia.
-     */
-    private void showListEmpty() {
-        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
-        view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
-        view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
-     */
-    private void setVisibleNoConnection() {
-        view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
-        view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
-        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
-    }
-
-    /**
-     * Auxiliar para mostrar lista de campanhas e esconder demais fragmentos.
-     */
-    private void showListDonativos() {
-        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
-        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
-        view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
-    }
-
-    private void executeLoadingDonativosTask() {
-        sharedPrefManager = SharedPrefManager.getInstance(getContext());
-        String username = sharedPrefManager.getUser().getUsername();
-        loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
-        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+    private void executeLoadingNewSolicitacoesTask(Long idMensageiro) {
+        loadingNewSolicitacoesTask = new LoadingNewSolicitacoesTask(getContext(), idMensageiro);
+        loadingNewSolicitacoesTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
 
             @Override
             public void processFinish(List<DoacaoAdapterDto> output) {
                 if (output.size() < 1) {
                     showListEmpty();
-
+                    swipeRefreshLayout.setRefreshing(false);
                 } else {
                     donativos = output;
                     showListDonativos();
@@ -247,7 +172,51 @@ public class MainSearchMyColetas extends Fragment implements RecyclerItemClickLi
             }
         };
 
-        loadingDonativoByMensageiroTask.execute();
+        loadingNewSolicitacoesTask.execute();
+    }
+
+    /**
+     * Executa Asycn task para recuperar mensageiro logado;
+     */
+    private void executeLoadingMensageiroAndNewSolicitacoesTasks() {
+        loadingMensageiroTask = new LoadingMensageiroTask(getContext(), SharedPrefManager.getInstance(getContext()).getUser().getUsername());
+        loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                executeLoadingNewSolicitacoesTask(output.getId());
+            }
+        };
+        loadingMensageiroTask.execute();
+    }
+
+    /**
+     * Auxiliar para mostrar fragmento para lista vazia.
+     */
+    private void showListEmpty() {
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
+        view.findViewById(R.id.container_fragment_my_solicitacoes).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Auxiliar para mostrar fragmento de sem conexão quando não houver internet no device.
+     */
+    private void setVisibleNoConnection() {
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
+        view.findViewById(R.id.container_fragment_my_solicitacoes).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+    }
+
+    /**
+     * Auxiliar para mostrar lista de campanhas e esconder demais fragmentos.
+     */
+    private void showListDonativos() {
+        view.findViewById(R.id.no_internet_fragment).setVisibility(View.GONE);
+        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
+        view.findViewById(R.id.container_fragment_my_solicitacoes).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
     }
 
 }

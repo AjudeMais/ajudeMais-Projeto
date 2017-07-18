@@ -39,24 +39,11 @@ public class MainActivity extends DrawerMenuActivity {
         setUpToggle();
         setupNavDrawer();
 
-        if (savedInstanceState == null) {
             mFragmentManager = getSupportFragmentManager();
             mFragmentTransaction = mFragmentManager.beginTransaction();
             mFragmentTransaction.replace(R.id.containerView, new TabFragment()).commit();
-        }
 
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void init() {
-        initProperties();
-        super.init();
     }
 
 
