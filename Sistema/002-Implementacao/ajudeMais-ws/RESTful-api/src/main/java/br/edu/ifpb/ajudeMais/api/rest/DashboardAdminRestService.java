@@ -1,0 +1,182 @@
+package br.edu.ifpb.ajudeMais.api.rest;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.edu.ifpb.ajudeMais.api.dto.DoacoesPeriodoDTO;
+import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
+import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
+import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
+import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+
+/**
+ * 
+ * <p>
+ * {@link DashboardAdminRestService}
+ * </p>
+ * 
+ * <p>
+ * Classe utilizada para disponibilização de end points relacionados a consultas
+ * das dasboards do administrador.
+ * </p>
+ *
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ *
+ */
+@RestController
+@RequestMapping("/dashboard/admin")
+public class DashboardAdminRestService {
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private InstituicaoCaridadeRepository instituicaoCaridadeRepository;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoRepository donativoRepository;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private CampanhaRepository campanhaRepositoty;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroRepository mensageiroRepositoy;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoService donativoService;
+	
+	/**
+	 * 
+	 */
+	private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM");
+
+	/**
+	 * 
+	 * <p>
+	 * GET /instituicao/count : Método disponibiliza recurso para obtenção de
+	 * quantidade de instituição salva. <br>
+	 * 
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/instituicao/count")
+	public ResponseEntity<Long> getCountInstituicaoCaridade() {
+		
+		Long count = instituicaoCaridadeRepository.count();
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /donativo/count : Método disponibiliza recurso para obtenção de
+	 * quantidade de donativos já recolhidos. <br>
+	 * 
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/donativo/count")
+	public ResponseEntity<Long> getCountDonativos() {
+		
+		Long count = donativoRepository.filterCountByEstadoRecolhido();
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /campanha/count : Método disponibiliza recurso para obtenção de
+	 * quantidade de campanhas. <br>
+	 * 
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/campanha/count")
+	public ResponseEntity<Long> getCountCampanhas() {
+		
+		Long count = campanhaRepositoty.count();
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /mensageiro/count : Método disponibiliza recurso para obtenção de
+	 * quantidade de mensageiros. <br>
+	 * 
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/count")
+	public ResponseEntity<Long> getCountMensageiros() {
+		
+		Long count = mensageiroRepositoy.count();
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /donativo/periodo : Busca donativos por periodos ao longo do tempo.
+	 * <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return Mapa contendo período de tempo com a quantidade de doações
+	 *         realizadas para cada data.
+	 */
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/donativo/periodo")
+	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodo(@Param("nDays") Integer nDays, @Param("estado") String estado) {
+
+		Map<Date, Integer> doacoes = donativoService.getDoacoesByPeriodo(nDays, Estado.getByEstado(estado));
+		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
+		
+		for (Date date : doacoes.keySet()) {
+			DoacoesPeriodoDTO doDto = new DoacoesPeriodoDTO(DATE_FORMAT.format(date), doacoes.get(date));
+			doacoesPeriodo.add(doDto);
+		}
+		
+		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+	}
+}

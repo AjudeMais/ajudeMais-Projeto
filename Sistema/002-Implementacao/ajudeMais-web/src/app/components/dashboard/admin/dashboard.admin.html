@@ -1,2 +1,63 @@
+<div class="row">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-university"></i></span>
 
-TODO
+            <div class="info-box-content">
+                <span class="info-box-text">Instituições</span>
+                <span class="info-box-number">{{vm.countInstituicoes}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa fa-heart"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Doações em Tramite</span>
+                <span class="info-box-number">{{vm.countDonativos}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix visible-sm-block"></div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-hashtag"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Campanhas</span>
+                <span class="info-box-number">{{vm.countCampanhas}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="fa fa-id-card-o"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Mensageiros</span>
+                <span class="info-box-number">{{vm.countMensageiros}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Número de doações nos últimos 30 dias</h3>
+            </div>
+            <div class="box-body">
+                <div class="chart">
+                    <canvas id="line" class="chart chart-line" chart-data="vm.dataDoacoesPeriod"
+                            options="vm.options" chart-legend = "true"
+                            chart-labels="vm.labelsDoacoesPeriod" chart-series="vm.seriesDoacoesPeriod">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

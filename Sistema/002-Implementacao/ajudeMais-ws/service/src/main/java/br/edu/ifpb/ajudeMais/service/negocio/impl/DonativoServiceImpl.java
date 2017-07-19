@@ -1,9 +1,14 @@
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -59,8 +64,6 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
-
-
 	/**
 	 * 
 	 */
@@ -84,7 +87,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private EstadoDoacaoService estadoDoacaoService;
-	
+
 	/**
 	 * 
 	 */
@@ -104,8 +107,8 @@ public class DonativoServiceImpl implements DonativoService {
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved);
 
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(
-					new DoacaoNotificationEvent(notificaveis, donativoSaved, "Novo donativo dispobilizado para coleta"));
+			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved,
+					"Novo donativo dispobilizado para coleta"));
 
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(),
@@ -206,25 +209,25 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException {
-		
+
 		List<Donativo> donativoFilted = new ArrayList<>();
-		
+
 		List<MensageiroAssociado> mensageiroAssociados = mensageiroAssociadoRepository.findByMensageiroId(idMensageiro);
-		
-		mensageiroAssociados.forEach(ma->{
-			
-			ma.getMensageiro().getEnderecos().forEach(e->{
-				
-				List<Donativo> donativos = donativoRepository.filterDonativoByLocal
-						(e.getLocalidade(), e.getUf(), ma.getInstituicaoCaridade().getId(), Estado.DISPONIBILIZADO);
+
+		mensageiroAssociados.forEach(ma -> {
+
+			ma.getMensageiro().getEnderecos().forEach(e -> {
+
+				List<Donativo> donativos = donativoRepository.filterDonativoByLocal(e.getLocalidade(), e.getUf(),
+						ma.getInstituicaoCaridade().getId(), Estado.DISPONIBILIZADO);
 
 				donativos.removeAll(donativoFilted);
 				donativoFilted.addAll(donativos);
-				
+
 			});
 
 		});
-		
+
 		return donativoFilted;
 	}
 
@@ -247,4 +250,86 @@ public class DonativoServiceImpl implements DonativoService {
 		donativos.sort(Comparator.comparing(Donativo::getHorarioAceito));
 		return donativos;
 	}
+
+	/**
+	 * 
+	 * <p>
+	 * Busca doações por um periodo de dias.
+	 * </p>
+	 * 
+	 * @param nDays
+	 *            numero de dias
+	 * @return Mapa contendo data como chave e quantidade de doações referentes
+	 *         a esa data.
+	 */
+	@Override
+	public Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado) {
+		Calendar dataInicial = Calendar.getInstance();
+		dataInicial = DateUtils.truncate(dataInicial, Calendar.DAY_OF_MONTH);
+		dataInicial.add(Calendar.DAY_OF_MONTH, (nDays - 1) * -1);
+
+		Map<Date, Integer> result = createMapEmpty((nDays - 1), dataInicial);
+		Long count = 0l;
+
+		for (Date date : result.keySet()) {
+			Calendar c1 = convetHoursFisrt(date);
+			Calendar c2 = convertHoursDoFinish(date, c1);
+			
+			if(estado.equals(Estado.RECOLHIDO)){
+				count = donativoRepository.filterCountByEstadoRecolhidoAndDateBetween(c1.getTime(), c2.getTime());
+				
+			}else {
+				count = donativoRepository.filterCountDonativoByEstadoAndDateBetween(c1.getTime(), c2.getTime(), estado);
+			}
+			 
+			result.put(date, count.intValue());
+
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * Cria mapa vazio com apenas datas referente a um mês.
+	 * </p>
+	 * 
+	 * @param nDays
+	 * @param dateInitial
+	 * @return
+	 */
+	private Map<Date, Integer> createMapEmpty(Integer nDays, Calendar dateInitial) {
+		dateInitial = (Calendar) dateInitial.clone();
+		Map<Date, Integer> mapInitial = new TreeMap<>();
+
+		for (int i = 0; i <= nDays; i++) {
+			mapInitial.put(dateInitial.getTime(), 0);
+			dateInitial.add(Calendar.DAY_OF_MONTH, 1); // add + um dia
+		}
+
+		return mapInitial;
+	}
+	
+	@SuppressWarnings("static-access")
+	private Calendar convertHoursDoFinish(Date date, Calendar c1) {
+		Calendar c2 = Calendar.getInstance();
+		c2.setTime(date);
+		c2.set(c1.HOUR, 23);
+		c2.set(c1.MINUTE, 59);
+		c2.set(c1.SECOND, 59);
+		return c2;
+	}
+
+	
+	@SuppressWarnings("static-access")
+	private Calendar convetHoursFisrt(Date date) {
+		Calendar c1 = Calendar.getInstance();
+		c1.setTime(date);
+		c1.set(c1.HOUR, 0);
+		c1.set(c1.MINUTE, 0);
+		c1.set(c1.SECOND, 0);
+		return c1;
+	}
+
 }

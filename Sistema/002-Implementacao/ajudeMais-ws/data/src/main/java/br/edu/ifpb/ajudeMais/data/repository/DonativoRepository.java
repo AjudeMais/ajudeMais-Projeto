@@ -1,5 +1,6 @@
 package br.edu.ifpb.ajudeMais.data.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -99,10 +100,10 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	List<Donativo> filterDonativoByEstadoAndInstituicao(@Param("idInstituicao") Long idInstitucao,
 			@Param("estado") Estado estado);
-	
+
 	/**
 	 * <p>
-	 * Busca donativos filtrando por mensageiro e estado 
+	 * Busca donativos filtrando por mensageiro e estado
 	 * </p>
 	 * 
 	 * @return lista de donativos
@@ -117,6 +118,41 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * 
 	 * @return lista de donativos
 	 */
-	List<Donativo> filterDonativoByLocal(@Param("localidade") String localidade, @Param("uf") String uf, @Param("idInstituicao") Long idInstitucao, 
+	List<Donativo> filterDonativoByLocal(@Param("localidade") String localidade, @Param("uf") String uf,
+			@Param("idInstituicao") Long idInstitucao, @Param("estado") Estado estado);
+
+	/**
+	 * 
+	 * <p>
+	 * Conta a quantidade de doações efetuadas a partir do estado recolhido
+	 * </p>
+	 * 
+	 * @return
+	 */
+	Long filterCountByEstadoRecolhido();
+
+	/**
+	 * 
+	 * <p>
+	 * Busca a quantidade de donativos por data;
+	 * </p>
+	 * 
+	 * @param data
+	 * @return
+	 */
+	Long filterCountByEstadoRecolhidoAndDateBetween(@Param("startDate") Date date1, @Param("endDate") Date date2);
+
+	/**
+	 * 
+	 * <p>
+	 * Busca a quantidade de donativos por data e estado.
+	 * </p>
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @param estado
+	 * @return
+	 */
+	Long filterCountDonativoByEstadoAndDateBetween(@Param("startDate") Date date1, @Param("endDate") Date date2,
 			@Param("estado") Estado estado);
 }

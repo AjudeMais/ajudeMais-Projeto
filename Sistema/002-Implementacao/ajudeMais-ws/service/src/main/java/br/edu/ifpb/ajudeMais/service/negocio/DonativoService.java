@@ -1,6 +1,8 @@
 package br.edu.ifpb.ajudeMais.service.negocio;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.repository.query.Param;
 
@@ -109,4 +111,14 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @throws AjudeMaisException
 	 */
 	List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException;
+
+	/**
+	 * <p>
+	 * Busca doações por um determinado periodo de dias.
+	 * </p>
+	 * 
+	 * @param nDays
+	 * @return Mapa contendo a quantidade de doações do dia.
+	 */
+	Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado);
 }

@@ -91,5 +91,5 @@ public interface InstituicaoCaridadeRepository extends JpaRepository<Instituicao
 	 * @return
 	 */
 	public List<InstituicaoCaridade> findByContaAtivo(boolean ativo);
-
+	
 }
