@@ -49,10 +49,6 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
     private FragmentManager mFragmentManager;
     private FragmentTransaction mFragmentTransaction;
     private FloatingActionButton fab;
-    private RelativeLayout componentLoading;
-    private FrameLayout componentView;
-    private RelativeLayout componentNoInternet;
-    private WriteStoreDevicePermission writeStoreDevicePermission;
     private SharedPrefManager sharedPrefManager;
     private LoadingDoadorTask loadingDoadorTask;
     private UpdateLocationDoadorTask updateDoadorTask;
@@ -69,11 +65,6 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         checkPermissions();
 
         init();
-
-        if (!androidUtil.isOnline()) {
-            showVisibleComponentNoInternet();
-        }
-
         setUpAccount();
         setUpToggle();
         setupNavDrawer();
@@ -129,19 +120,8 @@ public class MainActivity extends DrawerMenuActivity implements View.OnClickList
         super.init();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        componentLoading = (RelativeLayout) findViewById(R.id.loadingPanel);
-        componentLoading.setVisibility(View.VISIBLE);
-
-        componentView = (FrameLayout) findViewById(R.id.containerView);
-        componentNoInternet = (RelativeLayout) findViewById(R.id.no_internet_fragment);
-        componentNoInternet.setVisibility(View.GONE);
     }
 
-    private void showVisibleComponentNoInternet() {
-        componentNoInternet.setVisibility(View.VISIBLE);
-        componentLoading.setVisibility(View.GONE);
-        componentView.setVisibility(View.GONE);
-    }
 
     @Override
     public void onClick(View v) {

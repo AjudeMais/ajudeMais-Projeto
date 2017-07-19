@@ -72,6 +72,12 @@ public class ProfileSettingsFragment extends Fragment {
 
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("Mensageiro", mensageiro);
+
+    }
 
     /**
      *

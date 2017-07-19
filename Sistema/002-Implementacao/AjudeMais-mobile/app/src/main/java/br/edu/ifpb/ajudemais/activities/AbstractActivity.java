@@ -246,10 +246,10 @@ public class AbstractActivity extends AppCompatActivity implements NavigationVie
      */
     private void onNavDrawerItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
-            case R.id.nav_config:
-                break;
-            case R.id.nav_notificacoes:
-                break;
+//            case R.id.nav_config:
+//                break;
+//            case R.id.nav_notificacoes:
+//                break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
                 capturePhotoUtils.deleteImageProfile();

@@ -22,7 +22,6 @@ import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
 import br.edu.ifpb.ajudemais.enumarations.Estado;
 import br.edu.ifpb.ajudemais.fragments.DetailSolicitacoesFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission;
-import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.CallPhoneDevicePermission.MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION;
 
@@ -37,6 +36,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
     private ProgressBar progressBar;
     private Boolean notification;
     private CallPhoneDevicePermission callPhoneDevicePermission;
+    private byte[] image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +51,29 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                 (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) ||
                         getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO)))) {
 
-                setContentView(R.layout.fragment_solicitacao_not_disponivel);
-                Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
-                mToolbar.setTitle(getString(R.string.invalide_coleta));
+            setContentView(R.layout.fragment_solicitacao_not_disponivel);
+            Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
+            mToolbar.setTitle(getString(R.string.invalide_coleta));
 
-                setSupportActionBar(mToolbar);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(true);
+            setSupportActionBar(mToolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         } else {
             setContentView(R.layout.activity_detail_solicitacao);
             init();
-            if (!isDestroyed()) {
-                DetailSolicitacoesFragment fragment = new DetailSolicitacoesFragment();
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.add(R.id.donativo_detail_fragment, fragment);
-                fragmentTransaction.commit();
+
+            if (savedInstanceState == null) {
+
+                if (getFragmentManager().findFragmentByTag("detailSolcitacoes") == null) {
+                    DetailSolicitacoesFragment fragment = new DetailSolicitacoesFragment();
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(R.id.donativo_detail_fragment, fragment, "detailSolcitacoes");
+                    fragmentTransaction.commit();
+                }
+
             }
         }
+
     }
 
     private EstadoDoacao getEstadoAtivo() {
@@ -149,6 +155,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         getImageTask.delegate = new AsyncResponse<byte[]>() {
             @Override
             public void processFinish(byte[] output) {
+                image = output;
                 Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
                 imageHeader.setVisibility(View.VISIBLE);
                 imageHeader.setImageBitmap(bitmap);
@@ -197,6 +204,28 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                 }
                 break;
             }
+        }
+    }
+
+
+    /**
+     * @param outState
+     */
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("Donativo", donativo);
+        outState.putByteArray("Imagem", image);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedState) {
+        donativo = (Donativo) savedState.getSerializable("Donativo");
+        image = savedState.getByteArray("Imagem");
+
+        if (image != null) {
+            Bitmap bitmap = androidUtil.convertBytesInBitmap(image);
+            imageHeader.setVisibility(View.VISIBLE);
+            imageHeader.setImageBitmap(bitmap);
+            progressBar.setVisibility(View.GONE);
         }
     }
 }

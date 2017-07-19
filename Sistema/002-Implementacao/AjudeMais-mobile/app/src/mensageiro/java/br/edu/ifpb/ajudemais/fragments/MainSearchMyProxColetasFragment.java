@@ -33,7 +33,7 @@ import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 /**
  *
  */
-public class MainSearchMyProxColetas extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
+public class MainSearchMyProxColetasFragment extends Fragment implements RecyclerItemClickListener.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, SearchView.OnQueryTextListener {
 
     private DonativosAdapter donativosAdapter;
     private static RecyclerView recyclerView;
@@ -46,7 +46,7 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
 
-    public MainSearchMyProxColetas() {
+    public MainSearchMyProxColetasFragment() {
     }
 
     /**
@@ -177,7 +177,7 @@ public class MainSearchMyProxColetas extends Fragment implements RecyclerItemCli
         searchView = (SearchView) MenuItemCompat.getActionView(item);
 
         if (donativos != null) {
-            searchView.setOnQueryTextListener(MainSearchMyProxColetas.this);
+            searchView.setOnQueryTextListener(MainSearchMyProxColetasFragment.this);
         }
         MenuItemCompat.setOnActionExpandListener(item,
                 new MenuItemCompat.OnActionExpandListener() {

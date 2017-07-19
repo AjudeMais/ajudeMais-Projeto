@@ -73,6 +73,7 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
     private Button btnConfirmEntrega;
     private TextView tvQuantidade;
     private UpdateEstadoDonativoTask updateEstadoDonativoTask;
+    private byte[] imagem;
 
     /**
      *
@@ -82,9 +83,16 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_detail_solicitacao, container, false);
+        if (savedInstanceState != null) {
+            imagem = savedInstanceState.getByteArray("ImagemDoador");
+            donativo = (Donativo) savedInstanceState.getSerializable("Donativo");
 
-        Intent intentDonativo = getActivity().getIntent();
-        donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
+        } else {
+
+            Intent intentDonativo = getActivity().getIntent();
+            donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
+
+        }
         setHasOptionsMenu(true);
         return view;
     }
@@ -97,6 +105,7 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         estadosDonativoUtil = new EstadosDonativoUtil();
         callPhoneDevicePermission = new CallPhoneDevicePermission(getContext());
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
@@ -142,17 +151,25 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
         telefoneDoador.setText(donativo.getDoador().getTelefone());
 
         if (donativo.getDoador().getFoto() != null) {
-            getImageTask = new GetImageTask(getContext(), donativo.getDoador().getFoto().getNome());
-            getImageTask.setProgressAtivo(false);
-            getImageTask.delegate = new AsyncResponse<byte[]>() {
-                @Override
-                public void processFinish(byte[] output) {
-                    AndroidUtil androidUtil = new AndroidUtil(getContext());
-                    Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
-                    imageDoador.setImageBitmap(bitmap);
-                }
-            };
-            getImageTask.execute();
+            if (imagem != null) {
+                AndroidUtil androidUtil = new AndroidUtil(getContext());
+                Bitmap bitmap = androidUtil.convertBytesInBitmap(imagem);
+                imageDoador.setImageBitmap(bitmap);
+
+            } else {
+                getImageTask = new GetImageTask(getContext(), donativo.getDoador().getFoto().getNome());
+                getImageTask.setProgressAtivo(false);
+                getImageTask.delegate = new AsyncResponse<byte[]>() {
+                    @Override
+                    public void processFinish(byte[] output) {
+                        imagem = output;
+                        AndroidUtil androidUtil = new AndroidUtil(getContext());
+                        Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
+                        imageDoador.setImageBitmap(bitmap);
+                    }
+                };
+                getImageTask.execute();
+            }
         }
 
         cardViewDoador.setOnClickListener(new View.OnClickListener() {
@@ -371,5 +388,13 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
             }
         }
         return estadoDoacao;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("Donativo", donativo);
+        outState.putByteArray("ImagemDoador", imagem);
+
     }
 }

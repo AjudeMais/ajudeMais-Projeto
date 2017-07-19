@@ -46,6 +46,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/textSecond"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 card_view:ignore="InefficientWeight,RtlHardcoded,RtlSymmetry" />
 
 
