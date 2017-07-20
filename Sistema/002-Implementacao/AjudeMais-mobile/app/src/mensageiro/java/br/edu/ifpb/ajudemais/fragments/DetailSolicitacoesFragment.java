@@ -20,6 +20,7 @@ import java.util.Date;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.activities.MainActivity;
+import br.edu.ifpb.ajudemais.activities.NotRecolhidoActivity;
 import br.edu.ifpb.ajudemais.activities.SelectHorarioColetaActivity;
 import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
@@ -341,9 +342,10 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
                                 executeValidateRecolhimentoDonativoTask();
                                 break;
                             case 2:
-//                                estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
-//                                donativo.getEstadosDaDoacao().add(estadoDoacao);
-//                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
+                                Intent intent = new Intent(getContext(), NotRecolhidoActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                intent.putExtra("Donativo", donativo);
+                                startActivity(intent);
                                 break;
                             case 3:
                                 EstadoDoacao estadoDoacao = new EstadoDoacao();
