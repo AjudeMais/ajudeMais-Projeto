@@ -1,5 +1,5 @@
 /**
- * @ngdoc Controller
+ * @ngdoc config
  *
  * @author <a href="https://github.com/FranckAJ">Franck Aragão</a>
  */

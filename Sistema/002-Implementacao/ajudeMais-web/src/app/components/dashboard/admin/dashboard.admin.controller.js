@@ -99,7 +99,7 @@
          *
          */
         var getDoacoesByPeriodoEntregues = function () {
-            dashboardAdminService.getDoacoesByPeriodo(30, "ENTREGUE").then(function (response) {
+            dashboardAdminService.getDoacoesByPeriodo(30, "RECEBIDO").then(function (response) {
                 var dataDoacoesPeriod = [];
                 response.data.forEach(function (dto) {
                     dataDoacoesPeriod.push(dto.count);
