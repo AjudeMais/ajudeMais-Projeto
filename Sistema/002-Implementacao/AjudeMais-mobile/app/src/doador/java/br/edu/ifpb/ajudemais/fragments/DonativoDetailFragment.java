@@ -24,6 +24,7 @@ import br.edu.ifpb.ajudemais.asycnTasks.GetDonativoCampanhaByDonativoIdTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UpdateEstadoDonativoTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ValidateCancelDonativoTask;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.DonativoCampanha;
@@ -334,22 +335,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
-                            if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
-                                if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())
-                                        || donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
-
-                                    donativo.getEstadosDaDoacao().get(i).setAtivo(false);
-                                }
-
-                            }
-                        }
-                        EstadoDoacao estadoDoacao = new EstadoDoacao();
-                        estadoDoacao.setData(new Date());
-                        estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
-                        estadoDoacao.setAtivo(true);
-                        donativo.getEstadosDaDoacao().add(estadoDoacao);
-                        executeUpdateEstadoDoacaoTask(donativo);
+                        executeValidateCancelDonativoTask();
                     }
                 });
 
@@ -364,6 +350,40 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    /**
+     * Verifica se donativo ainda está disponível para ser cancelado
+     */
+    public void executeValidateCancelDonativoTask() {
+        ValidateCancelDonativoTask validateCancelDonativoTask = new ValidateCancelDonativoTask(getContext(), donativo.getId());
+        validateCancelDonativoTask.delegate = new AsyncResponse<Boolean>() {
+            @Override
+            public void processFinish(Boolean output) {
+                if (output) {
+                    for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
+                        if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
+                            if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())
+                                    || donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
+
+                                donativo.getEstadosDaDoacao().get(i).setAtivo(false);
+                            }
+
+                        }
+                    }
+                    EstadoDoacao estadoDoacao = new EstadoDoacao();
+                    estadoDoacao.setData(new Date());
+                    estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+                    estadoDoacao.setAtivo(true);
+                    donativo.getEstadosDaDoacao().add(estadoDoacao);
+                    executeUpdateEstadoDoacaoTask(donativo);
+                } else {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.not_avaible_cancel));
+                }
+            }
+        };
+        validateCancelDonativoTask.execute();
+
     }
 
     /**

@@ -194,6 +194,17 @@ public class DonativoRemoteService extends AbstractRemoteService {
         return responseEntity.getBody();
     }
 
+    /**
+     * Verifica se donativo está válido para ser cancelado
+     *
+     * @param id
+     * @return
+     */
+    public Boolean isValidCancelamentoByDonativo(Long id) {
+        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API + "/donativo/validatecancelamento/{id}", Boolean.class, id);
+        return responseEntity.getBody();
+    }
+
 
 }
 

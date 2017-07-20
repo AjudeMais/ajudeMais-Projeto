@@ -286,6 +286,24 @@ public class DonativoServiceImpl implements DonativoService {
 		
 		return true;
 	}
+	
+
+	/**
+	 * Verifica se Donativo está válido para ser cancelado.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidCancelamento(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.DISPONIBILIZADO) || e.getEstadoDoacao().equals(Estado.ACEITO))){
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	/**
 	 * 

@@ -134,6 +134,17 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 */
 	boolean isValidRecolhimento(Long id);
 	
+	/**
+	 * <p>
+	 * Verifica se Donativo com id passado Está valido ser cancelado
+	 * </p>
+	 * 
+	 * @param idDonativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	boolean isValidCancelamento(Long id);
+	
 	
 	/**
 	 * <p>
