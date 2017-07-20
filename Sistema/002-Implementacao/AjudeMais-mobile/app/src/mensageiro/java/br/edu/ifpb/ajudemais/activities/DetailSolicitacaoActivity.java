@@ -45,7 +45,6 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
 
         notification = (Boolean) getIntent().getSerializableExtra("notification");
-
         if ((notification != null && getEstadoAtivo() != null)
                 && (donativo.getMensageiro() != null ||
                 (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) ||
@@ -58,19 +57,18 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
             setSupportActionBar(mToolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         } else {
             setContentView(R.layout.activity_detail_solicitacao);
             init();
 
             if (savedInstanceState == null) {
-
                 if (getFragmentManager().findFragmentByTag("detailSolcitacoes") == null) {
                     DetailSolicitacoesFragment fragment = new DetailSolicitacoesFragment();
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.add(R.id.donativo_detail_fragment, fragment, "detailSolcitacoes");
                     fragmentTransaction.commit();
                 }
-
             }
         }
 
@@ -100,11 +98,9 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-
         progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
                 android.graphics.PorterDuff.Mode.MULTIPLY);
-
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle(donativo.getNome());
@@ -116,7 +112,6 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
             progressBar.setVisibility(View.GONE);
             imageHeader.setVisibility(View.VISIBLE);
         }
-
 
         setActionCollapsingTootlbar();
     }

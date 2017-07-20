@@ -21,12 +21,14 @@ import br.edu.ifpb.ajudemais.adapters.DonativosAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingNewSolicitacoesTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.ValidateColetaTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Mensageiro;
 import br.edu.ifpb.ajudemais.dto.DoacaoAdapterDto;
 import br.edu.ifpb.ajudemais.listeners.RecyclerItemClickListener;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -140,11 +142,7 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
 
     @Override
     public void onItemClick(View childView, int position) {
-        Donativo donativo = donativos.get(position).getDonativo();
-        Intent intent = new Intent(getContext(), DetailSolicitacaoActivity.class);
-        intent.putExtra("Donativo", donativo);
-        intent.putExtra("notification",  new Boolean(true));
-        startActivity(intent);
+       executeValidateColetaDonativoTask(position);
     }
 
     @Override
@@ -152,11 +150,33 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
 
     }
 
+    /**
+     * Verifica se donativo ainda está disponível para ser coletado
+     */
+    public void executeValidateColetaDonativoTask(final int pos) {
+        ValidateColetaTask validateColetaTask = new ValidateColetaTask(getContext(), donativos.get(pos).getDonativo().getId());
+        validateColetaTask.delegate = new AsyncResponse<Boolean>() {
+            @Override
+            public void processFinish(Boolean output) {
+                if (!output) {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.coleta_not_avaible));
+                }else {
+                    Donativo donativo = donativos.get(pos).getDonativo();
+                    Intent intent = new Intent(getContext(), DetailSolicitacaoActivity.class);
+                    intent.putExtra("Donativo", donativo);
+                    intent.putExtra("notification",  new Boolean(true));
+                    startActivity(intent);
+                }
+            }
+        };
+        validateColetaTask.execute();
+
+    }
+
 
     private void executeLoadingNewSolicitacoesTask(Long idMensageiro) {
         loadingNewSolicitacoesTask = new LoadingNewSolicitacoesTask(getContext(), idMensageiro);
         loadingNewSolicitacoesTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
-
             @Override
             public void processFinish(List<DoacaoAdapterDto> output) {
                 if (output.size() < 1) {

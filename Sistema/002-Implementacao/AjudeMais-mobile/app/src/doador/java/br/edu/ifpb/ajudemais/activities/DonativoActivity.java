@@ -4,22 +4,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.google.firebase.messaging.RemoteMessage;
-
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
-import br.edu.ifpb.ajudemais.asyncTasks.GetDonativoByIdTask;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.fragments.DonativoDetailFragment;
@@ -49,18 +46,39 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
     private ImageView imageHeader;
     private ProgressBar progressBar;
     private CallPhoneDevicePermission callPhoneDevicePermission;
+    private byte[] image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_donativo);
-        init();
-        if (!isDestroyed()) {
-            DonativoDetailFragment fragment = new DonativoDetailFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.donativo_detail_fragment, fragment);
-            fragmentTransaction.commit();
+        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
+
+
+        if (savedInstanceState == null) {
+
+            if (getFragmentManager().findFragmentByTag("detailDonativo") == null) {
+                DonativoDetailFragment fragment = new DonativoDetailFragment();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.add(R.id.donativo_detail_fragment, fragment, "detailDonativo");
+                fragmentTransaction.commit();
+            }
+        } else {
+            this.image = savedInstanceState.getByteArray("Imagem");
         }
+
+        init();
+
+    }
+
+    /**
+     * Seta a imagem do donativo in toolbar
+     */
+    private void setImageDonativo() {
+        Bitmap bitmap = androidUtil.convertBytesInBitmap(image);
+        imageHeader.setVisibility(View.VISIBLE);
+        imageHeader.setImageBitmap(bitmap);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -77,9 +95,6 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
-        Log.e("TESTE ACTIVITY DONATIVO", donativo.toString());
-
 
         progressBar = (ProgressBar) findViewById(R.id.progress_presentation);
         progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#FFFFFF"),
@@ -90,9 +105,14 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         collapsingToolbarLayout.setTitle(donativo.getNome());
         imageHeader = (ImageView) findViewById(R.id.header_logo);
 
+
         if (donativo.getFotosDonativo() != null && donativo.getFotosDonativo().size() > 0) {
-            executeLoadingPhotoTask(donativo.getFotosDonativo().get(0).getNome());
-        }else {
+            if (image != null) {
+                setImageDonativo();
+            } else {
+                executeLoadingPhotoTask(donativo.getFotosDonativo().get(0).getNome());
+            }
+        } else {
             progressBar.setVisibility(View.GONE);
             imageHeader.setVisibility(View.VISIBLE);
         }
@@ -103,7 +123,7 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         setActionCollapsingTootlbar();
     }
 
-    private void setActionCollapsingTootlbar(){
+    private void setActionCollapsingTootlbar() {
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
 
         appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
@@ -118,7 +138,7 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
                 if (scrollRange + verticalOffset == 0) {
                     isShow = true;
                     imageHeader.setVisibility(View.GONE);
-                } else if(isShow) {
+                } else if (isShow) {
                     imageHeader.setVisibility(View.VISIBLE);
                     isShow = false;
                 }
@@ -137,10 +157,9 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         getImageTask.delegate = new AsyncResponse<byte[]>() {
             @Override
             public void processFinish(byte[] output) {
-                Bitmap bitmap = androidUtil.convertBytesInBitmap(output);
-                imageHeader.setVisibility(View.VISIBLE);
-                imageHeader.setImageBitmap(bitmap);
-                progressBar.setVisibility(View.GONE);
+                image = output;
+                setImageDonativo();
+
             }
         };
 
@@ -179,8 +198,8 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
-                if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION: {
+                if (callPhoneDevicePermission.isCallPhonePermissionGranted()) {
                     callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
                 }
                 break;
@@ -188,4 +207,18 @@ public class DonativoActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        outState.putSerializable("Donativo", donativo);
+        outState.putByteArray("Imagem", image);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        donativo = (Donativo) savedInstanceState.getSerializable("Donativo");
+        this.image = savedInstanceState.getByteArray("Imagem");
+
+    }
 }

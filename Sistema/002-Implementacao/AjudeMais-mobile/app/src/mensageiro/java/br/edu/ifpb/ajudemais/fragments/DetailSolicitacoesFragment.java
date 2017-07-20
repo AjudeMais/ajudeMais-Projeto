@@ -25,6 +25,8 @@ import br.edu.ifpb.ajudemais.adapters.DisponibilidadeHorarioAdapter;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UpdateEstadoDonativoTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ValidateColetaTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ValidateRecolhimentoTask;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.Endereco;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
@@ -227,10 +229,7 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_aceitar) {
-            Intent intent = new Intent(getContext(), SelectHorarioColetaActivity.class);
-            intent.putExtra("Donativo", donativo);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            executeValidateColetaDonativoTask();
         } else if (v.getId() == R.id.btn_rejeitar) {
             Intent intent = new Intent(getContext(), MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -246,6 +245,52 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
         }
     }
 
+    /**
+     * Verifica se donativo ainda está disponível para ser coletado
+     */
+    public void executeValidateColetaDonativoTask() {
+
+        ValidateColetaTask validateColetaTask = new ValidateColetaTask(getContext(), donativo.getId());
+        validateColetaTask.delegate = new AsyncResponse<Boolean>() {
+            @Override
+            public void processFinish(Boolean output) {
+                if (output) {
+                    Intent intent = new Intent(getContext(), SelectHorarioColetaActivity.class);
+                    intent.putExtra("Donativo", donativo);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                } else {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.coleta_not_avaible));
+                }
+            }
+        };
+        validateColetaTask.execute();
+
+    }
+
+    /**
+     * Verifica se donativo ainda está disponível para ser recolhifo
+     */
+    public void executeValidateRecolhimentoDonativoTask() {
+        ValidateRecolhimentoTask validateRecolhimentoTask = new ValidateRecolhimentoTask(getContext(), donativo.getId());
+        validateRecolhimentoTask.delegate = new AsyncResponse<Boolean>() {
+            @Override
+            public void processFinish(Boolean output) {
+                if (output) {
+                    EstadoDoacao estadoDoacao = new EstadoDoacao();
+                    estadoDoacao.setAtivo(true);
+                    estadoDoacao.setData(new Date());
+                    estadoDoacao.setEstadoDoacao(Estado.RECOLHIDO);
+                    donativo.getEstadosDaDoacao().add(estadoDoacao);
+                    executeUpdateDonativoTask(donativo, getString(R.string.coleta_recolhida));
+                } else {
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.recolhimento_not_avaible));
+                }
+            }
+        };
+        validateRecolhimentoTask.execute();
+
+    }
 
     /**
      * Dialog para mostrar a lista de disponibilidade para coletar doação
@@ -290,21 +335,20 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
                                 donativo.getEstadosDaDoacao().get(i).setAtivo(false);
                             }
                         }
-                        EstadoDoacao estadoDoacao = new EstadoDoacao();
-                        estadoDoacao.setAtivo(true);
-                        estadoDoacao.setData(new Date());
+
                         switch (option) {
                             case 1:
-                                estadoDoacao.setEstadoDoacao(Estado.RECOLHIDO);
-                                donativo.getEstadosDaDoacao().add(estadoDoacao);
-                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_recolhida));
+                                executeValidateRecolhimentoDonativoTask();
                                 break;
                             case 2:
-                                estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
-                                donativo.getEstadosDaDoacao().add(estadoDoacao);
-                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
+//                                estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+//                                donativo.getEstadosDaDoacao().add(estadoDoacao);
+//                                executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
                                 break;
                             case 3:
+                                EstadoDoacao estadoDoacao = new EstadoDoacao();
+                                estadoDoacao.setAtivo(true);
+                                estadoDoacao.setData(new Date());
                                 estadoDoacao.setEstadoDoacao(Estado.RECEBIDO);
                                 donativo.getEstadosDaDoacao().add(estadoDoacao);
                                 executeUpdateDonativoTask(donativo, getString(R.string.coleta_entregue));
@@ -336,7 +380,6 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(msg);
-
             }
         };
         updateEstadoDonativoTask.execute();

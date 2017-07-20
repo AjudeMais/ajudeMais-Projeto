@@ -109,4 +109,28 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @throws AjudeMaisException
 	 */
 	List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException;
+	
+	/**
+	 * <p>
+	 * Verifica se Donativo com id passado Está valido para ser coletado
+	 * </p>
+	 * 
+	 * @param idDonativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	boolean isValidColeta(Long id);
+	
+	/**
+	 * <p>
+	 * Verifica se Donativo com id passado Está valido ser recolhido
+	 * </p>
+	 * 
+	 * @param idDonativo
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	boolean isValidRecolhimento(Long id);
+	
+	
 }

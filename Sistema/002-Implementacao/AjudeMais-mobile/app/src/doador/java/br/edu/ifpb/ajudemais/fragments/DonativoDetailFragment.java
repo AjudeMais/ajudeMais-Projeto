@@ -72,6 +72,8 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private ImageView imageMensageiro;
     private GetImageTask getImageTask;
     private CallPhoneDevicePermission callPhoneDevicePermission;
+    private DonativoCampanha donativoCampanha;
+    private byte[] image;
 
     /**
      *
@@ -82,8 +84,16 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
         view = inflater.inflate(R.layout.fragment_donativo_detail, container, false);
 
-        Intent intentDonativo = getActivity().getIntent();
-        donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
+        if (savedInstanceState != null) {
+            image = savedInstanceState.getByteArray("ImagemMensageiro");
+            donativo = (Donativo) savedInstanceState.getSerializable("Donativo");
+            donativoCampanha = (DonativoCampanha) savedInstanceState.getSerializable("DonativoCampanha");
+
+        } else {
+            Intent intentDonativo = getActivity().getIntent();
+            donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
+        }
+
         setHasOptionsMenu(true);
         return view;
     }
@@ -96,12 +106,18 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         estadosDonativoUtil = new EstadosDonativoUtil();
         callPhoneDevicePermission = new CallPhoneDevicePermission(getContext());
         descricaoDonativo = (TextView) getView().findViewById(R.id.tv_description);
 
         nomeInstituicao = (TextView) getView().findViewById(R.id.tv_instituicao_name);
-        executeGetDonativoCampanhaTask(donativo.getId());
+
+        if (donativoCampanha == null) {
+            executeGetDonativoCampanhaTask(donativo.getId());
+        } else {
+            setDetailOfDoacao();
+        }
 
         cardViewMensageiro = (CardView) getView().findViewById(R.id.componentMensageiro);
         agendamentoColeta = (TextView) getView().findViewById(R.id.tvAgendamentoColeta);
@@ -125,12 +141,13 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         validateAndSetStateDoacao();
         setAndValidateHorarioAtivo();
         setInformationMensageiro();
+
     }
 
 
     private void setInformationMensageiro() {
         for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
-            if ((dh.getAtivo()!= null && dh.getAtivo()) && donativo.getMensageiro() != null) {
+            if ((dh.getAtivo() != null && dh.getAtivo()) && donativo.getMensageiro() != null) {
                 btnListDisp.setVisibility(View.GONE);
                 cardViewMensageiro.setVisibility(View.VISIBLE);
                 nomeMensageiro.setText(donativo.getMensageiro().getNome());
@@ -165,14 +182,14 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     /**
      * Cria dialog para perguntar doador se deseja ligar para mensageiro
      */
-    private void dialogCallMensageiro(){
+    private void dialogCallMensageiro() {
         AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(getContext());
         alertDialogBuilderUserInput
                 .setCancelable(false)
                 .setTitle(getString(R.string.call_mensageiro))
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialogBox, int id) {
-                        if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+                        if (callPhoneDevicePermission.isCallPhonePermissionGranted()) {
                             callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
                         }
                     }
@@ -195,7 +212,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
     private void setAndValidateHorarioAtivo() {
 
         for (DisponibilidadeHorario dh : donativo.getHorariosDisponiveis()) {
-            if ((dh.getAtivo() != null && dh.getAtivo())&& donativo.getMensageiro() != null) {
+            if ((dh.getAtivo() != null && dh.getAtivo()) && donativo.getMensageiro() != null) {
                 informationAgenda.setText(getString(R.string.agedamento_coleta));
                 agendamentoColeta.setVisibility(View.VISIBLE);
                 btnListDisp.setVisibility(View.GONE);
@@ -212,7 +229,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
      */
     private void validateAndSetStateDoacao() {
         for (EstadoDoacao estado : donativo.getEstadosDaDoacao()) {
-            if (estado.getAtivo() != null && estado.getAtivo() ) {
+            if (estado.getAtivo() != null && estado.getAtivo()) {
 
                 estadosDonativoUtil.setCustomLabelEstadoDoacao(stateDoacao, estado.getEstadoDoacao());
 
@@ -220,11 +237,11 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                     btnCancelDoacao.setVisibility(View.GONE);
 
                 }
-                if (estado.getEstadoDoacao().name().equals(Estado.ACEITO.name())){
+                if (estado.getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
                     btnCancelDoacao.setVisibility(View.VISIBLE);
                 }
 
-                stateDoacao.setText(estado.getEstadoDoacao().name() == "NAO_ACEITO"? "NÃO ACEITO": estado.getEstadoDoacao().name());
+                stateDoacao.setText(estado.getEstadoDoacao().name() == "NAO_ACEITO" ? "NÃO ACEITO" : estado.getEstadoDoacao().name());
                 this.estadoDoacao = estado;
             }
         }
@@ -262,8 +279,10 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         updateEstadoDonativoTask.delegate = new AsyncResponse<Donativo>() {
             @Override
             public void processFinish(Donativo output) {
-                validateAndSetStateDoacao();
-                CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.doacao_cancelada));
+                if (isAdded()) {
+                    validateAndSetStateDoacao();
+                    CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.doacao_cancelada));
+                }
             }
         };
         updateEstadoDonativoTask.execute();
@@ -279,15 +298,27 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
         getDonativoCampanhaTask.delegate = new AsyncResponse<DonativoCampanha>() {
             @Override
             public void processFinish(DonativoCampanha output) {
-                if (output != null) {
-                    nomeInstituicao.setText(getString(R.string.doado_to_campanha) + " " + output.getCampanha().getNome());
-                } else {
-                    nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
-
+                if (isAdded()) {
+                    donativoCampanha = output;
+                    setDetailOfDoacao();
                 }
             }
         };
         getDonativoCampanhaTask.execute();
+    }
+
+    /**
+     * Exibi o nome da campanha caso a doação seja fruto de uma campanha
+     */
+    private void setDetailOfDoacao() {
+        if (isAdded()) {
+
+            if (donativoCampanha != null) {
+                nomeInstituicao.setText(getString(R.string.doado_to_campanha) + " " + donativoCampanha.getCampanha().getNome());
+            } else {
+                nomeInstituicao.setText(getString(R.string.doado_to) + " " + donativo.getCategoria().getInstituicaoCaridade().getNome());
+            }
+        }
     }
 
 
@@ -306,7 +337,7 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
                         for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
                             if (donativo.getEstadosDaDoacao().get(i).getAtivo() != null && donativo.getEstadosDaDoacao().get(i).getAtivo()) {
                                 if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.DISPONIBILIZADO.name())
-                                || donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
+                                        || donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().name().equals(Estado.ACEITO.name())) {
 
                                     donativo.getEstadosDaDoacao().get(i).setAtivo(false);
                                 }
@@ -369,13 +400,22 @@ public class DonativoDetailFragment extends Fragment implements View.OnClickList
 
 
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION : {
-                if (callPhoneDevicePermission.isCallPhonePermissionGranted()){
+            case MY_PERMISSIONS_REQUEST_CALL_PHONE_PERMISSION: {
+                if (callPhoneDevicePermission.isCallPhonePermissionGranted()) {
                     callPhoneDevicePermission.callPhone(donativo.getMensageiro().getTelefone());
                 }
                 break;
             }
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("Donativo", donativo);
+        outState.putSerializable("DonativoCampanha", donativoCampanha);
+        outState.putByteArray("ImagemMensageiro", image);
+
     }
 }
 

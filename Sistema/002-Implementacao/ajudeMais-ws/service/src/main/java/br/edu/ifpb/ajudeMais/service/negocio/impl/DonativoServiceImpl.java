@@ -229,7 +229,7 @@ public class DonativoServiceImpl implements DonativoService {
 	}
 
 	/**
-	 * 
+	 * Recupera donativos vinculado ao mensageiro passado
 	 */
 	@Override
 	public List<Donativo> findByMensageiro(Mensageiro mensageiro) {
@@ -239,12 +239,46 @@ public class DonativoServiceImpl implements DonativoService {
 	}
 
 	/**
-	 * 
+	 * Fitra donativos pelo mensageiro e estado passado.
 	 */
 	@Override
 	public List<Donativo> filterDonativoByMensageiroAndEstado(Mensageiro mensageiro, Estado estado) {
 		List<Donativo> donativos = donativoRepository.filterDonativoByMensageiroAndEstado(mensageiro.getId(), estado);
 		donativos.sort(Comparator.comparing(Donativo::getHorarioAceito));
 		return donativos;
+	}
+	
+	/**
+	 * Verifica se donativo está válido para ser aceita para coleta.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidColeta(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.DISPONIBILIZADO) && donativo.getMensageiro() == null)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Verifica se Donativo está válido para ser recolhido.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidRecolhimento(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.CANCELADO) || e.getEstadoDoacao().equals(Estado.NAO_ACEITO))){
+				return false;
+			}
+		}
+		
+		return true;
 	}
 }

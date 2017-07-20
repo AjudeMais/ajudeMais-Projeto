@@ -171,5 +171,29 @@ public class DonativoRemoteService extends AbstractRemoteService {
         return Arrays.asList(responseEntity.getBody());
     }
 
+
+    /**
+     * Verifica se donativo está válido para ser coletado
+     *
+     * @param id
+     * @return
+     */
+    public Boolean isValidColetaByDonativo(Long id) {
+        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API + "/donativo/validatecoleta/{id}", Boolean.class, id);
+        return responseEntity.getBody();
+    }
+
+    /**
+     * Verifica se donativo está válido para ser recolhido
+     *
+     * @param id
+     * @return
+     */
+    public Boolean isValidRecolhimentoByDonativo(Long id) {
+        ResponseEntity<Boolean> responseEntity = restTemplate.getForEntity(API + "/donativo/validaterecolhimento/{id}", Boolean.class, id);
+        return responseEntity.getBody();
+    }
+
+
 }
 

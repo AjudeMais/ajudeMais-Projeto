@@ -18,6 +18,7 @@ import br.edu.ifpb.ajudemais.adapters.SelectHorarioColetaAdapter;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.UpdateEstadoDonativoTask;
+import br.edu.ifpb.ajudemais.asyncTasks.ValidateColetaTask;
 import br.edu.ifpb.ajudemais.domain.DisponibilidadeHorario;
 import br.edu.ifpb.ajudemais.domain.Donativo;
 import br.edu.ifpb.ajudemais.domain.EstadoDoacao;
@@ -80,6 +81,34 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
     }
 
     /**
+     * Verifica se donativo ainda está disponível para ser coletado
+     */
+    public void executeValidateColetaDonativoTask() {
+        ValidateColetaTask validateColetaTask = new ValidateColetaTask(this, donativo.getId());
+        validateColetaTask.delegate = new AsyncResponse<Boolean>() {
+            @Override
+            public void processFinish(Boolean output) {
+                if (!output) {
+                    CustomToast.getInstance(getApplicationContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.coleta_not_avaible));
+                }else {
+                    if (validateSelectedHorario()){
+                        for(int i = 0 ; i<donativo.getHorariosDisponiveis().size();i++){
+                            if(donativo.getHorariosDisponiveis().get(i).getId().equals(currentSelectedHorarios.get(0).getId())){
+                                donativo.getHorariosDisponiveis().get(i).setAtivo(true);
+                            }
+                        }
+                        validateAndSetStateDoacao();
+                        executeLoadingMensageiroAndUpdateDonativoTasks(donativo);
+                    }
+
+                }
+            }
+        };
+        validateColetaTask.execute();
+
+    }
+
+    /**
      * Valida o estado da doação e seta o estado na label.
      */
     private void validateAndSetStateDoacao() {
@@ -132,16 +161,7 @@ public class SelectHorarioColetaActivity extends BaseActivity implements View.On
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btn_confirm){
-            if (validateSelectedHorario()){
-                for(int i = 0 ; i<donativo.getHorariosDisponiveis().size();i++){
-                    if(donativo.getHorariosDisponiveis().get(i).getId().equals(currentSelectedHorarios.get(0).getId())){
-                        donativo.getHorariosDisponiveis().get(i).setAtivo(true);
-                    }
-                }
-                validateAndSetStateDoacao();
-                executeLoadingMensageiroAndUpdateDonativoTasks(donativo);
-            }
-
+            executeValidateColetaDonativoTask();
         }
     }
 
