@@ -252,5 +252,8 @@
     <string name="new_solicitacoes">Novas Solicitações</string>
     <string name="proximas_coletas">Próximas Coletas</string>
     <string name="my_coletas">Minhas Coletas</string>
+    <string name="coleta_not_avaible">Infelizmente este item não está mais disponível para ser coletado</string>
+    <string name="recolhimento_not_avaible">Infelizmente, O item não está mais disponível para ser recolhido</string>
+    <string name="not_avaible_cancel">O donativo já foi recolhido. Em caso de dúvida consulte a Institução responsável</string>
 
 </resources>

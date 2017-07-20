@@ -314,4 +314,37 @@ public class DonativoRestService {
 		return new ResponseEntity<List<Donativo>>(solicitacoesColeta, HttpStatus.OK);
 
 	}
+	
+	/**
+	 * "/validatecoleta/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * 
+	 * @return boolean
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/validatecoleta/{id}")
+	public ResponseEntity<Boolean> isValidColetaByDonativo(@PathVariable Long id) {
+		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidColeta(id)), HttpStatus.OK);
+	}
+	
+	/**
+	 * "/validaterecolhimento/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * 
+	 * @return boolean
+	 */
+	@PreAuthorize("hasRole('MENSAGEIRO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/validaterecolhimento/{id}")
+	public ResponseEntity<Boolean> isValidRecolhimentoByDonativo(@PathVariable Long id) {
+		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidRecolhimento(id)), HttpStatus.OK);
+	}
+	
+	/**
+	 * "/validatecancelamento/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * 
+	 * @return boolean
+	 */
+	@PreAuthorize("hasAnyRole('MENSAGEIRO, DOADOR')")
+	@RequestMapping(method = RequestMethod.GET, value = "/validatecancelamento/{id}")
+	public ResponseEntity<Boolean> isValidCancelamentoByDonativo(@PathVariable Long id) {
+		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidRecolhimento(id)), HttpStatus.OK);
+	}
 }

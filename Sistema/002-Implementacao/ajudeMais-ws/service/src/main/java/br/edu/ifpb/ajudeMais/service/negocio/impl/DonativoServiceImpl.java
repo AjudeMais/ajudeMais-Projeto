@@ -64,6 +64,8 @@ public class DonativoServiceImpl implements DonativoService {
 	@Autowired
 	private ApplicationEventPublisher publisher;
 
+
+
 	/**
 	 * 
 	 */
@@ -87,7 +89,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Autowired
 	private EstadoDoacaoService estadoDoacaoService;
-
+	
 	/**
 	 * 
 	 */
@@ -107,8 +109,8 @@ public class DonativoServiceImpl implements DonativoService {
 		List<String> notificaveis = coletaUtil.getNotificaveisToBairro(donativoSaved);
 
 		if (notificaveis != null && !notificaveis.isEmpty()) {
-			publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativoSaved,
-					"Novo donativo dispobilizado para coleta"));
+			publisher.publishEvent(
+					new DoacaoNotificationEvent(notificaveis, donativoSaved, "Novo donativo dispobilizado para coleta"));
 
 		}
 		schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativoSaved.getId(),
@@ -209,30 +211,30 @@ public class DonativoServiceImpl implements DonativoService {
 	 */
 	@Override
 	public List<Donativo> filterByDonativosCloserMensageiroId(Long idMensageiro) throws AjudeMaisException {
-
+		
 		List<Donativo> donativoFilted = new ArrayList<>();
-
+		
 		List<MensageiroAssociado> mensageiroAssociados = mensageiroAssociadoRepository.findByMensageiroId(idMensageiro);
-
-		mensageiroAssociados.forEach(ma -> {
-
-			ma.getMensageiro().getEnderecos().forEach(e -> {
-
-				List<Donativo> donativos = donativoRepository.filterDonativoByLocal(e.getLocalidade(), e.getUf(),
-						ma.getInstituicaoCaridade().getId(), Estado.DISPONIBILIZADO);
+		
+		mensageiroAssociados.forEach(ma->{
+			
+			ma.getMensageiro().getEnderecos().forEach(e->{
+				
+				List<Donativo> donativos = donativoRepository.filterDonativoByLocal
+						(e.getLocalidade(), e.getUf(), ma.getInstituicaoCaridade().getId(), Estado.DISPONIBILIZADO);
 
 				donativos.removeAll(donativoFilted);
 				donativoFilted.addAll(donativos);
-
+				
 			});
 
 		});
-
+		
 		return donativoFilted;
 	}
 
 	/**
-	 * 
+	 * Recupera donativos vinculado ao mensageiro passado
 	 */
 	@Override
 	public List<Donativo> findByMensageiro(Mensageiro mensageiro) {
@@ -242,13 +244,65 @@ public class DonativoServiceImpl implements DonativoService {
 	}
 
 	/**
-	 * 
+	 * Fitra donativos pelo mensageiro e estado passado.
 	 */
 	@Override
 	public List<Donativo> filterDonativoByMensageiroAndEstado(Mensageiro mensageiro, Estado estado) {
 		List<Donativo> donativos = donativoRepository.filterDonativoByMensageiroAndEstado(mensageiro.getId(), estado);
 		donativos.sort(Comparator.comparing(Donativo::getHorarioAceito));
 		return donativos;
+	}
+	
+	/**
+	 * Verifica se donativo está válido para ser aceita para coleta.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidColeta(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.DISPONIBILIZADO) && donativo.getMensageiro() == null)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Verifica se Donativo está válido para ser recolhido.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidRecolhimento(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.CANCELADO) || e.getEstadoDoacao().equals(Estado.NAO_ACEITO))){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+
+	/**
+	 * Verifica se Donativo está válido para ser cancelado.
+	 * @return 
+	 */
+	@Override
+	public boolean isValidCancelamento(Long id) {
+		Donativo donativo = donativoRepository.findOne(id);
+		
+		for(EstadoDoacao e : donativo.getEstadosDaDoacao()){
+			if(e.getAtivo() && (e.getEstadoDoacao().equals(Estado.DISPONIBILIZADO) || e.getEstadoDoacao().equals(Estado.ACEITO))){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	/**
@@ -288,7 +342,7 @@ public class DonativoServiceImpl implements DonativoService {
 
 		return result;
 	}
-
+	
 	/**
 	 * 
 	 * <p>
