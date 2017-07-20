@@ -22,7 +22,7 @@
 
         vm.labelsDoacoesPeriod = [];
         vm.dataDoacoesPeriod = [];
-        vm.seriesDoacoesPeriod = ['Doações em Tramite', 'Doações canceladas', 'Doações Recebidas'];
+        vm.seriesDoacoesPeriod = ['Doações em Tramite', 'Doações Canceladas', 'Doações Recebidas', 'Doações não aceitas'];
 
         vm.options = {
             legend: {
@@ -100,6 +100,20 @@
          */
         var getDoacoesByPeriodoEntregues = function () {
             dashboardAdminService.getDoacoesByPeriodo(30, "ENTREGUE").then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoNaoAceitos();
+            });
+        }
+
+        /**
+         *
+         */
+        var getDoacoesByPeriodoNaoAceitos= function () {
+            dashboardAdminService.getDoacoesByPeriodo(30, "NAO_ACEITO").then(function (response) {
                 var dataDoacoesPeriod = [];
                 response.data.forEach(function (dto) {
                     dataDoacoesPeriod.push(dto.count);

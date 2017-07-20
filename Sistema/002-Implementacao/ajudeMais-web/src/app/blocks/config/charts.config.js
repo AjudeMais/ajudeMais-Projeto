@@ -8,7 +8,7 @@
         .config(['ChartJsProvider', function (ChartJsProvider) {
 
             ChartJsProvider.setOptions({
-                chartColors: [ '#b13227', '#00ADF9', '#1eb131', '#46BFBD', '#FDB45C', '#949FB1', '#4D5360'],
+                chartColors: [ '#b13227', '#00ADF9', '#1eb131', '#FDB45C', '#7916bf', '#949FB1', '#4D5360'],
                 responsive: true,
                 legend: {
                     display: true
