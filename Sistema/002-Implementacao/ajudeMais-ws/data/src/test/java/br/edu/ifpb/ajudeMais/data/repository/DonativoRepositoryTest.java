@@ -3,6 +3,9 @@ package br.edu.ifpb.ajudeMais.data.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Test;
@@ -180,5 +183,58 @@ public class DonativoRepositoryTest {
 		assertThat(donativos.isEmpty());
 
 	}
+	
+	/**
+	 * Testa método que busca a quantidade de donativos já recolhidos. Deveria retornar
+	 * false, caso não exista nenhum donativo recolhido.
+	 */
+	@Test
+	public void filterCountByEstadoRecolhidoTest() {
+		Long quantidade = donativoRepository.filterCountByEstadoRecolhido();
+		assertThat(quantidade > 0);
+	}
 
+	/**
+	 * Testa método que busca a quantidade de donativos já recolhidos durante um intervalo de tempo.
+	 * Deveria retornar false, caso não exista nenhum donativo recolhido durante aquela faixa de datas.
+	 */
+	@Test
+	public void filterCountByEstadoRecolhidoAndDateBetweenTest() {
+		Date dataInicial = convertDate("2017-06-05");
+		Date dataFinal = convertDate("2017-06-07");
+		Long quantidade = donativoRepository.filterCountByEstadoRecolhidoAndDateBetween(dataInicial, dataFinal);
+		assertThat(quantidade > 0);
+	}
+	
+	/**
+	 * Testa método que busca a quantidade de donativos com base em seu estado e um intervalo de tempo.
+	 * Deveria retornar false, caso não exista nenhum donativo recolhido
+	 * durante aquela faixa de datas e/ou no estado pesquisado.
+	 */
+	@Test
+	public void filterCountDonativoByEstadoAndDateBetweenTest() {
+		Date dataInicial = convertDate("2017-06-05");
+		Date dataFinal = convertDate("2017-06-09");
+		Long quantidade = donativoRepository.filterCountDonativoByEstadoAndDateBetween(dataInicial, dataFinal, Estado.DISPONIBILIZADO);
+		assertThat(quantidade > 0);
+	}
+	
+	/**
+	 * Utilitário para conversão de {@link String} em {@link Date}
+	 * 
+	 * @param date
+	 * 		String que será convertida
+	 * @return
+	 * 		Data convertida
+	 */
+	private Date convertDate(String date) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Date data = null;
+		try {
+			data = sdf.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
 }
