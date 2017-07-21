@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
@@ -41,6 +42,12 @@ public class CampanhaRestService {
 	 */
 	@Autowired
 	private CampanhaService campanhaService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private CampanhaRepository campanhaRepository;
 
 	/**
 	 * 
@@ -203,7 +210,7 @@ public class CampanhaRestService {
 	 * 
 	 * @param id
 	 * @return
-	 * @throws AjudeMaisException 
+	 * @throws AjudeMaisException
 	 */
 	@PreAuthorize("hasRole ('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
@@ -214,5 +221,42 @@ public class CampanhaRestService {
 		}
 		campanhaService.remover(campanhaEncontrada);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	/**
+	 * <p>
+	 * GET /count/id : Diponibiliza quantidade de campanhas de uma determinada
+	 * insituição. <br>
+	 * ROLE: ADMIN, INSTITUICAO
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasAnyRole ('ADMIN', 'INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "count/{id}")
+	public ResponseEntity<Long> countByInstituicao(@PathVariable Long id) throws AjudeMaisException {
+		Long count = campanhaRepository.countByInstituicaoCaridadeIdAndStatus(id, true);
+		return new ResponseEntity<>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * <p>
+	 * GET /count/id : Diponibiliza campanhas ativas de uma instituição. <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @param id
+	 * @return
+	 * @throws AjudeMaisException
+	 */
+	@PreAuthorize("hasRole ('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "filter/instituicao/{id}")
+	public ResponseEntity<List<Campanha>> getByInstituicaoAndStatusAtivo(@PathVariable Long id)
+			throws AjudeMaisException {
+		
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatus(id, true);
+		return new ResponseEntity<>(campanhas, HttpStatus.OK);
 	}
 }

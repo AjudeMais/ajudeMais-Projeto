@@ -85,7 +85,7 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @param conta
 	 */
 	List<MensageiroAssociado> findByInstituicaoCaridadeConta(Conta conta);
-	
+
 	/**
 	 * 
 	 * <p>
@@ -96,7 +96,6 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @param conta
 	 */
 	List<MensageiroAssociado> findByMensageiroId(Long id);
-
 
 	/**
 	 * 
@@ -110,5 +109,12 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 */
 	Optional<MensageiroAssociado> findByMensageiroAndInstituicaoCaridade(Mensageiro mensageiro,
 			InstituicaoCaridade instituicao);
+
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
+	Long countByStatusAndInstituicaoCaridadeId(boolean status, Long idInstituicao);
 
 }

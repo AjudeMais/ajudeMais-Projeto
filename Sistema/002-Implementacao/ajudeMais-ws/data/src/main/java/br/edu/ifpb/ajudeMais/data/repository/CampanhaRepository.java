@@ -71,5 +71,20 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @return
 	 */
 	List<Campanha> findAllByOrderByDataCriacaoDesc();
-
+	
+	/**
+	 * 
+	 * @param idInstituicao
+	 * @param status
+	 * @return
+	 */
+	Long countByInstituicaoCaridadeIdAndStatus(Long idInstituicao, boolean status);
+	
+	/**
+	 * 
+	 * @param idInstituicao
+	 * @param status
+	 * @return
+	 */
+	List<Campanha> findByInstituicaoCaridadeIdAndStatus(Long idInstituicao, boolean status);
 }

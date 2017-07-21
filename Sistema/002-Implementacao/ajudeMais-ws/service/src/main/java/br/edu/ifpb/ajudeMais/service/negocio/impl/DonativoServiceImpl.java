@@ -317,7 +317,7 @@ public class DonativoServiceImpl implements DonativoService {
 	 *         a esa data.
 	 */
 	@Override
-	public Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado) {
+	public Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado, Long idInstituicao) {
 		Calendar dataInicial = Calendar.getInstance();
 		dataInicial = DateUtils.truncate(dataInicial, Calendar.DAY_OF_MONTH);
 		dataInicial.add(Calendar.DAY_OF_MONTH, (nDays - 1) * -1);
@@ -330,10 +330,18 @@ public class DonativoServiceImpl implements DonativoService {
 			Calendar c2 = convertHoursDoFinish(date, c1);
 			
 			if(estado.equals(Estado.RECOLHIDO)){
-				count = donativoRepository.filterCountByEstadoRecolhidoAndDateBetween(c1.getTime(), c2.getTime());
+				if(idInstituicao == null){
+					count = donativoRepository.filterCountByEstadoRecolhidoAndDateBetween(c1.getTime(), c2.getTime());
+				}else{
+					count = donativoRepository.filterCountByEstadoRecolhidoAndDateBetweenAndInst(c1.getTime(), c2.getTime(), idInstituicao);
+				}
 				
 			}else {
-				count = donativoRepository.filterCountDonativoByEstadoAndDateBetween(c1.getTime(), c2.getTime(), estado);
+				if(idInstituicao == null){
+					count = donativoRepository.filterCountDonativoByEstadoAndDateBetween(c1.getTime(), c2.getTime(), estado);
+				} else {
+					count = donativoRepository.filterCountDonativoByEstadoAndDateBetweenAndInst(c1.getTime(), c2.getTime(), estado, idInstituicao);
+				}
 			}
 			 
 			result.put(date, count.intValue());

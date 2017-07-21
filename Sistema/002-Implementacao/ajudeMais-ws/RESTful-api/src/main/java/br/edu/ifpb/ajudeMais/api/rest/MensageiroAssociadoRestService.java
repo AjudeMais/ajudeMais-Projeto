@@ -22,10 +22,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
@@ -72,6 +75,12 @@ public class MensageiroAssociadoRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoCaridadeService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
 	/**
 	 * 
@@ -141,7 +150,21 @@ public class MensageiroAssociadoRestService {
 
 		return new ResponseEntity<List<MensageiroAssociado>>(mensageiros, HttpStatus.OK);
 	}
-	
-	
-	
+
+	/**
+	 * 
+	 * <p>
+	 * GET /count/id : Obtém a quantidade de mensageiros associados de uma
+	 * instituição de caridade que estã ativos. <br>
+	 * ROLE: INSTITUICAO
+	 * </p>
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/count/{id}")
+	public ResponseEntity<Long> countByInsituicao(@PathVariable Long id) {
+		Long count = mensageiroAssociadoRepository.countByStatusAndInstituicaoCaridadeId(true, id);
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
 }

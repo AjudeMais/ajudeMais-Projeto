@@ -18,7 +18,8 @@
         var service = {
             save: _save,
             update: _update,
-            getInstituicoes: _getInstituicoes
+            getInstituicoes: _getInstituicoes,
+            getInstituicoesAtivas: _getInstituicoesAtivas
         };
         return service;
 
@@ -62,5 +63,9 @@
                 callback(response.data);
             });
         };
+
+        function _getInstituicoesAtivas() {
+            return $http.get(Api + "/instituicao/ativas");
+        }
     };
 })();

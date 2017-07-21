@@ -18,7 +18,8 @@
         var service = {
             save: _save,
             getByInstituicao: _getByInsituicao,
-            update: _update
+            update: _update,
+            getCountByInstituicao: _getCountByInstituicao
         };
         return service;
 
@@ -62,5 +63,9 @@
                 callback(response.data);
             })
         };
+
+        function _getCountByInstituicao(instituicaoId) {
+            return $http.get(Api + "/associacao/count/" + instituicaoId);
+        }
     };
 })();

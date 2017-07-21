@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,7 +72,7 @@ public class DashboardAdminRestService {
 	 */
 	@Autowired
 	private DonativoService donativoService;
-	
+
 	/**
 	 * 
 	 */
@@ -91,7 +92,7 @@ public class DashboardAdminRestService {
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/instituicao/count")
 	public ResponseEntity<Long> getCountInstituicaoCaridade() {
-		
+
 		Long count = instituicaoCaridadeRepository.count();
 		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
@@ -110,7 +111,7 @@ public class DashboardAdminRestService {
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/donativo/count")
 	public ResponseEntity<Long> getCountDonativos() {
-		
+
 		Long count = donativoRepository.filterCountByEstadoRecolhido();
 		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
@@ -129,7 +130,7 @@ public class DashboardAdminRestService {
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/campanha/count")
 	public ResponseEntity<Long> getCountCampanhas() {
-		
+
 		Long count = campanhaRepositoty.count();
 		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
@@ -148,7 +149,7 @@ public class DashboardAdminRestService {
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/count")
 	public ResponseEntity<Long> getCountMensageiros() {
-		
+
 		Long count = mensageiroRepositoy.count();
 		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
@@ -167,16 +168,52 @@ public class DashboardAdminRestService {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@RequestMapping(method = RequestMethod.GET, value = "/donativo/periodo")
-	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodo(@Param("nDays") Integer nDays, @Param("estado") String estado) {
+	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodo(@Param("nDays") Integer nDays,
+			@Param("estado") String estado) {
 
-		Map<Date, Integer> doacoes = donativoService.getDoacoesByPeriodo(nDays, Estado.getByEstado(estado));
-		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
+		List<DoacoesPeriodoDTO> doacoesPeriodo = getDonativosByPeriodo(nDays, estado, null);
+
+		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * <p>
+	 * GET /donativo/periodo/instituicao : Busca quantidade de donativos por
+	 * periodos ao longo do tempo filtrando por instituição. <br>
+	 * ROLE: ADMIN
+	 * </p>
+	 * 
+	 * @return Mapa contendo período de tempo com a quantidade de doações
+	 *         realizadas para cada data.
+	 */
+
+	@PreAuthorize("hasRole('ADMIN')")
+	@RequestMapping(method = RequestMethod.GET, value = "/donativo/periodo/instituicao/{id}")
+	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodoInstituicao(@Param("nDays") Integer nDays,
+			@Param("estado") String estado, @PathVariable("id") Long idInst) {
 		
+		List<DoacoesPeriodoDTO> doacoesPeriodo = getDonativosByPeriodo(nDays, estado, idInst);
+		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @param nDays
+	 * @param estado
+	 * @return
+	 */
+	private List<DoacoesPeriodoDTO> getDonativosByPeriodo(Integer nDays, String estado, Long idInst) {
+		
+		Map<Date, Integer> doacoes = donativoService.getDoacoesByPeriodo(nDays, Estado.getByEstado(estado), idInst);
+		
+		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
+
 		for (Date date : doacoes.keySet()) {
 			DoacoesPeriodoDTO doDto = new DoacoesPeriodoDTO(DATE_FORMAT.format(date), doacoes.get(date));
 			doacoesPeriodo.add(doDto);
 		}
-		
-		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+		return doacoesPeriodo;
 	}
+
 }

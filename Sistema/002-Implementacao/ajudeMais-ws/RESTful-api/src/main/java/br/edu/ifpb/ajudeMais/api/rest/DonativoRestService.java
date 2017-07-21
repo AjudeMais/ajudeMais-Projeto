@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.data.repository.DonativoCampanhaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
@@ -65,6 +67,18 @@ public class DonativoRestService {
 	 */
 	@Autowired
 	private DonativoCampanhaService donativoCampanhaService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoCampanhaRepository donativoCampanhaRepository;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoRepository donativoRepositoory;
 
 	/**
 	 * 
@@ -241,7 +255,7 @@ public class DonativoRestService {
 		Mensageiro mensageiro = mensageiroService.findByContaUsername(username);
 		List<Donativo> donativos = donativoService.filterDonativoByMensageiroAndEstado(mensageiro,
 				Estado.getByEstado(estado));
-		
+
 		return new ResponseEntity<List<Donativo>>(donativos, HttpStatus.OK);
 	}
 
@@ -302,7 +316,8 @@ public class DonativoRestService {
 	}
 
 	/**
-	 * "/filter/closer/mensageiro/{id} : Busca todos os donativos com base na localização
+	 * "/filter/closer/mensageiro/{id} : Busca todos os donativos com base na
+	 * localização
 	 * 
 	 * @return solicitacoesColeta
 	 */
@@ -314,9 +329,10 @@ public class DonativoRestService {
 		return new ResponseEntity<List<Donativo>>(solicitacoesColeta, HttpStatus.OK);
 
 	}
-	
+
 	/**
-	 * "/validatecoleta/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * "/validatecoleta/{id} : Verifica se donativo com id passado está
+	 * disponível para coleta.
 	 * 
 	 * @return boolean
 	 */
@@ -325,9 +341,10 @@ public class DonativoRestService {
 	public ResponseEntity<Boolean> isValidColetaByDonativo(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidColeta(id)), HttpStatus.OK);
 	}
-	
+
 	/**
-	 * "/validaterecolhimento/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * "/validaterecolhimento/{id} : Verifica se donativo com id passado está
+	 * disponível para coleta.
 	 * 
 	 * @return boolean
 	 */
@@ -336,9 +353,10 @@ public class DonativoRestService {
 	public ResponseEntity<Boolean> isValidRecolhimentoByDonativo(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidRecolhimento(id)), HttpStatus.OK);
 	}
-	
+
 	/**
-	 * "/validatecancelamento/{id} : Verifica se donativo com id passado está disponível para coleta.
+	 * "/validatecancelamento/{id} : Verifica se donativo com id passado está
+	 * disponível para coleta.
 	 * 
 	 * @return boolean
 	 */
@@ -346,5 +364,27 @@ public class DonativoRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/validatecancelamento/{id}")
 	public ResponseEntity<Boolean> isValidCancelamentoByDonativo(@PathVariable Long id) {
 		return new ResponseEntity<Boolean>(new Boolean(donativoService.isValidRecolhimento(id)), HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/campanha/count/{id}")
+	public ResponseEntity<Long> countDoacoesCampanhasByInstituicao(@PathVariable("id") Long idInstituicao) {
+		Long count = donativoCampanhaRepository.countByDonativoCategoriaInstituicaoCaridadeId(idInstituicao);
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasAnyRole('ADMIN, INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/count/{id}")
+	public ResponseEntity<Long> countDoacoes(@PathVariable("id") Long idInstituicao) {
+		Long count = donativoRepositoory.countByCategoriaInstituicaoCaridadeId(idInstituicao);
+		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
 }

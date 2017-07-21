@@ -71,4 +71,11 @@ public interface DonativoCampanhaRepository extends JpaRepository<DonativoCampan
 	 * @return
 	 */
 	Long filterCountByEstadoAndCategoriaAfterAceito(@Param("idcampanha") Long idCampanha, @Param("idCategoria") Long idCategoria);
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Long countByDonativoCategoriaInstituicaoCaridadeId(Long id);
 }

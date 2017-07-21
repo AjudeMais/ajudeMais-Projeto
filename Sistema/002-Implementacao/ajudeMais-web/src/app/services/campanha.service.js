@@ -18,7 +18,9 @@
         var service = {
             save: _save,
             update: _update,
-            getCampanhasByInstituicao: _getCampanhasByInstituicao
+            getCampanhasByInstituicao: _getCampanhasByInstituicao,
+            getCountCampanhasByInstituicao: _getCountCampanhasByInstituicao,
+            getCampanhasAtivasByInstituicao: _getCampanhasAtivasByInstituicao
         };
         return service;
 
@@ -47,5 +49,23 @@
         function _getCampanhasByInstituicao() {
             return $http.get(Api + "/campanha/filter/instituicao");
         };
+
+        /**
+         *
+         * @param idInstituicao
+         * @private
+         */
+        function _getCountCampanhasByInstituicao(idInstituicao) {
+            return $http.get(Api + "/campanha/count/" + idInstituicao);
+        }
+
+        /**
+         *
+         * @param idInstituicao
+         * @private
+         */
+        function _getCampanhasAtivasByInstituicao(idInstituicao) {
+            return $http.get(Api + "/campanha/filter/instituicao/" + idInstituicao);
+        }
     }
 })();

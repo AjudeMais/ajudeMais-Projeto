@@ -20,7 +20,8 @@
             getCountDonativos: _getCountDonativos,
             getCountCampanhas: _getCountCampanhas,
             getCountMensageiros: _getCountMensageiros,
-            getDoacoesByPeriodo: _getDoacoesByPeriodo
+            getDoacoesByPeriodo: _getDoacoesByPeriodo,
+            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao
         };
         return service;
 
@@ -64,6 +65,20 @@
          */
         function _getDoacoesByPeriodo(nDays, estado) {
             return $http.get(Api + '/dashboard/admin/donativo/periodo', {params: {"nDays": nDays, "estado": estado}});
+        }
+
+        /**
+         *
+         * @param nDays
+         * @private
+         */
+        function _getDoacoesByPeriodoInstituicao(nDays, estado, idInst) {
+            return $http.get(Api + '/dashboard/admin/donativo/periodo/instituicao/' + idInst, {
+                params: {
+                    "nDays": nDays,
+                    "estado": estado
+                }
+            });
         }
 
     };

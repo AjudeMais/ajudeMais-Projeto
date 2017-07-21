@@ -18,7 +18,8 @@
         var service = {
             getByInstituicao: _getByInstituicao,
             getFilterDonativoByEstadoAndInstituicao: _getFilterDonativoByEstadoAndInstituicao,
-
+            countDonativosByInstituicao: _countDonativosByInstituicao,
+            countDonativosCampanhaByInstituicao: _countDonativosCampanhaByInstituicao
         };
         return service;
 
@@ -30,13 +31,26 @@
             return $http.get(Api + "/donativo/filter/instituicao");
         };
 
+        /**
+         *
+         */
+        function _countDonativosByInstituicao(id) {
+            return $http.get(Api + "/donativo/count/" + id);
+        }
+
+        /**
+         *
+         */
+        function _countDonativosCampanhaByInstituicao(id) {
+            return $http.get(Api + "/donativo/campanha/count/" + id);
+        }
 
         /**
          *
          * @private
          */
         function _getFilterDonativoByEstadoAndInstituicao(estado) {
-            return $http.get(Api + "/donativo/filter/estado",{params: {"estado":estado}});
+            return $http.get(Api + "/donativo/filter/estado", {params: {"estado": estado}});
         };
 
 

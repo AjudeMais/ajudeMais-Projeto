@@ -154,5 +154,5 @@ public interface DonativoService extends Service<Donativo, Long> {
 	 * @param nDays
 	 * @return Mapa contendo a quantidade de doações do dia.
 	 */
-	Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado);
+	Map<Date, Integer> getDoacoesByPeriodo(Integer nDays, Estado estado, Long idInstituicao);
 }

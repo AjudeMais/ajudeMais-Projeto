@@ -144,6 +144,16 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 
 	/**
 	 * 
+	 * @param date1
+	 * @param date2
+	 * @param idInst
+	 * @return
+	 */
+	Long filterCountByEstadoRecolhidoAndDateBetweenAndInst(@Param("startDate") Date date1, @Param("endDate") Date date2,
+			@Param("idInst") Long idInst);
+
+	/**
+	 * 
 	 * <p>
 	 * Busca a quantidade de donativos por data e estado.
 	 * </p>
@@ -155,4 +165,25 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	Long filterCountDonativoByEstadoAndDateBetween(@Param("startDate") Date date1, @Param("endDate") Date date2,
 			@Param("estado") Estado estado);
+
+	/**
+	 * 
+	 * <p>
+	 * </p>
+	 * 
+	 * @param date1
+	 * @param date2
+	 * @param estado
+	 * @param idInst
+	 * @return
+	 */
+	Long filterCountDonativoByEstadoAndDateBetweenAndInst(@Param("startDate") Date date1, @Param("endDate") Date date2,
+			@Param("estado") Estado estado, @Param("idInst") Long idInst);
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Long countByCategoriaInstituicaoCaridadeId(Long id);
 }
