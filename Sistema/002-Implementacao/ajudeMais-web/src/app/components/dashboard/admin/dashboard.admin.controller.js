@@ -37,7 +37,6 @@
 
         vm.labelsDoacoesInstPeriod = [];
         vm.dataDoacoesInstPeriod = [];
-        vm.seriesDoacoesInstPeriod = ['Doações em Trâmite'];
 
         vm.options = {
             legend: {
@@ -45,6 +44,9 @@
             }
         };
 
+        /**
+         *
+         */
         var getInstituicoesAtivas = function () {
             instituicaoService.getInstituicoesAtivas().then(function (response) {
                 vm.instituicoesAtivas = response.data;
@@ -168,7 +170,7 @@
          *
          */
         var getDoacoesByPeriodoInstituicao = function (idInst) {
-            vm.seriesDoacoesInstPeriod = ['Doações em Trâmite'];
+            vm.seriesDoacoesPeriod = ['Doações em Trâmite', 'Doações Canceladas', 'Doações Recebidas', 'Doações não aceitas'];
             vm.labelsDoacoesInstPeriod = [];
             vm.dataDoacoesInstPeriod = [];
             dashboardAdminService.getDoacoesByPeriodoInstituicao(30, "RECOLHIDO", idInst).then(function (response) {
@@ -178,6 +180,7 @@
                     dataDoacoesPeriod.push(dto.count);
                 })
                 vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoCanceladasInstituicao(idInst);
             });
         }
 
@@ -198,6 +201,20 @@
         /**
          *
          */
+        var getDoacoesByPeriodoCanceladasInstituicao = function (idInst) {
+            dashboardAdminService.getDoacoesByPeriodoInstituicao(30, "CANCELADO", idInst).then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoEntreguesInstituicao();
+            });
+        }
+
+        /**
+         *
+         */
         var getDoacoesByPeriodoEntregues = function () {
             dashboardAdminService.getDoacoesByPeriodo(30, "RECEBIDO").then(function (response) {
                 var dataDoacoesPeriod = [];
@@ -212,6 +229,20 @@
         /**
          *
          */
+        var getDoacoesByPeriodoEntreguesInstituicao = function (idInst) {
+            dashboardAdminService.getDoacoesByPeriodoInstituicao(30, "RECEBIDO", idInst).then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoNaoAceitosInstituicao();
+            });
+        }
+
+        /**
+         *
+         */
         var getDoacoesByPeriodoNaoAceitos = function () {
             dashboardAdminService.getDoacoesByPeriodo(30, "NAO_ACEITO").then(function (response) {
                 var dataDoacoesPeriod = [];
@@ -219,6 +250,19 @@
                     dataDoacoesPeriod.push(dto.count);
                 })
                 vm.dataDoacoesPeriod.push(dataDoacoesPeriod);
+            });
+        }
+
+        /**
+         *
+         */
+        var getDoacoesByPeriodoNaoAceitosInstituicao = function (idInst) {
+            dashboardAdminService.getDoacoesByPeriodoInstituicao(30, "NAO_ACEITO", idInst).then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
             });
         }
 
