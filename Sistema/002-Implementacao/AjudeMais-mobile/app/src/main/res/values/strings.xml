@@ -73,6 +73,7 @@
     <string name="no_connection">imagem representa sem conexão com a internet</string>
     <string name="no_connect_sec">Verifique sua conexão com a internet e tente novamente</string>
     <string name="hitName">Nome</string>
+    <string name="hitMotivo">Descreva o motivo</string>
     <string name="hitPhone">Número de telefone</string>
     <string name="hitConfirmationPassword">Confirme a senha</string>
     <string name="btnCreateNewAccount">CRIAR CONTA</string>
@@ -255,5 +256,11 @@
     <string name="coleta_not_avaible">Infelizmente este item não está mais disponível para ser coletado</string>
     <string name="recolhimento_not_avaible">Infelizmente, O item não está mais disponível para ser recolhido</string>
     <string name="not_avaible_cancel">O donativo já foi recolhido. Em caso de dúvida consulte a Institução responsável</string>
+    <string name="not_time_avaiable">Doador não encontrado no endereço informado</string>
+    <string name="not_avaiable_mensageiro">Indisponibilidade na data e horário marcado</string>
+    <string name="not_coleted_other">Outro</string>
+    <string name="SelectMotivoToCanceled">Selecione o Motivo</string>
+    <string name="motivo_not_informed">O motivo do cancelamento deve ser infomado</string>
+    <string name="not_selected_motivo">Selecione um motivo para cancelar coleta</string>
 
 </resources>
