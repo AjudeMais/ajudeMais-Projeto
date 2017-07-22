@@ -16,14 +16,13 @@ import br.edu.ifpb.ajudemais.enumarations.Estado;
  *
  * @author <a href="https://github.com/JoseRafael97">Rafael Feitosa</a>
  */
-
-
 public class EstadoDoacao implements Serializable{
 
     /**
      *
      */
     private static final long serialVersionUID = -7652424045014577650L;
+
     /**
      *
      */
@@ -48,6 +47,11 @@ public class EstadoDoacao implements Serializable{
      *
      */
     private Estado estadoDoacao;
+
+    /**
+     *
+     */
+    private String mensagem;
 
     /**
      * @return the id
@@ -123,6 +127,21 @@ public class EstadoDoacao implements Serializable{
         this.ativo = ativo;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    /**
+     *
+     * @param mensagem
+     */
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
 
     @Override
     public String toString() {

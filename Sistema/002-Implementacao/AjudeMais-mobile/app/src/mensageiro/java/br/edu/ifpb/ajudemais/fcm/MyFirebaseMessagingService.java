@@ -101,12 +101,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void processFinish(Donativo output) {
                 Donativo donativo = output;
 
-
                 resultIntent = new Intent(getApplicationContext(), DetailSolicitacaoActivity.class);
                 resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 resultIntent.putExtra("Donativo", donativo);
-                if (!remoteMessage.getNotification().getBody().equals("Doação foi cancelada pelo doador")){
+                if (!remoteMessage.getNotification().getBody().equals("Doação foi cancelada pelo doador") &&
+                        !remoteMessage.getNotification().getBody().contains("Doação cancelada pelo voluntário")){
                     resultIntent.putExtra("notification",  new Boolean(true));
                 }
                 notifyComponent(remoteMessage);

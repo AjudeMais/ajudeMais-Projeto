@@ -6,9 +6,11 @@ import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
@@ -39,6 +41,8 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
     private Button btnConfim;
     private Validator validator;
     private Donativo donativo;
+    private TextView tvNotWasInHouse;
+    private TextView tvNotAvaibleMensageiro;
 
     @Order(1)
     @NotEmpty(messageResId = R.string.motivo_not_informed, sequence = 1)
@@ -88,6 +92,9 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
         edtDescricao = (TextInputEditText) findViewById(R.id.edtOther);
         btnConfim = (Button) findViewById(R.id.btn_confirm);
         btnConfim.setOnClickListener(this);
+
+        tvNotWasInHouse = (TextView) findViewById(R.id.tv_not_found_in_house);
+        tvNotAvaibleMensageiro = (TextView) findViewById(R.id.tv_not_avaible_mensageiro);
     }
 
     @Override
@@ -123,21 +130,38 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
             textInputLayout.setVisibility(View.VISIBLE);
             validateIsChecked(checkOther);
         } else if (v.getId() == R.id.btn_confirm) {
+            EstadoDoacao estadoDoacao = new EstadoDoacao();
+            estadoDoacao.setAtivo(true);
+            estadoDoacao.setData(new Date());
 
             if (checkOther.isChecked()) {
                 validator.validate();
 
             } else if (checkNotWasHouse.isChecked()) {
-                EstadoDoacao estadoDoacao = new EstadoDoacao();
-                estadoDoacao.setAtivo(true);
-                estadoDoacao.setData(new Date());
-                estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+                setEstadoActiveToFalse();
+                estadoDoacao.setMensagem(getString(R.string.cancel_doacao_doador_not_was_in_house));
+                estadoDoacao.setEstadoDoacao(Estado.CANCELADO_POR_MENSAGEIRO);
                 donativo.getEstadosDaDoacao().add(estadoDoacao);
                 executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
             } else if (checkNotHadTime.isChecked()) {
-
-            }else {
+                setEstadoActiveToFalse();
+                estadoDoacao.setMensagem(getString(R.string.msg_mensageiro_not_avaible));
+                estadoDoacao.setEstadoDoacao(Estado.DISPONIBILIZADO);
+                donativo.getEstadosDaDoacao().add(estadoDoacao);
+                donativo.setMensageiro(null);
+                executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
+            } else {
                 CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(getString(R.string.not_selected_motivo));
+            }
+        }
+    }
+
+    private void setEstadoActiveToFalse() {
+        for (int i = 0; i < donativo.getEstadosDaDoacao().size(); i++) {
+            if (donativo.getEstadosDaDoacao().get(i).getEstadoDoacao().equals(Estado.ACEITO) &&
+                    donativo.getEstadosDaDoacao().get(i).getAtivo()) {
+                donativo.getEstadosDaDoacao().get(i).setAtivo(false);
+                return;
             }
         }
     }
@@ -146,14 +170,14 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
      * Executa Asycn task para atualizar o estado do donativo;
      */
     private void executeUpdateDonativoTask(final Donativo donativo, final String msg) {
-        UpdateEstadoDonativoTask updateEstadoDonativoTask = new UpdateEstadoDonativoTask(getApplicationContext(), donativo);
+        UpdateEstadoDonativoTask updateEstadoDonativoTask = new UpdateEstadoDonativoTask(NotRecolhidoActivity.this, donativo);
         updateEstadoDonativoTask.delegate = new AsyncResponse<Donativo>() {
             @Override
             public void processFinish(Donativo output) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Intent intent = new Intent(NotRecolhidoActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
-                CustomToast.getInstance(getApplicationContext()).createSuperToastSimpleCustomSuperToast(msg);
+                CustomToast.getInstance(NotRecolhidoActivity.this).createSuperToastSimpleCustomSuperToast(msg);
             }
         };
         updateEstadoDonativoTask.execute();
@@ -175,10 +199,12 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onValidationSucceeded() {
+        setEstadoActiveToFalse();
         EstadoDoacao estadoDoacao = new EstadoDoacao();
         estadoDoacao.setAtivo(true);
+        estadoDoacao.setMensagem("Doação cancelada pelo voluntário. "+edtDescricao.getText().toString().trim());
         estadoDoacao.setData(new Date());
-        estadoDoacao.setEstadoDoacao(Estado.CANCELADO);
+        estadoDoacao.setEstadoDoacao(Estado.CANCELADO_POR_MENSAGEIRO);
         donativo.getEstadosDaDoacao().add(estadoDoacao);
         executeUpdateDonativoTask(donativo, getString(R.string.coleta_cancelada));
     }
@@ -195,6 +221,27 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
             } else {
                 CustomToast.getInstance(NotRecolhidoActivity.this).createSuperToastSimpleCustomSuperToast(message);
             }
+        }
+    }
+
+    /**
+     * Implementação para controlar operações na action bar
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(NotRecolhidoActivity.this, DetailSolicitacaoActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

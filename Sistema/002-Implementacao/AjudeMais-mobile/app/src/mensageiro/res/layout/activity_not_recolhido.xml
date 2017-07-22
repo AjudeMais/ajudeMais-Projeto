@@ -59,7 +59,7 @@
 
 
             <TextView
-                android:id="@+id/tv_row_data"
+                android:id="@+id/tv_not_found_in_house"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="2dp"
@@ -106,7 +106,7 @@
 
 
             <TextView
-                android:id="@+id/tv_not"
+                android:id="@+id/tv_not_avaible_mensageiro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="2dp"

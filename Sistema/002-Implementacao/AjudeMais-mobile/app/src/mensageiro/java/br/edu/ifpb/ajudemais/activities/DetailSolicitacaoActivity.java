@@ -9,6 +9,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,10 +46,8 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
         donativo = (Donativo) getIntent().getSerializableExtra("Donativo");
 
         notification = (Boolean) getIntent().getSerializableExtra("notification");
-        if ((notification != null && getEstadoAtivo() != null)
-                && (donativo.getMensageiro() != null ||
-                (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) ||
-                        getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO)))) {
+
+        if (validateDonativo()) {
 
             setContentView(R.layout.fragment_solicitacao_not_disponivel);
             Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -72,6 +71,20 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
             }
         }
 
+    }
+
+    /**
+     * @return
+     */
+    private boolean validateDonativo() {
+        if (notification != null && getEstadoAtivo() != null) {
+            if (getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO) ||
+                    getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private EstadoDoacao getEstadoAtivo() {

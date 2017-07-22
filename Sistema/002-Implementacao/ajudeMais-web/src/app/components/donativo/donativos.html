@@ -30,7 +30,7 @@
                                 <td>{{donativo.quantidade}}</td>
                                 <td>{{donativo.doador.nome}}</td>
                                 <td>
-                                    <span class="{{vm.getEtadosDonativo(donativo.estadosDaDoacao) | status}}">{{vm.getEtadosDonativo(donativo.estadosDaDoacao) == 'NAO_ACEITO' ? 'NÃO ACEITO' : vm.getEtadosDonativo(donativo.estadosDaDoacao)}}</span>
+                                    <span class="{{vm.getEtadosDonativo(donativo.estadosDaDoacao) | status}}">{{vm.getEtadosDonativo(donativo.estadosDaDoacao) == 'NAO_ACEITO' ? 'NÃO ACEITO' : vm.getEtadosDonativo(donativo.estadosDaDoacao) == 'CANCELADO_POR_MENSAGEIRO' ? 'CANCELADO' : vm.getEtadosDonativo(donativo.estadosDaDoacao)}}</span>
                                 </td>
                             </tr>
                             </tbody>

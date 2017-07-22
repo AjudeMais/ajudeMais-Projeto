@@ -18,7 +18,7 @@
     <color name="colorStateCancelaodo">#E37B7E</color>
     <color name="colorStateNaoAceito">#f4ae5e</color>
     <color name="colorStateAceito">#789ee1</color>
-    <color name="colorStateRecolhido">#ee76fd</color>
+    <color name="colorStateRecolhido">#1cf7b1</color>
     <color name="colorStateRecebido">#93ed69</color>
     <color name="colorStateEntregue">#7fec97</color>
 

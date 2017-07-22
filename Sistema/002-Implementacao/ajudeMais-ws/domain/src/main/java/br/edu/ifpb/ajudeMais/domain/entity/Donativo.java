@@ -49,15 +49,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndDateBetweenAndInst", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
 			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.estadoDoacao != 'ENTREGUE'"
-			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and d.data BETWEEN :startDate AND :endDate and d.categoria.instituicaoCaridade.id = :idInst"),
+			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate and d.categoria.instituicaoCaridade.id = :idInst"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndDateBetween", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
 			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.estadoDoacao != 'ENTREGUE'"
-			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and d.data BETWEEN :startDate AND :endDate"),
+			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhido", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
 			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
-			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO'"),
+			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO'"),
 	
 		@NamedQuery(name = "Donativo.filterDonativoByMensageiroAndEstado", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.mensageiro.id = :idMensageiro and ed.estadoDoacao like :estado and ed.ativo is true"),
