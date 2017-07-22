@@ -2,7 +2,7 @@ package br.edu.ifpb.ajudeMais.domain.enumerations;
 
 public enum Estado {
 
-	DISPONIBILIZADO, ACEITO, CANCELADO, NAO_ACEITO, RECOLHIDO, RECEBIDO, ENTREGUE;
+	DISPONIBILIZADO, ACEITO, CANCELADO, NAO_ACEITO, RECOLHIDO, RECEBIDO, ENTREGUE, CANCELADO_POR_MENSAGEIRO;
 
 	public static Estado getByEstado(String estado) {
 		if (estado != null) {

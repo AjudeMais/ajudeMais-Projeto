@@ -12,7 +12,12 @@ import org.springframework.stereotype.Component;
 import br.edu.ifpb.ajudeMais.domain.entity.DisponibilidadeHorario;
 import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.EstadoDoacao;
+import br.edu.ifpb.ajudeMais.domain.enumerations.JobName;
+import br.edu.ifpb.ajudeMais.domain.enumerations.TriggerName;
+import br.edu.ifpb.ajudeMais.service.event.donativo.notification.newdonativo.DoacaoNotificationEvent;
 import br.edu.ifpb.ajudeMais.service.event.donativo.notification.statedonativo.DoacaoStateNotificationEvent;
+import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
+import br.edu.ifpb.ajudeMais.service.job.NotificationJob;
 
 /**
  * 
@@ -52,23 +57,55 @@ public class NotificationUtil {
 
 	/**
 	 * 
+	 */
+	@Autowired
+	private SchedulerJobUtil schedulerJobUtil;
+
+	/**
+	 * 
 	 * <p>
 	 * Notifica estado de um donativo donativo, após sua transição de estado.
 	 * </p>
 	 * 
 	 * @param donativo
+	 * @throws AjudeMaisException
 	 */
-	public EstadoDoacao notifyDonativo(Donativo donativo) {
+	public EstadoDoacao notifyDonativo(Donativo donativo) throws AjudeMaisException {
 		EstadoDoacao estadoDoaco = donativoColetaUtil.getEstadoDoacaoAtivo(donativo);
 		if ((estadoDoaco.getNotificado() == null) || (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
+			case DISPONIBILIZADO:
+
+				List<String> notificaveis = donativoColetaUtil.getNotificaveisToBairro(donativo);
+			
+				if (notificaveis != null && !notificaveis.isEmpty()) {
+					publisher.publishEvent(new DoacaoNotificationEvent(notificaveis, donativo,
+							"Novo donativo dispobilizado para coleta"));
+
+				}
+				publisher.publishEvent(new DoacaoStateNotificationEvent(
+						donativo.getDoador().getTokenFCM().getToken(), donativo, estadoDoaco.getMensagem()));
+				estadoDoaco.setNotificado(true);
+
+				schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativo.getId(),
+						NotificationJob.class);
+				
+
+				break;
+
 			case CANCELADO:
 				if (donativo.getMensageiro() != null) {
-					publisher.publishEvent(
-							new DoacaoStateNotificationEvent(donativo.getMensageiro().getTokenFCM().getToken(),
-									donativo, "Doação foi cancelada"));
+					publisher.publishEvent(new DoacaoStateNotificationEvent(
+							donativo.getMensageiro().getTokenFCM().getToken(), donativo, "Doação foi cancelada"));
 					estadoDoaco.setNotificado(true);
 				}
+				break;
+
+			case CANCELADO_POR_MENSAGEIRO:
+				publisher.publishEvent(new DoacaoStateNotificationEvent(
+						donativo.getDoador().getTokenFCM().getToken(), donativo, estadoDoaco.getMensagem()));
+				estadoDoaco.setNotificado(true);
+
 				break;
 
 			case ACEITO:

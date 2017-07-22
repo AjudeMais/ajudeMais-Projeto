@@ -101,7 +101,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             public void processFinish(Donativo output) {
                 Donativo donativo = output;
 
-
                 resultIntent = new Intent(getApplicationContext(), DetailSolicitacaoActivity.class);
                 resultIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP);

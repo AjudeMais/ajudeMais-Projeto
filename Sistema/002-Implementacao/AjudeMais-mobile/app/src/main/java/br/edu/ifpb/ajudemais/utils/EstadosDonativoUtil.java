@@ -28,7 +28,7 @@ public class EstadosDonativoUtil {
      * @param estado
      */
     public void setCustomLabelEstadoDoacao(TextView lbEstado, Estado estado) {
-        if (estado.name().equals(Estado.CANCELADO.name())) {
+        if (estado.name().equals(Estado.CANCELADO.name()) || estado.name().equals(Estado.CANCELADO_POR_MENSAGEIRO.name())) {
             lbEstado.setBackgroundResource(R.drawable.screen_border_cancelado);
             lbEstado.setTextColor(Color.WHITE);
 

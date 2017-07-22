@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,9 +92,9 @@ public class DetailSolicitacoesFragment extends Fragment implements View.OnClick
             donativo = (Donativo) savedInstanceState.getSerializable("Donativo");
 
         } else {
-
             Intent intentDonativo = getActivity().getIntent();
             donativo = (Donativo) intentDonativo.getSerializableExtra("Donativo");
+            Log.i("AJUDEMAIS", donativo.getEstadosDaDoacao().toString());
 
         }
         setHasOptionsMenu(true);

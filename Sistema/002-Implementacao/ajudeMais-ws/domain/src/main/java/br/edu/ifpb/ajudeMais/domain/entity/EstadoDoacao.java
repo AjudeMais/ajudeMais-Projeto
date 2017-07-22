@@ -57,7 +57,15 @@ public class EstadoDoacao implements Serializable {
 	private Boolean notificado = false;
 	
 	
+	/**
+	 * 
+	 */
 	private Boolean ativo;
+	
+	/**
+	 * 
+	 */
+	private String mensagem;
 	
 	/**
 	 * 
@@ -129,6 +137,20 @@ public class EstadoDoacao implements Serializable {
 		this.ativo = ativo;
 	}
 	
+	
+	
+	/**
+	 * @return the mensagem
+	 */
+	public String getMensagem() {
+		return mensagem;
+	}
+	/**
+	 * @param mensagem the mensagem to set
+	 */
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
 	/**
 	 * @return the serialversionuid
 	 */
@@ -187,15 +209,15 @@ public class EstadoDoacao implements Serializable {
 			return false;
 		return true;
 	}
-	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "EstadoDoacao [id=" + id + ", data=" + data + ", notificado=" + notificado + ", ativo=" + ativo
-				+ ", estadoDoacao=" + estadoDoacao + "]";
+				+ ", mensagem=" + mensagem + ", estadoDoacao=" + estadoDoacao + "]";
 	}
 	
+
 	
 }

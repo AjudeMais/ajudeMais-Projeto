@@ -100,6 +100,7 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
                 intent.setClass(DrawerMenuActivity.this, MyEnderecosActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                break;
             case R.id.nav_sair:
                 SharedPrefManager.getInstance(this).clearSharedPrefs();
                 capturePhotoUtils.deleteImageProfile();
@@ -108,6 +109,8 @@ public class DrawerMenuActivity extends BaseActivity implements View.OnClickList
                 intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 finish();
                 startActivity(intent2);
+                break;
+
         }
 
     }

@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.springframework.web.client.RestClientException;
 
@@ -50,8 +51,7 @@ public class UpdateEstadoDonativoTask extends AsyncTask<Void, Void, Donativo> {
     @Override
     protected Donativo doInBackground(Void... params) {
         try {
-            donativo = donativoRemoteService.updateDonativo(donativo);
-            return donativo;
+            return donativoRemoteService.updateDonativo(donativo);
         } catch (RestClientException e) {
             message = e.getMessage();
             e.printStackTrace();
