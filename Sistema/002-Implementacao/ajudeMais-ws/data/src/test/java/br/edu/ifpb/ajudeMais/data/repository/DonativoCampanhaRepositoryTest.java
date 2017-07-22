@@ -130,4 +130,6 @@ public class DonativoCampanhaRepositoryTest {
 		DonativoCampanha donativoCampanha = donativoRepository.findOneByDonativoId(10l);
 		assertEquals(donativoCampanha,null);
 	}
+	
+	
 }

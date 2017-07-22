@@ -154,5 +154,16 @@ public class CampanhaRepositotoryTest {
 		Long campanhas = campanhaRepository.filterCountCampanhasMetaCategoriaId(1l, 4l);
 		assertEquals(campanhas.longValue(), 0);
 	}
+	
+	@Test
+	public void countByInstituicaoCaridadeIdAndStatusTest() {
+		Long quantidade = campanhaRepository.countByInstituicaoCaridadeIdAndStatus(1l, false);
+		assertEquals(quantidade.longValue(), 0);
+	}
 
+	@Test
+	public void findByInstituicaoCaridadeIdAndStatusTest() {
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatus(1l, false);
+		assertThat(campanhas.isEmpty());
+	}
 }
