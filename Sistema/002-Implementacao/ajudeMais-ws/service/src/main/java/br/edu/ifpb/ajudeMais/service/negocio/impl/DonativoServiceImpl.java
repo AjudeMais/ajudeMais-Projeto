@@ -127,7 +127,7 @@ public class DonativoServiceImpl implements DonativoService {
 	public Donativo update(Donativo entity) throws AjudeMaisException {
 		Donativo donativoUpdated = donativoRepository.save(entity);
 
-		EstadoDoacao estadoDoacao = notificationUtil.notifyDonativo(donativoUpdated);
+		EstadoDoacao estadoDoacao = notificationUtil.notifyDonativo(entity);
 		estadoDoacaoService.update(estadoDoacao);
 
 		return donativoUpdated;

@@ -47,10 +47,7 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
 
         notification = (Boolean) getIntent().getSerializableExtra("notification");
 
-        if ((notification != null && getEstadoAtivo() != null)
-                && (getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO) && (donativo.getMensageiro() != null ||
-                (!getEstadoAtivo().getEstadoDoacao().equals(Estado.DISPONIBILIZADO) ||
-                        getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO))))) {
+        if (validateDonativo()) {
 
             setContentView(R.layout.fragment_solicitacao_not_disponivel);
             Toolbar mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -72,6 +69,25 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
                     fragmentTransaction.commit();
                 }
             }
+        }
+
+    }
+
+    /**
+     * @return
+     */
+    private boolean validateDonativo() {
+        if (notification == null && getEstadoAtivo() == null) {
+            return false;
+        }
+
+        if (donativo.getMensageiro() != null ||
+                (getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO) ||
+                        getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO))){
+
+            return true;
+        } else {
+            return false;
         }
 
     }
