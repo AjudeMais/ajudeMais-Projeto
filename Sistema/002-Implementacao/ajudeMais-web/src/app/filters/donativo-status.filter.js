@@ -21,14 +21,14 @@
                     case 'ACEITO':
                         out = 'label label-info';
                         break;
-                    case 'CANCELADO':
+                    case 'CANCELADO' || 'CANCELADO_POR_MENSAGEIRO':
                         out = 'label label-danger';
                         break;
                     case 'RECOLHIDO':
                         out = 'label label-primary';
                         break;
 
-                    case 'NAO_ACEITO':
+                    case 'NAO_ACEITO' :
                         out = 'label label-state-not-accepted';
                         break;
                 }
