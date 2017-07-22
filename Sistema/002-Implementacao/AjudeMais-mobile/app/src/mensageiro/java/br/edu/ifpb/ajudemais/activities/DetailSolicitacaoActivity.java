@@ -77,19 +77,14 @@ public class DetailSolicitacaoActivity extends BaseActivity implements View.OnCl
      * @return
      */
     private boolean validateDonativo() {
-        if (notification == null && getEstadoAtivo() == null) {
-            return false;
+        if (notification != null && getEstadoAtivo() != null) {
+            if (getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO) ||
+                    getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO)) {
+                return true;
+            }
         }
 
-        if (donativo.getMensageiro() != null ||
-                (getEstadoAtivo().getEstadoDoacao().equals(Estado.CANCELADO) ||
-                        getEstadoAtivo().getEstadoDoacao().equals(Estado.NAO_ACEITO))){
-
-            return true;
-        } else {
-            return false;
-        }
-
+        return false;
     }
 
     private EstadoDoacao getEstadoAtivo() {

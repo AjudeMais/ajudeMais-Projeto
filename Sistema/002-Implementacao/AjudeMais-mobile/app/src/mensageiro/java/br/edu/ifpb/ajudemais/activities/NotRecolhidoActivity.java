@@ -202,7 +202,7 @@ public class NotRecolhidoActivity extends BaseActivity implements View.OnClickLi
         setEstadoActiveToFalse();
         EstadoDoacao estadoDoacao = new EstadoDoacao();
         estadoDoacao.setAtivo(true);
-        estadoDoacao.setMensagem(edtDescricao.getText().toString().trim());
+        estadoDoacao.setMensagem("Doação cancelada pelo voluntário. "+edtDescricao.getText().toString().trim());
         estadoDoacao.setData(new Date());
         estadoDoacao.setEstadoDoacao(Estado.CANCELADO_POR_MENSAGEIRO);
         donativo.getEstadosDaDoacao().add(estadoDoacao);
