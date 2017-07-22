@@ -208,7 +208,7 @@
                     dataDoacoesPeriod.push(dto.count);
                 })
                 vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
-                getDoacoesByPeriodoEntreguesInstituicao();
+                getDoacoesByPeriodoEntreguesInstituicao(idInst);
             });
         }
 
@@ -236,7 +236,7 @@
                     dataDoacoesPeriod.push(dto.count);
                 })
                 vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
-                getDoacoesByPeriodoNaoAceitosInstituicao();
+                getDoacoesByPeriodoNaoAceitosInstituicao(idInst);
             });
         }
 
