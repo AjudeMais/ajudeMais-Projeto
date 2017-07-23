@@ -15,15 +15,21 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
+import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.Mensageiro;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.service.exceptions.AjudeMaisException;
@@ -62,6 +68,13 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	@Autowired
 	private GoogleMapsService googleMapsService;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoRepository donativoRepository;
+	
 
 	/**
 	 * Salva um mensageiro considerando restrições de email.
@@ -151,6 +164,30 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
 
 		return mensageiros;
+	}
+	
+	/**
+	 * 
+	 */
+	@Override
+	public Map<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade) {
+		
+		Map<MensageiroAssociado, Integer> mensageirosDoacoes = new LinkedHashMap<MensageiroAssociado, Integer>();
+		List<MensageiroAssociado> mensageiros = mensageiroAssociadoRepository.findAll();
+		
+		
+		mensageiros.forEach(m -> {
+			Long count = donativoRepository.filterCountByMensageiroAndEstado(m.getMensageiro());
+			mensageirosDoacoes.put(m, count.intValue());
+		});
+		
+		Map<MensageiroAssociado, Integer> sortedMap = 
+				mensageirosDoacoes.entrySet().stream()
+			    .sorted(Map.Entry.<MensageiroAssociado, Integer>comparingByValue().reversed())
+			    .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
+			                              (e1, e2) -> e2, LinkedHashMap::new));
+		
+		return sortedMap;
 	}
 	
 

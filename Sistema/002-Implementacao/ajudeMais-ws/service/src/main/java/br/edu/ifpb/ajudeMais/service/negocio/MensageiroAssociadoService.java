@@ -16,6 +16,7 @@
 package br.edu.ifpb.ajudeMais.service.negocio;
 
 import java.util.List;
+import java.util.Map;
 
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.Endereco;
@@ -54,34 +55,40 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	 * @return
 	 */
 	List<MensageiroAssociado> findByInstituicaoConta(Conta conta);
-	
+
 	/**
 	 * 
 	 * <p>
-	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com base no enderenco passado e no id da instituição
-	 * insituição.
+	 * Busca mensageiro Mais proximo, considerando mensageiros do bairro com
+	 * base no enderenco passado e no id da instituição insituição.
 	 * </p>
 	 * 
 	 * @param conta
 	 * @return
-	 * @throws AjudeMaisException 
-	 * @throws Exception 
+	 * @throws AjudeMaisException
+	 * @throws Exception
 	 */
 	List<Mensageiro> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
-	
+
 	/**
 	 * 
 	 * <p>
-	 * Busca mensageiro Mais proximo, considerando mensageiros da cidade com base no enderenco passado e no id da instituição
-	 * insituição.
+	 * Busca mensageiro Mais proximo, considerando mensageiros da cidade com
+	 * base no enderenco passado e no id da instituição insituição.
 	 * </p>
 	 * 
 	 * @param conta
 	 * @return
-	 * @throws AjudeMaisException 
-	 * @throws Exception 
+	 * @throws AjudeMaisException
+	 * @throws Exception
 	 */
 	List<Mensageiro> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao) throws AjudeMaisException;
-	
-	
+
+	/**
+	 * 
+	 * @param instituicaoCaridade
+	 * @return
+	 */
+	Map<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade);
+
 }

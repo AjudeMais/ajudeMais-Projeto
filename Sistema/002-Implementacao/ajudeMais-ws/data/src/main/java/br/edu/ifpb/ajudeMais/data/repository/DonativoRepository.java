@@ -186,4 +186,11 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	Long countByCategoriaInstituicaoCaridadeId(Long id);
+
+	/**
+	 * 
+	 * @param mensageiro
+	 * @return
+	 */
+	Long filterCountByMensageiroAndEstado(@Param("mensageiro") Mensageiro mensageiro);
 }
