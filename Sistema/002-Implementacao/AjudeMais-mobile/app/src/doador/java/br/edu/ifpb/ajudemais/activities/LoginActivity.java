@@ -1,21 +1,18 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -97,6 +94,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         btnFacebook.registerCallback(callbackManager, this);
 
         if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+
+            CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(Profile.getCurrentProfile().getName());
             DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
             Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
             if (doador != null) {
@@ -104,6 +104,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         }
     }
+
 
     /**
      * Inicializa todos os atributos e propriedades utilizadas na activity.
@@ -120,6 +121,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         edtPassword = (EditText) findViewById(R.id.edtPassword);
 
     }
+
+
 
 
     /**
@@ -233,7 +236,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      */
     @Override
     public void onSuccess(LoginResult loginResult) {
-        FacebookAccount.userFacebookData(loginResult, LoginActivity.this);
+
+        FacebookAccount.userFacebookData(this, loginResult, LoginActivity.this);
 
     }
 
@@ -276,4 +280,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         }
     }
+
+
 }
