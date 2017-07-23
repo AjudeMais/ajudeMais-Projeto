@@ -22,16 +22,26 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
+import java.util.Arrays;
+
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingImageFbTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
 
@@ -62,6 +72,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     protected Conta conta;
     protected Bitmap bitmap;
     protected WriteStoreDevicePermission writeStoreDevicePermission;
+    private CallbackManager callbackManager;
 
     /**
      *
@@ -69,7 +80,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     @Override
     public void init() {
         super.init();
-
         writeStoreDevicePermission = new WriteStoreDevicePermission(this);
 
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
@@ -92,6 +102,10 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
      * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
+        if (AccessToken.getCurrentAccessToken() != null) {
+            executeLoadingImageProfileTask(this, Profile.getCurrentProfile().getLinkUri().toString());
+
+        }
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta == null) {
             conta = SharedPrefManager.getInstance(this).getUser();
@@ -338,6 +352,8 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CHECK_SETTINGS) {
 
             if (resultCode == RESULT_OK) {
@@ -346,6 +362,20 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
 
             }
         }
+    }
+
+    private void executeLoadingImageProfileTask(final Context context, String url){
+        LoadingImageFbTask loadingImageFbTask = new LoadingImageFbTask(context, url);
+        loadingImageFbTask.delegate = new AsyncResponse<Bitmap>() {
+            @Override
+            public void processFinish(Bitmap output) {
+                bitmap = output;
+                capturePhotoUtils.saveToInternalStorage(output);
+                profilePhoto.setImageBitmap(output);
+            }
+        };
+
+        loadingImageFbTask.execute();
     }
 
 }
