@@ -25,6 +25,7 @@ import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.CreateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.FcmToken;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
@@ -107,7 +108,9 @@ public class CreateAccountHelperActivity extends BaseActivity implements View.On
     public void onValidationSucceeded() {
         List<String> grupos = new ArrayList<>();
         grupos.add("ROLE_DOADOR");
+        FcmToken fcmToken = new FcmToken(SharedPrefManager.getInstance(this).getFcmToken());
         doador.getConta().setGrupos(grupos);
+        doador.setTokenFCM(fcmToken);
         doador.setTelefone(edtTelefone.getText().toString().trim());
         if (doador.getConta().getEmail() == null) {
             doador.getConta().setEmail(edtEmail.getText().toString().trim());
