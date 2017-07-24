@@ -59,6 +59,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
 			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO'"),
 	
+	@NamedQuery(name = "Donativo.filterCountByMensageiroAndEstado", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
+			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
+			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO'"
+			+ "and d.mensageiro = :mensageiro"),
+	
 		@NamedQuery(name = "Donativo.filterDonativoByMensageiroAndEstado", query = "SELECT d FROM Donativo d JOIN d.estadosDaDoacao ed "
 				+ "WHERE d.mensageiro.id = :idMensageiro and ed.estadoDoacao like :estado and ed.ativo is true"),
 

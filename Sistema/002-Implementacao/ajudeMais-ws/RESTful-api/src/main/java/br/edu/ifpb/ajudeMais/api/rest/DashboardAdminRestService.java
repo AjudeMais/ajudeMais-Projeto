@@ -18,12 +18,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.edu.ifpb.ajudeMais.api.dto.DoacoesPeriodoDTO;
+import br.edu.ifpb.ajudeMais.api.dto.MensageiroRankingDTO;
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
+import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
  * 
@@ -72,6 +75,12 @@ public class DashboardAdminRestService {
 	 */
 	@Autowired
 	private DonativoService donativoService;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssService;
 
 	/**
 	 * 
@@ -215,5 +224,25 @@ public class DashboardAdminRestService {
 		}
 		return doacoesPeriodo;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/ranking")
+	public ResponseEntity<List<MensageiroRankingDTO>> getRanking() {
+		
+		Map<MensageiroAssociado, Integer> mensageiros = mensageiroAssService.getRanking(null);
+		List<MensageiroRankingDTO> rankingMensageiros = new ArrayList<>();
+		
+		mensageiros.forEach((mK, mV) ->{
+			MensageiroRankingDTO ranking = 
+					new MensageiroRankingDTO(mK, mV);
+			
+			rankingMensageiros.add(ranking);
+		});
+		
+		return new ResponseEntity<List<MensageiroRankingDTO>>(rankingMensageiros, HttpStatus.OK);
+		
+	}
 }

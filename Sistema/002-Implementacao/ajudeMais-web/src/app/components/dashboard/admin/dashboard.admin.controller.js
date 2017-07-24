@@ -11,25 +11,29 @@
         .controller('DashboardAdminController', DashboardAdminController);
 
     DashboardAdminController.$inject = ['dashboardAdminService', 'instituicaoService',
-        'donativoService', 'campanhaService', 'mensageiroAssociadoService'];
+        'donativoService', 'campanhaService', 'mensageiroAssociadoService', 'imageService'];
 
     function DashboardAdminController(dashboardAdminService, instituicaoService,
-                                      donativoService, campanhaService, mensageiroAssociadoService) {
+                                      donativoService, campanhaService, mensageiroAssociadoService, imageService) {
 
         var vm = this;
         vm.countInstituicoes = 0;
         vm.countDonativos = 0;
         vm.countCampanhas = 0;
         vm.countMensageiros = 0;
+        vm.statusPanelLineChart = true;
+        vm.instituicaoSelected = {};
+        vm.instituicoesAtivas = [];
+        vm.rankingMensageiros = [];
+        vm.statusPanelRanking = true;
+        vm.rankingDto = {};
+
         vm.countDonativosCampanhaInst = 0;
         vm.countDonativosInst = 0;
         vm.countCampanhasInst = 0;
-        vm.countMensageirosInst = 0;
-        vm.statusPanelLineChart = true;
-        vm.statusPanelInstDetail = true;
-        vm.instituicaoSelected = {};
-        vm.instituicoesAtivas = [];
         vm.campanhasAtivasInt = [];
+        vm.countMensageirosInst = 0;
+        vm.statusPanelInstDetail = true;
 
         vm.labelsDoacoesPeriod = [];
         vm.dataDoacoesPeriod = [];
@@ -52,10 +56,19 @@
                 vm.instituicoesAtivas = response.data;
                 vm.instituicaoSelected = vm.instituicoesAtivas[0];
                 vm.onSelectInstituicao();
-                console.log(vm.instituicaoSelected);
             })
         };
-        getInstituicoesAtivas();
+
+        var getMensageirosRanking = function() {
+            dashboardAdminService.getRankingMensageiro().then(function (response) {
+                response.data.forEach(function (ranking) {
+                    vm.rankingDto = {};
+                    vm.rankingDto.ranking = ranking;
+                    vm.rankingDto.image  = getImage(ranking.mensageiro.mensageiro.foto);
+                    vm.rankingMensageiros.push(vm.rankingDto);
+                })
+            })
+        }
 
         /**
          *
@@ -135,7 +148,6 @@
         var getCampanhasAtivasByInstituicao = function (id) {
             campanhaService.getCampanhasAtivasByInstituicao(id).then(function (response) {
                 vm.campanhasAtivasInt = response.data;
-                console.log(vm.campanhasAtivasInt);
             });
         };
 
@@ -266,6 +278,38 @@
             });
         }
 
+        /**
+         *
+         * @param imageName
+         */
+        var getImage = function(image) {
+            if (image) {
+                imageService.getImage(image.nome).then(function (response) {
+                    var image =  _arrayBufferToBase64(response.data);
+                    return image;
+                })
+            }
+        };
+
+        /**
+         * Necessário para converter array de bytes para base64.
+         * utilizado para recuperar foto da API.
+         * @param buffer
+         * @returns {string}
+         * @private
+         */
+        function _arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        }
+
+        getInstituicoesAtivas();
+        getMensageirosRanking();
         getCountCampanhas();
         getCountDonativos();
         getCountInstituicaoCaridade();

@@ -21,7 +21,8 @@
             getCountCampanhas: _getCountCampanhas,
             getCountMensageiros: _getCountMensageiros,
             getDoacoesByPeriodo: _getDoacoesByPeriodo,
-            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao
+            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao,
+            getRankingMensageiro: _getRankingMensageiro
         };
         return service;
 
@@ -81,5 +82,12 @@
             });
         }
 
+        /**
+         *
+         * @private
+         */
+        function _getRankingMensageiro() {
+            return $http.get(Api + '/dashboard/admin/mensageiro/ranking');
+        }
     };
 })();
