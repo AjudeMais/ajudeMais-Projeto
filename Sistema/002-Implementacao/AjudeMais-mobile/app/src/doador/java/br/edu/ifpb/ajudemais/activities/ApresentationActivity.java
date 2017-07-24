@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.LoginTask;
@@ -94,6 +97,9 @@ public class ApresentationActivity extends BaseActivity {
                     finish();
 
                 } else {
+//                    if (AccessToken.getCurrentAccessToken() != null){
+//                        LoginManager.getInstance().logOut();
+//                    }
                     Intent intent = new Intent();
                     intent.setClass(ApresentationActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

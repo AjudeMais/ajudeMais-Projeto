@@ -42,6 +42,7 @@ import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
+import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
@@ -128,6 +129,8 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
 
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap);
+        } else {
+            executeLoadingImageProfileTask();
         }
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -224,6 +227,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
 
     /**
      * Executa asycn task para atualizar imagem do doador
+     *
      * @param imageBytes
      */
     private void executeUpdateImageTask(byte[] imageBytes) {
@@ -325,7 +329,7 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
         if (!isDestroyed()) {
             collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
 
-            if (AccessToken.getCurrentAccessToken() != null){
+            if (AccessToken.getCurrentAccessToken() != null) {
                 collapsingToolbarLayout.setTitle(Profile.getCurrentProfile().getName());
             }
 
@@ -339,6 +343,28 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
             fragmentTransaction.commit();
             nestedScrollView.setVisibility(View.VISIBLE);
             fab.setEnabled(true);
+        }
+    }
+
+    /**
+     * Executa Asycn task para recuperar foto do facebook
+     *
+     */
+    private void executeLoadingImageProfileTask() {
+
+        if (AccessToken.getCurrentAccessToken() != null) {
+            FacebookProfilePictureTask loadingImageFbTask = new FacebookProfilePictureTask();
+            loadingImageFbTask.delegate = new AsyncResponse<Bitmap>() {
+                @Override
+                public void processFinish(Bitmap output) {
+                    if (output != null) {
+                        imageView.setImageBitmap(output);
+                    }
+                }
+            };
+            loadingImageFbTask.execute();
+
+
         }
     }
 

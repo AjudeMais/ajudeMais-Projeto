@@ -166,19 +166,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.delegate = new AsyncResponse<Doador>() {
             @Override
             public void processFinish(final Doador output) {
-                if (output.getFoto() != null) {
-                    getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
-                    getImageTask.delegate = new AsyncResponse<byte[]>() {
-                        @Override
-                        public void processFinish(byte[] imaBytes) {
-                            imagem = imaBytes;
-                            redirectMainActivity(output.getConta());
-                        }
-                    };
-                    getImageTask.execute();
+                if (output != null) {
+                    if (output.getFoto() != null) {
+                        getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
+                        getImageTask.delegate = new AsyncResponse<byte[]>() {
+                            @Override
+                            public void processFinish(byte[] imaBytes) {
+                                imagem = imaBytes;
+                                redirectMainActivity(output.getConta());
+                            }
+                        };
+                        getImageTask.execute();
 
-                } else {
-                    redirectMainActivity(output.getConta());
+                    } else {
+                        redirectMainActivity(output.getConta());
+                    }
                 }
             }
         };
