@@ -9,6 +9,7 @@ import org.springframework.web.client.RestClientException;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.utils.ProgressDialog;
 
 /**
  * <p>
@@ -29,12 +30,18 @@ public class LoadingDoadorTask extends AsyncTask<Void, Void, Doador> {
     public AsyncResponse<Doador> delegate = null;
     private String message = null;
     private Doador doador;
+    private ProgressDialog progressDialog;
     private Context context;
     private String username;
+    private boolean progressAtivo = false;
+
 
     public LoadingDoadorTask(Context context, String usernameDoador) {
         this.username = usernameDoador;
         this.context = context;
+        doadorRemoteService = new DoadorRemoteService(context);
+        this.progressDialog = new ProgressDialog(context);
+
     }
 
     /**
@@ -42,8 +49,11 @@ public class LoadingDoadorTask extends AsyncTask<Void, Void, Doador> {
      */
     @Override
     protected void onPreExecute() {
+        if (progressAtivo) {
+            progressDialog.showProgressDialog();
+        }
         super.onPreExecute();
-        doadorRemoteService = new DoadorRemoteService(context);
+
     }
 
     /**
@@ -67,11 +77,15 @@ public class LoadingDoadorTask extends AsyncTask<Void, Void, Doador> {
 
     @Override
     protected void onPostExecute(Doador doador) {
+        progressDialog.dismissProgressDialog();
         if (message == null) {
             delegate.processFinish(doador);
         }else
             android.widget.Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
 
+    }
+    public void setProgressAtivo(boolean progressAtivo) {
+        this.progressAtivo = progressAtivo;
     }
 
 }

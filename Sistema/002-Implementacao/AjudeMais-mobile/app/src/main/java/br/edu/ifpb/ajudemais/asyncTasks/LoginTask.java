@@ -88,9 +88,5 @@ public class LoginTask extends AsyncTask<Void, Void, Conta> {
     @Override
     protected void onPostExecute(Conta conta) {
         delegate.processFinish(conta);
-
-        if (message != null){
-            CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
-        }
     }
 }

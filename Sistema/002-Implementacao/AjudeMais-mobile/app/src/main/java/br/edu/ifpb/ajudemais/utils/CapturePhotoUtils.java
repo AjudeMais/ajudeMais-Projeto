@@ -109,14 +109,12 @@ public class CapturePhotoUtils {
                     + "/Files", "profilePhoto.png");
             Bitmap profilePhoto = BitmapFactory.decodeStream(new FileInputStream(file));
             return  profilePhoto;
+        } catch (FileNotFoundException e) {
+            return null;
+        }catch (Exception e){
+            return null;
         }
 
-        catch (FileNotFoundException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
 
     }
     /**

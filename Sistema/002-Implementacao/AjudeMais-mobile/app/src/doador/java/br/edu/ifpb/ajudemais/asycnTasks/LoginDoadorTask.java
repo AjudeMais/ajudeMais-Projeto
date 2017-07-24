@@ -35,6 +35,7 @@ public class LoginDoadorTask extends AsyncTask<Void, Void, Doador> {
     private ProgressDialog progressDialog;
     private String username;
     private String senha;
+    private boolean isLoginFacebook;
 
     public LoginDoadorTask(Context context, String username, String senha) {
         this.context = context;
@@ -69,18 +70,19 @@ public class LoginDoadorTask extends AsyncTask<Void, Void, Doador> {
     }
 
     /**
-     *
      * @param doador
      */
     @Override
     protected void onPostExecute(Doador doador) {
         progressDialog.dismissProgressDialog();
-        if (doador != null){
-            delegate.processFinish(doador);
-        }
+        delegate.processFinish(doador);
 
-        if (message != null) {
+        if (message != null && !isLoginFacebook) {
             CustomToast.getInstance(context).createSuperToastSimpleCustomSuperToast(message);
         }
+    }
+
+    public void setLoginFacebook(boolean loginFacebook) {
+        isLoginFacebook = loginFacebook;
     }
 }

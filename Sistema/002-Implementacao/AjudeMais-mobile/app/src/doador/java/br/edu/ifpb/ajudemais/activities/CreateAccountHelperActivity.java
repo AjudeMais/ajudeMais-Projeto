@@ -1,10 +1,7 @@
 package br.edu.ifpb.ajudemais.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -12,57 +9,67 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
-
-import org.springframework.web.client.RestClientException;
-
+import com.mobsandgeeks.saripaar.ValidationError;
+import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Order;
 import java.util.ArrayList;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.asycnTasks.CreateDoadorTask;
+import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.enumarations.Grupo;
-import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.AndroidUtil;
+import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
  * <b>{@link CreateAccountHelperActivity}</b>
  * </p>
  * <p>
- *     Activity para finalizar criação de conta utilizando o facebook
+ * Activity para finalizar criação de conta utilizando o facebook
  * <p>
- *
+ * <p>
  * </p>
  *
  * @author <a href="https://github.com/amslv">Ana Silva</a>
  */
-public class CreateAccountHelperActivity extends AbstractAsyncActivity implements View.OnClickListener {
+public class CreateAccountHelperActivity extends BaseActivity implements View.OnClickListener, Validator.ValidationListener {
 
     private Toolbar mToolbar;
     private Button btnFinalizeAccountCreation;
-    private TextInputEditText edtTelefone;
-    private TextInputEditText edtEmail;
     private Resources resources;
-    private AndroidUtil androidUtil;
     private Doador doador;
     private TextInputLayout ltEdtEmail;
+    private Validator validator;
+
+    @Order(1)
+    @NotEmpty(messageResId = R.string.msgPhoneNotInformed, sequence = 1)
+    @Length(min = 15, messageResId = R.string.msgPhoneNotCompleted, sequence = 2)
+    private TextInputEditText edtTelefone;
+
+    @Order(2)
+    @Email(messageResId = R.string.msgInvalideEmail, sequence = 1)
+    private TextInputEditText edtEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account_helper);
-        androidUtil = new AndroidUtil(this);
+
+        validator = new Validator(this);
+        validator.setValidationListener(this);
         init();
         if (doador.getConta().getEmail() != null) {
             editFieldsVisualization();
         }
-        androidUtil.setMaskPhone(edtTelefone);
         btnFinalizeAccountCreation.setOnClickListener(this);
     }
 
@@ -70,29 +77,11 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
         ltEdtEmail.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                logoutFaceBook();
-                Intent intent = new Intent(this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void logoutFaceBook() {
-        LoginManager.getInstance().logOut();
-    }
-
-    private void init() {
+    public void init() {
+        initProperties();
         doador = (Doador) getIntent().getSerializableExtra("Doador");
         mToolbar = (Toolbar) findViewById(R.id.nav_action);
-        mToolbar.setTitle("Criar Conta");
+        mToolbar.setTitle(R.string.complete_account);
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,99 +90,89 @@ public class CreateAccountHelperActivity extends AbstractAsyncActivity implement
 
         btnFinalizeAccountCreation = (Button) findViewById(R.id.btnFinalizeAccountCreation);
         edtTelefone = (TextInputEditText) findViewById(R.id.edtTelefone);
+        androidUtil.setMaskPhone(edtTelefone);
+
         edtEmail = (TextInputEditText) findViewById(R.id.edtEmail);
         ltEdtEmail = (TextInputLayout) findViewById(R.id.ltEdtEmail);
-    }
-
-    public boolean validateDoadorCreate() {
-        String phone = edtTelefone.getText().toString().trim();
-        return validateDataInformed(phone, null);
-    }
-
-    public boolean validateDataInformed(String phone, String email) {
-        if (email != null) {
-            if(!androidUtil.isEmailValid(email)) {
-                edtEmail.requestFocus();
-                edtEmail.setError(resources.getString(R.string.msgInvalideEmail));
-                return false;
-            }
-        }
-        if (!androidUtil.isPhoneValid(phone)) {
-            edtTelefone.requestFocus();
-            edtTelefone.setError(resources.getString(R.string.msgPhoneNotCompleted));
-            return false;
-        }
-        return true;
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.btnFinalizeAccountCreation) {
-            if (validateDoadorCreate()) {
-                List<String> grupos = new ArrayList<>();
-                grupos.add("ROLE_DOADOR");
-                doador.getConta().setGrupos(grupos);
-                doador.setTelefone(edtTelefone.getText().toString().trim());
-                if (doador.getConta().getEmail() == null) {
-                    doador.getConta().setEmail(edtEmail.getText().toString().trim());
-                }
-                new CreateDoadorAccountTask(doador, this).execute();
+            validator.validate();
+        }
+    }
+
+    @Override
+    public void onValidationSucceeded() {
+        List<String> grupos = new ArrayList<>();
+        grupos.add("ROLE_DOADOR");
+        doador.getConta().setGrupos(grupos);
+        doador.setTelefone(edtTelefone.getText().toString().trim());
+        if (doador.getConta().getEmail() == null) {
+            doador.getConta().setEmail(edtEmail.getText().toString().trim());
+        }
+        executeCreateDoadorTask(doador);
+    }
+
+    @Override
+    public void onValidationFailed(List<ValidationError> errors) {
+        for (ValidationError error : errors) {
+            View view = error.getView();
+            String message = error.getCollatedErrorMessage(this);
+
+            if (view instanceof TextInputEditText) {
+                ((TextInputEditText) view).setError(message);
+                view.requestFocus();
+            } else {
+                CustomToast.getInstance(CreateAccountHelperActivity.this).createSuperToastSimpleCustomSuperToast(message);
             }
         }
     }
 
-    public class CreateDoadorAccountTask extends AsyncTask<Void, Void, Conta> {
+    /**
+     * Executada Doador de Task.
+     *
+     * @param doador
+     */
+    private void executeCreateDoadorTask(Doador doador) {
+        CreateDoadorTask createDoadorTask = new CreateDoadorTask(this, doador);
 
-        private String message;
-        private Doador doador;
-        private String password;
-        private Bitmap bitmap;
-        private DoadorRemoteService doadorRemoteService;
-        private AuthRemoteService authRemoteService;
-
-        public CreateDoadorAccountTask(Doador doador, Context context) {
-            this.doador = doador;
-            doadorRemoteService = new DoadorRemoteService(context);
-            authRemoteService = new AuthRemoteService(context);
-        }
-
-        @Override
-        protected void onPreExecute() {
-            showLoadingProgressDialog();
-        }
-
-        @Override
-        protected Conta doInBackground(Void... params) {
-            try{
-                password = doador.getConta().getSenha();
-                doador = doadorRemoteService.saveDoador(doador);
-                Conta conta = authRemoteService.createAuthenticationToken(new Conta(doador.getConta().getUsername(), password), Grupo.DOADOR);
-                return conta;
-            } catch (RestClientException e) {
-                message = e.getMessage();
-                e.printStackTrace();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Conta conta) {
-            dismissProgressDialog();
-            if (conta != null) {
-                SharedPrefManager.getInstance(getApplication()).storeUser(doador.getConta());
+        createDoadorTask.delegate = new AsyncResponse<Doador>() {
+            @Override
+            public void processFinish(Doador output) {
+                SharedPrefManager.getInstance(CreateAccountHelperActivity.this).storeUser(output.getConta());
                 Intent intent = new Intent();
                 intent.setClass(CreateAccountHelperActivity.this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Conta", conta);
-                intent.putExtra("ProfilePic", bitmap);
+                intent.putExtra("Conta", output.getConta());
                 startActivity(intent);
                 finish();
-            } else {
-                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
             }
+        };
+        createDoadorTask.execute();
+    }
+
+    /**
+     * Implementação para controlar operações na action bar
+     *
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (AccessToken.getCurrentAccessToken()!= null){
+                    LoginManager.getInstance().logOut();
+                }
+                onBackPressed();
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
+
 }
