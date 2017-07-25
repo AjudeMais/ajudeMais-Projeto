@@ -178,11 +178,18 @@
 
                 <div class="box-body no-padding">
 
-                    <ul class="users-list clearfix">
+                    <ul class="users-list">
                         <li ng-repeat="mr in vm.rankingMensageiros">
-                            <!--<img src="dist/img/user1-128x128.jpg" alt="User Image">-->
-
-                            <img data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
+                            <img ng-show="!mr.image"
+                                 ng-src="{{vm.mockImage}}" ng-class="{
+                            'online': mr.ranking.quantidadeDoacoes > 1,
+                            'offline': mr.ranking.quantidadeDoacoes < 1,
+                            }">
+                            <img ng-show="mr.image" ng-class="{
+                            'online': mr.ranking.quantidadeDoacoes > 1,
+                            'offline': mr.ranking.quantidadeDoacoes < 1,
+                            }"
+                                 data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
 
                             <a class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
                                 {{mr.ranking.mensageiro.mensageiro.nome}}</a>

@@ -41,6 +41,7 @@
 
         vm.labelsDoacoesInstPeriod = [];
         vm.dataDoacoesInstPeriod = [];
+        vm.mockImage = 'content/img/mock-user.png';
 
         vm.options = {
             legend: {
@@ -59,13 +60,10 @@
             })
         };
 
-        var getMensageirosRanking = function() {
+        var getMensageirosRanking = function () {
             dashboardAdminService.getRankingMensageiro().then(function (response) {
                 response.data.forEach(function (ranking) {
-                    vm.rankingDto = {};
-                    vm.rankingDto.ranking = ranking;
-                    vm.rankingDto.image  = getImage(ranking.mensageiro.mensageiro.foto);
-                    vm.rankingMensageiros.push(vm.rankingDto);
+                    getImage(ranking);
                 })
             })
         }
@@ -282,13 +280,16 @@
          *
          * @param imageName
          */
-        var getImage = function(image) {
-            if (image) {
-                imageService.getImage(image.nome).then(function (response) {
-                    var image =  _arrayBufferToBase64(response.data);
-                    return image;
+        var getImage = function (ranking) {
+            vm.rankingDto = {};
+            vm.rankingDto.ranking = ranking;
+            if (ranking.mensageiro.mensageiro.foto) {
+                imageService.getImage(ranking.mensageiro.mensageiro.foto.nome).then(function (response) {
+                    var image = _arrayBufferToBase64(response.data);
+                    vm.rankingDto.image = image;
                 })
             }
+            vm.rankingMensageiros.push(vm.rankingDto);
         };
 
         /**

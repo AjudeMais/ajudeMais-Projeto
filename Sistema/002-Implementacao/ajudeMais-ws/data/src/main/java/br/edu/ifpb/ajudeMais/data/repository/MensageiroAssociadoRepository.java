@@ -116,5 +116,5 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @return
 	 */
 	Long countByStatusAndInstituicaoCaridadeId(boolean status, Long idInstituicao);
-
+	
 }

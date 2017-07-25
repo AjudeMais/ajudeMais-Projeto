@@ -3184,8 +3184,8 @@ Cria nova label para estado não aceito
 
 .users-list > li img {
     border-radius: 50%;
-    max-width: 100%;
-    height: auto;
+    max-width: 40%;
+    max-height: 40%;
 }
 
 .users-list > li > a:hover,
@@ -3215,4 +3215,12 @@ Cria nova label para estado não aceito
 .users-list-number {
     color: #999;
     font-size: 10px;
+}
+
+.offline {
+    border: 2px solid #dd4b39;
+}
+
+.online {
+    border: 2px solid #00a65a;
 }
