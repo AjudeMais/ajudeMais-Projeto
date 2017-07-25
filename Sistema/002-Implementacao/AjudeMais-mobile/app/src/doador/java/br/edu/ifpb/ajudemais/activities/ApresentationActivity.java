@@ -97,9 +97,7 @@ public class ApresentationActivity extends BaseActivity {
                     finish();
 
                 } else {
-//                    if (AccessToken.getCurrentAccessToken() != null){
-//                        LoginManager.getInstance().logOut();
-//                    }
+                   
                     Intent intent = new Intent();
                     intent.setClass(ApresentationActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
