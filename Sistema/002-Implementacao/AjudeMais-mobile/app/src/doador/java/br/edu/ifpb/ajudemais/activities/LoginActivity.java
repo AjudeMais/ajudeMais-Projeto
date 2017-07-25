@@ -25,6 +25,7 @@ import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoginDoadorTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
@@ -166,19 +167,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.delegate = new AsyncResponse<Doador>() {
             @Override
             public void processFinish(final Doador output) {
-                if (output.getFoto() != null) {
-                    getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
-                    getImageTask.delegate = new AsyncResponse<byte[]>() {
-                        @Override
-                        public void processFinish(byte[] imaBytes) {
-                            imagem = imaBytes;
-                            redirectMainActivity(output.getConta());
-                        }
-                    };
-                    getImageTask.execute();
+                if (output != null) {
+                    if (output.getFoto() != null) {
+                        getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
+                        getImageTask.delegate = new AsyncResponse<byte[]>() {
+                            @Override
+                            public void processFinish(byte[] imaBytes) {
+                                imagem = imaBytes;
 
-                } else {
-                    redirectMainActivity(output.getConta());
+                                redirectMainActivity(output.getConta());
+                            }
+                        };
+                        getImageTask.execute();
+
+                    } else {
+                        redirectMainActivity(output.getConta());
+                    }
                 }
             }
         };
@@ -246,7 +250,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             @Override
                             public void processFinish(byte[] imaBytes) {
                                 imagem = imaBytes;
-                                redirectMainActivity(output.getConta());
+                                output.getTokenFCM().setToken(SharedPrefManager.getInstance(LoginActivity.this).getFcmToken());
+                                executeUpdateDoadorTask(output);
                             }
                         };
                         getImageTask.execute();
@@ -301,5 +306,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
+    /**
+     * Executada Doador Update de Task.
+     *
+     * @param doador
+     */
+    private void executeUpdateDoadorTask(Doador doador) {
+        UpdateDoadorTask updateDoadorTask = new UpdateDoadorTask(this, doador);
+        updateDoadorTask.delegate = new AsyncResponse<Doador>() {
+            @Override
+            public void processFinish(Doador output) {
+                redirectMainActivity(output.getConta());
+            }
+        };
+        updateDoadorTask.execute();
+    }
 
 }

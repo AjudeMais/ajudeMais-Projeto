@@ -7,10 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.LoginTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.util.NotificationRedirectUtil;
 
 /**
@@ -78,33 +82,46 @@ public class ApresentationActivity extends BaseActivity {
      * Executa asycn Task para renovar login doador.
      */
     private void executeLoginTask() {
-        loginTask = new LoginTask(this);
+        if (SharedPrefManager.getInstance(this).getUser() != null) {
+            loginTask = new LoginTask(this);
+            loginTask.delegate = new AsyncResponse<Conta>() {
+                @Override
+                public void processFinish(Conta conta) {
+                    if (conta != null) {
+                        redirectNotification();
+                        Intent intent = new Intent();
+                        intent.setClass(ApresentationActivity.this, MainActivity.class);
+                        intent.putExtra("Conta", conta);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
 
-        loginTask.delegate = new AsyncResponse<Conta>() {
-            @Override
-            public void processFinish(Conta conta) {
-                if (conta != null) {
-                    redirectNotification();
-
-                    Intent intent = new Intent();
-                    intent.setClass(ApresentationActivity.this, MainActivity.class);
-                    intent.putExtra("Conta", conta);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-
-                } else {
-                    Intent intent = new Intent();
-                    intent.setClass(ApresentationActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    finish();
-
+                    } else {
+                       goToLoginActivity();
+                    }
                 }
-            }
-        };
+            };
 
-        loginTask.execute();
+            loginTask.execute();
+        }else {
+            goToLoginActivity();
+        }
+    }
+
+    /**
+     * Redirect for activity Login
+     */
+    private void goToLoginActivity(){
+        if (AccessToken.getCurrentAccessToken() != null) {
+            LoginManager.getInstance().logOut();
+            SharedPrefManager.getInstance(ApresentationActivity.this).clearSharedPrefs();
+            capturePhotoUtils.deleteImageProfile();
+        }
+        Intent intent = new Intent();
+        intent.setClass(ApresentationActivity.this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
     }
 
 

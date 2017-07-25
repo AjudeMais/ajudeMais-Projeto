@@ -1,26 +1,15 @@
 package br.edu.ifpb.ajudemais.asyncTasks;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 
-import com.facebook.AccessToken;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
+
 
 import org.springframework.web.client.RestClientException;
 
-import java.util.Arrays;
-
-import br.edu.ifpb.ajudemais.activities.ApresentationActivity;
-import br.edu.ifpb.ajudemais.activities.LoginActivity;
-import br.edu.ifpb.ajudemais.activities.MainActivity;
 import br.edu.ifpb.ajudemais.domain.Conta;
-import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.remoteServices.AuthRemoteService;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 /**
  * <p>
@@ -37,7 +26,6 @@ import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 public class LoginTask extends AsyncTask<Void, Void, Conta> {
 
-    private String message = null;
     private Conta conta;
     private AuthRemoteService authRemoteService;
     private Context context;
@@ -72,7 +60,6 @@ public class LoginTask extends AsyncTask<Void, Void, Conta> {
             }
 
         } catch (RestClientException e) {
-            message = e.getMessage();
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();

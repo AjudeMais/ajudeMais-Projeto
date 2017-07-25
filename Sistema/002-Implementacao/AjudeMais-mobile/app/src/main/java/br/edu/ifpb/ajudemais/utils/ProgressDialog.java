@@ -33,6 +33,7 @@ public class ProgressDialog {
         if (this.progressDialog == null) {
             this.progressDialog = new android.app.ProgressDialog(context);
             this.progressDialog.setIndeterminate(true);
+            this.progressDialog.setCancelable(false);
         }
 
         this.progressDialog.setMessage(context.getResources().getString(R.string.msgDialogLoading));

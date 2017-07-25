@@ -75,7 +75,6 @@ public class NotificationUtil {
 		if ((estadoDoaco.getNotificado() == null) || (!estadoDoaco.getNotificado())) {
 			switch (estadoDoaco.getEstadoDoacao()) {
 			case DISPONIBILIZADO:
-
 				List<String> notificaveis = donativoColetaUtil.getNotificaveisToBairro(donativo);
 			
 				if (notificaveis != null && !notificaveis.isEmpty()) {
@@ -90,7 +89,6 @@ public class NotificationUtil {
 				schedulerJobUtil.createJob(JobName.NOTIFICATION, TriggerName.NOTIFICATION, donativo.getId(),
 						NotificationJob.class);
 				
-
 				break;
 
 			case CANCELADO:
@@ -129,7 +127,6 @@ public class NotificationUtil {
 	}
 
 	/**
-	 * 
 	 * <p>
 	 * Verifica se horários de doação estão validos para notificação.
 	 * </p>

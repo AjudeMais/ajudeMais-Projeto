@@ -24,17 +24,16 @@
 		</ul>
 	</div>
 
-	<!--ESTA FUNCIONANDO, APENAS NÃO USANDO AINDA-->
-	<div class="item dropdown" uib-dropdown>
+	<div class="item dropdown " uib-dropdown>
 		<a href="#" class="dropdown-toggle" uib-dropdown-toggle> <i
 			class="fa fa-bell fa-lg"></i>
 			 <span ng-show="donativosNtlist.length>0" class="label label-warning number-notification">
 			 	{{donativosNtlist.length}}
 			 </span>
 		</a>
-		<ul class="dropdown-menu dropdown-menu-right">
+		<ul class="dropdown-menu dropdown-menu-right scrollable-menu">
 			<li class="dropdown-header"><b>Notificações de doações</b></li>
-			<div >
+			<div>
 				<ul class="list-group" ng-repeat="donativo in donativosNtlist">
 				  <a ng-click="openDetailsDonativo(donativo)" class="list-group-item">
 				  	<span  class="badge {{donativo.estadoAtivo.estadoDoacao | status}}">{{donativo.estadoAtivo.estadoDoacao  == 'NAO_ACEITO' ? 'NÃO ACEITO' : donativo.estadoAtivo.estadoDoacao}}</span>
