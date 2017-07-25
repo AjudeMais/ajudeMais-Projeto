@@ -1,6 +1,7 @@
 package br.edu.ifpb.ajudemais.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.Profile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,12 +36,14 @@ import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.ChangePasswordTask;
+import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Doador;
 import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.fragments.ProfileSettingsFragment;
 import br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
+import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.AccessCameraAndGalleryDevicePermission.MY_PERMISSIONS_REQUEST_CAMERA;
@@ -320,6 +324,11 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
     public void setProprieties() {
         if (!isDestroyed()) {
             collapsingToolbarLayout.setTitle(doador.getConta().getUsername());
+
+            if (AccessToken.getCurrentAccessToken() != null){
+                collapsingToolbarLayout.setTitle(Profile.getCurrentProfile().getName());
+            }
+
             ProfileSettingsFragment fragment = new ProfileSettingsFragment();
             Bundle bundle = new Bundle();
             bundle.putSerializable("doador", doador);
@@ -332,6 +341,5 @@ public class ProfileSettingsActivity extends BaseActivity implements View.OnClic
             fab.setEnabled(true);
         }
     }
-
 
 }

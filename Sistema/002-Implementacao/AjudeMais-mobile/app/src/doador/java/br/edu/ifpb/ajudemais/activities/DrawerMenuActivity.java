@@ -32,16 +32,13 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
-import java.util.Arrays;
-
 import br.edu.ifpb.ajudemais.R;
-import br.edu.ifpb.ajudemais.asycnTasks.LoadingImageFbTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
+import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
-import br.edu.ifpb.ajudemais.utils.CustomToast;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
 
@@ -72,7 +69,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     protected Conta conta;
     protected Bitmap bitmap;
     protected WriteStoreDevicePermission writeStoreDevicePermission;
-    private CallbackManager callbackManager;
 
     /**
      *
@@ -102,10 +98,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
      * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
-        if (AccessToken.getCurrentAccessToken() != null) {
-            executeLoadingImageProfileTask(this, Profile.getCurrentProfile().getLinkUri().toString());
-
-        }
+        executeLoadingImageProfileTask(this);
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta == null) {
             conta = SharedPrefManager.getInstance(this).getUser();
@@ -114,24 +107,21 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             tvUserName.setText(conta.getUsername());
             tvEmail.setText(conta.getEmail());
         }
+        if (AccessToken.getCurrentAccessToken() != null) {
+            tvUserName.setText(Profile.getCurrentProfile().getName());
+        }
+
         if (getIntent().hasExtra("ImageByteArray") && getIntent().getByteArrayExtra("ImageByteArray") != null) {
             if (writeStoreDevicePermission.isStoragePermissionGranted()) {
                 bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                 capturePhotoUtils.saveToInternalStorage(bitmap);
             }
-        } if (getIntent().hasExtra("ProfilePic") && getIntent().getByteArrayExtra("ProfilePic") != null) {
-            if (writeStoreDevicePermission.isStoragePermissionGranted()) {
-                bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
-                capturePhotoUtils.saveToInternalStorage(bitmap);
-            }
-        }
-        else {
+        } else {
             bitmap = capturePhotoUtils.loadImageFromStorage();
         }
         if (bitmap != null) {
             profilePhoto.setImageBitmap(bitmap);
         }
-
         callActivityEditProfile();
     }
 
@@ -220,7 +210,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     }
 
 
-
     /*** Set Configuração para Navegation Drawer
      * */
     protected void setupNavDrawer() {
@@ -254,6 +243,9 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
             case R.id.nav_notificacoes:
                 break;
             case R.id.nav_sair:
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    LoginManager.getInstance().logOut();
+                }
                 Intent intent = new Intent();
                 intent.setClass(DrawerMenuActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -264,6 +256,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
                 break;
 
         }
+
     }
 
 
@@ -307,8 +300,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
                     bitmap = androidUtil.convertBytesInBitmap(getIntent().getByteArrayExtra("ImageByteArray"));
                     capturePhotoUtils.saveToInternalStorage(bitmap);
                     profilePhoto.setImageBitmap(bitmap);
-                }
-                else if (getIntent().hasExtra("ProfilePic") && getIntent().getExtras().get("ProfilePic") != null) {
+                } else if (getIntent().hasExtra("ProfilePic") && getIntent().getExtras().get("ProfilePic") != null) {
                     bitmap = (Bitmap) getIntent().getExtras().get("ProfilePic");
                     capturePhotoUtils.saveToInternalStorage(bitmap);
                     profilePhoto.setImageBitmap(bitmap);
@@ -352,7 +344,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CHECK_SETTINGS) {
 
@@ -364,18 +355,35 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
         }
     }
 
-    private void executeLoadingImageProfileTask(final Context context, String url){
-        LoadingImageFbTask loadingImageFbTask = new LoadingImageFbTask(context, url);
-        loadingImageFbTask.delegate = new AsyncResponse<Bitmap>() {
-            @Override
-            public void processFinish(Bitmap output) {
-                bitmap = output;
-                capturePhotoUtils.saveToInternalStorage(output);
-                profilePhoto.setImageBitmap(output);
+
+    /**
+     * Executa Asycn task para recuperar foto do facebook
+     * @param context
+     */
+    private void executeLoadingImageProfileTask(final Context context) {
+
+        if (AccessToken.getCurrentAccessToken() != null && !getIntent().hasExtra("ImageByteArray")) {
+            Bitmap bitmap = capturePhotoUtils.loadImageFromStorage();
+            if (bitmap == null) {
+                FacebookProfilePictureTask loadingImageFbTask = new FacebookProfilePictureTask();
+                loadingImageFbTask.delegate = new AsyncResponse<Bitmap>() {
+                    @Override
+                    public void processFinish(Bitmap output) {
+                        if (output != null) {
+                            profilePhoto.setImageBitmap(output);
+                            writeStoreDevicePermission = new WriteStoreDevicePermission(DrawerMenuActivity.this);
+                            if (writeStoreDevicePermission.isStoragePermissionGranted()) {
+                                capturePhotoUtils.saveToInternalStorage(output);
+                            }
+
+                        }
+                    }
+                };
+                loadingImageFbTask.execute();
+
+            }else {
+                profilePhoto.setImageBitmap(bitmap);
             }
-        };
-
-        loadingImageFbTask.execute();
+        }
     }
-
 }

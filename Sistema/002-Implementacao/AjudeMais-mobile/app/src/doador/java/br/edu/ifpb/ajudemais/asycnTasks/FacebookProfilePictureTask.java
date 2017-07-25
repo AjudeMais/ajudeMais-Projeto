@@ -1,16 +1,15 @@
 package br.edu.ifpb.ajudemais.asyncTasks;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.facebook.Profile;
 
 import java.io.IOException;
 import java.net.URL;
 
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 /**
  * <p>
@@ -25,11 +24,7 @@ import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
  */
 public class FacebookProfilePictureTask extends AsyncTask<Void, Void, Bitmap> {
 
-    private CapturePhotoUtils capturePhotoUtils;
-
-    public FacebookProfilePictureTask(Context context) {
-        this.capturePhotoUtils = new CapturePhotoUtils(context);
-    }
+    public AsyncResponse<Bitmap> delegate = null;
 
     @Override
     protected void onPreExecute() {
@@ -52,6 +47,6 @@ public class FacebookProfilePictureTask extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
-        capturePhotoUtils.saveToInternalStorage(bitmap);
+        delegate.processFinish(bitmap);
     }
 }

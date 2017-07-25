@@ -2,17 +2,16 @@ package br.edu.ifpb.ajudemais.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.mobsandgeeks.saripaar.ValidationError;
@@ -30,7 +29,7 @@ import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
 import br.edu.ifpb.ajudemais.domain.Doador;
-import br.edu.ifpb.ajudemais.remoteServices.DoadorRemoteService;
+import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 import br.edu.ifpb.ajudemais.util.FacebookAccount;
 import br.edu.ifpb.ajudemais.utils.CustomToast;
 
@@ -54,7 +53,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private LoginButton btnFacebook;
     private TextView tvRecoveryPassword;
     private CallbackManager callbackManager;
-    private Doador contaFacebook;
     private LoginDoadorTask loginDoadorTask;
     private byte[] imagem;
     private GetImageTask getImageTask;
@@ -92,17 +90,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         btnFacebook.setReadPermissions(Arrays.asList("public_profile", "email"));
 
         btnFacebook.registerCallback(callbackManager, this);
-
-        if (AccessToken.getCurrentAccessToken() != null) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-
-            CustomToast.getInstance(this).createSuperToastSimpleCustomSuperToast(Profile.getCurrentProfile().getName());
-            DoadorRemoteService remoteService = new DoadorRemoteService(getApplicationContext());
-            Doador doador = remoteService.getDoador(Profile.getCurrentProfile().getId());
-            if (doador != null) {
-                redirectMainActivity(doador.getConta());
-            }
-        }
     }
 
 
@@ -110,7 +97,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * Inicializa todos os atributos e propriedades utilizadas na activity.
      */
     public void init() {
-
+        initProperties();
         validator = new Validator(this);
         validator.setValidationListener(this);
         btnCreateAccount = (Button) findViewById(R.id.btnCreateAccount);
@@ -121,8 +108,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         edtPassword = (EditText) findViewById(R.id.edtPassword);
 
     }
-
-
 
 
     /**
@@ -139,7 +124,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     /**
      * Método que obtem os dados de um usuário do facebook após uma solicitação bem sucedida
      * de login. A partir deste resultado, encaminha o user para a tela principal da aplicação
-     *
      */
     private void goToMainActivity() {
         Intent intent = new Intent();
@@ -147,7 +131,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
-
 
 
     /**
@@ -166,7 +149,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
 
-        }else if (v.getId() == R.id.tvForgotPassword){
+        } else if (v.getId() == R.id.tvForgotPassword) {
             Intent intent = new Intent();
             intent.setClass(LoginActivity.this, RecoveryPasswordActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -183,7 +166,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.delegate = new AsyncResponse<Doador>() {
             @Override
             public void processFinish(final Doador output) {
-                if (output.getFoto() != null){
+                if (output.getFoto() != null) {
                     getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
                     getImageTask.delegate = new AsyncResponse<byte[]>() {
                         @Override
@@ -194,7 +177,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     };
                     getImageTask.execute();
 
-                }else {
+                } else {
                     redirectMainActivity(output.getConta());
                 }
             }
@@ -206,20 +189,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     /**
      * Redireciona para main actiivity
+     *
      * @param conta
      */
-    private void redirectMainActivity(Conta conta){
+    private void redirectMainActivity(Conta conta) {
         Intent intent = new Intent();
         intent.setClass(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("Conta", conta);
-        intent.putExtra("ImageByteArray", imagem);
+        if (imagem != null) {
+            intent.putExtra("ImageByteArray", imagem);
+        }
         startActivity(intent);
         finish();
     }
 
     /**
-     *
      * @param requestCode
      * @param resultCode
      * @param data
@@ -231,14 +216,50 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     *
      * @param loginResult
      */
     @Override
     public void onSuccess(LoginResult loginResult) {
+        executeLoadingAccountUser(Profile.getCurrentProfile().getId(), loginResult);
+    }
 
-        FacebookAccount.userFacebookData(this, loginResult, LoginActivity.this);
+    /**
+     * Verifica se já existe essa conta do facebook na aplicação.
+     *
+     * @param username
+     * @param loginResult
+     */
+    private void executeLoadingAccountUser(String username, final LoginResult loginResult) {
+        loginDoadorTask = new LoginDoadorTask(this, username, username);
+        loginDoadorTask.setLoginFacebook(true);
+        loginDoadorTask.delegate = new AsyncResponse<Doador>() {
+            @Override
+            public void processFinish(final Doador output) {
+                if (output == null) {
+                    FacebookAccount.userFacebookData(LoginActivity.this, loginResult, LoginActivity.this);
+                } else {
+                    SharedPrefManager.getInstance(getApplication()).storeUser(output.getConta());
 
+                    if (output.getFoto() != null) {
+                        getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
+                        getImageTask.delegate = new AsyncResponse<byte[]>() {
+                            @Override
+                            public void processFinish(byte[] imaBytes) {
+                                imagem = imaBytes;
+                                redirectMainActivity(output.getConta());
+                            }
+                        };
+                        getImageTask.execute();
+
+                    } else {
+                        redirectMainActivity(output.getConta());
+                    }
+                }
+
+            }
+        };
+
+        loginDoadorTask.execute();
     }
 
     /**
@@ -251,7 +272,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     /**
-     *
      * @param e
      */
     @Override
