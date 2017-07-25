@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Email;
@@ -108,7 +109,7 @@ public class CreateAccountHelperActivity extends BaseActivity implements View.On
     public void onValidationSucceeded() {
         List<String> grupos = new ArrayList<>();
         grupos.add("ROLE_DOADOR");
-        FcmToken fcmToken = new FcmToken(SharedPrefManager.getInstance(this).getFcmToken());
+        FcmToken fcmToken = new FcmToken(FirebaseInstanceId.getInstance().getToken());
         doador.getConta().setGrupos(grupos);
         doador.setTokenFCM(fcmToken);
         doador.setTelefone(edtTelefone.getText().toString().trim());

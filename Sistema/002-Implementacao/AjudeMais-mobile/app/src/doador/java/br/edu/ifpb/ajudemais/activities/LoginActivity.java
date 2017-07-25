@@ -14,6 +14,7 @@ import com.facebook.FacebookException;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
@@ -21,6 +22,7 @@ import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
@@ -175,13 +177,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             public void processFinish(byte[] imaBytes) {
                                 imagem = imaBytes;
 
-                                redirectMainActivity(output.getConta());
+                                executeUpdateDoadorToken(output);
                             }
                         };
                         getImageTask.execute();
 
                     } else {
-                        redirectMainActivity(output.getConta());
+                        executeUpdateDoadorToken(output);
                     }
                 }
             }
@@ -250,14 +252,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             @Override
                             public void processFinish(byte[] imaBytes) {
                                 imagem = imaBytes;
-                                output.getTokenFCM().setToken(SharedPrefManager.getInstance(LoginActivity.this).getFcmToken());
-                                executeUpdateDoadorTask(output);
+                                executeUpdateDoadorToken(output);
                             }
                         };
                         getImageTask.execute();
 
                     } else {
-                        redirectMainActivity(output.getConta());
+                        executeUpdateDoadorToken(output);
                     }
                 }
 
@@ -265,6 +266,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         };
 
         loginDoadorTask.execute();
+    }
+
+    private void executeUpdateDoadorToken(Doador doador){
+        if(FirebaseInstanceId.getInstance().getToken().trim().length()>0) {
+            doador.getTokenFCM().setDate(new Date());
+            doador.getTokenFCM().setToken(FirebaseInstanceId.getInstance().getToken());
+            executeUpdateDoadorTask(doador);
+        }else {
+            redirectMainActivity(doador.getConta());
+        }
     }
 
     /**

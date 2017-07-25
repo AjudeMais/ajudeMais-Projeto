@@ -171,9 +171,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         } else {
 
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
 
         }
-        swipeRefreshLayout.setRefreshing(false);
 
     }
 
@@ -365,6 +365,9 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
             } else {
                 showResult(message);
             }
+
+            swipeRefreshLayout.setRefreshing(false);
+
         }
 
         /**

@@ -52,9 +52,9 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
                 @Override
                 public void processFinish(Mensageiro output) {
-                    FcmToken fcmToken = new FcmToken(token);
+                    FcmToken fcmToken = new FcmToken(FirebaseInstanceId.getInstance().getToken());
                     if(output.getTokenFCM() != null) {
-                        output.getTokenFCM().setToken(fcmToken.getToken());
+                        output.getTokenFCM().setToken(FirebaseInstanceId.getInstance().getToken());
                     }else {
                         output.setTokenFCM(fcmToken);
                     }

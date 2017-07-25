@@ -3,6 +3,9 @@ package br.edu.ifpb.ajudemais.fcm;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import java.util.Date;
+
+import br.edu.ifpb.ajudemais.activities.LoginActivity;
 import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
 import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
@@ -50,6 +53,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
             loadingDoadorTask.delegate = new AsyncResponse<Doador>() {
                 @Override
                 public void processFinish(Doador output) {
+                    output.getTokenFCM().setDate(new Date());
+                    output.getTokenFCM().setToken(FirebaseInstanceId.getInstance().getToken());
                     updateDoadorTask = new UpdateDoadorTask(getApplicationContext(), output);
                     updateDoadorTask.setProgressAtivo(false);
                     updateDoadorTask.execute();
