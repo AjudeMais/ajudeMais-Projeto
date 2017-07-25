@@ -7,16 +7,19 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.Length;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
 import com.mobsandgeeks.saripaar.annotation.Order;
 
+import java.util.Date;
 import java.util.List;
 
 import br.edu.ifpb.ajudemais.R;
 import br.edu.ifpb.ajudemais.asycnTasks.LoginMensageiroTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateMensageiroTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.GetImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
@@ -122,7 +125,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onValidationSucceeded() {
         if (androidUtil.isOnline()) {
             executeTasksLoginMensageiro();
-        }else {
+        } else {
             CustomToast.getInstance(this).createSimpleCustomSuperToastActivity(getString(R.string.no_internet_connection));
         }
     }
@@ -148,20 +151,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
             @Override
             public void processFinish(final Mensageiro output) {
-                if (output.getFoto() != null){
+                if (output.getFoto() != null) {
 
                     getImageTask = new GetImageTask(LoginActivity.this, output.getFoto().getNome());
                     getImageTask.delegate = new AsyncResponse<byte[]>() {
                         @Override
                         public void processFinish(byte[] imaBytes) {
                             imagem = imaBytes;
-                            redirectMainActivity(output.getConta());
+                            executeUpdateMensageiroToken(output);
                         }
                     };
                     getImageTask.execute();
 
-                }else {
-                    redirectMainActivity(output.getConta());
+                } else {
+                    executeUpdateMensageiroToken(output);
                 }
             }
         };
@@ -169,7 +172,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginMensageiroTask.execute();
     }
 
-    private void redirectMainActivity(Conta conta){
+    private void redirectMainActivity(Conta conta) {
         Intent intent = new Intent();
         intent.setClass(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -177,6 +180,34 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         intent.putExtra("ImageByteArray", imagem);
         startActivity(intent);
         finish();
+    }
+
+
+    private void executeUpdateMensageiroToken(Mensageiro mensageiro) {
+        if (FirebaseInstanceId.getInstance().getToken().trim().length() > 0) {
+            mensageiro.getTokenFCM().setDate(new Date());
+            mensageiro.getTokenFCM().setToken(FirebaseInstanceId.getInstance().getToken());
+            executeUpdateMensageiroTask(mensageiro);
+        } else {
+            redirectMainActivity(mensageiro.getConta());
+        }
+    }
+
+
+    /**
+     * Executada Mensageiro Update de Task.
+     *
+     * @param mensageiro
+     */
+    private void executeUpdateMensageiroTask(Mensageiro mensageiro) {
+        UpdateMensageiroTask updateMensageiroTask = new UpdateMensageiroTask(this, mensageiro);
+        updateMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+            @Override
+            public void processFinish(Mensageiro output) {
+                redirectMainActivity(output.getConta());
+            }
+        };
+        updateMensageiroTask.execute();
     }
 
 }

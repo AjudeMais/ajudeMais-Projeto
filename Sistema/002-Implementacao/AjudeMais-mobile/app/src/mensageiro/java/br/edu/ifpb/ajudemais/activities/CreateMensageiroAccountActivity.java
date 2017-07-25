@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -229,7 +231,7 @@ public class CreateMensageiroAccountActivity extends BaseActivity implements Vie
         } else {
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_MENSAGEIRO");
-            FcmToken fcmToken = new FcmToken(sharedPrefManager.getFcmToken());
+            FcmToken fcmToken = new FcmToken(FirebaseInstanceId.getInstance().getToken());
             Mensageiro mensageiro = new Mensageiro(edtName.getText().toString().trim(),
                     edtCpf.getText().toString().trim(),
                     edtPhone.getText().toString().trim(),

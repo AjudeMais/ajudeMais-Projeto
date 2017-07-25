@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
 import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
@@ -257,7 +258,7 @@ public class CreateAccountActivity extends BaseActivity implements View.OnClickL
         } else {
             List<String> grupos = new ArrayList<>();
             grupos.add("ROLE_DOADOR");
-            FcmToken fcmToken = new FcmToken(sharedPrefManager.getFcmToken());
+            FcmToken fcmToken = new FcmToken(FirebaseInstanceId.getInstance().getToken());
             Doador doador = new Doador(edtName.getText().toString().trim(), edtPhone.getText().toString().trim(), fcmToken,
                     new Conta(edtUserName.getText().toString().trim(),
                             edtPassword.getText().toString().trim(), true, edtEmail.getText().toString().trim(), grupos));

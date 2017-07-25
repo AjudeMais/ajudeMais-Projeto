@@ -2,6 +2,7 @@ package br.edu.ifpb.ajudemais.asycnTasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.springframework.web.client.RestClientException;
 
@@ -66,7 +67,10 @@ public class UpdateDoadorTask extends AsyncTask<Void, Void, Doador> {
     @Override
     protected Doador doInBackground(Void... params) {
         try {
+            Log.i("Ajudemais", doador.toString());
+
             doador = doadorRemoteService.updateDoador(doador);
+
             return  doador;
         } catch (RestClientException e) {
             message = e.getMessage();
