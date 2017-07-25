@@ -100,6 +100,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
             executeLoadingDoacoesTask();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -120,6 +121,8 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                         searchView.setOnQueryTextListener(MyDoacoesFragment.this);
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
+
             }
         };
 
@@ -163,7 +166,6 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         } else {
             setVisibleNoConnection();
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

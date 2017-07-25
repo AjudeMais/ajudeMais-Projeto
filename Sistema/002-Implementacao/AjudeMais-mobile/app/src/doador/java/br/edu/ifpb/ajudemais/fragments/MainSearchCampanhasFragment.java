@@ -119,8 +119,9 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
             executeLoadingCampanhasTask();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
+
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -205,6 +206,8 @@ public class MainSearchCampanhasFragment extends Fragment implements RecyclerIte
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
                     searchView.setOnQueryTextListener(MainSearchCampanhasFragment.this);
                 }
+                swipeRefreshLayout.setRefreshing(false);
+
             }
         };
 
