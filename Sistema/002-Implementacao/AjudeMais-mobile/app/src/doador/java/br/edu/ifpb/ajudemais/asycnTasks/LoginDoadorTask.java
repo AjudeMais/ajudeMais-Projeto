@@ -82,6 +82,10 @@ public class LoginDoadorTask extends AsyncTask<Void, Void, Doador> {
         }
     }
 
+    /**
+     *
+     * @param loginFacebook
+     */
     public void setLoginFacebook(boolean loginFacebook) {
         isLoginFacebook = loginFacebook;
     }

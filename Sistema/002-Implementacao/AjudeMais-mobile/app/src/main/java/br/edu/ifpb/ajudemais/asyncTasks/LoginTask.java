@@ -26,7 +26,6 @@ import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
 
 public class LoginTask extends AsyncTask<Void, Void, Conta> {
 
-    private String message = null;
     private Conta conta;
     private AuthRemoteService authRemoteService;
     private Context context;
@@ -61,7 +60,6 @@ public class LoginTask extends AsyncTask<Void, Void, Conta> {
             }
 
         } catch (RestClientException e) {
-            message = e.getMessage();
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
