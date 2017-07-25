@@ -182,19 +182,12 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 			mensageirosDoacoes.put(m, count.intValue());
 		});
 
-		final int maxSize = 10;
-		LinkedHashMap<MensageiroAssociado, Integer> cache = new LinkedHashMap<MensageiroAssociado, Integer>() {
-			@Override
-			protected boolean removeEldestEntry(final Map.Entry eldest) {
-				return size() > maxSize;
-			}
-		};
-
-		cache = mensageirosDoacoes.entrySet().stream()
+		LinkedHashMap<MensageiroAssociado, Integer> mapSorted = mensageirosDoacoes.entrySet().stream()
 				.sorted(Map.Entry.<MensageiroAssociado, Integer> comparingByValue().reversed())
+				.limit(10) 
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
-		return cache;
+		return mapSorted;
 	}
 
 	/**

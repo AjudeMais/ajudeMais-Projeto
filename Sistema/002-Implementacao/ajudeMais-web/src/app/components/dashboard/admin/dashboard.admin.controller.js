@@ -25,6 +25,7 @@
         vm.instituicaoSelected = {};
         vm.instituicoesAtivas = [];
         vm.rankingMensageiros = [];
+        vm.rankingImagesMensageiros = [];
         vm.statusPanelRanking = true;
         vm.rankingDto = {};
 
@@ -63,7 +64,21 @@
         var getMensageirosRanking = function () {
             dashboardAdminService.getRankingMensageiro().then(function (response) {
                 response.data.forEach(function (ranking) {
-                    getImage(ranking);
+                    getImages(ranking);
+                    vm.rankingDto = {};
+                    vm.rankingDto.ranking = ranking;
+                    vm.rankingMensageiros.push(vm.rankingDto);
+                })
+            })
+        }
+
+        var setImageInRanking = function () {
+            vm.rankingImagesMensageiros.forEach(function (ranking) {
+                console.log();
+                vm.rankingMensageiros.forEach(function (rankingM) {
+                    if (ranking.ranking.mensageiro.id === rankingM.ranking.mensageiro.id) {
+                        rankingM.image = ranking.image;
+                    }
                 })
             })
         }
@@ -280,16 +295,16 @@
          *
          * @param imageName
          */
-        var getImage = function (ranking) {
-            vm.rankingDto = {};
-            vm.rankingDto.ranking = ranking;
+        var getImages = function (ranking) {
             if (ranking.mensageiro.mensageiro.foto) {
                 imageService.getImage(ranking.mensageiro.mensageiro.foto.nome).then(function (response) {
-                    var image = _arrayBufferToBase64(response.data);
-                    vm.rankingDto.image = image;
+                    vm.rankingDto = {};
+                    vm.rankingDto.ranking = ranking;
+                    vm.rankingDto.image = _arrayBufferToBase64(response.data)
+                    vm.rankingImagesMensageiros.push(vm.rankingDto);
+                    setImageInRanking();
                 })
             }
-            vm.rankingMensageiros.push(vm.rankingDto);
         };
 
         /**
