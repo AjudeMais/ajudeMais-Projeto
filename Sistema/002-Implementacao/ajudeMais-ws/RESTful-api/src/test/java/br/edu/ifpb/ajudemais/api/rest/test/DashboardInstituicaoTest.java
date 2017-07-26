@@ -210,7 +210,7 @@ public class DashboardInstituicaoTest extends AbstractRestTest{
 	 */
 	@Test
 	public void getCountCategoriasOk() throws IOException, Exception {
-		mockMvc.perform(get("/dashboard/instituicao/categoria/count").header("Authorization", getAuth("Instituicao", "123456")))
+		mockMvc.perform(get("/dashboard/instituicao/itens/count").header("Authorization", getAuth("Instituicao", "123456")))
 		.andExpect(status().isOk());
 	}
 	
@@ -224,7 +224,7 @@ public class DashboardInstituicaoTest extends AbstractRestTest{
 	 */
 	@Test
 	public void getCountCategoriasWithoutAuth() throws IOException, Exception {
-		mockMvc.perform(get("/dashboard/instituicao/categoria/count")).andExpect(status().isUnauthorized());
+		mockMvc.perform(get("/dashboard/instituicao/itens/count")).andExpect(status().isUnauthorized());
 
 	}
 	
@@ -239,7 +239,7 @@ public class DashboardInstituicaoTest extends AbstractRestTest{
 	 */
 	@Test
 	public void getCountCategoriasNotAuthorization() throws IOException, Exception {
-		mockMvc.perform(get("/dashboard/instituicao/categoria/count").header("Authorization", getAuth("sheldonCoopper", "bazinga")))
+		mockMvc.perform(get("/dashboard/instituicao/itens/count").header("Authorization", getAuth("sheldonCoopper", "bazinga")))
 		.andExpect(status().isForbidden());
 		
 	}
