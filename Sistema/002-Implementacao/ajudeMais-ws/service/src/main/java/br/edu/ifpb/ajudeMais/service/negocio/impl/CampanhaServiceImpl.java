@@ -175,10 +175,13 @@ public class CampanhaServiceImpl implements CampanhaService {
 		return this.getByCurrentStatus(campanhaRepository.findByStatus(status));
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Campanha> findByInstituicaoCaridadeIdAndStatus(Long id) {
 
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatus(id, true);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatusOrderByDataFimDesc(id, true);
 
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);

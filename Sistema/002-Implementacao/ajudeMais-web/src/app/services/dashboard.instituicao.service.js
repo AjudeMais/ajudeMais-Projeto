@@ -20,7 +20,10 @@
             getCountCampanhas: _getCountCampanhas,
             getCountMensageiros: _getCountMensageiros,
             getRankingMensageiro: _getRankingMensageiro,
-            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao
+            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao,
+            getCountItens: _getCountItens,
+            getCampanhasMetasProgres: _getCampanhasMetasProgres,
+            getDonativosTimeline: _getDonativosTimeline
         };
         return service;
 
@@ -71,5 +74,24 @@
             });
         }
 
+        /**
+         *
+         * @private
+         */
+        function _getCountItens() {
+            return $http.get(Api + '/dashboard/instituicao/itens/count');
+        }
+
+        /**
+         *
+         * @private
+         */
+        function _getCampanhasMetasProgres() {
+            return $http.get(Api + '/dashboard/instituicao/campanha/metas')
+        }
+
+        function _getDonativosTimeline() {
+            return $http.get(Api + '/dashboard/instituicao/donativo/timeline')
+        }
     };
 })();

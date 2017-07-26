@@ -1,16 +1,6 @@
 <div class="row">
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-university"></i></span>
-
-            <div class="info-box-content">
-                <span class="info-box-text">Instituições</span>
-                <span class="info-box-number">0</span>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa fa-heart"></i></span>
 
             <div class="info-box-content">
@@ -39,6 +29,17 @@
             <div class="info-box-content">
                 <span class="info-box-text">Mensageiros</span>
                 <span class="info-box-number">{{vm.countMensageiros}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-tags"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Itens doáveis</span>
+                <span class="info-box-number">{{vm.countItens}}</span>
             </div>
         </div>
     </div>
@@ -92,6 +93,106 @@
                             <span class="users-list-number">{{mr.ranking.quantidadeDoacoes}} Coletas Realizadas</span>
                         </li>
                     </ul>
+                </div>
+            </div>
+        </uib-accordion>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <uib-accordion>
+            <div uib-accordion-group class="box" is-open="vm.statusPanelRanking">
+                <uib-accordion-heading>
+                    Campanhas
+                    <i class="pull-right glyphicon"
+                       ng-class="{'fa fa-chevron-down': vm.statusPanelCampanhas, 'fa fa-chevron-right': !vm.statusPanelCampanhas}"></i>
+                </uib-accordion-heading>
+
+                <div class="box-body no-padding">
+
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                            <tr>
+                                <th>Campanha</th>
+                                <th>Término</th>
+                                <th>Meta atingida</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="campanhaMeta in vm.campanhasMetasProgres">
+                                <td>{{campanhaMeta.campanha.descricao}}</td>
+                                <td><span class="label label-success">{{campanhaMeta.campanha.dataFim | date : "dd/MM/yyyy"}}</span>
+                                </td>
+                                <td>
+                                    <div class="progress-group">
+                                        <span class="progress-number"><b> {{campanhaMeta.percentualAtingido}} </b>%</span>
+
+                                        <div class="progress sm">
+                                            <div class="progress-bar progress-bar-aqua"
+                                                 style="width: {{campanhaMeta.percentualAtingido}}%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </uib-accordion>
+    </div>
+
+    <div class="col-md-6">
+        <uib-accordion>
+            <div uib-accordion-group class="box" is-open="vm.statusPanelRanking">
+                <uib-accordion-heading>
+                    Últimas Doações
+                    <i class="pull-right glyphicon"
+                       ng-class="{'fa fa-chevron-down': vm.statusPanelCampanhas, 'fa fa-chevron-right': !vm.statusPanelCampanhas}"></i>
+                </uib-accordion-heading>
+
+                <div class="box-body no-padding">
+                    <ul class="timeline">
+
+                        <li>
+                            <i class="fa fa-circle bg-gray"></i>
+                            <br/>
+                        </li>
+
+                        <li ng-repeat="donativo in vm.donativosTimeline"><span
+                                class="{{vm.getEtadosDonativo(donativo.estadosDaDoacao) | status}}">{{vm.getEtadosDonativo(donativo.estadosDaDoacao) == 'NAO_ACEITO' ? 'NÃO ACEITO' : vm.getEtadosDonativo(donativo.estadosDaDoacao) == 'CANCELADO_POR_MENSAGEIRO' ? 'CANCELADO' : vm.getEtadosDonativo(donativo.estadosDaDoacao)}}</span>
+                            <div class="timeline-item">
+                                <span class="time"><i class="fa fa-tag"></i> {{donativo.categoria.nome}}</span>
+                                <h3 class="timeline-header"><a ng-click="vm.openDetails(donativo)">{{donativo.nome}}</a>
+                                </h3>
+
+                                <div ng-show="donativo.descricao" class="timeline-body">
+                                    <div class="row">
+                                        {{donativo.descricao}}
+                                    </div>
+                                    <br/>
+
+                                    <strong>Reponsável pela coleta</strong>
+                                    <div ng-show="donativo.mensageiro" class="user-block">
+                                        <img class="img-responsive img-circle"
+                                             ng-src="{{vm.mockImage}}">
+
+                                        <span class="username">
+                                            {{donativo.mensageiro.nome}}
+                                        </span>
+
+                                        <span class="description">{{donativo.mensageiro.telefone}} - {{donativo.mensageiro.conta.email}}</span>
+                                        <span class="description">{{mensageiroAss.mensageiro.telefone}}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
                 </div>
             </div>
         </uib-accordion>

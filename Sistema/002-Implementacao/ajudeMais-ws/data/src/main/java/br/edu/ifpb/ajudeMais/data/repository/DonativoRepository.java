@@ -131,17 +131,17 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	Long filterCountByEstadoRecolhido();
 
-	
 	/**
 	 * 
 	 * <p>
-	 * Conta a quantidade de doações feitas para a instituição com id efetuadas a partir do estado recolhido 
+	 * Conta a quantidade de doações feitas para a instituição com id efetuadas
+	 * a partir do estado recolhido
 	 * </p>
 	 * 
 	 * @return
 	 */
 	Long filterCountByEstadoRecolhidoAndInstituicaoId(@Param("idInstituicao") Long idInstitucao);
-	
+
 	/**
 	 * 
 	 * <p>
@@ -204,4 +204,11 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 * @return
 	 */
 	Long filterCountByMensageiroAndEstado(@Param("mensageiro") Mensageiro mensageiro);
+
+	/**
+	 * 
+	 * @param instituicaoCaridade
+	 * @return
+	 */
+	List<Donativo> findFirst10ByCategoriaInstituicaoCaridadeOrderByDataDesc(InstituicaoCaridade instituicaoCaridade);
 }
