@@ -198,4 +198,15 @@ public class Conta {
 		this.resetSenha = resetSenha;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Conta [id=" + id + ", username=" + username + ", senha=" + senha + ", grupos=" + grupos + ", ativo="
+				+ ativo + ", email=" + email + ", resetSenha=" + resetSenha + "]";
+	}
+	
+	
+
 }

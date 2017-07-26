@@ -210,7 +210,9 @@ public class DashboardInstituicaoRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/count")
 	public ResponseEntity<Long> getCountMensageirosAssociados() {
 		Conta conta = authService.getCurrentUser();
+
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+		
 		if (instituicaoOp.isPresent()) {
 			Long count = mensageiroAssociadoRepository.countByStatusAndInstituicaoCaridadeId(true,
 					instituicaoOp.get().getId());
