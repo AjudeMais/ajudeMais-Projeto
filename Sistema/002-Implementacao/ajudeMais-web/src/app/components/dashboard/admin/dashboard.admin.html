@@ -109,11 +109,11 @@
                                     <div ng-repeat="meta in campanha.metas">
                                         <div class="progress-group">
                                             <span class="">{{meta.categoria.descricao}}</span>
-                                            <span class="progress-number"><b>{{meta.percentualAtingido}}</b>/{{meta.quantidade}}</span>
+                                            <span class="progress-number"><b>{{meta.percentualAtingido}}</b> % de {{meta.quantidade}}</span>
 
                                             <div class="progress sm">
                                                 <div class="progress-bar progress-bar-aqua"
-                                                     style="width: {{(meta.percentualAtingido/meta.quantidade)*100}}%;"></div>
+                                                     style="width: {{meta.percentualAtingido}}%;"></div>
                                             </div>
                                         </div>
                                     </div>

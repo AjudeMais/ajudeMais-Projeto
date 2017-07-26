@@ -256,7 +256,7 @@ public class CampanhaRestService {
 	public ResponseEntity<List<Campanha>> getByInstituicaoAndStatusAtivo(@PathVariable Long id)
 			throws AjudeMaisException {
 		
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatus(id, true);
+		List<Campanha> campanhas = campanhaService.findByInstituicaoCaridadeIdAndStatus(id);
 		return new ResponseEntity<>(campanhas, HttpStatus.OK);
 	}
 }

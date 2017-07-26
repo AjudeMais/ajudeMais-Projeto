@@ -48,15 +48,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 			+ "WHERE ed.estadoDoacao like :estado and ed.ativo is true and d.data BETWEEN :startDate AND :endDate and d.categoria.instituicaoCaridade.id = :idInst"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndDateBetweenAndInst", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
-			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO'"
-			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate and d.categoria.instituicaoCaridade.id = :idInst"),
+			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.estadoDoacao != 'RECEBIDO' and ed.ativo is true "
+			+ "and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate and d.categoria.instituicaoCaridade.id = :idInst"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndDateBetween", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
-			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO'"
-			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate"),
+			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.estadoDoacao != 'RECEBIDO' and ed.ativo is true "
+			+ "and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.data BETWEEN :startDate AND :endDate"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhido", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
-			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
+			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.ativo is true "
 			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO'"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndInstituicaoId", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "

@@ -55,4 +55,6 @@ public interface CampanhaService extends Service<Campanha, Long> {
 	 */
 	List<Campanha> findByStatus(boolean status);
 
+	List<Campanha> findByInstituicaoCaridadeIdAndStatus(Long id);
+
 }

@@ -91,5 +91,7 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	 * @return
 	 */
 	LinkedHashMap<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade);
+	
+	
 
 }
