@@ -181,7 +181,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 	@Override
 	public List<Campanha> findByInstituicaoCaridadeIdAndStatus(Long id) {
 
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatusOrderByDataFimDesc(id, true);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatusOrderByDataFimAsc(id, true);
 
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);

@@ -163,7 +163,7 @@ public class CampanhaRepositotoryTest {
 
 	@Test
 	public void findByInstituicaoCaridadeIdAndStatusTest() {
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatusOrderByDataFimDesc(1l, false);
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatusOrderByDataFimAsc(1l, false);
 		assertThat(campanhas.isEmpty());
 	}
 }

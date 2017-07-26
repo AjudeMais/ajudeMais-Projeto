@@ -88,5 +88,5 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 * @param status
 	 * @return
 	 */
-	List<Campanha> findByInstituicaoCaridadeIdAndStatusOrderByDataFimDesc(Long idInstituicao, boolean status);
+	List<Campanha> findByInstituicaoCaridadeIdAndStatusOrderByDataFimAsc(Long idInstituicao, boolean status);
 }
