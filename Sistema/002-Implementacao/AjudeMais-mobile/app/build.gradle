@@ -8,7 +8,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
-        versionName "0.7-IT03"
+        versionName "1.0-IT06"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -29,7 +29,7 @@ android {
             versionNameSuffix "-doador"
             testApplicationId 'br.edu.ifpb.ajudemais.doador.teste'
             versionCode 1
-            versionName '0.7-IT03'
+            versionName '1.0-IT06'
 
 
         }
@@ -38,7 +38,7 @@ android {
             applicationIdSuffix ".mensageiro"
             versionNameSuffix "-mensageiro"
             versionCode 1
-            versionName '0.7-IT03'
+            versionName '1.0-IT06'
         }
 
     }

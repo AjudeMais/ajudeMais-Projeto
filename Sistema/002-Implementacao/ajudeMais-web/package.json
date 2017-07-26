@@ -1,6 +1,6 @@
 {
   "name": "AjudeMais-Web",
-  "version": "0.5.1",
+  "version": "1.0-IT06",
   "description": "módulo web do Ajude Mais",
   "main": "app.js",
   "scripts": {
