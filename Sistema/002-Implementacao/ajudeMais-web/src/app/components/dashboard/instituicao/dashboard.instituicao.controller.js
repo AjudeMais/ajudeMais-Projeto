@@ -36,6 +36,7 @@
         vm.campanhasMetasProgres = [];
 
         vm.donativosTimeline = [];
+        vm.statusPanelTimeline = true;
 
         vm.mockImage = 'content/img/mock-user.png';
 

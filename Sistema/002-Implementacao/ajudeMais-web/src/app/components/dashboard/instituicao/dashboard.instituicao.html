@@ -69,40 +69,10 @@
 </div>
 
 <div class="row">
+
     <div class="col-md-12">
         <uib-accordion>
-            <div uib-accordion-group class="box" is-open="vm.statusPanelRanking">
-                <uib-accordion-heading>
-                    Top Mensageiros
-                    <i class="pull-right glyphicon"
-                       ng-class="{'fa fa-chevron-down': vm.statusPanelRanking, 'fa fa-chevron-right': !vm.statusPanelRanking}"></i>
-                </uib-accordion-heading>
-
-                <div class="box-body no-padding">
-
-                    <ul class="users-list">
-                        <li ng-repeat="mr in vm.rankingMensageiros">
-                            <img ng-show="!mr.image" class="img-circle"
-                                 ng-src="{{vm.mockImage}}">
-                            <img class="img-circle"
-                                 data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
-
-                            <p class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
-                                {{mr.ranking.mensageiro.mensageiro.nome}}</p>
-                            <span class="users-list-date">{{mr.ranking.mensageiro.instituicaoCaridade.nome}}</span>
-                            <span class="users-list-number">{{mr.ranking.quantidadeDoacoes}} Coletas Realizadas</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </uib-accordion>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-6">
-        <uib-accordion>
-            <div uib-accordion-group class="box" is-open="vm.statusPanelRanking">
+            <div uib-accordion-group class="box" is-open="vm.statusPanelCampanhas">
                 <uib-accordion-heading>
                     Campanhas
                     <i class="pull-right glyphicon"
@@ -144,14 +114,44 @@
             </div>
         </uib-accordion>
     </div>
+</div>
 
+<div class="row">
     <div class="col-md-6">
         <uib-accordion>
             <div uib-accordion-group class="box" is-open="vm.statusPanelRanking">
                 <uib-accordion-heading>
+                    Top Mensageiros
+                    <i class="pull-right glyphicon"
+                       ng-class="{'fa fa-chevron-down': vm.statusPanelRanking, 'fa fa-chevron-right': !vm.statusPanelRanking}"></i>
+                </uib-accordion-heading>
+
+                <div class="box-body no-padding">
+
+                    <ul class="users-list">
+                        <li ng-repeat="mr in vm.rankingMensageiros">
+                            <img ng-show="!mr.image" class="img-circle"
+                                 ng-src="{{vm.mockImage}}">
+                            <img class="img-circle"
+                                 data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
+
+                            <p class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
+                                {{mr.ranking.mensageiro.mensageiro.nome}}</p>
+                            <span class="users-list-date">{{mr.ranking.mensageiro.instituicaoCaridade.nome}}</span>
+                            <span class="users-list-number">{{mr.ranking.quantidadeDoacoes}} Coletas Realizadas</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </uib-accordion>
+    </div>
+    <div class="col-md-6">
+        <uib-accordion>
+            <div uib-accordion-group class="box" is-open="vm.statusPanelTimeline">
+                <uib-accordion-heading>
                     Últimas Doações
                     <i class="pull-right glyphicon"
-                       ng-class="{'fa fa-chevron-down': vm.statusPanelCampanhas, 'fa fa-chevron-right': !vm.statusPanelCampanhas}"></i>
+                       ng-class="{'fa fa-chevron-down': vm.statusPanelTimeline, 'fa fa-chevron-right': !vm.statusPanelTimeline}"></i>
                 </uib-accordion-heading>
 
                 <div class="box-body no-padding">
@@ -175,19 +175,17 @@
                                     </div>
                                     <br/>
 
-                                    <strong>Reponsável pela coleta</strong>
                                     <div ng-show="donativo.mensageiro" class="user-block">
                                         <img class="img-responsive img-circle"
                                              ng-src="{{vm.mockImage}}">
 
                                         <span class="username">
-                                            {{donativo.mensageiro.nome}}
+                                            Coleta: {{donativo.mensageiro.nome}}
                                         </span>
 
                                         <span class="description">{{donativo.mensageiro.telefone}} - {{donativo.mensageiro.conta.email}}</span>
                                         <span class="description">{{mensageiroAss.mensageiro.telefone}}</span>
                                     </div>
-
                                 </div>
                             </div>
                         </li>
