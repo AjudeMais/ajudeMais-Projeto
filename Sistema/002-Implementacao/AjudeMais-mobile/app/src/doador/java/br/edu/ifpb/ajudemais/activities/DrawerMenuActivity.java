@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,12 +32,16 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 import br.edu.ifpb.ajudemais.R;
+import br.edu.ifpb.ajudemais.asycnTasks.LoadingDoadorTask;
+import br.edu.ifpb.ajudemais.asycnTasks.UpdateDoadorTask;
 import br.edu.ifpb.ajudemais.asyncTasks.AsyncResponse;
 import br.edu.ifpb.ajudemais.asyncTasks.FacebookProfilePictureTask;
+import br.edu.ifpb.ajudemais.asyncTasks.UploadImageTask;
 import br.edu.ifpb.ajudemais.domain.Conta;
+import br.edu.ifpb.ajudemais.domain.Doador;
+import br.edu.ifpb.ajudemais.domain.Imagem;
 import br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission;
 import br.edu.ifpb.ajudemais.storage.SharedPrefManager;
-import br.edu.ifpb.ajudemais.utils.CapturePhotoUtils;
 
 import static br.edu.ifpb.ajudemais.permissionsPolyce.WriteStoreDevicePermission.MY_PERMISSIONS_REQUEST_STORE_PERMISSION;
 
@@ -87,6 +90,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
         componentHeader = (RelativeLayout) hView.findViewById(R.id.background_header);
         tvUserName = (TextView) hView.findViewById(R.id.tvUserNameProfile);
         tvEmail = (TextView) hView.findViewById(R.id.tvEmailProfile);
+        executeLoadingImageProfileTask(this);
 
         setUpAccount();
         setUpToggle();
@@ -98,7 +102,6 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
      * Set as informações do usuário logado no app
      */
     protected void setUpAccount() {
-        executeLoadingImageProfileTask(this);
         conta = (Conta) getIntent().getSerializableExtra("Conta");
         if (conta == null) {
             conta = SharedPrefManager.getInstance(this).getUser();
@@ -358,6 +361,7 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
 
     /**
      * Executa Asycn task para recuperar foto do facebook
+     *
      * @param context
      */
     private void executeLoadingImageProfileTask(final Context context) {
@@ -375,15 +379,65 @@ public class DrawerMenuActivity extends LocationActivity implements NavigationVi
                             if (writeStoreDevicePermission.isStoragePermissionGranted()) {
                                 capturePhotoUtils.saveToInternalStorage(output);
                             }
-
+                            executeUpdateImageTask(androidUtil.converteBitmapInBytesArray(output));
                         }
                     }
                 };
                 loadingImageFbTask.execute();
 
-            }else {
+            } else {
                 profilePhoto.setImageBitmap(bitmap);
             }
         }
+    }
+
+    /**
+     * Executa asycn task para atualizar imagem do doador
+     *
+     * @param imageBytes
+     */
+    private void executeUpdateImageTask(byte[] imageBytes) {
+        UploadImageTask uploadImageTask = new UploadImageTask(this, imageBytes);
+        uploadImageTask.setActiveProgress(false);
+        uploadImageTask.delegate = new AsyncResponse<Imagem>() {
+            @Override
+            public void processFinish(Imagem output) {
+                executeGetAndUpdateDoadorTask(output);
+            }
+        };
+
+        uploadImageTask.execute();
+    }
+
+    /**
+     * Executa Asycn Task para recuperar Doador
+     */
+    private void executeGetAndUpdateDoadorTask(final Imagem imagem) {
+        LoadingDoadorTask loadingDoadorTask = new LoadingDoadorTask(this, SharedPrefManager.getInstance(this).getUser().getUsername());
+        loadingDoadorTask.setProgressAtivo(false);
+        loadingDoadorTask.delegate = new AsyncResponse<Doador>() {
+            @Override
+            public void processFinish(final Doador output) {
+                if (output != null) {
+                    if (output.getFoto() != null) {
+                        output.getFoto().setNome(imagem.getNome());
+
+                    } else {
+                        output.setFoto(imagem);
+                    }
+
+                    UpdateDoadorTask updateDoadorTask = new UpdateDoadorTask(DrawerMenuActivity.this, output);
+                    updateDoadorTask.setProgressAtivo(false);
+                    updateDoadorTask.delegate = new AsyncResponse<Doador>() {
+                        @Override
+                        public void processFinish(Doador output) {
+                        }
+                    };
+                    updateDoadorTask.execute();
+                }
+            }
+        };
+
+        loadingDoadorTask.execute();
     }
 }

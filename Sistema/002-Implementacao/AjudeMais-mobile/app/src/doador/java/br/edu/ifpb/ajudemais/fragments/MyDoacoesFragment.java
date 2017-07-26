@@ -17,6 +17,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,8 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        androidUtil = new AndroidUtil(getContext());
+
         setHasOptionsMenu(true);
 
     }
@@ -94,39 +98,44 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     @Override
     public void onStart() {
         super.onStart();
-        androidUtil = new AndroidUtil(getContext());
 
         if (androidUtil.isOnline()) {
             executeLoadingDoacoesTask();
         } else {
             setVisibleNoConnection();
-            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
     private void executeLoadingDoacoesTask() {
-        loadingDoacoesTask = new LoadingDoacoesTask(getContext(), SharedPrefManager.getInstance(getContext()).getUser().getUsername());
-        loadingDoacoesTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
-            @Override
-            public void processFinish(List<DoacaoAdapterDto> output) {
-                if (output.size() < 1) {
-                    showListEmpty();
-                } else {
-                    donativos = output;
-                    showListDoacoes();
-                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
-                    recyclerView.setAdapter(donativosAdapter);
-                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));
-                    if (searchView != null) {
-                        searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+        if (androidUtil.isOnline()) {
+
+            loadingDoacoesTask = new LoadingDoacoesTask(getContext(), SharedPrefManager.getInstance(getContext()).getUser().getUsername());
+            loadingDoacoesTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+                @Override
+                public void processFinish(List<DoacaoAdapterDto> output) {
+                    if (output.size() < 1) {
+                        showListEmpty();
+                    } else {
+                        donativos = output;
+                        showListDoacoes();
+                        donativosAdapter = new DonativosAdapter(donativos, getActivity());
+                        recyclerView.setAdapter(donativosAdapter);
+                        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), MyDoacoesFragment.this));
+                        if (searchView != null) {
+                            searchView.setOnQueryTextListener(MyDoacoesFragment.this);
+                        }
                     }
+                    swipeRefreshLayout.setRefreshing(false);
+
                 }
-                swipeRefreshLayout.setRefreshing(false);
+            };
 
-            }
-        };
+            loadingDoacoesTask.execute();
+        } else {
+            setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
 
-        loadingDoacoesTask.execute();
+        }
     }
 
     /**
@@ -137,6 +146,30 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchDoacoes).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+
+        Button btnReload = (Button) view.findViewById(R.id.empty_list).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.empty_list).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
+    }
+
+
+    private void listenCliqueReload() {
+        view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+        executeLoadingDoacoesTask();
     }
 
     /**
@@ -145,8 +178,26 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
     private void setVisibleNoConnection() {
         view.findViewById(R.id.no_internet_fragment).setVisibility(View.VISIBLE);
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.GONE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        if (view.findViewById(R.id.containerViewSearchCampanha) != null) {
+            view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        }
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+
+        Button btnReload = (Button) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
     }
 
     /**
@@ -165,6 +216,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
             executeLoadingDoacoesTask();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 

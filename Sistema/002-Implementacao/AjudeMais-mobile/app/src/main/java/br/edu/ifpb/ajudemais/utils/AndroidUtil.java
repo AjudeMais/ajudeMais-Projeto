@@ -11,6 +11,7 @@ import android.widget.EditText;
 
 import com.redmadrobot.inputmask.MaskedTextChangedListener;
 
+import java.io.ByteArrayOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -201,6 +202,14 @@ public class AndroidUtil {
     public Bitmap convertBytesInBitmap(byte[] imagem){
         Bitmap bitmap = BitmapFactory.decodeByteArray(imagem , 0, imagem .length);
         return bitmap;
+    }
+
+    public byte[] converteBitmapInBytesArray(Bitmap bitmap){
+        Bitmap bmp = bitmap;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return byteArray;
     }
 
 

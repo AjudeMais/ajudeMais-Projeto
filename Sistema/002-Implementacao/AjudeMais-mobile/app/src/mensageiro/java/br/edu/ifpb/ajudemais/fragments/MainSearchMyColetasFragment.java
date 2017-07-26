@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +48,6 @@ public class MainSearchMyColetasFragment extends Fragment implements RecyclerIte
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
 
-    public MainSearchMyColetasFragment() {
-    }
 
     /**
      * @param savedInstanceState
@@ -107,8 +107,8 @@ public class MainSearchMyColetasFragment extends Fragment implements RecyclerIte
             executeLoadingDonativosTask();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -203,6 +203,30 @@ public class MainSearchMyColetasFragment extends Fragment implements RecyclerIte
         view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
         view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+
+        Button btnReload = (Button) view.findViewById(R.id.empty_list).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.empty_list).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
+    }
+
+    private void listenCliqueReload(){
+        view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+        executeLoadingDonativosTask();
+
     }
 
     /**
@@ -213,6 +237,22 @@ public class MainSearchMyColetasFragment extends Fragment implements RecyclerIte
         view.findViewById(R.id.loading_panel_my_coletas).setVisibility(View.GONE);
         view.findViewById(R.id.container_fragment_my_coletas).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+
+        Button btnReload = (Button) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
     }
 
     /**
@@ -226,27 +266,34 @@ public class MainSearchMyColetasFragment extends Fragment implements RecyclerIte
     }
 
     private void executeLoadingDonativosTask() {
-        sharedPrefManager = SharedPrefManager.getInstance(getContext());
-        String username = sharedPrefManager.getUser().getUsername();
-        loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
-        loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+        if (androidUtil.isOnline()) {
+            sharedPrefManager = SharedPrefManager.getInstance(getContext());
+            String username = sharedPrefManager.getUser().getUsername();
+            loadingDonativoByMensageiroTask = new LoadingDonativoByMensageiroTask(getContext(), username);
+            loadingDonativoByMensageiroTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
 
-            @Override
-            public void processFinish(List<DoacaoAdapterDto> output) {
-                if (output.size() < 1) {
-                    showListEmpty();
+                @Override
+                public void processFinish(List<DoacaoAdapterDto> output) {
+                    if (output.size() < 1) {
+                        showListEmpty();
 
-                } else {
-                    donativos = output;
-                    showListDonativos();
-                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
-                    recyclerView.setAdapter(donativosAdapter);
-                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    } else {
+                        donativos = output;
+                        showListDonativos();
+                        donativosAdapter = new DonativosAdapter(donativos, getActivity());
+                        recyclerView.setAdapter(donativosAdapter);
+                        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
                 }
-            }
-        };
 
-        loadingDonativoByMensageiroTask.execute();
+            };
+
+            loadingDonativoByMensageiroTask.execute();
+        }else{
+            setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
 }

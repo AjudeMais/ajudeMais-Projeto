@@ -265,5 +265,6 @@
     <string name="msg_mensageiro_not_avaible">Infelizmente o voluntário responsável pela coleta ficou indisponível. Sua doação foi disponibilizada novamente.</string>
     <string name="cancel_doacao_doador_not_was_in_house">Infelizmente o vonlutário responsável pela coleta não encontrou você no endereço informado. Sua doação foi cancelada.</string>
     <string name="complete_account">Complete as informações</string>
+    <string name="btn_reload">Toque para Recarregar</string>
 
 </resources>

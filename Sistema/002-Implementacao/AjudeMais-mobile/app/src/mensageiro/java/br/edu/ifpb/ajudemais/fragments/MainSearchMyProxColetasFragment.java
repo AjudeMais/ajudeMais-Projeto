@@ -46,9 +46,6 @@ public class MainSearchMyProxColetasFragment extends Fragment implements Recycle
     private SearchView searchView;
     private SharedPrefManager sharedPrefManager;
 
-    public MainSearchMyProxColetasFragment() {
-    }
-
     /**
      * @param savedInstanceState
      */
@@ -107,8 +104,8 @@ public class MainSearchMyProxColetasFragment extends Fragment implements Recycle
             executeLoadingDonativosTask();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -226,26 +223,33 @@ public class MainSearchMyProxColetasFragment extends Fragment implements Recycle
     }
 
     private void executeLoadingDonativosTask() {
-        sharedPrefManager = SharedPrefManager.getInstance(getContext());
-        String username = sharedPrefManager.getUser().getUsername();
-        loadingDonativoByMensageiroEstadoTask = new LoadingDonativoByMensageiroEstadoTask(getContext(), username);
-        loadingDonativoByMensageiroEstadoTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
+        if (androidUtil.isOnline()) {
+            sharedPrefManager = SharedPrefManager.getInstance(getContext());
+            String username = sharedPrefManager.getUser().getUsername();
+            loadingDonativoByMensageiroEstadoTask = new LoadingDonativoByMensageiroEstadoTask(getContext(), username);
+            loadingDonativoByMensageiroEstadoTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
 
-            @Override
-            public void processFinish(List<DoacaoAdapterDto> output) {
-                if (output.size() < 1) {
-                    showListEmpty();
+                @Override
+                public void processFinish(List<DoacaoAdapterDto> output) {
+                    if (output.size() < 1) {
+                        showListEmpty();
 
-                } else {
-                    donativos = output;
-                    showListDonativos();
-                    donativosAdapter = new DonativosAdapter(donativos, getActivity());
-                    recyclerView.setAdapter(donativosAdapter);
-                    recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    } else {
+                        donativos = output;
+                        showListDonativos();
+                        donativosAdapter = new DonativosAdapter(donativos, getActivity());
+                        recyclerView.setAdapter(donativosAdapter);
+                        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
+                    }
+                    swipeRefreshLayout.setRefreshing(false);
+
                 }
-            }
-        };
+            };
 
-        loadingDonativoByMensageiroEstadoTask.execute();
+            loadingDonativoByMensageiroEstadoTask.execute();
+        } else {
+            setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

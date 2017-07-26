@@ -38,6 +38,7 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
     private ProgressDialog progressDialog;
     private byte[] array;
     private Context context;
+    private boolean isActiveProgress = true;
 
 
     public UploadImageTask(Context context, byte[] array) {
@@ -53,7 +54,9 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
      */
     @Override
     protected void onPreExecute() {
-        progressDialog.showProgressDialog();
+        if (isActiveProgress) {
+            progressDialog.showProgressDialog();
+        }
         super.onPreExecute();
 
     }
@@ -92,5 +95,7 @@ public class UploadImageTask extends AsyncTask<Void, Void, Imagem> {
 
     }
 
-
+    public void setActiveProgress(boolean activeProgress) {
+        isActiveProgress = activeProgress;
+    }
 }

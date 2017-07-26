@@ -114,8 +114,9 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
             executeLoadingMensageiroAndNewSolicitacoesTasks();
         } else {
             setVisibleNoConnection();
+            swipeRefreshLayout.setRefreshing(false);
+
         }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -142,7 +143,7 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
 
     @Override
     public void onItemClick(View childView, int position) {
-       executeValidateColetaDonativoTask(position);
+        executeValidateColetaDonativoTask(position);
     }
 
     @Override
@@ -160,11 +161,11 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
             public void processFinish(Boolean output) {
                 if (!output) {
                     CustomToast.getInstance(getContext()).createSuperToastSimpleCustomSuperToast(getString(R.string.coleta_not_avaible));
-                }else {
+                } else {
                     Donativo donativo = donativos.get(pos).getDonativo();
                     Intent intent = new Intent(getContext(), DetailSolicitacaoActivity.class);
                     intent.putExtra("Donativo", donativo);
-                    intent.putExtra("notification",  new Boolean(true));
+                    intent.putExtra("notification", new Boolean(true));
                     startActivity(intent);
                 }
             }
@@ -175,6 +176,7 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
 
 
     private void executeLoadingNewSolicitacoesTask(Long idMensageiro) {
+
         loadingNewSolicitacoesTask = new LoadingNewSolicitacoesTask(getContext(), idMensageiro);
         loadingNewSolicitacoesTask.delegate = new AsyncResponse<List<DoacaoAdapterDto>>() {
             @Override
@@ -189,6 +191,9 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
                     recyclerView.setAdapter(donativosAdapter);
                     recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), clickListener));
                 }
+
+                swipeRefreshLayout.setRefreshing(false);
+
             }
         };
 
@@ -199,14 +204,19 @@ public class MainSearchNewSolicitacoesFragment extends Fragment implements Recyc
      * Executa Asycn task para recuperar mensageiro logado;
      */
     private void executeLoadingMensageiroAndNewSolicitacoesTasks() {
-        loadingMensageiroTask = new LoadingMensageiroTask(getContext(), SharedPrefManager.getInstance(getContext()).getUser().getUsername());
-        loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
-            @Override
-            public void processFinish(Mensageiro output) {
-                executeLoadingNewSolicitacoesTask(output.getId());
-            }
-        };
-        loadingMensageiroTask.execute();
+        if (androidUtil.isOnline()) {
+            loadingMensageiroTask = new LoadingMensageiroTask(getContext(), SharedPrefManager.getInstance(getContext()).getUser().getUsername());
+            loadingMensageiroTask.delegate = new AsyncResponse<Mensageiro>() {
+                @Override
+                public void processFinish(Mensageiro output) {
+                    executeLoadingNewSolicitacoesTask(output.getId());
+                }
+            };
+            loadingMensageiroTask.execute();
+        } else {
+            swipeRefreshLayout.setRefreshing(false);
+
+        }
     }
 
     /**

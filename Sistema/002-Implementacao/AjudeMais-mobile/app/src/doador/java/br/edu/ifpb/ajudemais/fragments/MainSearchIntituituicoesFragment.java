@@ -22,6 +22,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import org.springframework.web.client.RestClientException;
 
@@ -169,7 +171,6 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         if (androidUtil.isOnline()) {
             new MainSearchInstituicoesFragmentTask(this).execute();
         } else {
-
             setVisibleNoConnection();
             swipeRefreshLayout.setRefreshing(false);
 
@@ -185,6 +186,22 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+
+        Button btnReload = (Button) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.no_internet_fragment).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
     }
 
 
@@ -235,6 +252,34 @@ public class MainSearchIntituituicoesFragment extends Fragment implements Recycl
         view.findViewById(R.id.loadingPanelMainSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.containerViewSearchInst).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.VISIBLE);
+
+        Button btnReload = (Button) view.findViewById(R.id.empty_list).findViewById(R.id.btn_reload);
+        TextView tvReload = (TextView) view.findViewById(R.id.empty_list).findViewById(R.id.tv_reload);
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+
+            }
+        });
+        tvReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listenCliqueReload();
+            }
+        });
+    }
+
+    private void listenCliqueReload() {
+        if (view.findViewById(R.id.loadingPanelMainSearchCampanha) != null) {
+            view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.VISIBLE);
+        }
+        if (view.findViewById(R.id.containerViewSearchCampanha) != null) {
+            view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        }
+        view.findViewById(R.id.empty_list).setVisibility(View.GONE);
+        new MainSearchInstituicoesFragmentTask(this).execute();
+
     }
 
     /**
