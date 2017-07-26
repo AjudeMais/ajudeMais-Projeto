@@ -225,8 +225,8 @@ public class DashboardAdminRestService {
 
 		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
 
-		for (Date date : doacoes.keySet()) {
-			DoacoesPeriodoDTO doDto = new DoacoesPeriodoDTO(DATE_FORMAT.format(date), doacoes.get(date));
+		for (Map.Entry<Date, Integer> date : doacoes.entrySet()) {
+			DoacoesPeriodoDTO doDto = new DoacoesPeriodoDTO(DATE_FORMAT.format(date.getKey()), doacoes.get(date.getKey()));
 			doacoesPeriodo.add(doDto);
 		}
 		return doacoesPeriodo;
