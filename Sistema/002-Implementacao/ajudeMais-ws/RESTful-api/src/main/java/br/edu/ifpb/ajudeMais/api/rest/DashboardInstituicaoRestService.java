@@ -13,6 +13,9 @@
  */
 package br.edu.ifpb.ajudeMais.api.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +26,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.api.dto.MensageiroRankingDTO;
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
+import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
+import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
 /**
  * 
@@ -49,13 +55,12 @@ import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 @RequestMapping("/dashboard/instituicao")
 public class DashboardInstituicaoRestService {
 
-	
 	/**
 	 * 
 	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
-	
+
 	/**
 	 * 
 	 */
@@ -67,19 +72,22 @@ public class DashboardInstituicaoRestService {
 	 */
 	@Autowired
 	private CampanhaRepository campanhaRepositoty;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
-	
+
+	@Autowired
+	private MensageiroAssociadoService mensageiroAssociadoService;
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoCaridadeService;
-	
+
 	/**
 	 * 
 	 * <p>
@@ -129,7 +137,7 @@ public class DashboardInstituicaoRestService {
 			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * <p>
@@ -147,11 +155,36 @@ public class DashboardInstituicaoRestService {
 		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
 		if (instituicaoOp.isPresent()) {
-			Long count = mensageiroAssociadoRepository.countByStatusAndInstituicaoCaridadeId(true, instituicaoOp.get().getId());
+			Long count = mensageiroAssociadoRepository.countByStatusAndInstituicaoCaridadeId(true,
+					instituicaoOp.get().getId());
 			return new ResponseEntity<Long>(count, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
 		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/ranking")
+	public ResponseEntity<List<MensageiroRankingDTO>> getRanking() {
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+		
+		Map<MensageiroAssociado, Integer> mensageiros = mensageiroAssociadoService.getRanking(instituicaoOp.get());
+		List<MensageiroRankingDTO> rankingMensageiros = new ArrayList<>();
+
+		int limit = 0;
+		for (Map.Entry<MensageiroAssociado, Integer> entry : mensageiros.entrySet()) {
+			if (limit < 10) {
+				MensageiroRankingDTO ranking = new MensageiroRankingDTO(entry.getKey(), entry.getValue());
+				rankingMensageiros.add(ranking);
+			}
+			limit++;
+		}
+		return new ResponseEntity<List<MensageiroRankingDTO>>(rankingMensageiros, HttpStatus.OK);
+
 	}
 
 }

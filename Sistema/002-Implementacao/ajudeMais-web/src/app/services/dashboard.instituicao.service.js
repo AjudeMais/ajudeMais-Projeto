@@ -19,6 +19,7 @@
             getCountDonativos: _getCountDonativos,
             getCountCampanhas: _getCountCampanhas,
             getCountMensageiros: _getCountMensageiros,
+            getRankingMensageiro: _getRankingMensageiro
         };
         return service;
 
@@ -45,6 +46,14 @@
          */
         function _getCountMensageiros() {
             return $http.get(Api + '/dashboard/instituicao/mensageiro/count');
+        }
+
+        /**
+         *
+         * @private
+         */
+        function _getRankingMensageiro() {
+            return $http.get(Api + '/dashboard/instituicao/mensageiro/ranking');
         }
 
     };
