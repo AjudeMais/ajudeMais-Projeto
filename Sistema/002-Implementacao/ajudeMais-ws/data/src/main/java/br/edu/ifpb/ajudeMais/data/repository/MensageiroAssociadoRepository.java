@@ -88,6 +88,12 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 
 	/**
 	 * 
+	 * @return
+	 */
+	List<MensageiroAssociado> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade);
+
+	/**
+	 * 
 	 * <p>
 	 * 
 	 * Busca mensageiros associados pelo id do mensageiro.
@@ -116,5 +122,5 @@ public interface MensageiroAssociadoRepository extends JpaRepository<MensageiroA
 	 * @return
 	 */
 	Long countByStatusAndInstituicaoCaridadeId(boolean status, Long idInstituicao);
-	
+
 }

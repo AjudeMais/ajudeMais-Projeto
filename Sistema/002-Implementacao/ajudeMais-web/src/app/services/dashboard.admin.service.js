@@ -18,7 +18,7 @@
         var service = {
             getCountInstituicaoCaridade: _getCountInstituicaoCaridade,
             getCountDonativos: _getCountDonativos,
-            getCountCampanhas: _getCountCampanhas,
+            getCountDoadores: _getCountDoadores,
             getCountMensageiros: _getCountMensageiros,
             getDoacoesByPeriodo: _getDoacoesByPeriodo,
             getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao,
@@ -47,8 +47,8 @@
          *
          * @private
          */
-        function _getCountCampanhas() {
-            return $http.get(Api + '/dashboard/admin/campanha/count');
+        function _getCountDoadores() {
+            return $http.get(Api + '/dashboard/admin/doador/count');
         }
 
         /**
