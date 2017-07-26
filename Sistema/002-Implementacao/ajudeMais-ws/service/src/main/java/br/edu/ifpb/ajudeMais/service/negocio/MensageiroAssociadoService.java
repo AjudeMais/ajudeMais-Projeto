@@ -15,6 +15,7 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +90,6 @@ public interface MensageiroAssociadoService extends Service<MensageiroAssociado,
 	 * @param instituicaoCaridade
 	 * @return
 	 */
-	Map<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade);
+	LinkedHashMap<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade);
 
 }

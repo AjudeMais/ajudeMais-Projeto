@@ -178,14 +178,15 @@
 
                 <div class="box-body no-padding">
 
-                    <ul class="users-list clearfix">
+                    <ul class="users-list">
                         <li ng-repeat="mr in vm.rankingMensageiros">
-                            <!--<img src="dist/img/user1-128x128.jpg" alt="User Image">-->
+                            <img ng-show="!mr.image" class="img-circle"
+                                 ng-src="{{vm.mockImage}}">
+                            <img class="img-circle"
+                                 data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
 
-                            <img data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
-
-                            <a class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
-                                {{mr.ranking.mensageiro.mensageiro.nome}}</a>
+                            <p class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
+                                {{mr.ranking.mensageiro.mensageiro.nome}}</p>
                             <span class="users-list-date">{{mr.ranking.mensageiro.instituicaoCaridade.nome}}</span>
                             <span class="users-list-number">{{mr.ranking.quantidadeDoacoes}} Coletas Realizadas</span>
                         </li>

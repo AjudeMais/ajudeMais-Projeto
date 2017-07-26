@@ -62,19 +62,18 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 */
 	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private GoogleMapsService googleMapsService;
-	
+
 	/**
 	 * 
 	 */
 	@Autowired
 	private DonativoRepository donativoRepository;
-	
 
 	/**
 	 * Salva um mensageiro considerando restrições de email.
@@ -139,70 +138,71 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	 * 
 	 * @param conta
 	 * @return List<Mensageiro>
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@Override
-	public List<Mensageiro> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao) throws AjudeMaisException {
+	public List<Mensageiro> filterMensageirosCloserToBairro(Endereco endereco, Long idInstituicao)
+			throws AjudeMaisException {
 		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository.filterMensageirosCloserToBairro(
 				endereco.getBairro(), endereco.getLocalidade(), endereco.getUf(), idInstituicao);
 
-		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
+		List<Mensageiro> mensageiros = googleMapsService
+				.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
 
 		return mensageiros;
 	}
-	
+
 	/**
 	 * 
 	 */
 	@Override
 	public List<Mensageiro> filterMensageirosCloserToCidade(Endereco endereco, Long idInstituicao)
 			throws AjudeMaisException {
-		
+
 		List<Object[]> selectedMensageiros = mensageiroAssociadoRepository
-					.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
-		
-		List<Mensageiro> mensageiros = googleMapsService.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
+				.filterMensageirosCloserToCidade(endereco.getLocalidade(), endereco.getUf(), idInstituicao);
+
+		List<Mensageiro> mensageiros = googleMapsService
+				.validateAddressMensageiros(setEnderecoInList(selectedMensageiros));
 
 		return mensageiros;
 	}
-	
+
 	/**
 	 * 
 	 */
 	@Override
-	public Map<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade) {
-		
+	public LinkedHashMap<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade) {
+
 		Map<MensageiroAssociado, Integer> mensageirosDoacoes = new LinkedHashMap<MensageiroAssociado, Integer>();
 		List<MensageiroAssociado> mensageiros = mensageiroAssociadoRepository.findAll();
-		
-		
+
 		mensageiros.forEach(m -> {
 			Long count = donativoRepository.filterCountByMensageiroAndEstado(m.getMensageiro());
 			mensageirosDoacoes.put(m, count.intValue());
 		});
-		
-		Map<MensageiroAssociado, Integer> sortedMap = 
-				mensageirosDoacoes.entrySet().stream()
-			    .sorted(Map.Entry.<MensageiroAssociado, Integer>comparingByValue().reversed())
-			    .collect(Collectors.toMap(Entry::getKey, Entry::getValue,
-			                              (e1, e2) -> e2, LinkedHashMap::new));
-		
-		return sortedMap;
+
+		LinkedHashMap<MensageiroAssociado, Integer> mapSorted = mensageirosDoacoes.entrySet().stream()
+				.sorted(Map.Entry.<MensageiroAssociado, Integer> comparingByValue().reversed())
+				.limit(10) 
+				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+
+		return mapSorted;
 	}
-	
 
 	/**
 	 * <p>
-	 * Busca endereço com id recupera na consulta e substitui o id pelo objeto endereço
+	 * Busca endereço com id recupera na consulta e substitui o id pelo objeto
+	 * endereço
 	 * </p>
+	 * 
 	 * @param filters
 	 * @return
 	 */
 	private List<Object[]> setEnderecoInList(List<Object[]> filters) {
 
-		
 		for (int i = 0; i < filters.size(); i++) {
-			
+
 			List<Endereco> enderecos = ((Mensageiro) filters.get(i)[0]).getEnderecos();
 			for (Endereco e : enderecos) {
 				if (e.getId().equals(filters.get(i)[1])) {

@@ -75,7 +75,7 @@ public class DashboardAdminRestService {
 	 */
 	@Autowired
 	private DonativoService donativoService;
-	
+
 	/**
 	 * 
 	 */
@@ -201,7 +201,7 @@ public class DashboardAdminRestService {
 	@RequestMapping(method = RequestMethod.GET, value = "/donativo/periodo/instituicao/{id}")
 	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodoInstituicao(@Param("nDays") Integer nDays,
 			@Param("estado") String estado, @PathVariable("id") Long idInst) {
-		
+
 		List<DoacoesPeriodoDTO> doacoesPeriodo = getDonativosByPeriodo(nDays, estado, idInst);
 		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
 	}
@@ -213,9 +213,9 @@ public class DashboardAdminRestService {
 	 * @return
 	 */
 	private List<DoacoesPeriodoDTO> getDonativosByPeriodo(Integer nDays, String estado, Long idInst) {
-		
+
 		Map<Date, Integer> doacoes = donativoService.getDoacoesByPeriodo(nDays, Estado.getByEstado(estado), idInst);
-		
+
 		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
 
 		for (Date date : doacoes.keySet()) {
@@ -224,25 +224,26 @@ public class DashboardAdminRestService {
 		}
 		return doacoesPeriodo;
 	}
-	
+
 	/**
 	 * 
 	 * @return
 	 */
 	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/ranking")
 	public ResponseEntity<List<MensageiroRankingDTO>> getRanking() {
-		
+
 		Map<MensageiroAssociado, Integer> mensageiros = mensageiroAssService.getRanking(null);
 		List<MensageiroRankingDTO> rankingMensageiros = new ArrayList<>();
-		
-		mensageiros.forEach((mK, mV) ->{
-			MensageiroRankingDTO ranking = 
-					new MensageiroRankingDTO(mK, mV);
-			
-			rankingMensageiros.add(ranking);
-		});
-		
+
+		int limit = 0;
+		for (Map.Entry<MensageiroAssociado, Integer> entry : mensageiros.entrySet()) {
+			if (limit < 10) {
+				MensageiroRankingDTO ranking = new MensageiroRankingDTO(entry.getKey(), entry.getValue());
+				rankingMensageiros.add(ranking);
+			}
+			limit++;
+		}
 		return new ResponseEntity<List<MensageiroRankingDTO>>(rankingMensageiros, HttpStatus.OK);
-		
+
 	}
 }

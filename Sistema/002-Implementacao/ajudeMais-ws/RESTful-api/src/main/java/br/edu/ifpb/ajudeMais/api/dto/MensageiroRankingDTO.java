@@ -8,7 +8,6 @@ public class MensageiroRankingDTO {
 
 	private Integer quantidadeDoacoes;
 
-
 	public MensageiroRankingDTO(MensageiroAssociado mensageiro, Integer quantidadeDoacoes) {
 		this.mensageiro = mensageiro;
 		this.quantidadeDoacoes = quantidadeDoacoes;
@@ -46,6 +45,17 @@ public class MensageiroRankingDTO {
 	 */
 	public void setQuantidadeDoacoes(Integer quantidadeDoacoes) {
 		this.quantidadeDoacoes = quantidadeDoacoes;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MensageiroRankingDTO [mensageiro=" + mensageiro.getMensageiro().getNome() + ", quantidadeDoacoes="
+				+ quantidadeDoacoes + "]";
 	}
 
 }
