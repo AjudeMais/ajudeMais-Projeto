@@ -38,6 +38,8 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long> {
 	 */
 	List<Campanha> filterByInstituicaoLocalOrderByDataCriacaoDesc(@Param("localidade") String localidade,
 			@Param("uf") String uf);
+	
+	
 
 	/**
 	 * 

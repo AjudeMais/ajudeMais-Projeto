@@ -131,6 +131,17 @@ public interface DonativoRepository extends JpaRepository<Donativo, Long> {
 	 */
 	Long filterCountByEstadoRecolhido();
 
+	
+	/**
+	 * 
+	 * <p>
+	 * Conta a quantidade de doações feitas para a instituição com id efetuadas a partir do estado recolhido 
+	 * </p>
+	 * 
+	 * @return
+	 */
+	Long filterCountByEstadoRecolhidoAndInstituicaoId(@Param("idInstituicao") Long idInstitucao);
+	
 	/**
 	 * 
 	 * <p>
