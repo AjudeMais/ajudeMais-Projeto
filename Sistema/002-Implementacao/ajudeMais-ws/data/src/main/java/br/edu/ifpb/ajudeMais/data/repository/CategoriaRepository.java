@@ -72,4 +72,12 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
 	 */
 	List<Categoria> findByInstituicaoCaridadeAndNomeIgnoreCaseContaining(InstituicaoCaridade instituicao, String nome);
 
+	/**
+	 * 
+	 * @param instituicaoCaridade
+	 * @param ativo
+	 * @return
+	 */
+	Long countByInstituicaoCaridadeAndAtivo(InstituicaoCaridade instituicaoCaridade, boolean ativo);
+
 }

@@ -12,14 +12,15 @@
     angular.module('amApp')
         .controller('DashboardInstController', DashboardInstController);
 
-    DashboardInstController.$inject = ['dashboardInstituicaoService', 'imageService'];
+    DashboardInstController.$inject = ['dashboardInstituicaoService', 'imageService', '$state'];
 
-    function DashboardInstController(dashboardInstituicaoService, imageService) {
+    function DashboardInstController(dashboardInstituicaoService, imageService, $state) {
 
         var vm = this;
         vm.countDonativos = 0;
         vm.countCampanhas = 0;
         vm.countMensageiros = 0;
+        vm.countItens = 0;
 
         vm.rankingMensageiros = [];
         vm.rankingImagesMensageiros = [];
@@ -31,7 +32,44 @@
         vm.labelsDoacoesInstPeriod = [];
         vm.dataDoacoesInstPeriod = [];
 
+        vm.statusPanelCampanhas = true;
+        vm.campanhasMetasProgres = [];
+
+        vm.donativosTimeline = [];
+        vm.statusPanelTimeline = true;
+
         vm.mockImage = 'content/img/mock-user.png';
+
+        var getDonativosTimeline = function () {
+            dashboardInstituicaoService.getDonativosTimeline().then(function (response) {
+                vm.donativosTimeline = response.data;
+                console.log(vm.donativosTimeline)
+            })
+        }
+
+        vm.getEtadosDonativo = function (estados) {
+            var estadoAtivo;
+            estados.forEach(function (estado) {
+                if (estado.ativo) {
+                    estadoAtivo = estado;
+                }
+            });
+            return estadoAtivo.estadoDoacao;
+        }
+
+        /**
+         *
+         * @param campanha
+         */
+        vm.openDetails = function (donativo) {
+            $state.go("home.donativo.detail", {donativoDetail: JSON.stringify(donativo)});
+        }
+
+        var getCampanhasMetas = function () {
+            dashboardInstituicaoService.getCampanhasMetasProgres().then(function (response) {
+                vm.campanhasMetasProgres = response.data;
+            })
+        }
 
         var getMensageirosRanking = function () {
             dashboardInstituicaoService.getRankingMensageiro().then(function (response) {
@@ -61,6 +99,15 @@
         var getCountDonativos = function () {
             dashboardInstituicaoService.getCountDonativos().then(function (response) {
                 vm.countDonativos = response.data;
+            });
+        }
+
+        /**
+         *
+         */
+        var getCountItens = function () {
+            dashboardInstituicaoService.getCountItens().then(function (response) {
+                vm.countItens = response.data;
             });
         }
 
@@ -171,8 +218,11 @@
         getMensageirosRanking();
         getCountCampanhas();
         getCountDonativos();
+        getCountItens();
         getCountMensageiros();
-        getDoacoesByPeriodoInstituicao()
+        getDoacoesByPeriodoInstituicao();
+        getCampanhasMetas();
+        getDonativosTimeline();
 
 
     }

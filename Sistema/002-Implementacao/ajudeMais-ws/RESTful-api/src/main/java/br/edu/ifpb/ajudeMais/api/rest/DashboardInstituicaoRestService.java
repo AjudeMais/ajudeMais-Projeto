@@ -30,16 +30,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.api.dto.CampanhaMetaDTO;
 import br.edu.ifpb.ajudeMais.api.dto.DoacoesPeriodoDTO;
 import br.edu.ifpb.ajudeMais.api.dto.MensageiroRankingDTO;
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.CategoriaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
+import br.edu.ifpb.ajudeMais.domain.entity.Campanha;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
+import br.edu.ifpb.ajudeMais.domain.entity.Donativo;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
+import br.edu.ifpb.ajudeMais.domain.entity.Meta;
 import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
+import br.edu.ifpb.ajudeMais.service.negocio.CampanhaService;
 import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
@@ -84,6 +90,12 @@ public class DashboardInstituicaoRestService {
 	 * 
 	 */
 	@Autowired
+	private CampanhaService campanhaService;
+
+	/**
+	 * 
+	 */
+	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
 	/**
@@ -103,6 +115,12 @@ public class DashboardInstituicaoRestService {
 	 */
 	@Autowired
 	private DonativoService donativoService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private CategoriaRepository categoriaRepository;
 
 	/**
 	 * 
@@ -153,6 +171,24 @@ public class DashboardInstituicaoRestService {
 
 		if (instituicaoOp.isPresent()) {
 			Long count = campanhaRepositoty.countByInstituicaoCaridadeIdAndStatus(instituicaoOp.get().getId(), true);
+			return new ResponseEntity<Long>(count, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
+		}
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/itens/count")
+	public ResponseEntity<Long> getCountItens() {
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+
+		if (instituicaoOp.isPresent()) {
+			Long count = categoriaRepository.countByInstituicaoCaridadeAndAtivo(instituicaoOp.get(), true);
 			return new ResponseEntity<Long>(count, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Long>(HttpStatus.FORBIDDEN);
@@ -218,6 +254,62 @@ public class DashboardInstituicaoRestService {
 
 		List<DoacoesPeriodoDTO> doacoesPeriodo = getDonativosByPeriodo(nDays, estado);
 		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/campanha/metas")
+	public ResponseEntity<List<CampanhaMetaDTO>> getCampanhasMetas() {
+
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+
+		List<Campanha> campanhasAtivas = campanhaService
+				.findByInstituicaoCaridadeIdAndStatus(instituicaoOp.get().getId());
+		List<CampanhaMetaDTO> campanhasMetas = new ArrayList<>();
+
+		campanhasAtivas.forEach(c -> {
+			Float percentual = this.getPercentualMetas(c);
+			CampanhaMetaDTO cm = new CampanhaMetaDTO(c, percentual);
+			campanhasMetas.add(cm);
+		});
+
+		return new ResponseEntity<List<CampanhaMetaDTO>>(campanhasMetas, HttpStatus.OK);
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/donativo/timeline")
+	public ResponseEntity<List<Donativo>> getLastDonativos() {
+
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+
+		List<Donativo> donativos = donativoRepository
+				.findFirst10ByCategoriaInstituicaoCaridadeOrderByDataDesc(instituicaoOp.get());
+
+		return new ResponseEntity<>(donativos, HttpStatus.OK);
+
+	}
+
+	/**
+	 * @param campanha
+	 * @return
+	 */
+	private Float getPercentualMetas(Campanha campanha) {
+		Float percentual = 0f;
+		for (Meta meta : campanha.getMetas()) {
+			percentual += meta.getPercentualAtingido();
+		}
+		return percentual;
+
 	}
 
 	/**
