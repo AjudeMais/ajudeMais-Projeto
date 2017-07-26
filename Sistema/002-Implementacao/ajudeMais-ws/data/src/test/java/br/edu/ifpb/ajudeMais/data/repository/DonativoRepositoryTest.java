@@ -42,7 +42,8 @@ import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
  * </p>
  *
  *
- * @author <a href="https://franckaj.github.io">Franck Aragão</a>
+ * @author <a href="https://franckaj.github.io">Franck Aragão</a> and
+ * 			<a href="https://github.com/amslv> Ana Silva </a>
  *
  */
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
@@ -218,6 +219,40 @@ public class DonativoRepositoryTest {
 		Long quantidade = donativoRepository.filterCountDonativoByEstadoAndDateBetween(dataInicial, dataFinal, Estado.DISPONIBILIZADO);
 		assertThat(quantidade > 0);
 	}
+	
+	/**
+	 * Testa método que busca a quantidade de donativos com base em seu estado e um intervalo de tempo e instituição.
+	 * Deveria retornar false, caso não exista nenhum donativo recolhido
+	 * durante aquela faixa de datas, no estado pesquisado ou instituição.
+	 */
+	@Test
+	public void filterCountDonativoByEstadoAndDateBetweenAndInstTest() {
+		Date dataInicial = convertDate("2017-06-05");
+		Date dataFinal = convertDate("2017-06-09");
+		Long quantidade = donativoRepository.filterCountDonativoByEstadoAndDateBetweenAndInst(dataInicial, dataFinal, Estado.NAO_ACEITO, 1l);
+		assertThat(quantidade > 0);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void countByCategoriaInstituicaoCaridadeIdTest() {
+		Long quantidade = donativoRepository.countByCategoriaInstituicaoCaridadeId(1l);
+		assertThat(quantidade > 0);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void filterCountByMensageiroAndEstadoTest() {
+		Mensageiro mensageiro = new Mensageiro();
+		mensageiro.setId(1l);
+		Long quantidade = donativoRepository.filterCountByMensageiroAndEstado(mensageiro);
+		assertThat(quantidade > 0);
+	}
+	
 	
 	/**
 	 * Utilitário para conversão de {@link String} em {@link Date}
