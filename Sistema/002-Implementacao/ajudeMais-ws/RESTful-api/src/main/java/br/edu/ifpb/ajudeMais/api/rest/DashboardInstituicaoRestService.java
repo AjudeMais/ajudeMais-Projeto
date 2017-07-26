@@ -13,12 +13,16 @@
  */
 package br.edu.ifpb.ajudeMais.api.rest;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.edu.ifpb.ajudeMais.api.dto.DoacoesPeriodoDTO;
 import br.edu.ifpb.ajudeMais.api.dto.MensageiroRankingDTO;
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
@@ -33,7 +38,9 @@ import br.edu.ifpb.ajudeMais.data.repository.MensageiroAssociadoRepository;
 import br.edu.ifpb.ajudeMais.domain.entity.Conta;
 import br.edu.ifpb.ajudeMais.domain.entity.InstituicaoCaridade;
 import br.edu.ifpb.ajudeMais.domain.entity.MensageiroAssociado;
+import br.edu.ifpb.ajudeMais.domain.enumerations.Estado;
 import br.edu.ifpb.ajudeMais.service.negocio.AuthService;
+import br.edu.ifpb.ajudeMais.service.negocio.DonativoService;
 import br.edu.ifpb.ajudeMais.service.negocio.InstituicaoCaridadeService;
 import br.edu.ifpb.ajudeMais.service.negocio.MensageiroAssociadoService;
 
@@ -79,6 +86,9 @@ public class DashboardInstituicaoRestService {
 	@Autowired
 	private MensageiroAssociadoRepository mensageiroAssociadoRepository;
 
+	/**
+	 * 
+	 */
 	@Autowired
 	private MensageiroAssociadoService mensageiroAssociadoService;
 
@@ -87,6 +97,17 @@ public class DashboardInstituicaoRestService {
 	 */
 	@Autowired
 	private InstituicaoCaridadeService instituicaoCaridadeService;
+
+	/**
+	 * 
+	 */
+	@Autowired
+	private DonativoService donativoService;
+
+	/**
+	 * 
+	 */
+	private static DateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM");
 
 	/**
 	 * 
@@ -171,7 +192,7 @@ public class DashboardInstituicaoRestService {
 	public ResponseEntity<List<MensageiroRankingDTO>> getRanking() {
 		Conta conta = authService.getCurrentUser();
 		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
-		
+
 		Map<MensageiroAssociado, Integer> mensageiros = mensageiroAssociadoService.getRanking(instituicaoOp.get());
 		List<MensageiroRankingDTO> rankingMensageiros = new ArrayList<>();
 
@@ -185,6 +206,38 @@ public class DashboardInstituicaoRestService {
 		}
 		return new ResponseEntity<List<MensageiroRankingDTO>>(rankingMensageiros, HttpStatus.OK);
 
+	}
+
+	@PreAuthorize("hasRole('INSTITUICAO')")
+	@RequestMapping(method = RequestMethod.GET, value = "/donativo/periodo/instituicao")
+	public ResponseEntity<List<DoacoesPeriodoDTO>> getDoacoesByPeriodoInstituicao(@Param("nDays") Integer nDays,
+			@Param("estado") String estado) {
+
+		List<DoacoesPeriodoDTO> doacoesPeriodo = getDonativosByPeriodo(nDays, estado);
+		return new ResponseEntity<List<DoacoesPeriodoDTO>>(doacoesPeriodo, HttpStatus.OK);
+	}
+
+	/**
+	 * 
+	 * @param nDays
+	 * @param estado
+	 * @return
+	 */
+	private List<DoacoesPeriodoDTO> getDonativosByPeriodo(Integer nDays, String estado) {
+
+		Conta conta = authService.getCurrentUser();
+		Optional<InstituicaoCaridade> instituicaoOp = instituicaoCaridadeService.findOneByConta(conta);
+
+		Map<Date, Integer> doacoes = donativoService.getDoacoesByPeriodo(nDays, Estado.getByEstado(estado),
+				instituicaoOp.get().getId());
+
+		List<DoacoesPeriodoDTO> doacoesPeriodo = new ArrayList<>();
+
+		for (Date date : doacoes.keySet()) {
+			DoacoesPeriodoDTO doDto = new DoacoesPeriodoDTO(DATE_FORMAT.format(date), doacoes.get(date));
+			doacoesPeriodo.add(doDto);
+		}
+		return doacoesPeriodo;
 	}
 
 }

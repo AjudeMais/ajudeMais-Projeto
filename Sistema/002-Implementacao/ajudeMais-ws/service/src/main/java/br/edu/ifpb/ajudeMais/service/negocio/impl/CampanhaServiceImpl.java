@@ -79,7 +79,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 			publisher.publishEvent(new CampanhaNotificationEvent(notificaveis, campanhaSaved));
 			campanhaSaved.setNotificada(true);
 			this.update(campanhaSaved);
-			
+
 		}
 
 		return campanhaSaved;
@@ -141,7 +141,8 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public List<Campanha> findByInstituicaoCaridade(InstituicaoCaridade instituicaoCaridade) {
-		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeOrderByDataCriacaoDesc(instituicaoCaridade);
+		List<Campanha> campanhas = campanhaRepository
+				.findByInstituicaoCaridadeOrderByDataCriacaoDesc(instituicaoCaridade);
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);
 		}
@@ -156,8 +157,8 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 		Endereco endereco = googleMapsResponse.converteLatitudeAndLongitudeInAddress(latLng.getLatitude(),
 				latLng.getLongitude());
-		List<Campanha> campanhas = campanhaRepository.filterByInstituicaoLocalOrderByDataCriacaoDesc(endereco.getLocalidade(),
-				endereco.getUf());
+		List<Campanha> campanhas = campanhaRepository
+				.filterByInstituicaoLocalOrderByDataCriacaoDesc(endereco.getLocalidade(), endereco.getUf());
 
 		for (Campanha campanha : campanhas) {
 			setPercetualAtingidoInMeta(campanha);
@@ -172,6 +173,18 @@ public class CampanhaServiceImpl implements CampanhaService {
 	public List<Campanha> findByStatus(boolean status) {
 
 		return this.getByCurrentStatus(campanhaRepository.findByStatus(status));
+	}
+
+	@Override
+	public List<Campanha> findByInstituicaoCaridadeIdAndStatus(Long id) {
+
+		List<Campanha> campanhas = campanhaRepository.findByInstituicaoCaridadeIdAndStatus(id, true);
+
+		for (Campanha campanha : campanhas) {
+			setPercetualAtingidoInMeta(campanha);
+		}
+
+		return campanhas;
 	}
 
 	/**
@@ -227,7 +240,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 			Long qtdDonativos = donativoCampanhaRepository.filterCountByEstadoAndCategoriaAfterAceito(campanha.getId(),
 					m.getCategoria().getId());
 			if (qtdDonativos > 0) {
-				float percetual = (qtdDonativos* 100) / m.getQuantidade().floatValue();	
+				float percetual = (qtdDonativos * 100) / m.getQuantidade().floatValue();
 				m.setPercentualAtingido(percetual);
 
 			} else {

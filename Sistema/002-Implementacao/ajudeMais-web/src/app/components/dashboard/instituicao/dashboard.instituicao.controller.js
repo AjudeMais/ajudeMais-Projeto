@@ -55,72 +55,126 @@
             })
         }
 
-            /**
-             *
-             */
-            var getCountDonativos = function () {
-                dashboardInstituicaoService.getCountDonativos().then(function (response) {
-                    vm.countDonativos = response.data;
-                });
-            }
-
-            /**
-             *
-             */
-            var getCountCampanhas = function () {
-                dashboardInstituicaoService.getCountCampanhas().then(function (response) {
-                    vm.countCampanhas = response.data;
-                });
-            }
-
-            /**
-             *
-             */
-            var getCountMensageiros = function () {
-                dashboardInstituicaoService.getCountMensageiros().then(function (response) {
-                    vm.countMensageiros = response.data;
-                });
-            };
-
-            /**
-             *
-             * @param imageName
-             */
-            var getImages = function (ranking) {
-                if (ranking.mensageiro.mensageiro.foto) {
-                    imageService.getImage(ranking.mensageiro.mensageiro.foto.nome).then(function (response) {
-                        vm.rankingDto = {};
-                        vm.rankingDto.ranking = ranking;
-                        vm.rankingDto.image = _arrayBufferToBase64(response.data)
-                        vm.rankingImagesMensageiros.push(vm.rankingDto);
-                        setImageInRanking();
-                    })
-                }
-            };
-
-            /**
-             * Necessário para converter array de bytes para base64.
-             * utilizado para recuperar foto da API.
-             * @param buffer
-             * @returns {string}
-             * @private
-             */
-            function _arrayBufferToBase64(buffer) {
-                var binary = '';
-                var bytes = new Uint8Array(buffer);
-                var len = bytes.byteLength;
-                for (var i = 0; i < len; i++) {
-                    binary += String.fromCharCode(bytes[i]);
-                }
-                return window.btoa(binary);
-            };
-
-            getMensageirosRanking();
-            getCountCampanhas();
-            getCountDonativos();
-            getCountMensageiros();
-
-
+        /**
+         *
+         */
+        var getCountDonativos = function () {
+            dashboardInstituicaoService.getCountDonativos().then(function (response) {
+                vm.countDonativos = response.data;
+            });
         }
-    })
+
+        /**
+         *
+         */
+        var getCountCampanhas = function () {
+            dashboardInstituicaoService.getCountCampanhas().then(function (response) {
+                vm.countCampanhas = response.data;
+            });
+        }
+
+        /**
+         *
+         */
+        var getCountMensageiros = function () {
+            dashboardInstituicaoService.getCountMensageiros().then(function (response) {
+                vm.countMensageiros = response.data;
+            });
+        };
+
+        var getDoacoesByPeriodoInstituicao = function () {
+            dashboardInstituicaoService.getDoacoesByPeriodoInstituicao(30, "RECOLHIDO").then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    vm.labelsDoacoesInstPeriod.push(dto.date);
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoCanceladasInstituicao();
+            });
+        }
+
+        /**
+         *
+         */
+        var getDoacoesByPeriodoCanceladasInstituicao = function () {
+            dashboardInstituicaoService.getDoacoesByPeriodoInstituicao(30, "CANCELADO").then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoEntreguesInstituicao();
+            });
+        }
+
+        /**
+         *
+         */
+        var getDoacoesByPeriodoEntreguesInstituicao = function () {
+            dashboardInstituicaoService.getDoacoesByPeriodoInstituicao(30, "RECEBIDO").then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+                getDoacoesByPeriodoNaoAceitos();
+            });
+        }
+
+        /**
+         *
+         */
+        var getDoacoesByPeriodoNaoAceitos = function () {
+            dashboardInstituicaoService.getDoacoesByPeriodoInstituicao(30, "NAO_ACEITO").then(function (response) {
+                var dataDoacoesPeriod = [];
+                response.data.forEach(function (dto) {
+                    dataDoacoesPeriod.push(dto.count);
+                })
+                vm.dataDoacoesInstPeriod.push(dataDoacoesPeriod);
+            });
+        }
+
+        /**
+         *
+         * @param imageName
+         */
+        var getImages = function (ranking) {
+            if (ranking.mensageiro.mensageiro.foto) {
+                imageService.getImage(ranking.mensageiro.mensageiro.foto.nome).then(function (response) {
+                    vm.rankingDto = {};
+                    vm.rankingDto.ranking = ranking;
+                    vm.rankingDto.image = _arrayBufferToBase64(response.data)
+                    vm.rankingImagesMensageiros.push(vm.rankingDto);
+                    setImageInRanking();
+                })
+            }
+        };
+
+        /**
+         * Necessário para converter array de bytes para base64.
+         * utilizado para recuperar foto da API.
+         * @param buffer
+         * @returns {string}
+         * @private
+         */
+        function _arrayBufferToBase64(buffer) {
+            var binary = '';
+            var bytes = new Uint8Array(buffer);
+            var len = bytes.byteLength;
+            for (var i = 0; i < len; i++) {
+                binary += String.fromCharCode(bytes[i]);
+            }
+            return window.btoa(binary);
+        };
+
+        getMensageirosRanking();
+        getCountCampanhas();
+        getCountDonativos();
+        getCountMensageiros();
+        getDoacoesByPeriodoInstituicao()
+
+
+    }
+})
 ();

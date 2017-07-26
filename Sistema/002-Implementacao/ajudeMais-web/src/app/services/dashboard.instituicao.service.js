@@ -19,7 +19,8 @@
             getCountDonativos: _getCountDonativos,
             getCountCampanhas: _getCountCampanhas,
             getCountMensageiros: _getCountMensageiros,
-            getRankingMensageiro: _getRankingMensageiro
+            getRankingMensageiro: _getRankingMensageiro,
+            getDoacoesByPeriodoInstituicao: _getDoacoesByPeriodoInstituicao
         };
         return service;
 
@@ -54,6 +55,20 @@
          */
         function _getRankingMensageiro() {
             return $http.get(Api + '/dashboard/instituicao/mensageiro/ranking');
+        }
+
+        /**
+         *
+         * @param nDays
+         * @private
+         */
+        function _getDoacoesByPeriodoInstituicao(nDays, estado) {
+            return $http.get(Api + '/dashboard/instituicao/donativo/periodo/instituicao', {
+                params: {
+                    "nDays": nDays,
+                    "estado": estado
+                }
+            });
         }
 
     };
