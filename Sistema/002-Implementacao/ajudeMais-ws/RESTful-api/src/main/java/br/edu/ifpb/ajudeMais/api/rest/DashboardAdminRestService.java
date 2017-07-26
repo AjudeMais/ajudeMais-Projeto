@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifpb.ajudeMais.api.dto.DoacoesPeriodoDTO;
 import br.edu.ifpb.ajudeMais.api.dto.MensageiroRankingDTO;
 import br.edu.ifpb.ajudeMais.data.repository.CampanhaRepository;
+import br.edu.ifpb.ajudeMais.data.repository.DoadorRepository;
 import br.edu.ifpb.ajudeMais.data.repository.DonativoRepository;
 import br.edu.ifpb.ajudeMais.data.repository.InstituicaoCaridadeRepository;
 import br.edu.ifpb.ajudeMais.data.repository.MensageiroRepository;
@@ -81,6 +82,12 @@ public class DashboardAdminRestService {
 	 */
 	@Autowired
 	private MensageiroAssociadoService mensageiroAssService;
+	
+	/**
+	 * 
+	 */
+	@Autowired
+	private DoadorRepository doadorRepository;
 
 	/**
 	 * 
@@ -137,10 +144,10 @@ public class DashboardAdminRestService {
 	 * @return
 	 */
 	@PreAuthorize("hasRole('ADMIN')")
-	@RequestMapping(method = RequestMethod.GET, value = "/campanha/count")
-	public ResponseEntity<Long> getCountCampanhas() {
+	@RequestMapping(method = RequestMethod.GET, value = "/doador/count")
+	public ResponseEntity<Long> getCountDoadores() {
 
-		Long count = campanhaRepositoty.count();
+		Long count = doadorRepository.count();
 		return new ResponseEntity<Long>(count, HttpStatus.OK);
 	}
 

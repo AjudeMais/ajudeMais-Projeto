@@ -19,7 +19,7 @@
         var vm = this;
         vm.countInstituicoes = 0;
         vm.countDonativos = 0;
-        vm.countCampanhas = 0;
+        vm.countDoadores = 0;
         vm.countMensageiros = 0;
         vm.statusPanelLineChart = true;
         vm.instituicaoSelected = {};
@@ -105,8 +105,8 @@
          *
          */
         var getCountCampanhas = function () {
-            dashboardAdminService.getCountCampanhas().then(function (response) {
-                vm.countCampanhas = response.data;
+            dashboardAdminService.getCountDoadores().then(function (response) {
+                vm.countDoadores = response.data;
             });
         }
 

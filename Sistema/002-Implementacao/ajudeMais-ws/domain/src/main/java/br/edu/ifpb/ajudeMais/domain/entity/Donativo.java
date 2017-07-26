@@ -60,7 +60,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO'"),
 	
 	@NamedQuery(name = "Donativo.filterCountByEstadoRecolhidoAndInstituicaoId", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "
-			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' "
+			+ "WHERE ed.estadoDoacao != 'DISPONIBILIZADO' and ed.estadoDoacao != 'CANCELADO' and ed.ativo is true "
 			+ "and  ed.estadoDoacao != 'ACEITO' and ed.estadoDoacao != 'NAO_ACEITO' and ed.estadoDoacao != 'CANCELADO_POR_MENSAGEIRO' and d.categoria.instituicaoCaridade.id = :idInstituicao"),
 	
 	@NamedQuery(name = "Donativo.filterCountByMensageiroAndEstado", query = "SELECT COUNT(d) FROM Donativo d JOIN d.estadosDaDoacao ed "

@@ -188,6 +188,7 @@ public class DashboardInstituicaoRestService {
 	 * 
 	 * @return
 	 */
+	@PreAuthorize("hasRole('INSTITUICAO')")
 	@RequestMapping(method = RequestMethod.GET, value = "/mensageiro/ranking")
 	public ResponseEntity<List<MensageiroRankingDTO>> getRanking() {
 		Conta conta = authService.getCurrentUser();

@@ -15,6 +15,7 @@
  */
 package br.edu.ifpb.ajudeMais.service.negocio.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +176,13 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 	public LinkedHashMap<MensageiroAssociado, Integer> getRanking(InstituicaoCaridade instituicaoCaridade) {
 
 		Map<MensageiroAssociado, Integer> mensageirosDoacoes = new LinkedHashMap<MensageiroAssociado, Integer>();
-		List<MensageiroAssociado> mensageiros = mensageiroAssociadoRepository.findAll();
+		List<MensageiroAssociado> mensageiros = new ArrayList<>();
+
+		if (instituicaoCaridade != null) {
+			mensageiros = mensageiroAssociadoRepository.findByInstituicaoCaridade(instituicaoCaridade);
+		} else {
+			mensageiros = mensageiroAssociadoRepository.findAll();
+		}
 
 		mensageiros.forEach(m -> {
 			Long count = donativoRepository.filterCountByMensageiroAndEstado(m.getMensageiro());
@@ -183,8 +190,7 @@ public class MensageiroAssociadoServiceImpl implements MensageiroAssociadoServic
 		});
 
 		LinkedHashMap<MensageiroAssociado, Integer> mapSorted = mensageirosDoacoes.entrySet().stream()
-				.sorted(Map.Entry.<MensageiroAssociado, Integer> comparingByValue().reversed())
-				.limit(10) 
+				.sorted(Map.Entry.<MensageiroAssociado, Integer> comparingByValue().reversed()).limit(10)
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
 
 		return mapSorted;

@@ -24,11 +24,11 @@
 
     <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-hashtag"></i></span>
+            <span class="info-box-icon bg-green"><i class="fa fa-user"></i></span>
 
             <div class="info-box-content">
-                <span class="info-box-text">Campanhas</span>
-                <span class="info-box-number">{{vm.countCampanhas}}</span>
+                <span class="info-box-text">Doadores</span>
+                <span class="info-box-number">{{vm.countDoadores}}</span>
             </div>
         </div>
     </div>
@@ -180,9 +180,9 @@
 
                     <ul class="users-list">
                         <li ng-repeat="mr in vm.rankingMensageiros">
-                            <img ng-show="!mr.image" class="img-circle"
+                            <img ng-show="!mr.image"
                                  ng-src="{{vm.mockImage}}">
-                            <img class="img-circle"
+                            <img
                                  data-ng-src="data:{{mr.ranking.mensageiro.mensageiro.foto.contentType}};base64,{{mr.image}}">
 
                             <p class="users-list-name" href="#"><span class="badge">{{$index + 1}}</span>
