@@ -17,7 +17,8 @@ elif [ $1 = "dev" ]; then
 elif [ $1 = "prod" ]; then
 
    heroku login	
-   heroku deploy:jar target/ajudeMais-ws-0.5-SNAPSHOT.jar Procfile --app ajudemais-ws
+   mvn heroku:deploy
+   heroku logs --app ajudemaisws --tail 
 
 else
   mvn spring-boot:run
