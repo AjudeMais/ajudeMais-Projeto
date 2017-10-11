@@ -167,7 +167,7 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
 
     private void listenCliqueReload() {
         view.findViewById(R.id.loadingPanelMainSearchCampanha).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
+        //view.findViewById(R.id.containerViewSearchCampanha).setVisibility(View.GONE);
         view.findViewById(R.id.empty_list).setVisibility(View.GONE);
         executeLoadingDoacoesTask();
     }
@@ -280,7 +280,9 @@ public class MyDoacoesFragment extends Fragment implements RecyclerItemClickList
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-                        donativosAdapter.setFilter(donativos);
+                        if (donativos != null) {
+                            donativosAdapter.setFilter(donativos);
+                        }
                         return true;
                     }
 
