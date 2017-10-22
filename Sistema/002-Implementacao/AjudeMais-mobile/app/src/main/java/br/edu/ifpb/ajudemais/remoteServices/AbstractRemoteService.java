@@ -24,7 +24,7 @@ import br.edu.ifpb.ajudemais.handler.MyResponseErrorHandler;
  */
 public abstract class AbstractRemoteService {
 
-    protected static final String API = "http://192.168.237.115:8080";
+    protected static final String API = "https://ajudemaisws.herokuapp.com";
 
     protected RestTemplate restTemplate;
 
