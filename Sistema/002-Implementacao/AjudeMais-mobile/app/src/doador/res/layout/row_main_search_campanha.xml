@@ -29,7 +29,6 @@
             android:id="@+id/tv_row_campanha_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/thumbnail"
             android:maxLines="2"
             android:paddingStart="8dp"
             android:paddingTop="5dp"

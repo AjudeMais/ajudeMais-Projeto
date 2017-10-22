@@ -59,8 +59,8 @@
     <!--Tela Esqueceu a senha sem rede social-->
     <string name="btnRecoveryPasswordName">REDEFINIR</string>
 
-    <string name="facebook_app_id">775335345957213</string>
-    <string name="fb_login_protocol_scheme">fb775335345957213</string>
+    <string name="facebook_app_id">137692430207752</string>
+    <string name="fb_login_protocol_scheme">fb137692430207752</string>
 
     <!--Detalhe intituição-->
     <string name="tv_inf_instituicao">Ajude Esta Instituição com:</string>
