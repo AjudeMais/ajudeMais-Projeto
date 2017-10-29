@@ -13,8 +13,8 @@ android {
         applicationId "br.edu.ifpb.ajudemais"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 11
-        versionName "1.1-IT06"
+        versionCode 1003
+        versionName "1.2-IT06"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.AjudeMais
     }
@@ -33,8 +33,8 @@ android {
             applicationIdSuffix ".doador"
             versionNameSuffix "-doador"
             testApplicationId 'br.edu.ifpb.ajudemais.doador.teste'
-            versionCode 11
-            versionName '1.1-IT06'
+            versionCode 1003
+            versionName '1.2-IT06'
         }
         mensageiro {
             applicationId "br.edu.ifpb.ajudemais.mensageiro"

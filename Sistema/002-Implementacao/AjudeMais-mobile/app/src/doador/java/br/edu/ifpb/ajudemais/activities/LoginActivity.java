@@ -8,10 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -60,6 +63,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private byte[] imagem;
     private GetImageTask getImageTask;
     private Validator validator;
+    private ProfileTracker mProfileTracker;
+    private LoginResult loginResult;
 
     @Order(2)
     @Length(min = 4, messageResId = R.string.msgInvalideUserName, sequence = 2)
@@ -225,8 +230,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
      * @param loginResult
      */
     @Override
-    public void onSuccess(LoginResult loginResult) {
-        executeLoadingAccountUser(Profile.getCurrentProfile().getId(), loginResult);
+    public void onSuccess(final LoginResult loginResult) {
+
+        this.loginResult = loginResult;
+        if (Profile.getCurrentProfile() == null) {
+            mProfileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                    executeLoadingAccountUser(currentProfile.getId(), loginResult);
+
+                    mProfileTracker.stopTracking();
+                }
+            };
+        } else {
+            final Profile profile = Profile.getCurrentProfile();
+            executeLoadingAccountUser(profile.getId(), loginResult);
+        }
     }
 
     /**
@@ -268,12 +287,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         loginDoadorTask.execute();
     }
 
-    private void executeUpdateDoadorToken(Doador doador){
-        if(FirebaseInstanceId.getInstance().getToken().trim().length()>0) {
+    private void executeUpdateDoadorToken(Doador doador) {
+        if (FirebaseInstanceId.getInstance().getToken().trim().length() > 0) {
             doador.getTokenFCM().setDate(new Date());
             doador.getTokenFCM().setToken(FirebaseInstanceId.getInstance().getToken());
             executeUpdateDoadorTask(doador);
-        }else {
+        } else {
             redirectMainActivity(doador.getConta());
         }
     }
